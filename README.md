@@ -1,13 +1,19 @@
 # Algo Clash
 
-A handheld-style creature RPG where every battle is a real interview problem. Read the problem, recognise the pattern, pick the data structure, and **write the C++ by hand**. A real compiler running in your browser judges it against hidden tests.
+A handheld-style creature RPG where every battle is a real interview problem. Recognise the pattern, pick the data structure, and **write the C++ by hand**; a real in-browser C++ compiler judges your code against hidden tests. It runs from C++ syntax and the STL up to LeetCode medium and hard, for FAANG / big-tech / startup / remote SDE loops.
 
-- **Teaches:** C++ for interviews (syntax → STL → pitfalls), then 20+ regions of DSA patterns from arrays to segment trees, and about 420 original problems at real LeetCode easy/medium/hard difficulty.
-- **Plays like a game:** overworld, Structling party, gyms, a rival, Team Undefined, the Forge (write templates from memory), the Daily Rift (spaced repetition), the Arena (contests) and the Interview Tower (mock interviews scored like big-tech rubrics).
-- **Runs anywhere:** a static installable PWA that works offline after the first load.
+Play: https://anmol-pawa.github.io/algo-clash/ (installable PWA; on iPhone use Share → Add to Home Screen).
 
-Live (after the first deploy): https://anmol-pawa.github.io/algo-clash/
+**Stack:** Next.js 16 · React 19 · TypeScript · Tailwind 4 · PixiJS 8 · CodeMirror 6 · clang→WASM · Vitest
 
-Design docs: [Game design](docs/GAME_DESIGN.md) · [Curriculum](docs/CURRICULUM.md) · [Architecture](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md)
+## Develop
 
-Built by an hourly routine that follows [CLAUDE.md](CLAUDE.md).
+```
+npm ci
+npm run dev          # http://localhost:3000
+npm run lint && npm run typecheck && npm test
+npm run build        # normal build
+npm run build:pages  # static export for GitHub Pages + service worker
+```
+
+The design set lives in `docs/` (game design, curriculum, architecture); `ROADMAP.md` is the work queue and `PROGRESS.md` the log. The project is built by an hourly routine; see `CLAUDE.md`.
