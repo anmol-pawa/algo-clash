@@ -13,3 +13,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages confirmation skipped: GitHub Actions quota exhausted until 2026-11-01.
 - Known gaps: `app/icon.png`, `apple-icon.png`, `public/icon-*.png` are still Query Clash's placeholders (to replace with original art in B1/polish); CodeMirror/Pixi deps installed but unused yet; the work was pushed to branch `claude/eloquent-ritchie-wcl1m5` (session branch rule), not `main`, so Pages will not deploy until it is merged.
 - Next: A2 (C++ toolchain spike, `@yowasp/clang`).
+
+## 2026-10-28: A2 C++ toolchain spike
+- `@yowasp/clang` compiles and runs STL-heavy C++ in the browser: `/dev/judge` (compile worker + fresh run worker with an in-repo WASI host, timeout via `terminate()`). Details and numbers in `docs/adr/0001-cpp-runtime.md`: ~27 MB gzip download, cold compile ~10–13 s, warm ~5.8 s, run under 10 ms.
+- Key findings: C++ exceptions do not link (judge uses `-fno-exceptions`); `bits/stdc++.h` shim works; the stack-size flag works but V8's engine stack caps recursion depth; the `runClang` API in the README does not exist in this version (`commands["clang++"]`).
+- Infra: `scripts/copy-toolchain.mjs` (run by dev/build/build:pages) copies the toolchain to gitignored `public/toolchain/`; `gen-sw.mjs` no longer precaches it and caches it on demand in a deploy-surviving cache; eslint ignores it.
+- Verified: `npm run lint`, `typecheck`, `test`, `build`, `build:pages` pass; Playwright on the static `out/`: desktop and `devices["iPhone 14"]`, two compile+run rounds each, correct stdout, no console errors, no horizontal overflow, screenshot viewed (readable, tap target ≥ 44 px). CI/Pages confirmation skipped: Actions quota exhausted until 2026-11-01.
+- Known gaps: real iPhone Safari memory is unmeasured (only Chromium emulation); max recursion depth unmeasured; the SW toolchain caching path is untested in a browser; work is on branch `claude/eloquent-ritchie-upifrq` (session branch rule), not `main`.
+- Next: A3 (judge core: harness, verdicts, clang-error table, tests).

@@ -2,15 +2,16 @@
   "name": "algo-clash",
   "version": "0.1.0",
   "private": true,
-  "description": "Algo Clash — a creature RPG that teaches data structures and algorithms in C++",
+  "description": "Algo Clash \u2014 a creature RPG that teaches data structures and algorithms in C++",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/copy-toolchain.mjs && next dev",
+    "build": "node scripts/copy-toolchain.mjs && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "build:pages": "STATIC_EXPORT=1 BASE_PATH=${BASE_PATH-/algo-clash} next build && BASE_PATH=${BASE_PATH-/algo-clash} node scripts/gen-sw.mjs"
+    "build:pages": "node scripts/copy-toolchain.mjs && STATIC_EXPORT=1 BASE_PATH=${BASE_PATH-/algo-clash} next build && BASE_PATH=${BASE_PATH-/algo-clash} node scripts/gen-sw.mjs",
+    "toolchain": "node scripts/copy-toolchain.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",
@@ -20,6 +21,7 @@
     "@codemirror/state": "^6.7.6",
     "@codemirror/view": "^6.43.13",
     "@lezer/highlight": "^1.2.5",
+    "@yowasp/clang": "^22.0.0-git20542-10",
     "codemirror": "^6.0.2",
     "motion": "^13.4.4",
     "next": "^16.2.10",
