@@ -11,3 +11,5 @@ next-env.d.ts
 .routine/lock.tmp
 next-env.d.ts
 *.tsbuildinfo
+/public/judge/*
+!/public/judge/*-worker.mjs
