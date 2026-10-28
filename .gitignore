@@ -8,3 +8,5 @@ test-results/
 *.log
 .DS_Store
 .env*
+next-env.d.ts
+*.tsbuildinfo
