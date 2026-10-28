@@ -8,7 +8,7 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
 
 ## Phase A: Foundation
 
-- [ ] A1. **Scaffold from Query Clash** (reference clone at `/home/user/query-clash`):
+- [x] A1. **Scaffold from Query Clash** (reference clone at `/home/user/query-clash`):
   - Next.js 16 + React 19 + Pixi 8 + Tailwind 4, the PWA/service worker (keep the worker-fragment fix), the `ci.yml` + `pages.yml` workflows (basePath `/algo-clash`), and lint/typecheck/test/build/build:pages scripts.
   - Remove every Query/SQL/PGlite reference. Add `.gitignore`, the `.routine/` lock convention and a README.
   - The title screen and an empty `/play` render.

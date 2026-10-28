@@ -1,13 +1,17 @@
 # Algo Clash
 
-A handheld-style creature RPG where every battle is a real interview problem. Read the problem, recognise the pattern, pick the data structure, and **write the C++ by hand**. A real compiler running in your browser judges it against hidden tests.
+A handheld-style creature RPG that teaches **data structures and algorithms in C++**, from syntax and the STL to LeetCode medium/hard and big-tech interview level. Recognise the pattern, pick the data structure, write the C++ by hand; a real in-browser compiler judges it.
 
-- **Teaches:** C++ for interviews (syntax → STL → pitfalls), then 20+ regions of DSA patterns from arrays to segment trees, and about 420 original problems at real LeetCode easy/medium/hard difficulty.
-- **Plays like a game:** overworld, Structling party, gyms, a rival, Team Undefined, the Forge (write templates from memory), the Daily Rift (spaced repetition), the Arena (contests) and the Interview Tower (mock interviews scored like big-tech rubrics).
-- **Runs anywhere:** a static installable PWA that works offline after the first load.
+**Stack:** Next.js 16 · React 19 · PixiJS 8 · Tailwind 4 · CodeMirror 6 · clang→WASM (planned) · Vitest
 
-Live (after the first deploy): https://anmol-pawa.github.io/algo-clash/
+Play: https://anmol-pawa.github.io/algo-clash/
 
-Design docs: [Game design](docs/GAME_DESIGN.md) · [Curriculum](docs/CURRICULUM.md) · [Architecture](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md)
+## Develop
 
-Built by an hourly routine that follows [CLAUDE.md](CLAUDE.md).
+```
+npm ci
+npm run dev          # http://localhost:3000
+npm run lint && npm run typecheck && npm test && npm run build && npm run build:pages
+```
+
+See `CLAUDE.md` (routine protocol), `ROADMAP.md`, `PROGRESS.md` and `docs/`.
