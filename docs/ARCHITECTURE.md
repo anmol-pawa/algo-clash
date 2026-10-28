@@ -18,7 +18,7 @@ How the game is built. Decisions that are expensive to reverse are recorded as A
 ### 2.1 Toolchain
 Primary candidate: **`@yowasp/clang`** (Clang/LLD built for WebAssembly, targeting `wasm32-wasip1`). The npm tarball is about 27 MB, about 105 MB unpacked, and it **ships libc++ headers and `libc++.a` for wasm32-wasip1** (verified on 2026-10-28 by listing the package). It runs clang in a virtual filesystem via `runClang(['clang++', …], files)`, and the output is a WASI module.
 
-**The spike (ROADMAP A2) must measure and record in an ADR:**
+**Spike result (A2, done): see `docs/adr/0001-cpp-runtime.md`.** Headline: it works on desktop Chromium with `-O1 -fno-exceptions`; C++ exceptions do not link; recursion depth is capped near 5,000 frames by the host JS stack; cold compile ≈ 9 s, warm ≈ 3.7 s; ≈ 27 MB over the wire. The original checklist follows for reference:
 - cold download size over the wire (gzip/brotli)
 - cold and warm compile time for a 60-line STL-heavy solution on desktop Chromium and on an iPhone 14 (Safari)
 - peak memory
