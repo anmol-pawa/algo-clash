@@ -57,3 +57,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: per-test wall time in batch mode is the average; real-device Safari untested; clang table checked against only one wasm-clang message so far.
 - Next: A4 (content pipeline: problem package format and `content:verify`).
+
+## 2026-10-29: A4a Pattern taxonomy and package validators
+- Split A4 into A4a–A4d in `ROADMAP.md` (validators, native runner, `content:verify`, three sample problems).
+- Added `content/patterns.ts` (37 patterns mapped to regions R0–R22 with signals), `lib/content/types.ts` (`ProblemMeta`, `HiddenTest`, test groups) and `lib/content/validate.ts` (meta, editorial in the eight house-style sections with an O(...) claim in Optimal, 3-rung hints, statement skeleton, hidden-test groups/weights/duplicates, prerequisite-cycle detection). 12 unit tests in `tests/content-validate.test.ts`.
+- Verified: `npm run lint`, `typecheck`, `test` (101 pass), `build`, `build:pages` pass. No visual changes, so no screenshots. `content:verify` does not exist yet (A4c).
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: nothing loads real packages yet; the taxonomy will grow as regions are built.
+- Next: A4b (package loader and native g++ runner with seeded RNG and `.cache/`).
