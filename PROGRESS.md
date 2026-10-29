@@ -48,3 +48,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: matched against native clang 18; the bundled wasm clang version may word a few messages differently (A3d smoke test should compare); not yet shown in any UI.
 - Next: A3d (`judgeProblem()` wiring + Playwright smoke test).
+
+## 2026-10-29: A3d judgeProblem() wiring and browser smoke test
+- Added `lib/judge/judge.ts`: `judgeProblem(spec, code, tests, opts, deps)` generates the driver source, compiles once, runs all tests in one process, and on a crash or timeout re-runs tests one by one to blame the first failing test (AC/WA/TLE/RE/CE; CE carries raw diagnostics and the friendly first error). Workers are injected via `deps` so it tests natively.
+- `tests/judge-judge.test.ts` (5 tests) uses g++ and a native runner as stand-in workers: AC, WA with got/expected, RE blamed on the right test, TLE on the hanging test, CE with friendly first error.
+- `/dev/judge` has a "Judge two-sum" button using the real compile and run workers. `scripts/smoke-judge.mjs <baseUrl>` (Playwright, global install) drives it on desktop and iPhone 14 emulation.
+- Verified: `npm run lint`, `typecheck`, `test` (89 pass), `build`, `build:pages` pass. Smoke test on the static export: correct solution → AC (3 tests), broken-memo solution → WA, undeclared name → CE with first error "Unknown name" (wasm clang 22 wording matches the table); no console errors, no horizontal overflow on iPhone 14; screenshot is readable with large tap targets.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: per-test wall time in batch mode is the average; real-device Safari untested; clang table checked against only one wasm-clang message so far.
+- Next: A4 (content pipeline: problem package format and `content:verify`).

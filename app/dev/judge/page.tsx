@@ -2,6 +2,20 @@
 
 import { useState } from "react";
 import { compileCpp, runWasm } from "@/lib/judge/client";
+import { judgeProblem } from "@/lib/judge/judge";
+import type { FunctionSpec } from "@/lib/judge/harness/driver";
+
+const TWO_SUM: FunctionSpec = {
+  kind: "function",
+  name: "twoSum",
+  returns: "vector<int>",
+  params: [{ type: "vector<int>&", name: "nums" }, { type: "int", name: "target" }],
+};
+const TWO_SUM_TESTS = [
+  { input: "[2,7,11,15]\n9", expected: "[0,1]" },
+  { input: "[3,2,4]\n6", expected: "[1,2]" },
+  { input: "[3,3]\n6", expected: "[0,1]" },
+];
 
 const SAMPLE = `#include <bits/stdc++.h>
 using namespace std;
@@ -57,6 +71,19 @@ export default function DevJudge() {
     setBusy(false);
   }
 
+  /** Judge the editor contents (a bare `class Solution`) against the two-sum tests via the real workers. */
+  async function judge() {
+    setBusy(true);
+    setLog("judging…");
+    const r = await judgeProblem(TWO_SUM, src, TWO_SUM_TESTS, { timeLimitMs: 2000 }, {
+      compile: (source) => compileCpp(source),
+      run: runWasm,
+    });
+    const first = r.firstError;
+    setLog(`verdict ${r.verdict} failedAt=${r.failedAt} maxMs=${r.maxMs}\n${r.outcomes.map((o, i) => `#${i} ${o.verdict} ${o.reason ?? ""} ${o.got ?? ""}`).join("\n")}${first ? `\nfirst error L${first.line}: ${first.entry?.title ?? first.message}` : ""}`);
+    setBusy(false);
+  }
+
   return (
     <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-3 px-4 py-6">
       <h1 className="font-display text-2xl text-[var(--gold)]">Judge playground</h1>
@@ -76,6 +103,9 @@ export default function DevJudge() {
         </label>
         <button id="go" className="px-btn px-5" disabled={busy} onClick={go}>
           {busy ? "Running…" : "Compile & run"}
+        </button>
+        <button id="judge" className="px-btn px-5" disabled={busy} onClick={judge}>
+          Judge two-sum
         </button>
       </div>
       <pre id="log" className="panel min-h-24 overflow-x-auto whitespace-pre-wrap p-2 text-xs">{log}</pre>
