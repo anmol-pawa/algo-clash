@@ -19,7 +19,7 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
 - [ ] A3. **Judge core** (ARCH §2.2–2.3), split into sub-boxes:
   - [x] A3a. Pure TS: LC literal parser/printer (`lib/judge/lc.ts`) and verdict mapping (`lib/judge/verdict.ts`), unit-tested.
   - [x] A3b. C++ harness header (`ListNode`, `TreeNode`, graph `Node`, LC literal parsers/printers) and a generated `main` per problem, including the design-problem ops format; tested natively with g++ and clang++.
-  - [ ] A3c. Friendly clang-error table (first 40 errors, generated natively in tests) in `lib/judge/clangErrors.ts`.
+  - [x] A3c. Friendly clang-error table (first 40 errors, generated natively in tests) in `lib/judge/clangErrors.ts`.
   - [ ] A3d. `judgeProblem()` wiring compile worker + run worker + verdicts, and a Playwright smoke test that compiles and judges one problem in Chromium.
 - [ ] A4. **Content pipeline** (GDD §8, ARCH §2.4):
   - the problem package format

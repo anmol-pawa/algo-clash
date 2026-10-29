@@ -40,3 +40,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: no cyclic linked lists, N-ary or random-pointer nodes yet (add behind macros when a problem needs them); per-test timing is not emitted by the driver (whole-run wall time only); the harness is not yet wired to the workers.
 - Next: A3c (friendly clang-error table).
+
+## 2026-10-29: A3c Friendly clang-error table
+- Added `lib/judge/clangErrors.ts`: `parseDiagnostics` (plain-text clang output to structured diagnostics), 44 `CLANG_ERRORS` entries (pattern, title, explanation, fix, broken `example`), `explainMessage`, `errorDiagnostics`/`explainCompile` (errors plus the one warning-rooted case, unterminated strings). Specific entries sit before generic ones (e.g. `std::max` mixed types before "no matching function"; missing `operator<` and wrong stream direction before "invalid operands").
+- `tests/judge-clang-errors.test.ts` compiles every entry's example natively with `clang++ -std=c++20 -fno-exceptions -Wall -fsyntax-only` and asserts clang's first error maps to that entry, so the patterns are tied to real output (clang 18 here). Also tests parsing of notes/carets/summary lines and unknown messages.
+- Verified: `npm run lint`, `typecheck`, `test` (87 pass), `build`, `build:pages` pass. No visual changes, so no screenshots.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: patterns come from clang 18; the browser's `@yowasp/clang` is a different version, so A3d's smoke test should re-run the table against its output; link errors (undefined reference) and warnings-as-hints are not covered; nothing renders the table until the editor UI (A5).
+- Branch note: committed to the session branch `claude/eloquent-ritchie-jkww5m` (the session's designated branch) rather than `main`; the owner may need to merge it to `main` for deploys.
+- Next: A3d (`judgeProblem()` wiring + Playwright smoke test).
