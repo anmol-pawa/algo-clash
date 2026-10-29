@@ -48,3 +48,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: matched against native clang 18; the bundled wasm clang version may word a few messages differently (A3d smoke test should compare); not yet shown in any UI.
 - Next: A3d (`judgeProblem()` wiring + Playwright smoke test).
+
+## 2026-10-29: A3d judgeProblem() wiring and browser smoke test
+- Added `lib/judge/judge.ts`: `judgeProblem(req, deps)` generates the driver source, compiles once, runs all tests in one batched process, and maps to AC/WA/TLE/RE/CE. If the batch crashes, times out or prints the wrong number of lines, it reruns tests one by one to pin the first failure on a test. CE carries raw diagnostics plus the friendly entry from `clangErrors.ts` (the `#line` directives mean clang already reports the player's own line numbers).
+- `/dev/judge` gained "Judge two-sum / wrong / CE" buttons; `scripts/smoke-judge.mjs <baseUrl>` drives them in Chromium.
+- Verified: `tests/judge-core.test.ts` (5 tests, native g++ standing in for the workers: AC, WA index, crash attribution, TLE, CE); `npm run lint`, `typecheck`, `test` (89 pass), `build`, `build:pages` pass. Smoke test against `next dev` with the real wasm clang: AC / WA failedAt=1 / CE all correct, CE's first error reported at line 13 with the friendly "Missing semicolon" entry, so the bundled clang's wording matches the table for that case. Screenshots (desktop and iPhone 14): no console errors, no horizontal overflow, buttons readable.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: per-test wall time is the batch average; only the missing-semicolon wording was compared against wasm clang; the smoke test is a manual script, not in CI. Work was pushed to the session branch `claude/eloquent-ritchie-oyc6sm` (the harness restricts pushes to it), not `main`, so the Pages deploy will not see it until merged.
+- Next: A4 (content pipeline).

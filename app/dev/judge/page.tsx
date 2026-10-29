@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { compileCpp, runWasm } from "@/lib/judge/client";
+import { judgeProblem } from "@/lib/judge/judge";
+import type { DriverSpec } from "@/lib/judge/harness/driver";
 
 const SAMPLE = `#include <bits/stdc++.h>
 using namespace std;
@@ -35,6 +37,30 @@ int main(int argc, char** argv) {
 }
 `;
 
+const TWO_SUM_SPEC: DriverSpec = { kind: "function", name: "twoSum", returns: "vector<int>", params: [{ type: "vector<int>&", name: "nums" }, { type: "int", name: "target" }] };
+const TWO_SUM_TESTS = [
+  { input: "[2,7,11,15]\n9", expected: "[0,1]" },
+  { input: "[3,2,4]\n6", expected: "[1,2]" },
+  { input: "[3,3]\n6", expected: "[0,1]" },
+];
+const TWO_SUM_CODE = `#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> seen;
+        for (int i = 0; i < (int)nums.size(); ++i) {
+            auto it = seen.find(target - nums[i]);
+            if (it != seen.end()) return {it->second, i};
+            seen[nums[i]] = i;
+        }
+        return {};
+    }
+};
+`;
+const WRONG_BODY = "return {0, 1};";
+
 /** Judge playground for the A2 toolchain spike: compile + run C++ in workers and report timings. */
 export default function DevJudge() {
   const [src, setSrc] = useState(SAMPLE);
@@ -57,6 +83,14 @@ export default function DevJudge() {
     setBusy(false);
   }
 
+  async function judge(code: string) {
+    setBusy(true);
+    setLog("judging…");
+    const r = await judgeProblem({ spec: TWO_SUM_SPEC, code, tests: TWO_SUM_TESTS, timeLimitMs: 2000 });
+    setLog(`verdict ${r.verdict} failedAt=${r.failedAt} maxMs=${Math.round(r.maxMs)}\n${r.diagnostics ?? ""}${r.firstError ? `\nfirst error line ${r.firstError.line}: ${r.firstError.entry?.title ?? r.firstError.message}` : ""}\n${JSON.stringify(r.outcomes)}`);
+    setBusy(false);
+  }
+
   return (
     <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-3 px-4 py-6">
       <h1 className="font-display text-2xl text-[var(--gold)]">Judge playground</h1>
@@ -76,6 +110,15 @@ export default function DevJudge() {
         </label>
         <button id="go" className="px-btn px-5" disabled={busy} onClick={go}>
           {busy ? "Running…" : "Compile & run"}
+        </button>
+        <button id="judge-ac" className="px-btn px-5" disabled={busy} onClick={() => judge(TWO_SUM_CODE)}>
+          Judge two-sum
+        </button>
+        <button id="judge-wa" className="px-btn px-5" disabled={busy} onClick={() => judge(TWO_SUM_CODE.replace("return {it->second, i};", WRONG_BODY))}>
+          Judge wrong
+        </button>
+        <button id="judge-ce" className="px-btn px-5" disabled={busy} onClick={() => judge(TWO_SUM_CODE.replace("return {};", "return {}"))}>
+          Judge CE
         </button>
       </div>
       <pre id="log" className="panel min-h-24 overflow-x-auto whitespace-pre-wrap p-2 text-xs">{log}</pre>
