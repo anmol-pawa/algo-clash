@@ -38,6 +38,8 @@ Never fall back to a C++ *interpreter* that lacks real STL semantics; it would t
 - keep the clang module instantiated in a long-lived worker
 - compile only the user's translation unit, then link against a cached harness object
 
+**A2 result (ADR 0001):** `@yowasp/clang` works in a Chromium worker. Exceptions do **not** link (compile with `-fno-exceptions`), recursion is capped at roughly 5,000 frames by the host stack whatever `-z stack-size` says, and a warm compile is about 5 s. Budget problems accordingly.
+
 ### 2.2 Execution
 - **Compile worker:** owns the clang module. Input: user source + harness + problem driver. Output: a WASM binary or diagnostics.
 - **Run worker:** a fresh worker per run, with a WASI shim (e.g. `@bjorn3/browser_wasi_shim`, or a minimal in-repo shim) and stdin/stdout as in-memory buffers. Timeout via `worker.terminate()`. The wall time is reported. Optional instruction-count metering is not needed.

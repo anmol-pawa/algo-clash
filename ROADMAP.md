@@ -12,7 +12,7 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
   - Next.js 16 + React 19 + Pixi 8 + Tailwind 4, the PWA/service worker (keep the worker-fragment fix), the `ci.yml` + `pages.yml` workflows (basePath `/algo-clash`), and lint/typecheck/test/build/build:pages scripts.
   - Remove every Query/SQL/PGlite reference. Add `.gitignore`, the `.routine/` lock convention and a README.
   - The title screen and an empty `/play` render.
-- [ ] A2. **C++ toolchain spike** (ARCH §2.1): a `/dev/judge` page compiles and runs a STL-heavy LeetCode-style program in a worker using `@yowasp/clang`.
+- [x] A2. **C++ toolchain spike** (ARCH §2.1): a `/dev/judge` page compiles and runs a STL-heavy LeetCode-style program in a worker using `@yowasp/clang`.
   - Measure download size, cold/warm compile time, memory, exceptions and stack size on desktop Chromium and Playwright iPhone 14 emulation.
   - Write `docs/adr/0001-cpp-runtime.md` with the numbers and the decision (including the mobile policy).
   - If it fails, try the fallbacks listed in ARCH §2.1 before deciding.

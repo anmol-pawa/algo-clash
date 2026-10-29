@@ -20,7 +20,7 @@ const hash = createHash("sha256");
 const urls = [];
 for (const file of walk(out).sort()) {
   const rel = relative(out, file).split(sep).join("/");
-  if (rel === "sw.js" || rel === ".nojekyll" || rel.endsWith(".map")) continue;
+  if (rel === "sw.js" || rel === ".nojekyll" || rel.endsWith(".map") || rel.startsWith("toolchain/")) continue; // toolchain (~105 MB) is cached on first use
   hash.update(rel).update(readFileSync(file));
   // serve directory indexes by their pretty URL too (…/campaign/)
   urls.push(`${base}/${rel}`);
