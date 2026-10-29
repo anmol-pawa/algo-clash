@@ -98,3 +98,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: vim mode not added (needs `@replit/codemirror-vim`, deferred); settings are not persisted until A6; the symbol bar is always shown (should hide on keyboard-attached desktops later).
 - Next: A5b (statement panel, Run/Submit verdict panels wired to `judgeProblem`).
+
+## 2026-10-29: A5b Statement panel and verdict panels
+- Added `lib/ui/statement.ts` (safe minimal markdown to blocks, constraints as stat chips), `lib/ui/verdictView.ts` (JudgeResult to headline/tone/per-test chips, WA input/expected/got diff with first differing char, CE friendly explanation), `components/StatementPanel.tsx`, `components/VerdictPanel.tsx`, and `/dev/problem` (statement + editor + Run on the basic tests / Submit on all hidden tests via `judgeProblem`). 5 unit tests in `tests/ui-statement-verdict.test.ts`, including parsing a real `problem.md`.
+- Verified: `npm run lint`, `typecheck`, `test` (125 pass, includes content:verify), `build`, `build:pages` pass. Playwright on the static export at desktop and iPhone 14: layout reads well, no console errors, no horizontal overflow. The WASM toolchain was not exercised in the browser this run (large download), so Run/Submit verdict rendering is covered by unit tests only.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: dev page hardcodes crate-brackets (a bundled catalogue comes with A7); no hint/editorial UI yet.
+- Next: A5c is blocked on A6, so A6 (IndexedDB save system) is the next box.
