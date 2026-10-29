@@ -16,12 +16,11 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
   - Measure download size, cold/warm compile time, memory, exceptions and stack size on desktop Chromium and Playwright iPhone 14 emulation.
   - Write `docs/adr/0001-cpp-runtime.md` with the numbers and the decision (including the mobile policy).
   - If it fails, try the fallbacks listed in ARCH §2.1 before deciding.
-- [ ] A3. **Judge core** (ARCH §2.2–2.3):
-  - compile worker + run worker with timeout
-  - the `bits/stdc++.h` shim
-  - LeetCode harness (ListNode, TreeNode, graph Node, LC literal parsers and printers, the design-problem operations format)
-  - verdicts AC/WA/TLE/RE/CE and the friendly clang-error table (first 40 errors, generated natively in tests)
-  - unit tests for the parsers/printers and the verdict mapping, and a Playwright smoke test that compiles and judges one problem in Chromium
+- [ ] A3. **Judge core** (ARCH §2.2–2.3), split into sub-boxes:
+  - [x] A3a. Pure TS: LC literal parser/printer (`lib/judge/lc.ts`) and verdict mapping (`lib/judge/verdict.ts`), unit-tested.
+  - [ ] A3b. C++ harness header (`ListNode`, `TreeNode`, graph `Node`, LC literal parsers/printers, design-problem ops format) and a generated `main` per problem; tested natively with g++.
+  - [ ] A3c. Friendly clang-error table (first 40 errors, generated natively in tests) in `lib/judge/clangErrors.ts`.
+  - [ ] A3d. `judgeProblem()` wiring compile worker + run worker + verdicts, and a Playwright smoke test that compiles and judges one problem in Chromium.
 - [ ] A4. **Content pipeline** (GDD §8, ARCH §2.4):
   - the problem package format
   - `npm run content:verify` (native g++ compile, test generation, stress test reference vs brute, wrong solutions must fail, metadata and editorial validation) wired into Vitest
