@@ -31,6 +31,9 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
   - the pattern taxonomy (`content/patterns.ts`, matching CUR §3–5)
   - three sample problems that pass the pipeline
 - [ ] A5. **Editor and battle-code UI:**
+  - [x] A5a. CodeMirror 6 C++ editor component (themes, font size, autocomplete toggle, mobile symbol toolbar) with pure settings/insert helpers in `lib/editor/`, unit-tested, shown on `/dev/editor`. (Vim option deferred to a later box.)
+  - [ ] A5b. Statement panel (markdown, examples, constraints-as-stats) and Run/Submit verdict panels with diffs wired to `judgeProblem`.
+  - [ ] A5c. Drafts autosave (after A6 save system).
   - CodeMirror 6 C++ editor (themes, font size, vim option, autocomplete toggle per mode, a mobile symbol toolbar)
   - statement panel (markdown, examples, constraints-as-stats)
   - Run (visible + custom tests) and Submit (hidden groups) with verdict panels and diffs

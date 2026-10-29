@@ -90,3 +90,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: skyline-hall `tests.json` is 3.6 MB (perf arrays); consider storing perf tests as generator seeds before shipping to the client (A5/A6). Problems are not yet playable in a UI.
 - Next: A5 (CodeMirror editor and battle-code UI).
+
+## 2026-10-29: A5a CodeMirror C++ editor component
+- Split A5 into A5a–A5c in `ROADMAP.md`. Done: A5a.
+- Added `components/CodeEditor.tsx` (CodeMirror 6, C++ highlighting, night/paper themes, font size, autocomplete toggle via compartments, closeBrackets, history, Tab indent, mobile symbol toolbar with ≥44 px keys that does not steal focus), pure helpers in `lib/editor/settings.ts` (`sanitizeSettings`, `SYMBOL_KEYS`, `applySymbol`) with 4 unit tests, `/dev/editor` playground and `scripts/smoke-editor.mjs`.
+- Verified: `npm run lint`, `typecheck`, `test` (120 pass), `build`, `build:pages` pass. `content:verify` is part of `npm test` and passes. Playwright smoke on the static export at desktop and iPhone 14: typing plus symbol-bar insert works (`int x()`), theme/font toggles work, no console errors, no horizontal overflow; screenshots read well (long lines scroll inside the editor).
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: vim mode not added (needs `@replit/codemirror-vim`, deferred); settings are not persisted until A6; the symbol bar is always shown (should hide on keyboard-attached desktops later).
+- Next: A5b (statement panel, Run/Submit verdict panels wired to `judgeProblem`).
