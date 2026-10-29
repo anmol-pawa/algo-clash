@@ -40,3 +40,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: no cyclic linked lists, N-ary or random-pointer nodes yet (add behind macros when a problem needs them); per-test timing is not emitted by the driver (whole-run wall time only); the harness is not yet wired to the workers.
 - Next: A3c (friendly clang-error table).
+
+## 2026-10-29: A3c Friendly clang errors
+- Added `lib/judge/clangErrors.ts`: `parseDiagnostics` (file/line/col/severity/message, `-W` flag stripped, notes attached), `explainCompile` (first 40 errors, `hidden` count, a one-line headline like "Line 4: Missing semicolon"), 29 ordered rules plus a generic fallback, and `JUDGE_CLANG_FLAGS` (`-Werror=return-type`). Errors raised in harness code map to a null line, unless a note points back into the player's `solution.cpp` (an unclosed brace), and the headline then tells the player to check their method signature.
+- `tests/judge-clang-errors.test.ts` (39 tests) compiles 33 known-broken snippets natively with clang++ 18 (same flags as the browser plus the generated driver) and asserts the rule and the line for each; also that every non-generic rule is covered by a snippet, that a clean solution has no diagnostics, the 40-error cap and the parser.
+- Verified: `npm run lint`, `typecheck`, `test` (80 pass), `build`, `build:pages`. No visual changes, so no screenshots.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: the table matches clang 18 wording (the browser bundles `@yowasp/clang`, whose version may differ slightly; A3d's smoke test should include one CE case); the compile worker does not yet pass `JUDGE_CLANG_FLAGS` (A3d); the clang test file takes about 35 s (parallel native compiles).
+- Next: A3d (`judgeProblem()` wiring plus Playwright smoke test).
