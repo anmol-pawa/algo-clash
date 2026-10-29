@@ -65,3 +65,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: nothing loads real packages yet; the taxonomy will grow as regions are built.
 - Next: A4b (package loader and native g++ runner with seeded RNG and `.cache/`).
+
+## 2026-10-29: A4b Native runner, package loader, seeded RNG
+- Added `lib/content/rng.ts` (mulberry32 `Rng` with `int/pick/shuffle/ints`, `seedFor(problemId, label)` for stable per-group seeds), `lib/content/native.ts` (`compileNative` with g++ `-std=c++20 -O2 -fno-exceptions`, binaries cached by source hash in `.cache/native`; `runNative` batch run mapping hang→TLE, crash/bad line count→RE; `GenModule` contract for `gen.ts`; `loadPackage` and `findPackages` for `content/problems/<region>/<slug>/`).
+- `tests/content-native.test.ts` (6 tests): RNG determinism/bounds/shuffle, compile + cache hit, compile error, TLE, RE. `.cache/` added to `.gitignore`.
+- Verified: `npm run lint`, `typecheck`, `test` (107 pass), `build`, `build:pages` pass. No visual changes, so no screenshots.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: `loadPackage` has no test yet (needs a real package; A4d covers it); `GenModule` shape may be adjusted by A4c/A4d.
+- Next: A4c (`content:verify`: regenerate tests.json, stale check, 200-case stress vs brute, wrong solutions rejected).
