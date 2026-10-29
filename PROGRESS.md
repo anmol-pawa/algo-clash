@@ -65,3 +65,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: nothing loads real packages yet; the taxonomy will grow as regions are built.
 - Next: A4b (package loader and native g++ runner with seeded RNG and `.cache/`).
+
+## 2026-10-29: A4b Package loader and native g++ runner
+- Added `lib/content/rng.ts` (seeded mulberry32 `Rng`: `int`, `pick`, `shuffle`) and `lib/content/native.ts` (`compileNative` via the real driver with `g++ -std=c++20 -O2 -Wall -fno-exceptions`, hash-cached in `.cache/native/`; `runNative` batch runner with RE/TLE status; `loadProblemFiles` for solution/brute/`wrong/*`/`tests.json`; `answersFor` helper). `/.cache/` added to `.gitignore`.
+- `tests/content-native.test.ts` (6 tests): RNG determinism/range/shuffle, compile cache hit, batch run, compile error, RE, TLE, loader.
+- Verified: `npm run lint`, `typecheck`, `test` (107 pass), `build`, `build:pages` pass. No visual changes, so no screenshots. `content:verify` does not exist yet (A4c).
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: `gen.ts` contract (`GeneratedCase`) is defined but not yet consumed; no real problem packages yet.
+- Branch note: this session's harness pinned work to `claude/eloquent-ritchie-wp7pal` rather than `main`, so the commit is there and needs merging to `main` for Pages.
+- Next: A4c (`npm run content:verify`: regenerate `tests.json`, stale check, 200-case stress vs brute, wrong solutions rejected).
