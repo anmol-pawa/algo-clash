@@ -38,7 +38,7 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
   - statement panel (markdown, examples, constraints-as-stats)
   - Run (visible + custom tests) and Submit (hidden groups) with verdict panels and diffs
   - drafts autosave to IndexedDB
-- [ ] A6. **Save system:** IndexedDB schema v1 (profile, party, mastery, attempts, drafts, settings, flags), migrations, JSON export/import, and tests.
+- [x] A6. **Save system:** IndexedDB schema v1 (profile, party, mastery, attempts, drafts, settings, flags), migrations, JSON export/import, and tests.
 
 ## Phase B: Vertical slice (first playable, about 30 minutes of play)
 

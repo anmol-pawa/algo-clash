@@ -105,3 +105,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: dev page hardcodes crate-brackets (a bundled catalogue comes with A7); no hint/editorial UI yet.
 - Next: A5c is blocked on A6, so A6 (IndexedDB save system) is the next box.
+
+## 2026-10-29: A6 Save system
+- Added `lib/save/`: `schema.ts` (v1 `CoreSave`: profile, party, mastery, settings, flags, plus `Attempt` and `Draft`, with never-throwing sanitisers), `migrations.ts` (versioned chain with a v0 prototype migration; a save from a newer version is refused and never overwritten), `backend.ts` (`SaveBackend` contract and `MemoryBackend`), `idb.ts` (IndexedDB stores `core`, `attempts` indexed by problem, `drafts`), `service.ts` (`SaveService`: load/migrate/rewrite, attempts, drafts, JSON export/import that validates before replacing anything, reset).
+- `tests/save.test.ts` (13 tests): sanitising, idempotence, v0 migration, future-version refusal, corrupt fallback, attempts, drafts, export/import round trip, bad imports leave storage untouched.
+- `/dev/save` and `scripts/smoke-save.mjs` run a real IndexedDB round trip (save, attempt, draft, export, reset, import) in Chromium.
+- Verified: `npm run lint`, `typecheck`, `test` (138 pass, includes content:verify), `build`, `build:pages` pass. Smoke test on the static export at desktop and iPhone 14: round trip OK, no console errors, no horizontal overflow (dev page is a single button and a text line, no art changes).
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: the SRS fields in `ProblemMastery` are placeholders until `lib/srs/` (a later box); no UI for export/import yet (Settings screen); `/dev/save` is not linked from anywhere.
+- Next: A5c (drafts autosave in the editor, every 5 s, using `SaveService`).
