@@ -73,3 +73,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: `loadPackage` has no test yet (needs a real package; A4d covers it); `GenModule` shape may be adjusted by A4c/A4d.
 - Next: A4c (`content:verify`: regenerate tests.json, stale check, 200-case stress vs brute, wrong solutions rejected).
+
+## 2026-10-29: A4c content:verify
+- Added `lib/content/verify.ts` (`generateTests`: seeded tests from `gen.ts` with expected outputs from the reference and a native perf-time check at `timeLimitMs / 3`; `verifyPackage`: meta/statement/hints/editorial/test validation, 200-case reference-vs-brute stress, hidden tests reproduce the reference, every `wrong/*.cpp` must fail a hidden test by WA/RE/TLE, mediums and hards need a `wrong/tle*.cpp`). `ProblemMeta` gained optional `floatTol`.
+- `tests/content-packages.test.ts`: loops over `content/problems/*/*` (stale-`tests.json` check) plus a synthetic in-memory package proving the verifier flags a disagreeing reference, a passing wrong solution and a missing TLE file, and accepts a hung wrong solution as TLE. Scripts: `npm run content:verify`, `npm run content:gen` (rewrites `tests.json`).
+- Verified: `npm run lint`, `typecheck`, `test` (113 pass), `content:verify` (6 pass), `build`, `build:pages` pass. No visual changes, so no screenshots.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01). Note: this run committed to the harness-designated branch `claude/eloquent-ritchie-tj9aoz`, not `main`; merge to `main` is needed for deploy.
+- Known gaps: no real problem package yet (A4d); browser-WASM time ratio is not measured by `content:verify`.
+- Next: A4d (three sample problems E/M/H as full packages).

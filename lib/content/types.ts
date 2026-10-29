@@ -32,6 +32,8 @@ export interface ProblemMeta {
   /** Relative weight of each hidden test group in the score. */
   testWeights: Record<TestGroup, number>;
   similar: SimilarPointer[];
+  /** Compare outputs with this absolute/relative tolerance instead of exactly (floating-point answers). */
+  floatTol?: number;
   /** Signature for the generated driver. */
   spec: DriverSpec;
 }
