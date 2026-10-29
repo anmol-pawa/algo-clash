@@ -40,3 +40,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: no cyclic linked lists, N-ary or random-pointer nodes yet (add behind macros when a problem needs them); per-test timing is not emitted by the driver (whole-run wall time only); the harness is not yet wired to the workers.
 - Next: A3c (friendly clang-error table).
+
+## 2026-10-29: A3c Friendly clang-error table
+- Added `lib/judge/clangErrors.ts`: 41 entries (title, why, fix, pattern, broken snippet) plus `parseClangErrors` (line/column/message with line offset for the injected harness) and `explainFirstError`.
+- `tests/judge-clang-errors.test.ts` compiles every snippet with native clang++ (C++20, `-fno-exceptions`, linked) and asserts real clang output maps to the entry's own id, so the table cannot drift from real messages. Free-function arity errors surface from clang as "no matching function", so they share that entry.
+- Verified: `npm run lint`, `typecheck`, `test` (84 pass), `build`, `build:pages` all pass. No visual changes, so no screenshots.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: matched against native clang 18; the bundled wasm clang version may word a few messages differently (A3d smoke test should compare); not yet shown in any UI.
+- Next: A3d (`judgeProblem()` wiring + Playwright smoke test).
