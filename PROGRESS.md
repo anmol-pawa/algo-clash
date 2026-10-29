@@ -114,3 +114,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: the SRS fields in `ProblemMastery` are placeholders until `lib/srs/` (a later box); no UI for export/import yet (Settings screen); `/dev/save` is not linked from anywhere.
 - Next: A5c (drafts autosave in the editor, every 5 s, using `SaveService`).
+
+## 2026-10-29: A5c Drafts autosave
+- Added `lib/save/autosave.ts` (`DraftAutosaver`: throttled to one write per 5 s with the latest text, skips unchanged code, `flush()` on tab hide/unmount, retries after a storage failure, injectable timers) and wired it into `/dev/problem` (restores the saved draft on load and shows "Draft restored"). 3 unit tests in `tests/autosave.test.ts`.
+- Fixed a mobile layout bug from A5b: the `/dev/problem` grid column grew to 680 px on iPhone 14 (zoomed-out layout viewport); added `grid-cols-1`/`min-w-0`. The only remaining wide element is the symbol toolbar, which scrolls inside its own container.
+- `scripts/smoke-draft.mjs`: types, waits for autosave, reloads and expects the draft back.
+- Verified: `npm run lint`, `typecheck`, `test` (141 pass, includes content:verify), `build`, `build:pages` pass. Playwright on the static export at desktop and iPhone 14: draft restored after reload, no console errors, no horizontal overflow; iPhone screenshot reads well and fits the viewport.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: the draft is not cleared on an AC submit yet (battle flow, B-phase); restore can race with very fast typing right after load; editor settings are not yet persisted.
+- Next: B1 (art: starter and town).
