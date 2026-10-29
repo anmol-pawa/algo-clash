@@ -1,5 +1,4 @@
 import type { GenModule } from "../../../../lib/content/native";
-import type { Rng } from "../../../../lib/content/rng";
 
 const arr = (a: number[]) => `[${a.join(",")}]`;
 const flat = (n: number, v: number) => new Array<number>(n).fill(v);
