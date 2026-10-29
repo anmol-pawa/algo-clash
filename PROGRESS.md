@@ -82,3 +82,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: the whole-batch TLE rule means a wrong solution is "rejected by TLE" only if the full hidden batch exceeds `timeLimitMs`; custom checkers (multiple valid answers) are not wired in yet; `loadPackage` is covered only through the fixture.
 - Next: A4d (three real sample problems E/M/H as full packages).
+
+## 2026-10-29: A4d Three sample problems (E/M/H)
+- Added full packages under `content/problems/`: `R6/crate-brackets` (E, stack), `R3/calm-window` (M, sliding window, at most k distinct), `R6/skyline-hall` (H, monotonic stack, largest histogram area, 64-bit). Each has original statement, reference, brute, 3-4 wrong solutions (including a TLE one for M/H), seeded `gen.ts`, generated `tests.json`, 3-rung hints and an 8-section editorial.
+- `content:verify` now checks 3 real problems: reference matches brute on 200 random cases and every wrong solution is rejected. It caught one bad "wrong" solution in calm-window (the `if` instead of `while` shrink is actually correct, the non-shrinking window trick), which I replaced with a real bug and fixed the editorial/hints that had claimed otherwise.
+- Verified: `npm run lint`, `typecheck`, `test` (116 pass), `content:verify`, `build`, `build:pages` pass. No visual changes, so no screenshots.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: skyline-hall `tests.json` is 3.6 MB (perf arrays); consider storing perf tests as generator seeds before shipping to the client (A5/A6). Problems are not yet playable in a UI.
+- Next: A5 (CodeMirror editor and battle-code UI).
