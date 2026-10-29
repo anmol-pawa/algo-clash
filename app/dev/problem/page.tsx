@@ -1,11 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CodeEditor from "@/components/CodeEditor";
 import StatementPanel from "@/components/StatementPanel";
 import VerdictPanel from "@/components/VerdictPanel";
 import { DEFAULT_EDITOR_SETTINGS } from "@/lib/editor/settings";
 import { compileCpp, runWasm } from "@/lib/judge/client";
+import { DraftAutosaver, restoreDraft } from "@/lib/editor/autosave";
+import { IdbBackend } from "@/lib/save/idb";
+import { SaveService } from "@/lib/save/service";
 import { judgeProblem } from "@/lib/judge/judge";
 import { parseStatement } from "@/lib/ui/statement";
 import { buildVerdictView, type VerdictView } from "@/lib/ui/verdictView";
@@ -46,6 +49,25 @@ export default function DevProblem() {
   const [code, setCode] = useState(STARTER);
   const [view, setView] = useState<VerdictView | null>(null);
   const [busy, setBusy] = useState(false);
+  const autosaver = useRef<DraftAutosaver | null>(null);
+
+  // Restore the saved draft once, then autosave every 5 s and on unmount.
+  useEffect(() => {
+    let cancelled = false;
+    const svc = new SaveService(new IdbBackend());
+    restoreDraft(svc, meta.id, STARTER).then((c) => {
+      if (cancelled) return;
+      const a = new DraftAutosaver(svc, meta.id, c);
+      a.start();
+      autosaver.current = a;
+      setCode(c);
+    });
+    return () => {
+      cancelled = true;
+      void autosaver.current?.dispose();
+      autosaver.current = null;
+    };
+  }, []);
 
   async function judge(tests: typeof allTests) {
     setBusy(true);
@@ -60,7 +82,7 @@ export default function DevProblem() {
       <div className="grid min-h-0 flex-1 gap-3 lg:grid-cols-2">
         <div className="max-h-[40dvh] min-h-0 lg:max-h-none"><StatementPanel statement={statement} badge={<span className="px-btn px-2 text-xs">{meta.difficulty}</span>} /></div>
         <div className="flex min-h-0 flex-col gap-3">
-          <div className="h-[45dvh] min-h-0 lg:h-auto lg:flex-1"><CodeEditor value={code} onChange={setCode} settings={DEFAULT_EDITOR_SETTINGS} /></div>
+          <div className="h-[45dvh] min-h-0 lg:h-auto lg:flex-1"><CodeEditor value={code} onChange={(c) => { setCode(c); autosaver.current?.update(c); }} settings={DEFAULT_EDITOR_SETTINGS} /></div>
           <div className="flex gap-2">
             <button className="px-btn min-h-11 flex-1" disabled={busy} onClick={() => judge(visible)}>Run ({visible.length})</button>
             <button className="px-btn px-btn-primary min-h-11 flex-1" disabled={busy} onClick={() => judge(allTests as typeof allTests)}>{busy ? "Judging…" : `Submit (${allTests.length})`}</button>

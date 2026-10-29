@@ -114,3 +114,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: the SRS fields in `ProblemMastery` are placeholders until `lib/srs/` (a later box); no UI for export/import yet (Settings screen); `/dev/save` is not linked from anywhere.
 - Next: A5c (drafts autosave in the editor, every 5 s, using `SaveService`).
+
+## 2026-10-29: A5c Drafts autosave
+- Added `lib/editor/autosave.ts` (`DraftAutosaver`: saves the latest code every 5 s only when changed, serialised writes, a failed write stays dirty and retries, `dispose()` flushes; `restoreDraft` falls back to starter on missing/blank/error) and wired it into `/dev/problem` via `SaveService` + IndexedDB. 4 unit tests in `tests/editor-autosave.test.ts`; `scripts/smoke-draft.mjs` types, waits for autosave, reloads and checks the text returns.
+- Verified: `npm run lint`, `typecheck`, `test` (142 pass, includes content:verify), `build`, `build:pages` pass. Smoke on the static export at desktop and iPhone 14: draft restored, no console errors, no scrollWidth overflow. The iPhone screenshot looked horizontally offset (page scrolled left after the editor click), though `scrollWidth` reported no overflow; to recheck when the real battle screen replaces this dev page.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Note: this run was pinned to branch `claude/eloquent-ritchie-k1w9pw` by the session, so commits went there rather than `main`; merge to `main` for the Pages deploy.
+- Known gaps: drafts are only wired to the dev page; clearing the draft after an AC comes with the battle screen.
+- Next: B1 (art: starter and town).
