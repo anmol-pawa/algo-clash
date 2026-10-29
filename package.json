@@ -12,6 +12,8 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "content:verify": "vitest run tests/content-problems.test.ts",
+    "content:gen": "CONTENT_WRITE=1 vitest run tests/content-problems.test.ts",
     "icons": "node scripts/gen-icons.mjs",
     "build:pages": "node scripts/copy-toolchain.mjs && STATIC_EXPORT=1 BASE_PATH=${BASE_PATH-/algo-clash} next build && BASE_PATH=${BASE_PATH-/algo-clash} node scripts/gen-sw.mjs"
   },

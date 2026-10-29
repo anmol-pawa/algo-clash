@@ -73,3 +73,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: `loadPackage` has no test yet (needs a real package; A4d covers it); `GenModule` shape may be adjusted by A4c/A4d.
 - Next: A4c (`content:verify`: regenerate tests.json, stale check, 200-case stress vs brute, wrong solutions rejected).
+
+## 2026-10-29: A4c content:verify pipeline
+- Added `lib/content/verify.ts` (`verifyPackage`, `generateInputs`): validates meta/statement/hints/editorial, compiles solution/brute/wrong with g++, regenerates hidden tests from the seeded `gen.ts` with reference outputs, checks `tests.json` is fresh (missing or stale fails; `write: true` rewrites), stress-tests reference vs brute on 200 small cases, and requires every `wrong/*.cpp` to be rejected (WA, RE or TLE within the time limit). Mediums/hards need a `wrong/*tle*.cpp`.
+- `npm run content:verify` runs `tests/content-problems.test.ts` over `content/problems/**` (no real problems yet, so it checks only ids/cycles); `npm run content:gen` does the same with `CONTENT_WRITE=1` to regenerate `tests.json`.
+- `tests/content-verify.test.ts` exercises the whole pipeline on a fixture package (`tests/fixtures/problems/R2/pair-count`, counting pairs with hash lookup; wrong: int overflow, self-pair) and checks the negative paths: missing/stale tests.json, a "wrong" solution that is secretly right, reference disagreeing with brute.
+- Verified: `npm run lint` (clean), `typecheck`, `test` (113 pass), `content:verify`, `build`, `build:pages` pass. No visual changes, so no screenshots.
+- CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
+- Known gaps: the whole-batch TLE rule means a wrong solution is "rejected by TLE" only if the full hidden batch exceeds `timeLimitMs`; custom checkers (multiple valid answers) are not wired in yet; `loadPackage` is covered only through the fixture.
+- Next: A4d (three real sample problems E/M/H as full packages).

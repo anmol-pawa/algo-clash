@@ -24,7 +24,7 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
 - [ ] A4. **Content pipeline** (GDD §8, ARCH §2.4), split into sub-boxes:
   - [x] A4a. Pattern taxonomy (`content/patterns.ts`), package types (`lib/content/types.ts`) and pure validators for meta, editorial, hints, statement and tests (`lib/content/validate.ts`), unit-tested.
   - [x] A4b. Package loader plus native runner (`lib/content/native.ts`): compile solution/brute/wrong with g++ via the harness, run tests, hash-cached in `.cache/`; seeded RNG for `gen.ts`.
-  - [ ] A4c. `npm run content:verify` (regenerate `tests.json`, stale check, 200-case stress vs brute, wrong solutions rejected) wired into Vitest.
+  - [x] A4c. `npm run content:verify` (regenerate `tests.json`, stale check, 200-case stress vs brute, wrong solutions rejected) wired into Vitest.
   - [ ] A4d. Three sample problems (E/M/H) that pass the pipeline, full packages.
   - the problem package format
   - `npm run content:verify` (native g++ compile, test generation, stress test reference vs brute, wrong solutions must fail, metadata and editorial validation) wired into Vitest
