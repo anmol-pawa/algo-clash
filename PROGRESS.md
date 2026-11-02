@@ -154,3 +154,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (183 pass, includes content:verify), `build`, `build:pages` pass. No UI changes this run, so no screenshots.
 - Known gaps: no rendering or input yet; the `faceBack` NPC turn and flag persistence are for B2c; the villager sprite does not exist yet (B2b).
 - Next: B2b (`/play` canvas scene, camera, d-pad, tap-to-move, warps).
+
+## 2026-11-02: B2b Overworld rendering
+- Added `lib/overworld/mover.ts` (pure world tick: held direction and tap-to-move path, 170 ms tile steps, collisions, warps applied after the step, encounter roll, interpolated draw position), `lib/overworld/route1.ts` (second map so warps work both ways; Mainville warp arrival moved to y=1), a villager look, `game/sprites/canvasFrames.ts`, and `components/WorldCanvas.tsx` on `/play`: 11x9 tile camera with clamping, animated water/tall grass, NPCs, trainer walk cycle, keyboard (arrows/WASD, Z/Enter), 56 px on-screen d-pad and A button, tap-to-move, and a basic dialogue box with choices (so no conversation can soft-lock; B2c restyles it with portraits). 8 tests in `tests/overworld-mover.test.ts`; `scripts/smoke-play.mjs`.
+- Verified: `npm run lint`, `typecheck`, `test` (191 pass), `build`, `build:pages`; Playwright smoke on the static export at desktop and iPhone 14: talk to Iota with a choice, walk through the south warp to Route 1, no console errors, no horizontal overflow. Screenshots read well; fixed the map label wrapping on iPhone.
+- Known gaps: the overworld uses 2D canvas, not Pixi (noted in ARCH); encounters only show a placeholder note until B3/B4; no portraits or typewriter yet; NPC `faceBack` and flag saving are B2c; no transition fade between maps.
+- Next: B2c (pixel dialogue box with portraits and typewriter, flags saved via `SaveService`, `faceBack`).

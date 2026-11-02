@@ -69,7 +69,7 @@ CI installs g++ (present on `ubuntu-latest`). Native compile results are cached 
 
 ## 4. Game runtime
 
-- `game/` holds the Pixi scenes: Overworld (tile map, player movement, NPCs, triggers, encounters), Battle (stage, sprites, FX), Transitions.
+- `game/` holds the scenes (the B2b overworld renders with a 2D canvas via `components/WorldCanvas.tsx` and the pure `lib/overworld/mover.ts`; Pixi is for the battle stage, B3): Overworld (tile map, player movement, NPCs, triggers, encounters), Battle (stage, sprites, FX), Transitions.
 - `game/sprites/` holds palette + grid sprite definitions (as in Query Clash) with idle/attack/hurt/faint/evolve frames, `/dev/sprites` for review, and tests.
 - `lib/battle/` holds the pure battle logic (damage, multipliers, hearts, verdict → animation events). It's unit-tested and has no Pixi dependency.
 - `lib/srs/` holds the scheduler (mastery states, intervals, rust) with property tests.

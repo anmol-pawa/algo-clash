@@ -31,6 +31,12 @@ export const IOTA: CharacterLook = {
   glasses: true,
 };
 
+export const VILLAGER: CharacterLook = {
+  name: "villager",
+  colors: ["#f0c8a0", "#d4a07a", "#7a4a2a", "#55321c", "#6aa84f", "#487a36", "#f2e6c9", "#cdbd96",
+    "#8a6a4a", "#664a30", "#3a2a2a", "#ffffff", "#141018", "#f0c040", "#f0a090", "#7a2c2c"],
+};
+
 export function lookPalette(l: CharacterLook): string[] {
   // index 0 transparent, 1 outline, 2..17 from look
   return ["", "#1a1420", ...l.colors];
