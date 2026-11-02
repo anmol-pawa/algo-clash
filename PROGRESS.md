@@ -147,3 +147,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI on 691e8dd failed once: `wrong/tle-pair-deletion.cpp` was not rejected on the faster CI runner (the old perf group only just exceeded the 1 s limit locally). Added two perf cases with a long unmatched prefix (`)`x50000 + `()`x25000, `]`x40000 + `(`x30000 + `)`x30000); the wrong solution now takes about 9 s total against the 1 s limit; reference unaffected. Regenerated `tests.json`.
 - Verified: lint, typecheck, test (161 pass, includes content:verify).
 - Lesson: a TLE wrong solution needs a >=5x margin over the limit, not ~1x.
+
+## 2026-11-02: B2a Overworld and dialogue logic
+- Added `lib/overworld/map.ts` (map format with legend, `validateMap`, `walkable`, `step` with turn-before-walk, warps, `facingNpc`, weighted deterministic `rollEncounter`, BFS `findPath` for tap-to-move that avoids warps) and `lib/dialogue/script.ts` (nodes, choices, flag branches, `validateScript`, `advance`/`choose`, typewriter `visibleChars`). 10 unit tests in `tests/overworld.test.ts`. ROADMAP B2 split into B2a-B2c.
+- Verified: lint, typecheck, test, build, build:pages (see commit). No visual change this run, so no screenshots.
+- Actions quota note ended 2026-11-01; CI is checked for the branch commit where possible.
+- Next: B2b (Pixi overworld scene on /play).
