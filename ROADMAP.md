@@ -44,11 +44,10 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
 
 Goal: a new player can start a game, walk Mainville, get the starter, take the first lesson, win concept and coding battles, inscribe a scroll and beat the first gym, on desktop and iPhone.
 
-- [ ] B1. **Art: starter and town.** (split: B1a done)
+- [ ] B1. **Art: starter and town.** (split: B1a, B1b done)
   - [x] B1a. ARRAYLING front/back sprites with idle/attack/hurt/faint/evolve (64×64, shaded, 3–4 ramps), grid toolkit `game/sprites/grid.ts`, `/dev/sprites`
-  - the trainer overworld sprite (4-direction walk cycle)
-  - Professor Iota's portrait and overworld sprite
-  - the Mainville tileset (grass, paths, houses, lab, water, trees) on `/dev/sprites`
+  - [x] B1b. Trainer overworld sprite (4-direction walk cycle) and Professor Iota's overworld sprite and portrait (`game/sprites/character.ts`)
+  - [ ] B1c. Mainville tileset: grass, paths, houses, lab, water, trees on `/dev/sprites`
 - [ ] B2. **Overworld engine:** tile map format, camera, collision, 4-direction movement (keyboard, d-pad and tap-to-move on mobile), NPC interaction, warps between maps, encounter zones, and a pixel dialogue box with portraits (dialogue scripts in `lib/dialogue/`).
 - [ ] B3. **Battle stage** (ported from Query Clash and restyled):
   - platforms, slide-ins, HP boxes, the typing text box, hit-stop, shake, damage numbers and verdict stingers

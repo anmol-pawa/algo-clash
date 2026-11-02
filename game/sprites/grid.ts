@@ -107,3 +107,26 @@ export function toRGBA(g: Grid, palette: string[]): Uint8ClampedArray {
   }
   return out;
 }
+
+/** Horizontal mirror (used for the right-facing walk cycle). */
+export function mirrorH(src: Grid): Grid {
+  const out = new Grid(src.w, src.h);
+  for (let y = 0; y < src.h; y++) for (let x = 0; x < src.w; x++) out.set(src.w - 1 - x, y, src.get(x, y));
+  return out;
+}
+
+/** Add a 1px outline (colour `line`) around every opaque region, on transparent pixels only. */
+export function outline(g: Grid, line: number): void {
+  const add: number[] = [];
+  for (let y = 0; y < g.h; y++)
+    for (let x = 0; x < g.w; x++)
+      if (!g.get(x, y) && (g.get(x - 1, y) || g.get(x + 1, y) || g.get(x, y - 1) || g.get(x, y + 1))) add.push(y * g.w + x);
+  for (const i of add) g.d[i] = line;
+}
+
+/** Filled box with a darker bottom row and right column. */
+export function shadedBox(g: Grid, x: number, y: number, w: number, h: number, base: number, shade: number): void {
+  fillRect(g, x, y, w, h, base);
+  fillRect(g, x, y + h - 1, w, 1, shade);
+  fillRect(g, x + w - 1, y, 1, h, shade);
+}

@@ -130,3 +130,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy: Actions quota note ended 2026-11-01, so confirmation is attempted below if possible.
 - Known gaps: art is procedural-shaded and fairly simple (could get more face/limb detail later); evolve is a flat silhouette pulse, no morph yet.
 - Next: B1b (trainer 4-direction walk cycle, Professor Iota sprite and portrait), then B1c (Mainville tileset).
+
+## 2026-11-02: B1b Trainer and Professor Iota sprites
+- Added `game/sprites/character.ts`: 16x24 overworld sheets (down/up/left walk x4 frames, right = mirror, idle) for the trainer and Professor Iota (silver hair, glasses, lab coat), 48x48 dialogue portraits with blink and talk animations; new grid helpers `outline`, `mirrorH`, `shadedBox`. `/dev/sprites` shows them; 9 unit tests in `tests/sprites-character.test.ts`.
+- Verified: lint, typecheck, test, build, build:pages; Playwright on the static export at desktop and iPhone 14: no console errors, no overflow; screenshots read well (walk poses, portraits). Glasses were too heavy in the first pass and were thinned.
+- Known gaps: side-view legs are simple; the trainer has no gender/skin options yet (customisation later).
+- Next: B1c (Mainville tileset: grass, paths, houses, lab, water, trees).
