@@ -136,3 +136,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: lint, typecheck, test, build, build:pages; Playwright on the static export at desktop and iPhone 14: no console errors, no overflow; screenshots read well (walk poses, portraits). Glasses were too heavy in the first pass and were thinned.
 - Known gaps: side-view legs are simple; the trainer has no gender/skin options yet (customisation later).
 - Next: B1c (Mainville tileset: grass, paths, houses, lab, water, trees).
+
+## 2026-11-02: B1c Mainville tileset
+- Added `game/sprites/tiles.ts`: 18 deterministic 16x16 tiles (grass x2, flowers, path, path edge, animated water x4, tree, bush, fence, sign, house wall/roof/door/window, teal lab wall/roof/door, animated tall grass x2) on a shared 36-colour palette, plus a `SOLID` set for the overworld's collision (B2). `components/TileScene.tsx` composes an animated sample village on `/dev/sprites`. 4 unit tests in `tests/sprites-tiles.test.ts`.
+- Verified: lint, typecheck, test (161 pass), build, build:pages; Playwright on the static export (served under `/algo-clash`) at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots show readable tiles and a coherent village scene.
+- Known gaps: no sand/shore edge tiles or paths turning corners yet; lab building uses the generic door/roof (a dedicated lab sign comes with the map in B2).
+- Next: B2 (overworld engine: tile map format, camera, collision, movement, dialogue).
