@@ -48,6 +48,9 @@ export const gen: GenModule = {
       [q("(".repeat(50000) + ")".repeat(50000))],
       [q("()".repeat(50000))],
       [q("(".repeat(100000))],
+      // Long unmatched prefix: a rescan-from-the-start solution pays 50k steps per removal (quadratic with a wide margin).
+      [q(")".repeat(50000) + "()".repeat(25000))],
+      [q("]".repeat(40000) + "(".repeat(30000) + ")".repeat(30000))],
     ],
   },
 };

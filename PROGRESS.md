@@ -142,3 +142,8 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: lint, typecheck, test (161 pass), build, build:pages; Playwright on the static export (served under `/algo-clash`) at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots show readable tiles and a coherent village scene.
 - Known gaps: no sand/shore edge tiles or paths turning corners yet; lab building uses the generic door/roof (a dedicated lab sign comes with the map in B2).
 - Next: B2 (overworld engine: tile map format, camera, collision, movement, dialogue).
+
+## 2026-11-02: fix flaky TLE check in crate-brackets (CI)
+- CI on 691e8dd failed once: `wrong/tle-pair-deletion.cpp` was not rejected on the faster CI runner (the old perf group only just exceeded the 1 s limit locally). Added two perf cases with a long unmatched prefix (`)`x50000 + `()`x25000, `]`x40000 + `(`x30000 + `)`x30000); the wrong solution now takes about 9 s total against the 1 s limit; reference unaffected. Regenerated `tests.json`.
+- Verified: lint, typecheck, test (161 pass, includes content:verify).
+- Lesson: a TLE wrong solution needs a >=5x margin over the limit, not ~1x.
