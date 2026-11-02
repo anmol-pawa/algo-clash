@@ -147,3 +147,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI on 691e8dd failed once: `wrong/tle-pair-deletion.cpp` was not rejected on the faster CI runner (the old perf group only just exceeded the 1 s limit locally). Added two perf cases with a long unmatched prefix (`)`x50000 + `()`x25000, `]`x40000 + `(`x30000 + `)`x30000); the wrong solution now takes about 9 s total against the 1 s limit; reference unaffected. Regenerated `tests.json`.
 - Verified: lint, typecheck, test (161 pass, includes content:verify).
 - Lesson: a TLE wrong solution needs a >=5x margin over the limit, not ~1x.
+
+## 2026-11-02: B2a Overworld and dialogue logic
+- Split B2 into B2a–B2c in `ROADMAP.md`. Done: B2a (pure logic, no rendering).
+- Added `lib/overworld/map.ts` (map format, `parseMap` validation with readable errors, solid/encounter/readable tile sets, NPCs, warps, signs), `walk.ts` (`step` with turn/move/bump/warp/encounter events and an injected RNG, `interact`, `arrive`, `findPath` BFS for tap-to-move that stops next to and faces blocked targets), `mainville.ts` (sample map built from the B1c tiles). Added `lib/dialogue/script.ts` (pages, choices, flags, revisit variants via `when`, `validateScript`, typewriter `visibleText`) and `mainville.ts` (original sample dialogue). 22 tests in `tests/overworld.test.ts`, including a check that `SOLID_TILES` equals the tileset's `SOLID` and a 2000-step random walk that never enters a blocked tile.
+- Verified: `npm run lint`, `typecheck`, `test` (183 pass, includes content:verify), `build`, `build:pages` pass. No UI changes this run, so no screenshots.
+- Known gaps: no rendering or input yet; the `faceBack` NPC turn and flag persistence are for B2c; the villager sprite does not exist yet (B2b).
+- Next: B2b (`/play` canvas scene, camera, d-pad, tap-to-move, warps).
