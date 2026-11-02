@@ -123,3 +123,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/Pages deploy confirmation skipped (GitHub Actions quota exhausted until 2026-11-01).
 - Known gaps: the draft is not cleared on an AC submit yet (battle flow, B-phase); restore can race with very fast typing right after load; editor settings are not yet persisted.
 - Next: B1 (art: starter and town).
+
+## 2026-11-02: B1a Arrayling sprites and sprite toolkit
+- Added `game/sprites/grid.ts` (palette-index grids, dithered shaded rounded boxes, outlines, silhouette, RGBA conversion; no DOM/Pixi), `game/sprites/arrayling.ts` (64×64 front and back sheets: idle ×4, attack ×3, hurt ×2, faint ×4, evolve ×4; green 5-step ramp, amber index tags 0–3 so it reads as an array), `components/SpriteCanvas.tsx` and `/dev/sprites`. 7 unit tests in `tests/sprites-arrayling.test.ts`. ROADMAP B1 split; B1a ticked.
+- Verified: lint, typecheck, test, build, build:pages; Playwright on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots show readable digits, antennae no longer overlap tags, hurt/evolve are white silhouettes, attack no longer clips.
+- CI/Pages deploy: Actions quota note ended 2026-11-01, so confirmation is attempted below if possible.
+- Known gaps: art is procedural-shaded and fairly simple (could get more face/limb detail later); evolve is a flat silhouette pulse, no morph yet.
+- Next: B1b (trainer 4-direction walk cycle, Professor Iota sprite and portrait), then B1c (Mainville tileset).

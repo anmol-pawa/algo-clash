@@ -44,8 +44,8 @@ The hourly routine works top to bottom: take the **first unchecked box**. When y
 
 Goal: a new player can start a game, walk Mainville, get the starter, take the first lesson, win concept and coding battles, inscribe a scroll and beat the first gym, on desktop and iPhone.
 
-- [ ] B1. **Art: starter and town.**
-  - ARRAYLING front/back sprites with idle/attack/hurt/faint/evolve (64×64, original, shaded, 3–4 ramps)
+- [ ] B1. **Art: starter and town.** (split: B1a done)
+  - [x] B1a. ARRAYLING front/back sprites with idle/attack/hurt/faint/evolve (64×64, shaded, 3–4 ramps), grid toolkit `game/sprites/grid.ts`, `/dev/sprites`
   - the trainer overworld sprite (4-direction walk cycle)
   - Professor Iota's portrait and overworld sprite
   - the Mainville tileset (grass, paths, houses, lab, water, trees) on `/dev/sprites`
