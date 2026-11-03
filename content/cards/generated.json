@@ -1,0 +1,22 @@
+{
+  "r0-vector-header": {},
+  "r0-contiguous": {},
+  "r0-int-division": {
+    "output": "3\n2\n"
+  },
+  "r0-loop-sum": {
+    "output": "22\n"
+  },
+  "r0-scope-error": {
+    "diagnostic": "line 5: 'i' was not declared in this scope"
+  },
+  "r0-const-error": {
+    "diagnostic": "line 3: assignment of read-only variable 'limit'"
+  },
+  "r0-sum-vector-order": {
+    "output": "43\n"
+  },
+  "r0-count-up-cloze": {
+    "output": "0\n1\n2\n3\n4\n"
+  }
+}

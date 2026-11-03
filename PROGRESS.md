@@ -191,3 +191,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (234 pass), `build`, `build:pages`. No UI changes, so no screenshots.
 - Known gaps: the machine is not yet wired into `BattleArena` (encounter flow, strategy picker UI come with B5/B6 content); the rematch list is only a flag until the SRS storage lands; `workable` (neutral) patterns are not yet in problem meta.
 - Next: B5 (concept-card battles).
+
+## 2026-11-03: B5 Concept-card battles
+- Split B5 into B5a (logic + native generation) and B5b (UI); both done.
+- Added `lib/cards/` (types for mcq, multi-select, predict, trace, compiler-error, Parsons, cloze; `gradeCard`; `pickDeck`, `parsonsShuffle`, `cardXp`), `lib/content/cardsNative.ts` (g++ compiles and runs each card: predict/trace output, the first real g++ error for compiler-error cards, solved Parsons and cloze programs; every accepted cloze alternative must behave identically; `generated.json` staleness is a test failure; `npm run content:gen` rewrites it), 8 seed R0 cards in `content/cards/R0/syntax.ts`, `components/CardBattle.tsx` (5-step deck, tap-to-place Parsons, inline cloze inputs, explanation after each answer, streak/XP results) and `/dev/cards`. 21 new tests in `tests/cards.test.ts` (255 total).
+- Verified: lint, typecheck, test, build, build:pages; `scripts/smoke-cards.mjs` on the static export at desktop and iPhone 14: all card kinds answered, no console errors, no horizontal overflow. Screenshots caught and fixed font ligatures turning `<=` into a single glyph (disabled in code blocks) and an oversized cloze row on iPhone.
+- Known gaps: cards are not yet wired into overworld wild encounters or the save/SRS; compiler-error diagnostics are g++ text (the in-browser judge uses clang); no card art or sound; only 8 seed cards (B6/B7 add the real sets).
+- Next: B6 (Syntax Shores content, part 1).
