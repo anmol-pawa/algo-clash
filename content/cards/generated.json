@@ -94,5 +94,40 @@
   },
   "s2-digit-sum-parsons": {
     "output": "10\n"
+  },
+  "s3-ctor-forms": {
+    "output": "5 1 5 9\n"
+  },
+  "s3-reserve-resize": {
+    "output": "0\n4 0 4\n"
+  },
+  "s3-oob-index": {},
+  "s3-size-unsigned": {},
+  "s3-2d-init": {},
+  "s3-erase-cost": {},
+  "s3-auto-ref": {
+    "output": "2 4 6 \n"
+  },
+  "s3-const-auto-error": {
+    "diagnostic": "line 5: assignment of read-only reference 'x'"
+  },
+  "s3-substr-args": {
+    "output": "ter|view||iew\n"
+  },
+  "s3-find-npos": {
+    "output": "2 5 1\n"
+  },
+  "s3-char-arith": {
+    "output": "d 22 e 101\n"
+  },
+  "s3-to-string-stoi": {
+    "output": "2 79\n"
+  },
+  "s3-substr-tle": {},
+  "s3-letter-count-cloze": {
+    "output": "32\n"
+  },
+  "s3-split-parsons": {
+    "output": "3 5 4 \n"
   }
 }

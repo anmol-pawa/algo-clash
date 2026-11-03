@@ -31,6 +31,24 @@ describe("content/lessons", () => {
     expect(outputs[lessonKey("s2-recursion-static", 0, 1)]).toBe("1594323\n");
     expect(outputs[lessonKey("s2-recursion-static", 1, 1)]).toBe("123 111\n");
   });
+  it("computes the real outputs of the S3 listings", () => {
+    expect(outputs[lessonKey("s3-vectors", 0, 1)]).toBe("3 2 4\n");
+    expect(outputs[lessonKey("s3-vectors", 0, 4)]).toBe("5 2x3\n");
+    expect(outputs[lessonKey("s3-vectors", 1, 1)]).toBe("0 5 0 9\n");
+    expect(outputs[lessonKey("s3-vectors", 1, 4)]).toBe("2 3 4 \n");
+    expect(outputs[lessonKey("s3-strings", 0, 1)]).toBe("algo rithm or\n");
+    expect(outputs[lessonKey("s3-strings", 0, 3)]).toBe("1 3 \n");
+    expect(outputs[lessonKey("s3-strings", 1, 1)]).toBe("221\n");
+    expect(outputs[lessonKey("s3-strings", 1, 3)]).toBe("1230 1231\n");
+    expect(outputs[lessonKey("s3-splitting", 0, 1)]).toBe("3 []\n");
+    expect(outputs[lessonKey("s3-splitting", 0, 3)]).toBe("2\n");
+  });
+  it("every S3 card is practised by exactly one S3 lesson", () => {
+    const s3 = allCards.filter((c) => c.id.startsWith("s3-")).map((c) => c.id).sort();
+    const used = allLessons.filter((l) => l.section === "S3").flatMap((l) => l.cardIds).sort();
+    expect(used).toEqual(s3);
+    expect(s3.length).toBe(15);
+  });
   it("every S2 card is practised by exactly one S2 lesson", () => {
     const s2 = allCards.filter((c) => c.id.startsWith("s2-")).map((c) => c.id).sort();
     const used = allLessons.filter((l) => l.section === "S2").flatMap((l) => l.cardIds).sort();

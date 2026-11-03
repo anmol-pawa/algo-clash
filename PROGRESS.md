@@ -239,3 +239,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `CONTENT_WRITE=1 npx vitest run tests/content-problems.test.ts` (26 pass natively with g++), `npm run lint` (2 unused-import warnings in gens), `typecheck`, `test` (313 pass), `build`, `build:pages`. No visual changes, so no screenshots. CI/deploy confirmation skipped: not required by the run notes' quota period was over, but not checked this run.
 - Known gaps: problems not reachable from the game yet; `step-counter` and `rank-roster` tests.json are 7-11 MB (large; consider trimming perf sizes); S3/S4 lessons and cards pending.
 - Next: B7c (S3 lesson screens and 15 S3 cards).
+
+## 2026-11-03: B7c S3 lesson screens and 15 S3 cards
+- Added three S3 lessons in `content/lessons/R0/s3.ts` (vectors and grids; strings, characters and costs; splitting text; 5 pages, 10 runnable listings with natively computed output) and 15 S3 cards in `content/cards/R0/s3.ts` (constructor forms, reserve/resize, indexing, unsigned `size()`, 2D init, erase cost, `auto&`, const-ref error, `substr`, `find`/`npos`, char arithmetic, `to_string`/`stoi`, `substr` TLE, cloze, Parsons). Outputs and g++ diagnostics regenerated into the `generated.json` files. New S3 tests in `tests/lessons.test.ts` (listing outputs; each S3 card practised by exactly one S3 lesson). Hand-typed expectations were wrong in three places and the native results corrected them, which is the point of computing them.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `test` (330 pass, native g++), `build`, `build:pages`; `scripts/smoke-lesson.mjs` on the static export at desktop and iPhone 14 across all nine lessons: no console errors, no horizontal overflow; screenshots readable.
+- Known gaps: lessons, cards and exercises are not wired into the overworld/progression yet; card diagnostics are g++ text, not clang.
+- Next: B7d (S4 lesson screens and 15 S4 cards).
