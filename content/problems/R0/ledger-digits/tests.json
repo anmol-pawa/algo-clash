@@ -1,0 +1,102 @@
+[
+ {
+  "input": "1234",
+  "expected": "10",
+  "group": "basic"
+ },
+ {
+  "input": "-407",
+  "expected": "11",
+  "group": "basic"
+ },
+ {
+  "input": "0",
+  "expected": "0",
+  "group": "basic"
+ },
+ {
+  "input": "9",
+  "expected": "9",
+  "group": "basic"
+ },
+ {
+  "input": "100200300",
+  "expected": "6",
+  "group": "basic"
+ },
+ {
+  "input": "936230",
+  "expected": "23",
+  "group": "basic"
+ },
+ {
+  "input": "-9",
+  "expected": "9",
+  "group": "edge"
+ },
+ {
+  "input": "10",
+  "expected": "1",
+  "group": "edge"
+ },
+ {
+  "input": "-10",
+  "expected": "1",
+  "group": "edge"
+ },
+ {
+  "input": "9223372036854775807",
+  "expected": "88",
+  "group": "edge"
+ },
+ {
+  "input": "-9223372036854775807",
+  "expected": "88",
+  "group": "edge"
+ },
+ {
+  "input": "999999999999999999",
+  "expected": "162",
+  "group": "edge"
+ },
+ {
+  "input": "2147483648",
+  "expected": "47",
+  "group": "edge"
+ },
+ {
+  "input": "-2147483649",
+  "expected": "48",
+  "group": "edge"
+ },
+ {
+  "input": "4294967296",
+  "expected": "58",
+  "group": "adversarial"
+ },
+ {
+  "input": "-4294967297",
+  "expected": "59",
+  "group": "adversarial"
+ },
+ {
+  "input": "5000000000",
+  "expected": "5",
+  "group": "adversarial"
+ },
+ {
+  "input": "928427170009971946",
+  "expected": "85",
+  "group": "adversarial"
+ },
+ {
+  "input": "-578497764802",
+  "expected": "67",
+  "group": "adversarial"
+ },
+ {
+  "input": "-2405481318",
+  "expected": "36",
+  "group": "adversarial"
+ }
+]

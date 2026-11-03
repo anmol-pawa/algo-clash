@@ -198,3 +198,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: lint, typecheck, test, build, build:pages; `scripts/smoke-cards.mjs` on the static export at desktop and iPhone 14: all card kinds answered, no console errors, no horizontal overflow. Screenshots caught and fixed font ligatures turning `<=` into a single glyph (disabled in code blocks) and an oversized cloze row on iPhone.
 - Known gaps: cards are not yet wired into overworld wild encounters or the save/SRS; compiler-error diagnostics are g++ text (the in-browser judge uses clang); no card art or sound; only 8 seed cards (B6/B7 add the real sets).
 - Next: B6 (Syntax Shores content, part 1).
+
+## 2026-11-03: B6a Syntax Shores exercises, S1 (5 problems)
+- Split B6 into B6a-B6d in `ROADMAP.md`; done: B6a.
+- Added five full packages under `content/problems/R0/`: `ledger-digits` (digit sum, negative `%`, 64-bit), `wrap-dial` (floor modulo for negatives), `cargo-total` (`long long` accumulator, `accumulate(..., 0)` trap), `vowel-census` (case folding, `tolower` cast), `safe-midpoint` (`lo + (hi - lo) / 2`). Each has reference, brute, 2-3 wrong solutions, a seeded generator, generated `tests.json`, a 3-rung hint ladder and a house-style editorial.
+- Verified: `CONTENT_WRITE=1 npx vitest run tests/content-problems.test.ts` (all 9 pass natively with g++: reference equals brute on random cases, every wrong solution rejected); full lint/typecheck/test/build/build:pages results below in the commit. No UI changes, so no screenshots.
+- Known gaps: the problems are not reachable from the game yet (no encounter or lesson wiring); no S2 problems, lessons or cards yet.
+- Next: B6b (five S2 exercises).

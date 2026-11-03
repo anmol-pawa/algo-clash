@@ -63,7 +63,11 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 - [x] B5. **Concept-card battles:** MCQ, trace, predict-output, compiler-error, Parsons and cloze card UIs. Cards are graded by tests, and predict-output and compiler-error cards are generated natively.
   - [x] B5a. Card model, grading, deck/XP logic (`lib/cards/`), native g++ generation + verification of predict/trace/compiler-error/Parsons/cloze cards, seed cards in `content/cards/R0/`
   - [x] B5b. Card UIs (`components/CardBattle.tsx`, `/dev/cards`), keyboard and touch, Playwright smoke
-- [ ] B6. **Syntax Shores content, part 1** (CUR §2 S1–S2): the lesson screens, 30 cards and 10 judged exercises.
+- [ ] B6. **Syntax Shores content, part 1** (CUR §2 S1–S2): the lesson screens, 30 cards and 10 judged exercises. Split:
+  - [x] B6a. Five S1 judged exercises under `content/problems/R0/` (ledger-digits, wrap-dial, cargo-total, vowel-census, safe-midpoint), full packages.
+  - [ ] B6b. Five S2 judged exercises (control flow, functions, pass by const reference, recursion basics, `static`), full packages.
+  - [ ] B6c. S1 lesson screens (model + UI) and 15 S1 cards (generated natively).
+  - [ ] B6d. S2 lesson screens and 15 S2 cards.
 - [ ] B7. **Syntax Shores content, part 2** (CUR §2 S3–S4): the lesson screens, 30 cards and 12 judged exercises.
 - [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI.
 - [ ] B9. **Mainville Gym:** a gym leader sprite (96×96, idle/attack/hurt/faint), the three-phase gym flow (GDD §5.5) with Syntax Shores content, a badge, and the victory and evolution scenes.
