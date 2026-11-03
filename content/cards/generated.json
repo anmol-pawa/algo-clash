@@ -18,5 +18,42 @@
   },
   "r0-count-up-cloze": {
     "output": "0\n1\n2\n3\n4\n"
+  },
+  "s1-endl-vs-newline": {},
+  "s1-sync-off": {},
+  "s1-int-range": {},
+  "s1-double-literal": {
+    "output": "1000000007\n1e+09\n"
+  },
+  "s1-negative-mod": {
+    "output": "-3\n-1\n"
+  },
+  "s1-wrap-trace": {
+    "output": "6\n"
+  },
+  "s1-auto-int-div": {
+    "output": "3\n3.5\n"
+  },
+  "s1-narrowing-error": {
+    "diagnostic": "line 2: narrowing conversion of '5000000000' from 'long long int' to 'int' [-Wnarrowing]"
+  },
+  "s1-missing-include": {
+    "diagnostic": "line 2: 'vector' is not a member of 'std'"
+  },
+  "s1-semicolon-error": {
+    "diagnostic": "line 4: expected ',' or ';' before 'total'"
+  },
+  "s1-literals": {},
+  "s1-size-t-trap": {
+    "output": "positive\n"
+  },
+  "s1-mid-cloze": {
+    "output": "2050000000\n"
+  },
+  "s1-io-cloze": {
+    "output": "42\n"
+  },
+  "s1-hello-order": {
+    "output": "13\n"
   }
 }

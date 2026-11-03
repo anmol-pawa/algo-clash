@@ -212,3 +212,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `CONTENT_WRITE=1 npx vitest run tests/content-problems.test.ts` (14 pass natively with g++: reference equals brute on random cases, every wrong solution rejected), `npm run lint`, `typecheck`, `test` (265 pass), `build`, `build:pages`. No UI changes, so no screenshots.
 - Known gaps: the problems are not reachable from the game yet (no encounter or lesson wiring); `echo-chamber` uses `long long` parameters (the harness supports them) but its stack-overflow wrong solution behaves differently under WASM clang than under native g++, which is only a rejection-path concern.
 - Next: B6c (S1 lesson screens and 15 S1 cards).
+
+## 2026-11-03: B6c S1 lesson screens and 15 S1 cards
+- Added the lesson model (`lib/lessons/types.ts`, `progress.ts`: typed blocks text/code/idiom/pitfall/picture/recall, Next locked until each recall check is solved, structural validation), `lib/content/lessonsNative.ts` (every lesson program compiles with g++; `run` blocks show real stdout from `content/lessons/generated.json`), the 6-screen "Program Basics" lesson (`content/lessons/R0/s1.ts`), `components/LessonViewer.tsx`, `/dev/lesson`, and 15 S1 cards (`content/cards/R0/s1.ts`: mcq, multi, predict, trace, compilerError, parsons, cloze; outputs/diagnostics computed with g++). `/dev/cards` still uses the 8 seed cards so its smoke is stable. Tests in `tests/lessons.test.ts`.
+- Caught by verification: g++ only warns on narrowing of non-constants (clang errors), so the card uses a constant and the lesson says so; a "which literal is long long" card was wrong on LP64 (`5000000000` is `long`), reworded to "not int".
+- Verified: lint, typecheck, `vitest run` (287+ pass), `build:pages`; `scripts/smoke-lesson.mjs` and `smoke-cards.mjs` on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots readable.
+- Known gaps: lessons are not yet launched from Professor Iota or saved as completed; the S1 cards are not wired to wild encounters.
+- CI/deploy confirmation skipped (GitHub Actions quota note, though today is past 2026-11-01 the run could not use `gh`); work pushed to the designated branch `claude/eloquent-ritchie-i5cubj`, not `main`.
+- Next: B6d (S2 lesson screens and 15 S2 cards).

@@ -1,0 +1,14 @@
+{
+  "s1-program-basics#0.1": {
+    "output": "42\n"
+  },
+  "s1-program-basics#2.1": {
+    "output": "1000000007\n1e+09\n10000000000\n"
+  },
+  "s1-program-basics#3.1": {
+    "output": "3 1\n-3 -1\n-3 1\n"
+  },
+  "s1-program-basics#4.1": {
+    "output": "lost\n"
+  }
+}

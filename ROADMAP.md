@@ -66,7 +66,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 - [ ] B6. **Syntax Shores content, part 1** (CUR §2 S1–S2): the lesson screens, 30 cards and 10 judged exercises. Split:
   - [x] B6a. Five S1 judged exercises under `content/problems/R0/` (ledger-digits, wrap-dial, cargo-total, vowel-census, safe-midpoint), full packages.
   - [x] B6b. Five S2 judged exercises (toll-booth, charge-meter, shelf-rank, echo-chamber, pocket-calendar: control flow, break/continue, pass by const reference, recursion basics, `static`), full packages.
-  - [ ] B6c. S1 lesson screens (model + UI) and 15 S1 cards (generated natively).
+  - [x] B6c. S1 lesson screens (model + UI) and 15 S1 cards (generated natively).
   - [ ] B6d. S2 lesson screens and 15 S2 cards.
 - [ ] B7. **Syntax Shores content, part 2** (CUR §2 S3–S4): the lesson screens, 30 cards and 12 judged exercises.
 - [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI.
