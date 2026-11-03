@@ -265,3 +265,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (369 pass), `build`, `build:pages`; new `scripts/smoke-forge.mjs` on the static export at desktop and iPhone 14: locked tiers, failed trace, passed trace, wrong then right fills in both clozes (judge rejects wrong, accepts reference), Blank AC with the reference, status Inscribed persisted across reload, no console errors, no horizontal overflow. Screenshots read well.
 - Known gaps: Forge is not linked from the overworld yet; Ingrained needs two days so is only unit-tested; scroll results do not feed SRS yet (C1); CI/deploy status not checked this run.
 - Next: B9 (Mainville Gym).
+
+## 2026-11-03: B9a Gym logic and Syntax Shores gym content
+- Split B9 into B9a (logic + content, done), B9b (leader sprite + backdrop) and B9c (gym UI, badge, victory/evolution scenes).
+- Added `lib/gym/` (`types.ts`, `machine.ts`): the 8-item recognition blitz (20 s each, late answers count as misses), foe shield (start 4, hit -1, miss +1, max 6), the phase-2 head start (8 HP per shield point broken), core then signature phase flow, faint = retry that phase, retreat = abandon, badge + Compiler Shard reward, seeded `shuffledOptions`. Content `content/gyms/r0.ts`: Warden Brace, Lighthouse Badge, 8 original blitz items (2 review), core `run-squash`, signature `step-counter`, twist "Warnings are errors" (-Wall -Wextra -Werror; applied in B9c). GDD §5.5 records the rules.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (381 pass, incl. 12 new gym tests), `build`, `build:pages`. No UI changes, so no screenshots.
+- Known gaps: all R0 problems are Easy, so the gym's core/signature problems are the hardest existing ones, not a true medium/hard; consider a dedicated medium + follow-up for the gym in B9c; the -Werror twist is not wired into the judge yet.
+- Next: B9b (Warden Brace sprite and gym backdrop).
