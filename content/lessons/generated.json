@@ -1,0 +1,7 @@
+{
+  "s1-first-program:0:1": "hello, mainville\n",
+  "s1-types:0:1": "char 1\nint 4\nlong long 8\ndouble 8\n",
+  "s1-types:1:1": "10000000000\n",
+  "s1-arithmetic:0:1": "3 1\n-3 -1\n-3 1\n",
+  "s1-arithmetic:1:1": "3 3.5 3.5\n"
+}

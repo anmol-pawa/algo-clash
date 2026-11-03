@@ -18,5 +18,44 @@
   },
   "r0-count-up-cloze": {
     "output": "0\n1\n2\n3\n4\n"
+  },
+  "s1-endl-vs-newline": {},
+  "s1-sync-stdio": {},
+  "s1-wide-types": {},
+  "s1-unsigned-wrap": {
+    "output": "4294967295\n"
+  },
+  "s1-negative-mod": {
+    "output": "-3\n-1\n1\n"
+  },
+  "s1-int-division-double": {
+    "output": "3\n3.5\n"
+  },
+  "s1-auto-sizeof": {
+    "output": "4\n8\n8\n1\n"
+  },
+  "s1-halving-steps": {
+    "output": "4\n"
+  },
+  "s1-literal-1e9": {
+    "output": "5000000000\n"
+  },
+  "s1-narrowing-error": {
+    "diagnostic": "line 2: narrowing conversion of '3.5e+0' from 'double' to 'int' [-Wnarrowing]"
+  },
+  "s1-missing-include": {
+    "diagnostic": "line 4: 'vector' was not declared in this scope"
+  },
+  "s1-auto-noinit-error": {
+    "diagnostic": "line 2: declaration of 'auto total' has no initializer"
+  },
+  "s1-big-sum-order": {
+    "output": "7000000000\n"
+  },
+  "s1-fast-io-cloze": {
+    "output": "ready\n"
+  },
+  "s1-widen-cloze": {
+    "output": "10000000000\n"
   }
 }
