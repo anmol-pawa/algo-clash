@@ -101,3 +101,11 @@ export function playerDrawPos(s: WorldState): { x: number; y: number } {
   const { dx, dy } = DELTA[s.player.facing];
   return { x: x - dx * f, y: y - dy * f };
 }
+
+/** Turn an NPC to face a direction (used when the player talks to them). Returns false for unknown ids. */
+export function faceNpc(s: WorldState, npcId: string, dir: Dir): boolean {
+  const npc = s.map.npcs.find((n) => n.id === npcId);
+  if (!npc) return false;
+  npc.facing = dir;
+  return true;
+}

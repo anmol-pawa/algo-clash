@@ -48,10 +48,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B1a. ARRAYLING front/back sprites with idle/attack/hurt/faint/evolve (64×64, shaded, 3–4 ramps), grid toolkit `game/sprites/grid.ts`, `/dev/sprites`
   - [x] B1b. Trainer overworld sprite (4-direction walk cycle) and Professor Iota's overworld sprite and portrait (`game/sprites/character.ts`)
   - [x] B1c. Mainville tileset: grass, paths, houses, lab, water, trees on `/dev/sprites`
-- [ ] B2. **Overworld engine** (B2a, B2b done; B2c open):
+- [x] B2. **Overworld engine** (B2a, B2b, B2c done):
   - [x] B2a. Pure logic: map format and validation, grid movement with turn/bump/warp/encounter events, interaction, tap-to-move BFS (`lib/overworld/`), dialogue scripts and runner with typewriter (`lib/dialogue/`), sample Mainville map and dialogue, 22 tests
   - [x] B2b. Rendering: `/play` canvas scene (camera follows player, smooth tile-to-tile walk with the B1b walk cycles, NPC sprites, animated water/tall grass), keyboard + on-screen d-pad + tap-to-move, warps between maps, encounter hook
-  - [ ] B2c. Pixel dialogue box with portraits (typewriter, tap to advance, choices), flags saved via `SaveService`, `faceBack` NPC turning
+  - [x] B2c. Pixel dialogue box with portraits (typewriter, tap to advance, choices), flags saved via `SaveService`, `faceBack` NPC turning
 - [ ] B3. **Battle stage** (ported from Query Clash and restyled):
   - platforms, slide-ins, HP boxes, the typing text box, hit-stop, shake, damage numbers and verdict stingers
   - the desktop layout (stage on top, statement + editor below) and the mobile tab layout

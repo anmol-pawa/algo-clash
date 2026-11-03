@@ -4,9 +4,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { Dir, GameMap, parseMap } from "@/lib/overworld/map";
-import { newWorld, playerDrawPos, press, tapTo, tickWorld, WorldState } from "@/lib/overworld/mover";
+import { faceNpc, newWorld, playerDrawPos, press, tapTo, tickWorld, WorldState } from "@/lib/overworld/mover";
 import { MAINVILLE_DIALOGUES } from "@/lib/dialogue/mainville";
-import { DialogueState, advance, awaitingChoice, choose, currentNode, startDialogue } from "@/lib/dialogue/script";
+import { DialogueState, advance, choose, startDialogue } from "@/lib/dialogue/script";
+import { DialogueBox, DIALOGUE_CONFIRM } from "@/components/DialogueBox";
+import { flagSet, raiseFlags } from "@/lib/dialogue/flags";
+import { SaveService } from "@/lib/save/service";
+import { IdbBackend } from "@/lib/save/idb";
+import type { CoreSave } from "@/lib/save/schema";
 import { IOTA, TRAINER, VILLAGER, buildCharacter } from "@/game/sprites/character";
 import { buildTileset, TILE } from "@/game/sprites/tiles";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
@@ -31,6 +36,19 @@ export function WorldCanvas() {
     world.current.held = talk ? null : keys.current[keys.current.length - 1] ?? null;
   }, [talk]);
   const [note, setNote] = useState("");
+  const svc = useRef<SaveService | null>(null);
+  const core = useRef<CoreSave | null>(null);
+  useEffect(() => {
+    svc.current = new SaveService(new IdbBackend());
+    svc.current.load().then((c) => { core.current = c; }).catch(() => undefined);
+  }, []);
+  const finish = useCallback((st: DialogueState) => {
+    setTalk(null);
+    const c = core.current;
+    if (!c || st.raised.length === 0) return;
+    core.current = { ...c, flags: raiseFlags(c.flags, st.raised) };
+    svc.current?.save(core.current).catch(() => undefined);
+  }, []);
 
   const syncHeld = useCallback(() => {
     world.current.held = talkRef.current ? null : keys.current[keys.current.length - 1] ?? null;
@@ -43,15 +61,15 @@ export function WorldCanvas() {
 
   const action = useCallback(() => {
     if (talkRef.current) {
-      const next = advance(talkRef.current);
-      setTalk(next.done ? null : next);
+      window.dispatchEvent(new Event(DIALOGUE_CONFIRM));
       return;
     }
     const r = press(world.current);
     if ((r.type === "npc" || r.type === "sign") && MAINVILLE_DIALOGUES[r.dialogue]) {
       keys.current = [];
       syncHeld();
-      setTalk(startDialogue(MAINVILLE_DIALOGUES[r.dialogue]));
+      if (r.type === "npc") faceNpc(world.current, r.npcId, r.faceBack);
+      setTalk(startDialogue(MAINVILLE_DIALOGUES[r.dialogue], flagSet(core.current?.flags ?? {})));
     }
   }, [syncHeld]);
 
@@ -130,7 +148,7 @@ export function WorldCanvas() {
   }, [note]);
 
   const onTap = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (talk) { action(); return; }
+    if (talk) return;
     const cv = e.currentTarget;
     const r = cv.getBoundingClientRect();
     const w = world.current;
@@ -143,7 +161,6 @@ export function WorldCanvas() {
     tapTo(w, tx, ty);
   };
 
-  const node = talk ? currentNode(talk) : null;
   const pad = (d: Dir, label: string, cls: string) => (
     <button
       aria-label={d}
@@ -170,23 +187,10 @@ export function WorldCanvas() {
           className="block w-full touch-none rounded border-4 border-[#2a2540]"
           style={{ imageRendering: "pixelated", aspectRatio: `${VIEW_W} / ${VIEW_H}` }}
         />
-        {node && talk && (
-          <div role="dialog" onPointerDown={action} className="panel absolute inset-x-2 bottom-2 min-h-20 cursor-pointer px-3 py-2 text-sm">
-            <p className="font-display text-[var(--gold)]">{node.speaker}</p>
-            <p>{node.pages[talk.page]}</p>
-            {awaitingChoice(talk) ? (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {node.choices!.map((c, i) => (
-                  <button key={c.text} className="px-btn px-3 text-sm"
-                    onPointerDown={(e) => { e.stopPropagation(); const n = choose(talk, i); setTalk(n.done ? null : n); }}>
-                    {c.text}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <p className="mt-1 text-right text-xs text-white/40">tap ▶</p>
-            )}
-          </div>
+        {talk && (
+          <DialogueBox talk={talk}
+            onAdvance={() => { const n = advance(talk); if (n.done) finish(n); else setTalk(n); }}
+            onChoose={(i) => { const n = choose(talk, i); if (n.done) finish(n); else setTalk(n); }} />
         )}
         {note && <div className="panel absolute inset-x-2 top-2 px-3 py-2 text-center text-sm">{note}</div>}
       </div>

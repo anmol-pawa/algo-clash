@@ -79,3 +79,26 @@ describe("overworld mover", () => {
     expect(maps.mainville.tiles[s.player.y][s.player.x]).not.toBe("tree");
   });
 });
+
+describe("NPC facing and dialogue flags", () => {
+  it("faceNpc turns the NPC back toward the player", async () => {
+    const { faceNpc } = await import("@/lib/overworld/mover");
+    const s = newWorld(parseMap(MAINVILLE));
+    s.player.facing = "right";
+    const r = press(s);
+    expect(r.type).toBe("npc");
+    if (r.type !== "npc") return;
+    expect(r.faceBack).toBe("left");
+    expect(faceNpc(s, r.npcId, r.faceBack)).toBe(true);
+    expect(s.map.npcs.find((n) => n.id === r.npcId)!.facing).toBe("left");
+    expect(faceNpc(s, "nobody", "up")).toBe(false);
+  });
+  it("raiseFlags merges without mutating and flagSet only reads true flags", async () => {
+    const { flagSet, raiseFlags } = await import("@/lib/dialogue/flags");
+    const base = { "iota.met": false, coins: 3 };
+    const next = raiseFlags(base, ["iota.met", "x"]);
+    expect(base["iota.met"]).toBe(false);
+    expect([...flagSet(next)].sort()).toEqual(["iota.met", "x"]);
+    expect(raiseFlags(base, [])).toBe(base);
+  });
+});

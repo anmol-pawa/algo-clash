@@ -160,3 +160,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (191 pass), `build`, `build:pages`; Playwright smoke on the static export at desktop and iPhone 14: talk to Iota with a choice, walk through the south warp to Route 1, no console errors, no horizontal overflow. Screenshots read well; fixed the map label wrapping on iPhone.
 - Known gaps: the overworld uses 2D canvas, not Pixi (noted in ARCH); encounters only show a placeholder note until B3/B4; no portraits or typewriter yet; NPC `faceBack` and flag saving are B2c; no transition fade between maps.
 - Next: B2c (pixel dialogue box with portraits and typewriter, flags saved via `SaveService`, `faceBack`).
+
+## 2026-11-03: B2c Dialogue box, flags, NPC turning
+- Added `components/DialogueBox.tsx` (handheld window with animated 48x48 portrait that talks while typing, name tag, 45 cps typewriter, first tap/Z/A completes the page and the next advances, choices appear after typing, 44 px choice buttons), `lib/dialogue/flags.ts` (`flagSet`, `raiseFlags`), `faceNpc` in `lib/overworld/mover.ts`. `WorldCanvas` loads the save through `SaveService`, starts dialogue with the saved flags (Iota greets a returning trainer), writes raised flags back when a conversation ends, and the NPC turns to face the player. 2 new tests (193 pass).
+- Verified: `npm run lint`, `typecheck`, `test`, `build`, `build:pages` pass. `scripts/smoke-play.mjs` (extended: typewriter, flag survives a reload, warp) passes on the static export at desktop and iPhone 14; screenshots show the portrait, readable text, Iota turned toward the player, no console errors, no horizontal overflow.
+- Known gaps: two confirm presses within one frame can skip a page (the confirm handler reads the last rendered state); flags are only saved when a conversation ends; only Mainville dialogues exist.
+- Next: B3 (battle stage).
