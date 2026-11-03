@@ -20,5 +20,12 @@
   "s3-strings:1:1": "221\n",
   "s3-strings:1:3": "1230 1231\n",
   "s3-splitting:0:1": "3 []\n",
-  "s3-splitting:0:3": "2\n"
+  "s3-splitting:0:3": "2\n",
+  "s4-structs:0:2": "1\n",
+  "s4-structs:1:1": "abc\n",
+  "s4-lists:0:1": "123\n",
+  "s4-lists:1:1": "1 2 3 \n",
+  "s4-lists:1:3": "1 2 3 \n",
+  "s4-trees-solution:0:1": "2\n",
+  "s4-trees-solution:1:1": "2\n"
 }

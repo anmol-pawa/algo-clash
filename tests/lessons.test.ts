@@ -43,6 +43,24 @@ describe("content/lessons", () => {
     expect(outputs[lessonKey("s3-splitting", 0, 1)]).toBe("3 []\n");
     expect(outputs[lessonKey("s3-splitting", 0, 3)]).toBe("2\n");
   });
+  it("computes the real outputs of the S4 listings", () => {
+    expect(outputs[lessonKey("s4-structs", 0, 2)]).toBe("1\n");
+    expect(outputs[lessonKey("s4-structs", 1, 1)]).toBe("abc\n");
+    expect(outputs[lessonKey("s4-lists", 0, 1)]).toBe("123\n");
+    expect(outputs[lessonKey("s4-lists", 1, 1)]).toBe("1 2 3 \n");
+    expect(outputs[lessonKey("s4-lists", 1, 3)]).toBe("1 2 3 \n");
+    expect(outputs[lessonKey("s4-trees-solution", 0, 1)]).toBe("2\n");
+    expect(outputs[lessonKey("s4-trees-solution", 1, 1)]).toBe("2\n");
+  });
+  it("every S4 card is practised by exactly one S4 lesson and every S4 exercise is linked", () => {
+    const s4 = allCards.filter((c) => c.id.startsWith("s4-")).map((c) => c.id).sort();
+    const lessons = allLessons.filter((l) => l.section === "S4");
+    expect(lessons.flatMap((l) => l.cardIds).sort()).toEqual(s4);
+    expect(s4.length).toBe(15);
+    expect(lessons.flatMap((l) => l.problemIds).sort()).toEqual(
+      ["drop-negatives", "forge-chain", "leaf-sum", "middle-link", "rank-roster", "step-counter", "tree-height"],
+    );
+  });
   it("every S3 card is practised by exactly one S3 lesson", () => {
     const s3 = allCards.filter((c) => c.id.startsWith("s3-")).map((c) => c.id).sort();
     const used = allLessons.filter((l) => l.section === "S3").flatMap((l) => l.cardIds).sort();

@@ -129,5 +129,42 @@
   },
   "s3-split-parsons": {
     "output": "3 5 4 \n"
+  },
+  "s4-struct-class-access": {},
+  "s4-init-order": {
+    "output": "12\n"
+  },
+  "s4-this-shadow": {
+    "output": "1\n"
+  },
+  "s4-no-default-ctor": {
+    "diagnostic": "line 6: no matching function for call to 'P::P()'"
+  },
+  "s4-operator-less": {
+    "output": "abc\n"
+  },
+  "s4-nullptr": {},
+  "s4-list-walk": {
+    "output": "123\n"
+  },
+  "s4-dummy-head": {},
+  "s4-new-pointer": {
+    "diagnostic": "line 7: conversion from 'ListNode*' to non-scalar type 'ListNode' requested"
+  },
+  "s4-append-parsons": {
+    "output": "1 2 3 \n"
+  },
+  "s4-tree-height": {
+    "output": "3 2 0\n"
+  },
+  "s4-arrow-dot": {
+    "diagnostic": "line 9: request for member 'val' in 'p', which is of pointer type 'TreeNode*' (maybe you meant to use '->' ?)"
+  },
+  "s4-tree-null-base": {},
+  "s4-leaf-cloze": {
+    "output": "2\n"
+  },
+  "s4-solution-private": {
+    "diagnostic": "line 6: 'int Solution::twice(int)' is private within this context"
   }
 }
