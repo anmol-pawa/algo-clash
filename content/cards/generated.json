@@ -57,5 +57,42 @@
   },
   "s1-widen-cloze": {
     "output": "10000000000\n"
+  },
+  "s2-switch-fallthrough": {
+    "output": "two\nthree\n"
+  },
+  "s2-dangling-else": {
+    "output": "B\nC\n"
+  },
+  "s2-continue-trace": {
+    "output": "27\n"
+  },
+  "s2-break-nested": {},
+  "s2-switch-types": {},
+  "s2-switch-init-error": {
+    "diagnostic": "line 7: jump to case label"
+  },
+  "s2-by-value-tle": {},
+  "s2-ref-vs-value": {
+    "output": "5\n6\n"
+  },
+  "s2-const-ref-error": {
+    "diagnostic": "line 3: passing 'const std::vector<int>' as 'this' argument discards qualifiers [-fpermissive]"
+  },
+  "s2-overload-pick": {
+    "output": "int\nlong long\nint\ndouble\n"
+  },
+  "s2-default-arg-cloze": {
+    "output": "70 21\n"
+  },
+  "s2-recursion-trace": {
+    "output": "13\n"
+  },
+  "s2-missing-base-case": {},
+  "s2-static-local": {
+    "output": "1\n2\n3\n"
+  },
+  "s2-digit-sum-parsons": {
+    "output": "10\n"
   }
 }
