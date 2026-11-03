@@ -224,3 +224,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (301 pass, includes native g++ checks), `build`, `build:pages`; `scripts/smoke-lesson.mjs` on the static export (served under `/algo-clash`) at desktop and iPhone 14 across all six lessons: no console errors, no horizontal overflow; screenshots show readable listings, computed output panels and practice cards.
 - Known gaps: lessons, cards and exercises are not wired into the overworld/progression yet; card diagnostics are g++ text, not clang.
 - Next: B7 (Syntax Shores part 2, S3-S4); it is large, so split it into sub-boxes first.
+
+## 2026-11-03: B7a Syntax Shores exercises, S3 (5 problems)
+- Split B7 into B7a-B7d in `ROADMAP.md`; done: B7a.
+- Added five full packages under `content/problems/R0/`: `grid-turn` (2D `vector` shape, non-square transpose), `run-squash` (erase cost; `erase(unique(...))`; erase-in-loop TLE), `field-split` (`find` + `substr(pos, len)`, empty fields; `getline` drops the trailing empty field), `letter-tally` (`c - 'a'` buckets, `tolower` with `unsigned char`, ASCII neighbours of the letter ranges), `overlap-count` (`find` with a start position, overlap by advancing 1, per-step `substr` copy TLE). Each has reference, brute, 3 wrong solutions, seeded generator, generated `tests.json`, hints and editorial.
+- Build fix: the 14 MB `grid-turn` test file made Tailwind's source scan hang Turbopack's PostCSS step (`npm run build` timed out). Added `@source not "../content/problems";` to `app/globals.css` and cut grid-turn perf to 100k cells.
+- Verified: `npm run lint`, `typecheck`, `test` (306 pass, includes native g++ verification), `build`, `build:pages`. No visual changes, so no screenshots.
+- Known gaps: problems not reachable from the game yet; no S3 lessons/cards (B7c).
+- Next: B7b (seven S4 exercises).
