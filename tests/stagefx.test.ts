@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { HITSTOP_MS, INTRO_MS, NUMBER_MS, STINGER_MS, createFx, hitFoe, hitPlayer, shakeFor, shakeOffset, showVerdict, slideOffset, tick } from "@/lib/battle/stagefx";
+import { CHAR_MS, EFFECT_MS, LINGER_MS, WIPE_MS, advanceMessage, evolve, faint, messageView, say, HITSTOP_MS, INTRO_MS, NUMBER_MS, STINGER_MS, createFx, hitFoe, hitPlayer, shakeFor, shakeOffset, showVerdict, slideOffset, tick } from "@/lib/battle/stagefx";
 
 describe("stage effects", () => {
   it("slides in over the intro and settles at zero offset", () => {
@@ -70,5 +70,47 @@ describe("stage effects", () => {
     expect(fx.shake).toBeGreaterThan(0);
     tick(fx, 2000);
     expect(fx.shake).toBe(0);
+  });
+  it("hits spawn move effects that expire", () => {
+    const fx = createFx();
+    hitFoe(fx, 10);
+    hitPlayer(fx);
+    expect(fx.effects.map((e) => e.kind).sort()).toEqual(["bolt", "slash"]);
+    hitFoe(fx, 10, true);
+    expect(fx.effects.some((e) => e.kind === "burst")).toBe(true);
+    tick(fx, HITSTOP_MS);
+    tick(fx, EFFECT_MS + 1);
+    expect(fx.effects).toHaveLength(0);
+  });
+  it("the wipe opens over WIPE_MS", () => {
+    const fx = createFx();
+    expect(fx.wipe).toBe(0);
+    tick(fx, WIPE_MS / 2);
+    expect(fx.wipe).toBeCloseTo(0.5);
+    tick(fx, WIPE_MS);
+    expect(fx.wipe).toBe(1);
+  });
+  it("faint and evolve poses: faint holds, evolve returns to idle", () => {
+    const fx = createFx();
+    faint(fx, "foe");
+    evolve(fx, "player");
+    tick(fx, 5000);
+    expect(fx.pose.foe.name).toBe("faint");
+    expect(fx.pose.player.name).toBe("idle");
+  });
+  it("text box types out, skips on advance, queues and clears", () => {
+    const fx = createFx();
+    expect(messageView(fx)).toBeNull();
+    say(fx, "Hello there");
+    say(fx, "Second");
+    expect(messageView(fx)).toEqual({ text: "", done: false });
+    tick(fx, CHAR_MS * 5);
+    expect(messageView(fx)).toEqual({ text: "Hello", done: false });
+    advanceMessage(fx);
+    expect(messageView(fx)).toEqual({ text: "Hello there", done: true });
+    advanceMessage(fx);
+    expect(messageView(fx)?.text).toBe("");
+    tick(fx, CHAR_MS * 6 + LINGER_MS + 10);
+    expect(messageView(fx)).toBeNull();
   });
 });

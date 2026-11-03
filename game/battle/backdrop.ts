@@ -4,7 +4,7 @@ export const LH = 135;
 
 export const PLATFORMS = {
   foe: { cx: 170, cy: 62, rx: 42, ry: 8 },
-  player: { cx: 62, cy: 112, rx: 54, ry: 10 },
+  player: { cx: 62, cy: 100, rx: 54, ry: 10 },
 };
 
 const rect = (c: CanvasRenderingContext2D, color: string, x: number, y: number, w: number, h: number) => {

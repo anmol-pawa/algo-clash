@@ -5,16 +5,23 @@ import { LH, LW, PLATFORMS, drawBackdrop } from "@/game/battle/backdrop";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
 import { buildArrayling } from "@/game/sprites/arrayling";
 import type { SpriteSheet } from "@/game/sprites/grid";
+import { toRGBA } from "@/game/sprites/grid";
+import { EFFECT_PALETTES, EFFECT_SIZE, effectFrames } from "@/game/battle/effects";
 import {
-  type Verdict, STINGER_MS, createFx, hitFoe, hitPlayer, shakeOffset, showVerdict, slideOffset, tick, type StageFx,
+  type Verdict, type EffectKind, EFFECT_FRAME_MS, STINGER_MS, advanceMessage, createFx, evolve, faint, hitFoe, hitPlayer, messageView, say,
+  shakeOffset, showVerdict, slideOffset, tick, type StageFx,
 } from "@/lib/battle/stagefx";
 
 const SCALE = 3; // backing-store pixels per logical pixel (crisp text, nearest-neighbour sprites)
 
 export interface BattleStageHandle {
-  hitFoe(damage: number, crit?: boolean): void;
+  hitFoe(damage: number, crit?: boolean, kind?: EffectKind): void;
   hitPlayer(hearts?: number): void;
   verdict(v: Verdict): void;
+  say(text: string): void;
+  advance(): void;
+  faint(side: "player" | "foe"): void;
+  evolve(side: "player" | "foe"): void;
   restart(): void;
 }
 
@@ -38,7 +45,11 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
     const cv = useRef<HTMLCanvasElement>(null);
     const fx = useRef<StageFx>(createFx(5, foeMax));
     useImperativeHandle(ref, () => ({
-      hitFoe: (d, crit) => hitFoe(fx.current, d, crit),
+      hitFoe: (d, crit, kind) => hitFoe(fx.current, d, crit, kind),
+      say: (t) => say(fx.current, t),
+      advance: () => advanceMessage(fx.current),
+      faint: (side) => faint(fx.current, side),
+      evolve: (side) => evolve(fx.current, side),
       hitPlayer: (h) => hitPlayer(fx.current, h),
       verdict: (v) => showVerdict(fx.current, v),
       restart: () => { fx.current = createFx(5, foeMax); },
@@ -49,6 +60,14 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
       const canvas = cv.current, ctx = canvas?.getContext("2d");
       if (!canvas || !ctx) return;
       const frames = { player: sheetToCanvases(sheets.player), foe: sheetToCanvases(sheets.foe) };
+      const effects = Object.fromEntries((Object.keys(EFFECT_PALETTES) as EffectKind[]).map((k) => [k,
+        effectFrames(k).map((g) => {
+          const c = document.createElement("canvas");
+          c.width = c.height = EFFECT_SIZE;
+          const rgba = toRGBA(g, EFFECT_PALETTES[k]) as unknown as Uint8ClampedArray<ArrayBuffer>;
+          c.getContext("2d")!.putImageData(new ImageData(rgba, EFFECT_SIZE, EFFECT_SIZE), 0, 0);
+          return c;
+        })])) as Record<EffectKind, HTMLCanvasElement[]>;
       let raf = 0, last = performance.now();
       const frameOf = (side: "player" | "foe", f: StageFx) => {
         const p = f.pose[side], sheet = sheets[side], list = frames[side][p.name];
@@ -98,6 +117,14 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
         ctx.fillRect(PLATFORMS.player.cx - 26 + plOff, PLATFORMS.player.cy - 1, 52, 3);
         draw(foe, PLATFORMS.foe.cx - 32 + fxOff + lunge("foe"), PLATFORMS.foe.cy - 58);
         draw(pl, PLATFORMS.player.cx - 32 + plOff + lunge("player"), PLATFORMS.player.cy - 58);
+        // sprite move effects over the target
+        for (const e of f.effects) {
+          const anchor = e.side === "foe" ? PLATFORMS.foe : PLATFORMS.player;
+          const list = effects[e.kind], i = Math.min(list.length - 1, Math.floor(e.age / EFFECT_FRAME_MS));
+          const sc = e.kind === "burst" ? 2 : 1.5;
+          const sz = EFFECT_SIZE * sc;
+          ctx.drawImage(list[i], Math.round(anchor.cx - sz / 2), Math.round(anchor.cy - 34 - sz / 2), sz, sz);
+        }
         // damage numbers
         ctx.font = `10px ${font}`; ctx.textAlign = "center";
         for (const n of f.numbers) {
@@ -113,7 +140,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
         // HP boxes (not shaken, so they stay readable)
         const slideHud = slideOffset(f.intro, 0.4);
         hpBox(6 - Math.round(slideHud * 120), 6, foeName, `Lv${foeLevel}`, f.hp.foe.shown / f.hp.foe.max, null);
-        hpBox(LW - 110 + Math.round(slideHud * 120), LH - 44, playerName, "Lv5",
+        hpBox(LW - 110 + Math.round(slideHud * 120), 70, playerName, "Lv5",
           f.hp.player.shown / f.hp.player.max, "♥".repeat(Math.max(0, Math.ceil(f.hp.player.target))));
         // verdict stinger
         if (f.stinger) {
@@ -128,6 +155,28 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
           ctx.fillStyle = "#e9edf5"; ctx.font = `8px ${font}`;
           ctx.fillText(st.sub, LW / 2, LH / 2 + 10);
           ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.globalAlpha = 1;
+        }
+        // typewriter text box along the bottom
+        const msg = messageView(f);
+        if (msg) {
+          const bx = 4, by = LH - 27, bw = LW - 8, bh = 24;
+          ctx.fillStyle = "#1c2433"; ctx.fillRect(bx, by, bw, bh);
+          ctx.fillStyle = "#f4efdc"; ctx.fillRect(bx + 2, by + 2, bw - 4, bh - 4);
+          ctx.fillStyle = "#1c2433"; ctx.font = `8px ${font}`; ctx.textBaseline = "top";
+          const words = msg.text.split(" "); let row = "", y = by + 4;
+          for (const w of words) {
+            const t = row ? `${row} ${w}` : w;
+            if (ctx.measureText(t).width > bw - 16 && row) { ctx.fillText(row, bx + 7, y); y += 9; row = w; } else row = t;
+          }
+          ctx.fillText(row, bx + 7, y);
+          if (msg.done && Math.floor(f.time / 350) % 2 === 0) { ctx.fillStyle = "#e5534b"; ctx.fillRect(bx + bw - 12, by + bh - 9, 5, 3); }
+        }
+        // battle wipe: black bars open from the middle
+        if (f.wipe < 1) {
+          const open = f.wipe * f.wipe * (3 - 2 * f.wipe), half = (LH / 2) * (1 - open);
+          ctx.fillStyle = "#0b0f1a";
+          ctx.fillRect(0, 0, LW, Math.ceil(half)); ctx.fillRect(0, LH - Math.ceil(half), LW, Math.ceil(half));
+          ctx.fillStyle = "#e9edf5"; ctx.fillRect(0, Math.ceil(half), LW, 1); ctx.fillRect(0, LH - Math.ceil(half) - 1, LW, 1);
         }
         raf = requestAnimationFrame(loop);
       };

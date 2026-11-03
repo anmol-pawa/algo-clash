@@ -173,3 +173,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (199 pass), `build`, `build:pages`. Smoke on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots show readable HP boxes (hearts moved to their own row after overlapping the level), stinger and sprites. Fixed a flaky crash found by the smoke (a negative first-frame dt gave a negative frame index).
 - Known gaps: the foe is a recoloured Arrayling placeholder; no per-move sprite effects, evolve play, text box or wipe (B3b); the layouts with editor and mobile tabs are B3c; no audio yet; the stage is 2D canvas, not Pixi.
 - Next: B3b.
+
+## 2026-11-03: B3b Battle text box, move effects, faint/evolve, wipe
+- Extended `lib/battle/stagefx.ts` (move effects with expiry, wipe progress, typewriter message queue with skip/advance, `faint`/`evolve` poses) and added `game/battle/effects.ts` (5-frame 32x32 pixel effects: slash, burst, bolt, each with its own palette). `BattleStage` draws effects over the target, a handheld text box (typewriter, blinking advance cue), and a black-bar battle wipe; the player platform and HP box moved up so the text box never covers them. `/dev/battle` has Burst, Say, Next line, Foe faints and Evolve buttons. 7 new tests (206 pass).
+- Verified: `npm run lint`, `typecheck`, `test`, `build`, `build:pages`; `scripts/smoke-battle.mjs` on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots show the wipe opening, effects on the right targets, the evolve silhouette, foe fainting, and a readable text box.
+- Known gaps: effects are generic per kind (no per-move art yet); the Arrayling evolve is still a flat silhouette pulse; text box wraps to two lines max and does not paginate; no audio.
+- Next: B3c (desktop and mobile battle layouts with statement + editor).

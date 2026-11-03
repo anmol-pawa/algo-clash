@@ -3,10 +3,14 @@
 
 export type Side = "player" | "foe";
 export type Verdict = "AC" | "WA" | "TLE" | "RE" | "CE";
-export type Pose = "idle" | "attack" | "hurt" | "faint";
+export type Pose = "idle" | "attack" | "hurt" | "faint" | "evolve";
+export type EffectKind = "slash" | "burst" | "bolt";
 
 export interface DamageNumber { id: number; side: Side; text: string; age: number; crit: boolean }
 export interface Stinger { verdict: Verdict; age: number }
+/** A sprite move effect playing over `side` (frames live in game/battle/effects.ts). */
+export interface MoveEffect { id: number; kind: EffectKind; side: Side; age: number }
+export interface Message { text: string; age: number }
 
 export interface StageFx {
   time: number; // animation clock (ms); frozen during hit-stop
@@ -17,6 +21,11 @@ export interface StageFx {
   hp: Record<Side, { shown: number; target: number; max: number }>;
   numbers: DamageNumber[];
   stinger: Stinger | null;
+  effects: MoveEffect[];
+  /** battle-wipe progress 0..1 (black bars opening) */
+  wipe: number;
+  message: Message | null;
+  queue: string[];
   nextId: number;
 }
 
@@ -24,8 +33,14 @@ export const INTRO_MS = 900;
 export const HITSTOP_MS = 60;
 export const NUMBER_MS = 900;
 export const STINGER_MS = 1400;
+export const WIPE_MS = 650;
+export const EFFECT_FRAME_MS = 70;
+export const EFFECT_FRAMES = 5;
+export const EFFECT_MS = EFFECT_FRAME_MS * EFFECT_FRAMES;
+export const CHAR_MS = 28; // typewriter speed (about 36 characters per second)
+export const LINGER_MS = 750; // how long a fully typed message stays before the next one
 const HP_RATE = 0.06; // hp points per ms the bar drains at (scaled by max)
-const POSE_MS: Record<Pose, number> = { idle: Infinity, attack: 360, hurt: 220, faint: Infinity };
+const POSE_MS: Record<Pose, number> = { idle: Infinity, attack: 360, hurt: 220, faint: Infinity, evolve: 1100 };
 
 export function createFx(playerMax = 5, foeMax = 100): StageFx {
   return {
@@ -35,7 +50,7 @@ export function createFx(playerMax = 5, foeMax = 100): StageFx {
       player: { shown: playerMax, target: playerMax, max: playerMax },
       foe: { shown: foeMax, target: foeMax, max: foeMax },
     },
-    numbers: [], stinger: null, nextId: 1,
+    numbers: [], stinger: null, effects: [], wipe: 0, message: null, queue: [], nextId: 1,
   };
 }
 
@@ -50,7 +65,7 @@ export function setPose(fx: StageFx, side: Side, name: Pose): void {
 }
 
 /** The player's code landed `damage` on the foe. */
-export function hitFoe(fx: StageFx, damage: number, crit = false): void {
+export function hitFoe(fx: StageFx, damage: number, crit = false, kind: EffectKind = crit ? "burst" : "slash"): void {
   const h = fx.hp.foe;
   h.target = Math.max(0, h.target - damage);
   setPose(fx, "player", "attack");
@@ -58,6 +73,48 @@ export function hitFoe(fx: StageFx, damage: number, crit = false): void {
   fx.hitstop = HITSTOP_MS;
   fx.shake = Math.max(fx.shake, shakeFor(damage, h.max));
   fx.numbers.push({ id: fx.nextId++, side: "foe", text: String(damage), age: 0, crit });
+  addEffect(fx, kind, "foe");
+}
+
+export function addEffect(fx: StageFx, kind: EffectKind, side: Side): void {
+  fx.effects.push({ id: fx.nextId++, kind, side, age: 0 });
+}
+
+/** Play the faint animation (the sprite sinks and fades, then stays down). */
+export function faint(fx: StageFx, side: Side): void {
+  setPose(fx, side, "faint");
+}
+
+/** Play the evolve animation (white silhouette morph), then return to idle. */
+export function evolve(fx: StageFx, side: Side): void {
+  setPose(fx, side, "evolve");
+}
+
+/** Queue a line for the typewriter text box. */
+export function say(fx: StageFx, text: string): void {
+  if (fx.message === null) fx.message = { text, age: 0 };
+  else fx.queue.push(text);
+}
+
+/** What the text box shows right now: the typed prefix and whether typing has finished. */
+export function messageView(fx: StageFx): { text: string; done: boolean } | null {
+  const m = fx.message;
+  if (!m) return null;
+  const n = Math.min(m.text.length, Math.floor(m.age / CHAR_MS));
+  return { text: m.text.slice(0, n), done: n >= m.text.length };
+}
+
+/** Skip the typewriter to the end of the current line; a second call moves to the next line. */
+export function advanceMessage(fx: StageFx): void {
+  const m = fx.message;
+  if (!m) return;
+  if (m.age < m.text.length * CHAR_MS) m.age = m.text.length * CHAR_MS;
+  else nextMessage(fx);
+}
+
+function nextMessage(fx: StageFx): void {
+  const t = fx.queue.shift();
+  fx.message = t === undefined ? null : { text: t, age: 0 };
 }
 
 /** A failing submission: the foe counterattacks and the player loses hearts. */
@@ -68,6 +125,7 @@ export function hitPlayer(fx: StageFx, hearts = 1): void {
   setPose(fx, "player", h.target <= 0 ? "faint" : "hurt");
   fx.hitstop = HITSTOP_MS;
   fx.shake = Math.max(fx.shake, 3);
+  addEffect(fx, "bolt", "player");
   fx.numbers.push({ id: fx.nextId++, side: "player", text: `-${hearts}`, age: 0, crit: false });
 }
 
@@ -84,6 +142,13 @@ export function tick(fx: StageFx, dt: number): void {
   }
   fx.time += dt;
   fx.intro = Math.min(1, fx.intro + dt / INTRO_MS);
+  fx.wipe = Math.min(1, fx.wipe + dt / WIPE_MS);
+  for (const e of fx.effects) e.age += dt;
+  fx.effects = fx.effects.filter((e) => e.age < EFFECT_MS);
+  if (fx.message) {
+    fx.message.age += dt;
+    if (fx.message.age >= fx.message.text.length * CHAR_MS + LINGER_MS) nextMessage(fx);
+  }
   fx.shake = Math.max(0, fx.shake - dt * 0.012);
   for (const side of ["player", "foe"] as const) {
     const p = fx.pose[side];
