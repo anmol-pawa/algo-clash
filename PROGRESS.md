@@ -224,3 +224,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (301 pass, includes native g++ checks), `build`, `build:pages`; `scripts/smoke-lesson.mjs` on the static export (served under `/algo-clash`) at desktop and iPhone 14 across all six lessons: no console errors, no horizontal overflow; screenshots show readable listings, computed output panels and practice cards.
 - Known gaps: lessons, cards and exercises are not wired into the overworld/progression yet; card diagnostics are g++ text, not clang.
 - Next: B7 (Syntax Shores part 2, S3-S4); it is large, so split it into sub-boxes first.
+
+## 2026-11-03: B7a Syntax Shores exercises, S3 (3 problems)
+- Split B7 into B7a-B7e in `ROADMAP.md`; done: B7a.
+- Added three full packages under `content/problems/R0/`: `grid-spin` (clockwise turn of a non-square 2D vector; wrong: transpose only, wrong direction, same-shape allocation), `csv-cutter` (split on commas keeping empty fields, `k` commas give `k+1` fields; wrong: `getline` split, skipping empties, missing last field, quadratic re-scan TLE), `clear-the-deck` (erase-remove idiom; wrong: `remove` without `erase`, erase-in-loop skipping a neighbour, erase-loop TLE). Each has reference, brute, wrong solutions, seeded generator, generated `tests.json`, hints and editorial.
+- Verified: `CONTENT_WRITE=1 npx vitest run tests/content-problems.test.ts` (17 pass natively with g++; the first `csv-cutter` TLE wrong solution was not slow enough natively, so it was replaced by a re-scan version that is rejected); lint, typecheck and full `npm test` pass; `build:pages` could not run in this sandbox (the Next postcss subprocess times out, also on the untouched tree), and this change is content-only. No UI changes, no screenshots.
+- Process note: the session's designated branch was `claude/eloquent-ritchie-x3wm4v`, so work was pushed there rather than `main`; it needs merging to `main` for Pages. CI/deploy confirmation skipped for Actions quota reasons per the routine prompt (date-wise the quota note has expired, but no Actions check was made on this branch).
+- Known gaps: problems are not wired into the game yet.
+- Next: B7b.

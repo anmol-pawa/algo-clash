@@ -68,7 +68,12 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B6b. Five S2 judged exercises (toll-booth, charge-meter, shelf-rank, echo-chamber, pocket-calendar: control flow, break/continue, pass by const reference, recursion basics, `static`), full packages.
   - [x] B6c. S1 lesson screens (model + UI) and 15 S1 cards (generated natively).
   - [x] B6d. S2 lesson screens and 15 S2 cards.
-- [ ] B7. **Syntax Shores content, part 2** (CUR §2 S3–S4): the lesson screens, 30 cards and 12 judged exercises.
+- [ ] B7. **Syntax Shores content, part 2** (CUR §2 S3–S4): the lesson screens, 30 cards and 12 judged exercises. Split:
+  - [x] B7a. Three S3 exercises (grid-spin, csv-cutter, clear-the-deck), full packages.
+  - [ ] B7b. Three more S3 exercises (`substr` cost, `to_string`/`stoi`, char arithmetic, `emplace_back`/`reserve`).
+  - [ ] B7c. Six S4 exercises (struct + `operator<` sort, constructors/initialiser lists, `ListNode` and `TreeNode` basics, `nullptr`).
+  - [ ] B7d. S3 lesson screens and 15 cards.
+  - [ ] B7e. S4 lesson screens and 15 cards.
 - [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI.
 - [ ] B9. **Mainville Gym:** a gym leader sprite (96×96, idle/attack/hurt/faint), the three-phase gym flow (GDD §5.5) with Syntax Shores content, a badge, and the victory and evolution scenes.
 - [ ] B10. **Audio v1:** the WebAudio synth, a Mainville theme, a battle theme and SFX (menu, hit, AC, WA, TLE, CE, level-up), with volume settings.
