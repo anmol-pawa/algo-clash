@@ -122,3 +122,17 @@ describe("progress", () => {
     expect(p.passed).toEqual(["trace"]);
   });
 });
+
+describe("scroll kits", () => {
+  for (const s of allScrolls) {
+    it(`${s.id}: kit statement equals problem.md and spec matches the template`, async () => {
+      const { scrollKits } = await import("../content/scrolls/kits");
+      const kit = scrollKits[s.id];
+      expect(kit).toBeDefined();
+      expect(kit.statement).toBe(readFileSync(join(process.cwd(), "content", "problems", s.region, s.problemId, "problem.md"), "utf8"));
+      expect(s.template).toContain(kit.spec.name);
+      expect(kit.starter).toContain(kit.spec.name);
+      expect(kit.parSeconds).toBeGreaterThan(0);
+    });
+  }
+});

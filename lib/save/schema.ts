@@ -2,6 +2,8 @@
 
 export const SAVE_VERSION = 1;
 
+import type { ScrollProgress } from "../forge/types";
+
 export type MasteryState = "unseen" | "learning" | "solved" | "mastered" | "rusty";
 
 export interface ProblemMastery {
@@ -62,6 +64,8 @@ export interface CoreSave {
   party: string[];
   mastery: Record<string, ProblemMastery>;
   settings: Settings;
+  /** Forge progress per scroll id (GDD §6.4). Optional in old saves; sanitised to `{}`. */
+  forge: Record<string, ScrollProgress>;
   flags: Record<string, boolean | number | string>;
 }
 
@@ -79,6 +83,7 @@ export function newCoreSave(now: number, name = "Trainer"): CoreSave {
     party: [],
     mastery: {},
     settings: { ...DEFAULT_SETTINGS, editor: { ...DEFAULT_SETTINGS.editor } },
+    forge: {},
     flags: {},
   };
 }
@@ -102,6 +107,19 @@ function sanitizeMastery(raw: unknown): ProblemMastery {
     ease: num(r.ease, 2.5, 1.3, 3.5),
     lastSolvedAt: num(r.lastSolvedAt, 0, 0),
   };
+}
+
+const FORGE_TIER_IDS = ["trace", "cloze30", "cloze70", "blank"];
+
+function sanitizeForge(raw: unknown): Record<string, ScrollProgress> {
+  const out: Record<string, ScrollProgress> = {};
+  for (const [id, v] of Object.entries(rec(raw)).slice(0, 200)) {
+    const r = rec(v);
+    const passed = (Array.isArray(r.passed) ? r.passed : []).filter((t): t is ScrollProgress["passed"][number] => FORGE_TIER_IDS.includes(t as string));
+    const blankRuns = (Array.isArray(r.blankRuns) ? r.blankRuns : []).slice(-20).map((x) => ({ seconds: num(rec(x).seconds, 0, 0), at: num(rec(x).at, 0, 0) }));
+    out[id.slice(0, 64)] = { passed: [...new Set(passed)], blankRuns };
+  }
+  return out;
 }
 
 /** Coerce untrusted data (storage, imported JSON) into a valid v1 core save. Never throws. */
@@ -140,6 +158,7 @@ export function sanitizeCore(raw: unknown, now: number): CoreSave {
         autocomplete: typeof e.autocomplete === "boolean" ? e.autocomplete : true,
       },
     },
+    forge: sanitizeForge(r.forge),
     flags,
   };
 }

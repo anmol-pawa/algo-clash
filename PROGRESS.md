@@ -258,3 +258,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `CONTENT_WRITE=1` problem and card generation, `npm run lint` (2 existing warnings), `typecheck`, `npm test` (368 pass, native g++; template equals the reference, mask round-trips for 25 seeds x 2 ratios), `build`, `build:pages`. No UI changes, so no screenshots. CI/deploy not checked (Actions status was not queried this run).
 - Known gaps: no UI yet, progress not persisted, only one scroll (CUR §4 Core scrolls come with their regions).
 - Next: B8b (`/forge` UI).
+
+## 2026-11-03: B8b The Forge UI (B8 complete)
+- Added `/forge` (`app/forge/page.tsx`, `components/ForgeScreen.tsx`): scroll list with status chips and tier pips; per scroll the four tiers with unlocking (Trace: annotated template + 5 natively computed trace cards, pass at 4/5, common bugs; Cloze 30 % / 70 %: seeded masks with inputs, judged by the real compiler and hidden tests, red outlines as a hint only; Blank: statement, timer vs par, editor, Submit judged by `judgeProblem`, status Inscribed, Under par flag). Progress persists in the save (`CoreSave.forge`, sanitised; no version bump since absent means `{}`). `content/scrolls/kits.ts` holds spec/statement/starter and lazily imports the 3 MB tests (own chunk); test asserts the statement equals `problem.md`.
+- Fixed a mobile layout bug found by the smoke: `CardBattle` panels grew to their code's width (`w-full min-w-0` added).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (369 pass), `build`, `build:pages`; new `scripts/smoke-forge.mjs` on the static export at desktop and iPhone 14: locked tiers, failed trace, passed trace, wrong then right fills in both clozes (judge rejects wrong, accepts reference), Blank AC with the reference, status Inscribed persisted across reload, no console errors, no horizontal overflow. Screenshots read well.
+- Known gaps: Forge is not linked from the overworld yet; Ingrained needs two days so is only unit-tested; scroll results do not feed SRS yet (C1); CI/deploy status not checked this run.
+- Next: B9 (Mainville Gym).

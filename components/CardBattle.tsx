@@ -170,7 +170,7 @@ export default function CardBattle({ cards, computed, size = 5, seed = 1, onFini
 
   if (done) {
     return (
-      <section className="panel mx-auto flex max-w-xl flex-col gap-3 p-4" aria-label="Card results" data-testid="card-results">
+      <section className="panel mx-auto flex w-full min-w-0 max-w-xl flex-col gap-3 p-4" aria-label="Card results" data-testid="card-results">
         <h2 className="font-display text-xl text-[var(--gold)]">{stats.correct === stats.total ? "Flawless!" : "Encounter cleared"}</h2>
         <p className="text-sm">{stats.correct} / {stats.total} correct · best streak {stats.bestStreak} · <strong className="text-[var(--gold)]">+{stats.xp} XP</strong></p>
         <button className="px-btn px-btn-primary min-h-11 px-4" onClick={() => { setIdx(0); setResponse(null); setGrade(null); setStats({ total: 0, correct: 0, xp: 0, bestStreak: 0 }); setStreak(0); setDone(false); }}>Again</button>
@@ -178,7 +178,7 @@ export default function CardBattle({ cards, computed, size = 5, seed = 1, onFini
     );
   }
   return (
-    <section className="panel mx-auto flex max-w-2xl flex-col gap-3 p-4" aria-label="Concept card">
+    <section className="panel mx-auto flex w-full min-w-0 max-w-2xl flex-col gap-3 p-4" aria-label="Concept card">
       <header className="flex items-center justify-between text-xs">
         <span className="font-display uppercase tracking-wider opacity-70">Card {idx + 1} / {deck.length}</span>
         <span>Streak {streak} · {stats.xp} XP</span>
