@@ -232,3 +232,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (306 pass, includes native g++ verification), `build`, `build:pages`. No visual changes, so no screenshots.
 - Known gaps: problems not reachable from the game yet; no S3 lessons/cards (B7c).
 - Next: B7b (seven S4 exercises).
+
+## 2026-11-03: B7b1 Three S4 judged exercises
+- Added full packages under `content/problems/R0/`: `crate-order` (struct with constructor + `operator<`, sort by weight desc then id), `reverse-chain` (`ListNode*` in-place reversal), `tree-depth` (`TreeNode*`, `nullptr` base case; chains up to 10^4 nodes in perf). Each has reference, brute, three wrong solutions, seeded generator, generated `tests.json` (four groups), hint ladder and house-style editorial.
+- ROADMAP B7b split into B7b1 (done) and B7b2 (four more S4 exercises).
+- Verified: `npm run lint`, `typecheck`, `npm test` (309 pass, includes `content:verify` for all packages: reference vs brute stress, every wrong solution rejected), `npm run build`, `npm run build:pages`. No visual changes, so no screenshots.
+- Work was committed on the session branch `claude/eloquent-ritchie-bwmn2s` (session instructions pin that branch), not `main`; Pages deploys only from `main`, so this needs merging.
+- Known gaps: none new. Next: B7b2.

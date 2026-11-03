@@ -70,7 +70,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B6d. S2 lesson screens and 15 S2 cards.
 - [ ] B7. **Syntax Shores content, part 2** (CUR §2 S3–S4): the lesson screens, 30 cards and 12 judged exercises. Split:
   - [x] B7a. Five S3 judged exercises (grid-turn, run-squash, field-split, letter-tally, overlap-count: 2D vector shape, erase cost, split/substr, `c - 'a'` counting, `find` with a start position), full packages.
-  - [ ] B7b. Seven S4 judged exercises (struct with constructor and `operator<`, `ListNode`, `TreeNode`, `nullptr`, `class Solution`), full packages.
+  - [ ] B7b. Seven S4 judged exercises (struct with constructor and `operator<`, `ListNode`, `TreeNode`, `nullptr`, `class Solution`), full packages. Split:
+    - [x] B7b1. Three: crate-order (struct + `operator<`), reverse-chain (`ListNode*`), tree-depth (`TreeNode*`, `nullptr`).
+    - [ ] B7b2. Four more: list build/merge with `new`, a struct with member initialiser list and `this`, tree traversal, `nullptr`-guarded pointer walk.
   - [ ] B7c. S3 lesson screens and 15 S3 cards.
   - [ ] B7d. S4 lesson screens and 15 S4 cards.
 - [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI.
