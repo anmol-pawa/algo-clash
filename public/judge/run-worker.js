@@ -1,7 +1,9 @@
 // One-shot run worker: instantiates a compiled WASI module with an in-memory stdin/stdout.
 // The host terminates this worker on timeout. Protocol:
 //   in : {wasm, stdin, args}   out: {status, exitCode, stdout, stderr, wallMs, detail}
-const OUT_CAP = 1 << 20;
+// The whole batch (every test of a problem) writes to one stdout, so the cap must hold the sum of all expected outputs
+// (a 1 MiB cap silently emptied the later tests of big problems and produced bogus WA). Exceeding it is an error, never a silent cut.
+const OUT_CAP = 48 << 20;
 class ProcExit extends Error { constructor(code) { super("exit " + code); this.code = code; } }
 
 self.onmessage = (e) => {
@@ -27,7 +29,8 @@ self.onmessage = (e) => {
       let w = 0;
       for (let i = 0; i < n; i++) {
         const p = dv().getUint32(iovs + 8 * i, true), l = dv().getUint32(iovs + 8 * i + 4, true);
-        if (outLen < OUT_CAP) { out[fd].push(u8().slice(p, p + l)); outLen += l; }
+        if (outLen + l > OUT_CAP) throw new ProcExit(-2); // output limit exceeded
+        out[fd].push(u8().slice(p, p + l)); outLen += l;
         w += l;
       }
       dv().setUint32(nwPtr, w, true);
@@ -80,6 +83,7 @@ self.onmessage = (e) => {
   }
   const join = (parts) => new TextDecoder().decode(concat(parts));
   function concat(parts) { const n = parts.reduce((s, p) => s + p.length, 0); const r = new Uint8Array(n); let o = 0; for (const p of parts) { r.set(p, o); o += p.length; } return r; }
-  if (status === "ok" && exitCode !== 0) { status = "RE"; detail = "non-zero exit"; }
+  if (status === "ok" && exitCode === -2) { status = "RE"; detail = "output limit exceeded"; }
+  else if (status === "ok" && exitCode !== 0) { status = "RE"; detail = "non-zero exit"; }
   self.postMessage({ status, exitCode, stdout: join(out[1]), stderr: join(out[2]), wallMs: Math.round(performance.now() - t0), detail, memPages: mem ? mem.buffer.byteLength / 65536 : 0 });
 };

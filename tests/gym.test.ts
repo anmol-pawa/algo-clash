@@ -1,9 +1,11 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { allGyms, syntaxShoresGym as gym } from "../content/gyms/r0";
 import { FOE_MAX_HP } from "../lib/battle/damage";
 import { GymError, SHIELD_MAX, SHIELD_START, answerBlitz, battleResult, shuffledOptions, blitzCorrect, coreFoeHp, startGym } from "../lib/gym/machine";
+import { applyGymWin, blitzSecondsLeft, hasBadge, SHARDS_FLAG } from "../lib/gym/progress";
+import { newCoreSave } from "../lib/save/schema";
 import type { GymState } from "../lib/gym/types";
 
 const answerAll = (s: GymState, right: boolean, seconds = 5): GymState => {
@@ -100,5 +102,31 @@ describe("gym machine", () => {
     expect(s.reward).toBeNull();
     expect(() => battleResult(gym, startGym(gym), "won")).toThrow(GymError);
     expect(() => battleResult(gym, s, "won")).toThrow(GymError);
+  });
+});
+
+describe("gym persistence", () => {
+  it("a win records the badge and one shard, and a rematch pays nothing more", () => {
+    const c0 = newCoreSave(0);
+    expect(hasBadge(c0, gym)).toBe(false);
+    const c1 = applyGymWin(c0, gym);
+    expect(hasBadge(c1, gym)).toBe(true);
+    expect(c1.flags[SHARDS_FLAG]).toBe(1);
+    expect(applyGymWin(c1, gym)).toBe(c1);
+    expect(c0.flags).toEqual({});
+  });
+  it("blitz seconds count down and clamp at zero", () => {
+    expect(blitzSecondsLeft(1000, 1000, 20)).toBe(20);
+    expect(blitzSecondsLeft(1000, 6500, 20)).toBe(15);
+    expect(blitzSecondsLeft(1000, 99999, 20)).toBe(0);
+  });
+  it("kits match the problem packages", async () => {
+    const { gymKits } = await import("../content/gyms/kits");
+    for (const id of [gym.coreProblemId, gym.signatureProblemId]) {
+      const kit = gymKits[id];
+      expect(kit).toBeDefined();
+      expect(kit.statement).toBe(readFileSync(join(process.cwd(), "content", "problems", "R0", id, "problem.md"), "utf8"));
+      expect(kit.starter.length).toBeGreaterThan(20);
+    }
   });
 });

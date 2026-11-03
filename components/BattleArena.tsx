@@ -32,10 +32,23 @@ export interface ArenaProblem {
   foeLevel: number;
 }
 
+export type ArenaResult = "won" | "fainted" | "retreated";
+
+export interface ArenaOptions {
+  /** Foe HP at the start of the fight (gym head start). */
+  foeStartHp?: number;
+  /** clang flags for every Run/Submit (a gym twist such as -Werror). Compile errors never cost a heart. */
+  compileFlags?: string[];
+  /** When set the fight can end: a Continue button reports the result, and Retreat is offered. */
+  onResult?: (r: ArenaResult) => void;
+}
+
+const PLAYER_HEARTS = 5;
+
 const FOE_HP = 100;
 
 /** One coding battle: stage + statement + editor, Run (visible tests) chips the foe, Submit (all tests) decides the fight. */
-export default function BattleArena({ problem }: { problem: ArenaProblem }) {
+export default function BattleArena({ problem, foeStartHp, compileFlags, onResult }: { problem: ArenaProblem } & ArenaOptions) {
   const statement = useMemo(() => parseStatement(problem.statement), [problem.statement]);
   const visible = useMemo(() => problem.tests.filter((t) => t.group === "basic"), [problem.tests]);
   const [tab, setTab] = useState<BattleTab>("code");
@@ -43,6 +56,9 @@ export default function BattleArena({ problem }: { problem: ArenaProblem }) {
   const [view, setView] = useState<VerdictView | null>(null);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState("");
+  const [ended, setEnded] = useState<"won" | "fainted" | null>(null);
+  const [confirmRetreat, setConfirmRetreat] = useState(false);
+  const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
 
@@ -77,15 +93,19 @@ export default function BattleArena({ problem }: { problem: ArenaProblem }) {
     const tests = kind === "run" ? visible : problem.tests;
     setBusy(true);
     setView(null);
-    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s), run: runWasm });
+    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s, compileFlags), run: runWasm });
     const v = buildVerdictView(r, tests);
     setView(v);
     setBusy(false);
     const out = battleOutcome(kind, v.verdict, v.passed, v.total, FOE_HP);
     if (out.foeDamage > 0) stage.current?.hitFoe(out.foeDamage, kind === "submit", kind === "submit" ? "burst" : "slash");
-    if (out.playerHearts > 0) stage.current?.hitPlayer(out.playerHearts);
+    if (out.playerHearts > 0) {
+      stage.current?.hitPlayer(out.playerHearts);
+      hearts.current = Math.max(0, hearts.current - out.playerHearts);
+      if (hearts.current === 0) setEnded("fainted");
+    }
     if (kind === "submit") stage.current?.verdict(v.verdict);
-    if (kind === "submit" && v.verdict === "AC") stage.current?.faint("foe");
+    if (kind === "submit" && v.verdict === "AC") { stage.current?.faint("foe"); setEnded("won"); }
     stage.current?.say(out.line);
     setTab((cur) => tabAfterJudge(cur, kind, v.verdict));
   }
@@ -95,7 +115,7 @@ export default function BattleArena({ problem }: { problem: ArenaProblem }) {
       tab={tab}
       onTab={setTab}
       badges={view ? { code: view.verdict } : undefined}
-      stage={<BattleStage ref={stage} font={`${pixelFamily}, monospace`} foeName={problem.foeName} foeLevel={problem.foeLevel} foeMax={FOE_HP} />}
+      stage={<BattleStage ref={stage} font={`${pixelFamily}, monospace`} foeName={problem.foeName} foeLevel={problem.foeLevel} foeMax={FOE_HP} foeStart={foeStartHp} />}
       problem={<StatementPanel statement={statement} badge={<span className="px-btn px-2 text-xs">{problem.difficulty}</span>} />}
       code={
         <>
@@ -105,10 +125,20 @@ export default function BattleArena({ problem }: { problem: ArenaProblem }) {
         </>
       }
       actions={
-        <div className="flex gap-2">
-          <button className="px-btn min-h-11 flex-1" disabled={busy} onClick={() => judge("run")}>Run ({visible.length})</button>
-          <button className="px-btn px-btn-primary min-h-11 flex-1" disabled={busy} onClick={() => judge("submit")}>{busy ? "Judging…" : `Submit (${problem.tests.length})`}</button>
-        </div>
+        ended && onResult ? (
+          <button className="px-btn px-btn-primary min-h-11 w-full" onClick={() => onResult(ended)}>
+            {ended === "won" ? "Foe beaten! Continue ▶" : "You fainted. Continue ▶"}
+          </button>
+        ) : (
+          <div className="flex gap-2">
+            {onResult && (
+              <button className="px-btn min-h-11 px-3 text-sm" disabled={busy} onClick={() => (confirmRetreat ? onResult("retreated") : setConfirmRetreat(true))}
+                onBlur={() => setConfirmRetreat(false)}>{confirmRetreat ? "Sure?" : "Retreat"}</button>
+            )}
+            <button className="px-btn min-h-11 flex-1" disabled={busy} onClick={() => judge("run")}>Run ({visible.length})</button>
+            <button className="px-btn px-btn-primary min-h-11 flex-1" disabled={busy} onClick={() => judge("submit")}>{busy ? "Judging…" : `Submit (${problem.tests.length})`}</button>
+          </div>
+        )
       }
     />
   );

@@ -40,10 +40,17 @@ function foeSheet(): SpriteSheet {
   return { ...s, palette: s.palette.map((c, i) => map[i] ?? c) };
 }
 
-export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; font?: string }>(
-  function BattleStage({ foeName = "Bracketeer", foeLevel = 4, playerName = "Arrayling", foeMax = 100, font = "monospace" }, ref) {
+/** A fresh stage state; `foeStart` (default full) lets a gym foe begin the fight already bitten by the blitz. */
+function freshFx(foeMax: number, foeStart?: number): StageFx {
+  const f = createFx(5, foeMax);
+  if (foeStart !== undefined) f.hp.foe.shown = f.hp.foe.target = Math.max(1, Math.min(foeMax, foeStart));
+  return f;
+}
+
+export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; foeStart?: number; font?: string }>(
+  function BattleStage({ foeName = "Bracketeer", foeLevel = 4, playerName = "Arrayling", foeMax = 100, foeStart, font = "monospace" }, ref) {
     const cv = useRef<HTMLCanvasElement>(null);
-    const fx = useRef<StageFx>(createFx(5, foeMax));
+    const fx = useRef<StageFx>(freshFx(foeMax, foeStart));
     useImperativeHandle(ref, () => ({
       hitFoe: (d, crit, kind) => hitFoe(fx.current, d, crit, kind),
       say: (t) => say(fx.current, t),
@@ -52,8 +59,8 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
       evolve: (side) => evolve(fx.current, side),
       hitPlayer: (h) => hitPlayer(fx.current, h),
       verdict: (v) => showVerdict(fx.current, v),
-      restart: () => { fx.current = createFx(5, foeMax); },
-    }), [foeMax]);
+      restart: () => { fx.current = freshFx(foeMax, foeStart); },
+    }), [foeMax, foeStart]);
     const sheets = useMemo(() => ({ player: buildArrayling("back"), foe: foeSheet() }), []);
 
     useEffect(() => {
