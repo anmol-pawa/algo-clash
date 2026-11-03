@@ -61,6 +61,8 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - the type multiplier from patterns, hearts, damage formula, faint/retreat, rematch list
   - unit tests for every transition
 - [ ] B5. **Concept-card battles:** MCQ, trace, predict-output, compiler-error, Parsons and cloze card UIs. Cards are graded by tests, and predict-output and compiler-error cards are generated natively.
+  - [x] B5a. Card model and pure grading (`lib/cards/`), sample Syntax Shores cards, native g++ verification of predict-output / compiler-error / trace answers (`tests/cards.test.ts`)
+  - [ ] B5b. Card UIs (`components/CardPlayer.tsx`, `/dev/cards`) for every card type, mobile-friendly, wired to SRS-ready results
 - [ ] B6. **Syntax Shores content, part 1** (CUR §2 S1–S2): the lesson screens, 30 cards and 10 judged exercises.
 - [ ] B7. **Syntax Shores content, part 2** (CUR §2 S3–S4): the lesson screens, 30 cards and 12 judged exercises.
 - [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI.

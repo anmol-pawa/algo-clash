@@ -1,0 +1,28 @@
+{
+  "r0-int-division": {
+    "out": "3 1"
+  },
+  "r0-overflow": {
+    "out": "10000000000"
+  },
+  "r0-loop-sum": {
+    "out": "16\n17\n26\n30"
+  },
+  "r0-ref-vs-copy": {
+    "out": "101"
+  },
+  "r0-missing-semicolon": {
+    "errorLine": 4,
+    "errorId": "expected-semicolon"
+  },
+  "r0-const-assign": {
+    "errorLine": 3,
+    "errorId": "const-assign"
+  },
+  "r0-count-parsons": {
+    "out": "1"
+  },
+  "r0-max-cloze": {
+    "out": "9"
+  }
+}

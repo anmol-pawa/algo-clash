@@ -191,3 +191,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (234 pass), `build`, `build:pages`. No UI changes, so no screenshots.
 - Known gaps: the machine is not yet wired into `BattleArena` (encounter flow, strategy picker UI come with B5/B6 content); the rematch list is only a flag until the SRS storage lands; `workable` (neutral) patterns are not yet in problem meta.
 - Next: B5 (concept-card battles).
+
+## 2026-11-03: B5a Concept-card model and grading
+- Split B5 into B5a (logic + content verification) and B5b (card UIs) in `ROADMAP.md`; done: B5a.
+- Added `lib/cards/types.ts` (MCQ, multi-select, predict-output, trace, compiler-error, Parsons, cloze), `lib/cards/grade.ts` (`gradeCard`, whitespace-insensitive matching, `fillCloze`, `blankCount`, deterministic `shuffledLines` that never returns the solved order), 10 original Syntax Shores cards in `content/cards/syntax-shores/cards.ts`, and `content/cards/generated.json`: expected outputs and clang error lines are produced by `tests/cards.test.ts` (native g++ run, clang++ `-fsyntax-only` + the friendly-error table) and the test fails if the committed file drifts (`CARDS_WRITE=1 npx vitest run tests/cards.test.ts` regenerates). It also compiles and runs the solved Parsons card and every accepted cloze alternative, and checks that right answers grade correct and wrong ones incorrect.
+- Verified: `npm run lint`, `typecheck`, `test` (247 pass), `build`, `build:pages`. No UI changes, so no screenshots.
+- Known gaps: only 10 cards (the 30-card sets arrive with B6/B7); Parsons/cloze proof harness wraps the code in a fixed `main` (fine for the current function-shaped cards); no UI yet.
+- Next: B5b (card UIs on `/dev/cards`).
