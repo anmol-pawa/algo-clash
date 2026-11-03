@@ -5,7 +5,7 @@
 Copy an element into a new vector whenever it is the first or differs from its predecessor. O(n) time and extra O(n) space. It is correct and fast; it is the checker because it is obviously right.
 
 ## Key insight
-The real lesson is the cost of `vector::erase`: removing element `i` moves every later element one slot left, O(n - i). Erasing inside a loop therefore turns a linear task into a quadratic one, and the 10^5 equal labels in the perf group make that visible. The standard answer is the erase-remove idiom: an algorithm (`unique`, `remove`, `remove_if`) moves the survivors to the front and returns the new logical end, and a single `erase(newEnd, end)` trims the tail.
+The real lesson is the cost of `vector::erase`: removing element `i` moves every later element one slot left, O(n - i). Erasing inside a loop therefore turns a linear task into a quadratic one, and the 3·10^5 equal labels in the perf group make that visible. The standard answer is the erase-remove idiom: an algorithm (`unique`, `remove`, `remove_if`) moves the survivors to the front and returns the new logical end, and a single `erase(newEnd, end)` trims the tail.
 
 ## Optimal
 `erase(unique(...), end())`. Time O(n), space O(1) extra (the parameter is a copy the function is free to modify).

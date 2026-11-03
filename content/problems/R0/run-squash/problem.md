@@ -13,6 +13,6 @@ Given the labels `nums` in belt order, return the labels that remain, in the sam
 
 ## Constraints
 
-- `0 <= nums.size() <= 100000`
+- `0 <= nums.size() <= 300000`
 - `-1000000000 <= nums[i] <= 1000000000`
 - `nums` is **not** sorted
