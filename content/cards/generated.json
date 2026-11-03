@@ -166,5 +166,20 @@
   },
   "s4-solution-private": {
     "diagnostic": "line 6: 'int Solution::twice(int)' is private within this context"
+  },
+  "forge-accumulate-trace-basic": {
+    "output": "12\n"
+  },
+  "forge-accumulate-trace-boundary": {
+    "output": "12\n"
+  },
+  "forge-accumulate-trace-wide": {
+    "output": "4000000000\n"
+  },
+  "forge-accumulate-trace-adds": {
+    "output": "5 3\n"
+  },
+  "forge-accumulate-trace-empty": {
+    "output": "0 0\n"
   }
 }

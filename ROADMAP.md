@@ -73,7 +73,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B7b. Seven S4 judged exercises (struct with constructor and `operator<`, `ListNode`, `TreeNode`, `nullptr`, `class Solution`), full packages.
   - [x] B7c. S3 lesson screens and 15 S3 cards.
   - [x] B7d. S4 lesson screens and 15 S4 cards.
-- [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI.
+- [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI. Split:
+  - [x] B8a. Pure logic `lib/forge/` (scroll type, seeded cloze masks at 30 %/70 %, tier unlocking, trace pass rule, Ingrained rule), the first scroll (`content/scrolls/accumulate.ts`, judged by the `pouch-sum` package) with 5 natively computed trace cards, tests.
+  - [ ] B8b. `/forge` UI: scroll list with status, annotated Trace tier + 5 trace cards, Cloze 30/70 editors and the timed Blank tier judged by `judgeProblem`, progress saved via `SaveService`, smoke test at desktop and iPhone 14.
 - [ ] B9. **Mainville Gym:** a gym leader sprite (96×96, idle/attack/hurt/faint), the three-phase gym flow (GDD §5.5) with Syntax Shores content, a badge, and the victory and evolution scenes.
 - [ ] B10. **Audio v1:** the WebAudio synth, a Mainville theme, a battle theme and SFX (menu, hit, AC, WA, TLE, CE, level-up), with volume settings.
 - [ ] B11. **Vertical-slice polish pass:**

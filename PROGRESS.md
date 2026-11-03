@@ -251,3 +251,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint` (2 existing warnings), `typecheck`, `test` (347 pass, native g++), `build`, `build:pages`; `smoke-lesson.mjs` and `smoke-cards.mjs` on the static export at desktop and iPhone 14: no console errors, no horizontal overflow. Screenshots caught raw `**bold**` and backticks in card prompts (the renderer only formats inline backticks in lesson text); removed.
 - Known gaps: lessons, cards and exercises are not wired into the overworld/progression yet; card diagnostics are g++ text, not clang.
 - Next: B8 (The Forge v1).
+
+## 2026-11-03: B8a Forge logic and the first scroll
+- Split B8 into B8a (logic + content, done) and B8b (`/forge` UI).
+- Added `lib/forge/` (`types.ts`; `cloze.ts`: seeded tokenizer-based masks at 30 %/70 %, comments/keywords never blanked, `diffFills` hint; `progress.ts`: tier unlocking, Trace pass at 4 of 5, status new → forging → inscribed → ingrained, Ingrained = two Blank passes under par at least two days apart). First scroll `content/scrolls/accumulate.ts` (annotated template, common bugs) judged by the new full package `content/problems/R0/pouch-sum` (reference, brute with `__int128`, 4 wrong solutions, seeded gen, hints, editorial) and 5 trace cards in `content/cards/R0/forge.ts` with g++-computed outputs. GDD §6.4 records the rules and that a scroll is a problem package plus scroll metadata.
+- Verified: `CONTENT_WRITE=1` problem and card generation, `npm run lint` (2 existing warnings), `typecheck`, `npm test` (368 pass, native g++; template equals the reference, mask round-trips for 25 seeds x 2 ratios), `build`, `build:pages`. No UI changes, so no screenshots. CI/deploy not checked (Actions status was not queried this run).
+- Known gaps: no UI yet, progress not persisted, only one scroll (CUR §4 Core scrolls come with their regions).
+- Next: B8b (`/forge` UI).

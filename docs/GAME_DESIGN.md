@@ -189,7 +189,9 @@ Scrolls are the reusable templates listed in `docs/CURRICULUM.md` §4. Each scro
 3. **Cloze 70 %.**
 4. **Blank:** write it from scratch against a spec plus tests, timed.
 
-A tier passes when the template compiles and passes its tests. **Ingrained** = Blank under par time on two spaced occasions. Scrolls feed the SRS like problems.
+A tier passes when the template compiles and passes its tests (Trace: at least 4 of the 5 questions right). Tiers unlock in order. **Inscribed** = Blank passed once (the move can be equipped); **Ingrained** = Blank under par time on two occasions at least two days apart. Scrolls feed the SRS like problems.
+
+Implementation: a scroll is a normal judged problem package (spec, reference, wrong solutions, generated tests) plus `content/scrolls/<id>.ts` (annotated template, five trace cards, common bugs). Cloze masks are generated from the template by a seeded tokenizer (`lib/forge/cloze.ts`), never hand-typed, so the judge, not string equality, decides whether a fill is valid.
 
 ### 6.5 Scaffolding modes (honest difficulty dial)
 
