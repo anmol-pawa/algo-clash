@@ -60,7 +60,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - the Scout → Strategise → Code → Judge → Debrief state machine
   - the type multiplier from patterns, hearts, damage formula, faint/retreat, rematch list
   - unit tests for every transition
-- [ ] B5. **Concept-card battles:** MCQ, trace, predict-output, compiler-error, Parsons and cloze card UIs. Cards are graded by tests, and predict-output and compiler-error cards are generated natively.
+- [ ] B5. **Concept-card battles** (GDD §8.2), split into sub-boxes:
+  - [x] B5a. Pure card model (`lib/cards/`): types for MCQ, multi-select, complexity, trace, predict-output, spot-the-bug, compiler-error, Parsons and cloze; graders, validation, seeded shuffles; native generation of predict/trace/compiler-error answers into `content/cards/<region>/generated.json`; native verification of Parsons, cloze and spot-the-bug solutions; sample cards; tests.
+  - [ ] B5b. Card UI components for every kind (touch-friendly, keyboard-navigable) and a `/dev/cards` review page.
+  - [ ] B5c. Concept-card wild encounter flow (30–90 s, XP, wrong-answer explanation) wired into the overworld grass encounter.
 - [ ] B6. **Syntax Shores content, part 1** (CUR §2 S1–S2): the lesson screens, 30 cards and 10 judged exercises.
 - [ ] B7. **Syntax Shores content, part 2** (CUR §2 S3–S4): the lesson screens, 30 cards and 12 judged exercises.
 - [ ] B8. **The Forge, v1** (GDD §6.4): the four tiers and the first scroll ("loop over a vector and accumulate with `long long`"), plus the Scroll UI.

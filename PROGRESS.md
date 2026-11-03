@@ -191,3 +191,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (234 pass), `build`, `build:pages`. No UI changes, so no screenshots.
 - Known gaps: the machine is not yet wired into `BattleArena` (encounter flow, strategy picker UI come with B5/B6 content); the rematch list is only a flag until the SRS storage lands; `workable` (neutral) patterns are not yet in problem meta.
 - Next: B5 (concept-card battles).
+
+## 2026-11-03: B5a Concept-card model
+- Split B5 into B5a-B5c in `ROADMAP.md`; done: B5a.
+- Added `lib/cards/types.ts` (MCQ, multi-select, complexity, trace, predict, spot-the-bug, compiler-error, Parsons, cloze), `lib/cards/grade.ts` (`gradeCard`, `validateCard`, `resolveCards`, seeded `permutation`/`parsonsPool`, cloze fill, lenient output normalisation) and `lib/cards/native.ts` (g++ run with `-fwrapv`, clang error capture, generation of answers). `content/cards/R0/cards.ts` holds 12 sample cards covering every kind; predict/trace answers and compiler-error answers/choices are produced natively into `content/cards/R0/generated.json` (`npm run cards:gen`) and `tests/cards.test.ts` fails if the file is stale. The test also compiles and runs every Parsons ordering, every accepted cloze answer and every spot-the-bug fix (and checks the buggy original differs). 27 new tests (261 pass).
+- Verified: `npm run lint`, `typecheck`, `test`, `build`, `build:pages` pass. No UI changes, no screenshots. Branch note: pushed to the session's designated branch `claude/eloquent-ritchie-h8qz1h` (not `main`) per the session's branch instructions.
+- Known gaps: complexity and MCQ answers are validated structurally only (no native check possible); Parsons distractors are not proven to break the program; `generated.json` exists for R0 only (the loader is per-region later).
+- Next: B5b (card UI components and `/dev/cards`).

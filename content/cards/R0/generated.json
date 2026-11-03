@@ -1,0 +1,41 @@
+{
+  "negative-mod": {
+    "answer": "-3 -1 1"
+  },
+  "unsigned-size-wrap": {
+    "answer": "1"
+  },
+  "trace-doubling-loop": {
+    "answer": "2 5 12 27"
+  },
+  "ce-undeclared-total": {
+    "answer": "undeclared-identifier",
+    "errorLine": 5,
+    "choiceIds": [
+      "no-member-named",
+      "deduce-auto",
+      "undeclared-identifier",
+      "extra-tokens"
+    ]
+  },
+  "ce-vector-length": {
+    "answer": "no-member-named",
+    "errorLine": 5,
+    "choiceIds": [
+      "static-nonstatic",
+      "no-member-named",
+      "narrowing",
+      "return-type-void"
+    ]
+  },
+  "ce-const-assign": {
+    "answer": "const-assign",
+    "errorLine": 5,
+    "choiceIds": [
+      "jump-bypasses",
+      "break-outside",
+      "private-member",
+      "const-assign"
+    ]
+  }
+}
