@@ -53,8 +53,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B2b. Rendering: `/play` canvas scene (camera follows player, smooth tile-to-tile walk with the B1b walk cycles, NPC sprites, animated water/tall grass), keyboard + on-screen d-pad + tap-to-move, warps between maps, encounter hook
   - [x] B2c. Pixel dialogue box with portraits (typewriter, tap to advance, choices), flags saved via `SaveService`, `faceBack` NPC turning
 - [ ] B3. **Battle stage** (ported from Query Clash and restyled):
-  - platforms, slide-ins, HP boxes, the typing text box, hit-stop, shake, damage numbers and verdict stingers
-  - the desktop layout (stage on top, statement + editor below) and the mobile tab layout
+  - [x] B3a. Stage canvas: meadow backdrop, platforms, slide-ins, HP boxes, hit-stop, shake, damage numbers and verdict stingers (`lib/battle/stagefx.ts`, `components/BattleStage.tsx`, `/dev/battle`)
+  - [ ] B3b. The typing text box, sprite-based move effects (not only lunges), faint/evolve plays, a battle wipe intro
+  - [ ] B3c. The desktop layout (stage on top, statement + editor below) and the mobile tab layout
 - [ ] B4. **Battle logic** (`lib/battle/`, GDD §5.3):
   - the Scout → Strategise → Code → Judge → Debrief state machine
   - the type multiplier from patterns, hearts, damage formula, faint/retreat, rematch list

@@ -166,3 +166,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test`, `build`, `build:pages` pass. `scripts/smoke-play.mjs` (extended: typewriter, flag survives a reload, warp) passes on the static export at desktop and iPhone 14; screenshots show the portrait, readable text, Iota turned toward the player, no console errors, no horizontal overflow.
 - Known gaps: two confirm presses within one frame can skip a page (the confirm handler reads the last rendered state); flags are only saved when a conversation ends; only Mainville dialogues exist.
 - Next: B3 (battle stage).
+
+## 2026-11-03: B3a Battle stage canvas
+- Split B3 into B3a-B3c in `ROADMAP.md`; done: B3a.
+- Added `lib/battle/stagefx.ts` (pure effect state: intro slide-in, 60 ms hit-stop, damage-scaled shake, HP drain tween, poses, damage numbers, verdict stingers; ignores non-positive frame gaps), `game/battle/backdrop.ts` (procedural meadow: sky, drifting clouds, hills, flowers, platforms), `components/BattleStage.tsx` (240x135 logical canvas at 3x, arrayling back sprite vs a purple recolour as the placeholder foe, lunges, HP boxes with hearts, ACCEPTED/WRONG ANSWER/TIME LIMIT/RUNTIME ERROR/COMPILE ERROR stingers) and `/dev/battle` with trigger buttons. 6 tests in `tests/stagefx.test.ts`; `scripts/smoke-battle.mjs`.
+- Verified: `npm run lint`, `typecheck`, `test` (199 pass), `build`, `build:pages`. Smoke on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots show readable HP boxes (hearts moved to their own row after overlapping the level), stinger and sprites. Fixed a flaky crash found by the smoke (a negative first-frame dt gave a negative frame index).
+- Known gaps: the foe is a recoloured Arrayling placeholder; no per-move sprite effects, evolve play, text box or wipe (B3b); the layouts with editor and mobile tabs are B3c; no audio yet; the stage is 2D canvas, not Pixi.
+- Next: B3b.
