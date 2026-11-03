@@ -185,3 +185,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (212 pass incl. content:verify), `build:pages`; smoke on the static export at desktop and iPhone 14: wrong submit shows the stinger, heart loss and text line; on iPhone submit jumps to Stage and the Code tab shows `[WA]`; no console errors, no horizontal overflow. Screenshots read well.
 - Known gaps: on mobile the Stage tab has empty space under the stage (could show the verdict summary); the foe is still the placeholder recolour; no encounter flow yet (B4).
 - Next: B4 (battle logic state machine).
+
+## 2026-11-03: B4 Battle logic
+- Added `lib/battle/damage.ts` (type multiplier x1.5/x1.0/x0.5 via `effectiveness`, rust cap 1.25, time bonus, `submitDamage` with group weights, hints and plan bonus, `rewards` for XP/Bits) and `lib/battle/machine.ts` (immutable Scout → Strategise → Plan → Code → Judging → Debrief machine: Run chips 25% once and never costs a heart, a failing Submit costs a heart, compile errors are free, a correct Plan shields one wrong submit, 0 hearts faints and queues the Rematch list, retreat, hints/editorial assisted flags, illegal transitions throw). Design choice: partial submits never reduce the foe below 1 HP; only a full AC defeats it. 22 tests in `tests/battle-logic.test.ts`.
+- Verified: `npm run lint`, `typecheck`, `test` (234 pass), `build`, `build:pages`. No UI changes, so no screenshots.
+- Known gaps: the machine is not yet wired into `BattleArena` (encounter flow, strategy picker UI come with B5/B6 content); the rematch list is only a flag until the SRS storage lands; `workable` (neutral) patterns are not yet in problem meta.
+- Next: B5 (concept-card battles).

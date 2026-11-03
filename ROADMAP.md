@@ -56,7 +56,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B3a. Stage canvas: meadow backdrop, platforms, slide-ins, HP boxes, hit-stop, shake, damage numbers and verdict stingers (`lib/battle/stagefx.ts`, `components/BattleStage.tsx`, `/dev/battle`)
   - [x] B3b. The typing text box, sprite-based move effects (not only lunges), faint/evolve plays, a battle wipe intro
   - [x] B3c. The desktop layout (stage on top, statement + editor below) and the mobile tab layout
-- [ ] B4. **Battle logic** (`lib/battle/`, GDD §5.3):
+- [x] B4. **Battle logic** (`lib/battle/`, GDD §5.3):
   - the Scout → Strategise → Code → Judge → Debrief state machine
   - the type multiplier from patterns, hearts, damage formula, faint/retreat, rematch list
   - unit tests for every transition
