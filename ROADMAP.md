@@ -78,7 +78,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B8b. `/forge` UI: scroll list with status, annotated Trace tier + 5 trace cards, Cloze 30/70 editors and the timed Blank tier judged by `judgeProblem`, progress saved via `SaveService`, smoke test at desktop and iPhone 14.
 - [ ] B9. **Mainville Gym:** a gym leader sprite (96×96, idle/attack/hurt/faint), the three-phase gym flow (GDD §5.5) with Syntax Shores content, a badge, and the victory and evolution scenes. Split:
   - [x] B9a. Pure logic `lib/gym/` (blitz, shield, head start, phase flow, retry/abandon) and the Syntax Shores gym content `content/gyms/r0.ts`, with tests.
-  - [ ] B9b. Warden Brace leader sprite (96×96, idle/attack/hurt/faint) on `/dev/sprites`, plus the gym backdrop.
+  - [x] B9b. Warden Brace leader sprite (96×96, idle/attack/hurt/faint) on `/dev/sprites`, plus the gym backdrop.
   - [ ] B9c. Gym UI (`/gym`): blitz screen with 20 s timer, then phases 2 and 3 via the coding battle (twist: -Werror), badge, victory and Arrayling evolution scene; persist badge in the save; smoke test.
 - [ ] B10. **Audio v1:** the WebAudio synth, a Mainville theme, a battle theme and SFX (menu, hit, AC, WA, TLE, CE, level-up), with volume settings.
 - [ ] B11. **Vertical-slice polish pass:**

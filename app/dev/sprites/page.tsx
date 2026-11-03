@@ -4,6 +4,8 @@ import { useMemo } from "react";
 import { SpriteCanvas } from "@/components/SpriteCanvas";
 import { buildArrayling } from "@/game/sprites/arrayling";
 import { TileScene } from "@/components/TileScene";
+import { GymScene } from "@/components/GymScene";
+import { buildWarden } from "@/game/sprites/warden";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
@@ -13,6 +15,7 @@ const WALKS = ["down", "up", "left", "right"];
 export default function SpritesDev() {
   const sheets = useMemo(() => ({ front: buildArrayling("front"), back: buildArrayling("back") }), []);
   const chars = useMemo(() => [TRAINER, IOTA].map((l) => ({ l, sheet: buildCharacter(l), portrait: buildPortrait(l) })), []);
+  const warden = useMemo(() => buildWarden(), []);
   const tiles = useMemo(() => buildTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
@@ -31,6 +34,22 @@ export default function SpritesDev() {
           </div>
         </section>
       ))}
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Warden Brace (96x96 gym leader)</h2>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {["idle", "attack", "hurt", "faint"].map((a) => (
+            <figure key={a} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+              <SpriteCanvas sheet={warden} anim={a} scale={3} />
+              <figcaption className="text-xs text-black">{a}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Gym backdrop (idle / attack)</h3>
+        <div className="grid gap-3 md:grid-cols-2">
+          <GymScene sheet={warden} anim="idle" scale={3} />
+          <GymScene sheet={warden} anim="attack" scale={3} />
+        </div>
+      </section>
       <section className="mb-6">
         <h2 className="mb-2 font-semibold">Mainville tileset (16x16)</h2>
         <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-9">

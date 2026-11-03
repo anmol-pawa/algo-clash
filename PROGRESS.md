@@ -272,3 +272,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (381 pass, incl. 12 new gym tests), `build`, `build:pages`. No UI changes, so no screenshots.
 - Known gaps: all R0 problems are Easy, so the gym's core/signature problems are the hardest existing ones, not a true medium/hard; consider a dedicated medium + follow-up for the gym in B9c; the -Werror twist is not wired into the judge yet.
 - Next: B9b (Warden Brace sprite and gym backdrop).
+
+## 2026-11-03: B9b Warden Brace sprite and gym backdrop
+- Added `game/sprites/warden.ts`: Warden Brace, 96x96 shaded pixel art (navy coat ramp, brass lamp-staff, cap lantern, `{ }` belt buckle) with idle (4), attack (4: wind-up, swing with light beam, flash, recover), hurt (white flash + recoil) and faint (sink, staff drops, fade) animations. Added `drawGymBackdrop` and `GYM_PLATFORMS` in `game/battle/backdrop.ts` (dusk sea, striped lighthouse with sweeping beam, rocky ledges; foe ledge lowered for the 96px leader) and `components/GymScene.tsx`; both are previewed on `/dev/sprites`. New `tests/warden-sprite.test.ts`.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (384 pass), `build`, `build:pages`; Playwright on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots read well. Fixed a negative-frame-index crash in GymScene found by the smoke. CI/deploy confirmation is normally required now (quota period ended 2026-11-01) but is checked below/next run.
+- Known gaps: Warden has a front view only (leaders face the player); no evolve animation (not needed for leaders); the gym battle UI is not built yet.
+- Next: B9c (gym UI, badge, victory and evolution scenes).
