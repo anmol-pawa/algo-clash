@@ -232,3 +232,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint`, `typecheck`, `test` (306 pass, includes native g++ verification), `build`, `build:pages`. No visual changes, so no screenshots.
 - Known gaps: problems not reachable from the game yet; no S3 lessons/cards (B7c).
 - Next: B7b (seven S4 exercises).
+
+## 2026-11-03: B7b Syntax Shores exercises, S4 (7 problems)
+- Added seven full packages under `content/problems/R0/`: `rank-roster` (struct with constructor and `operator<`, sort), `drop-negatives` (`ListNode`, dummy head, `nullptr`), `middle-link` (count then walk), `tree-height` and `leaf-sum` (`TreeNode`, null base case), `step-counter` (first design-format problem: member initialiser list, `this->` shadowing bug, clamp), `forge-chain` (`new` plus tail pointer). Each has reference, brute, 3-4 wrong solutions, seeded generator, generated `tests.json`, hints and editorial.
+- Added `lib/content/treegen.ts` (seeded random/skewed/complete tree level-order literals for generators).
+- Verified: `CONTENT_WRITE=1 npx vitest run tests/content-problems.test.ts` (26 pass natively with g++), `npm run lint` (2 unused-import warnings in gens), `typecheck`, `test` (313 pass), `build`, `build:pages`. No visual changes, so no screenshots. CI/deploy confirmation skipped: not required by the run notes' quota period was over, but not checked this run.
+- Known gaps: problems not reachable from the game yet; `step-counter` and `rank-roster` tests.json are 7-11 MB (large; consider trimming perf sizes); S3/S4 lessons and cards pending.
+- Next: B7c (S3 lesson screens and 15 S3 cards).
