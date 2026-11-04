@@ -4,7 +4,7 @@ const require = createRequire(import.meta.url);
 const { chromium, devices } = require("playwright");
 const base = process.argv[2] ?? "http://localhost:3000";
 const dir = process.env.SHOT_DIR ?? ".";
-const routes = ["", "play", "forge", "gym", "dev/lesson", "dev/cards", "dev/problem", "dev/sprites"];
+const routes = ["", "play", "learn", "forge", "gym", "dev/lesson", "dev/cards", "dev/problem", "dev/sprites"];
 const browser = await chromium.launch();
 let bad = 0;
 for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 } }], ["iphone", devices["iPhone 14"]]]) {

@@ -329,3 +329,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions status was not confirmed.
 - Known gaps: cards practised inside lessons and the forge do not feed SRS yet (C1); the gym is not gated on lessons.
 - Next: B11c (slice review entry in PROGRESS.md).
+
+## 2026-11-04: B11c Slice review (B11 complete)
+- `scripts/tour.mjs` now includes `/learn`; reference shots in `docs/slice/` refreshed (title, play, learn, forge, gym, dev pages; desktop and iPhone 14), shot from the static export served under `/algo-clash`.
+- **Slice review.** Feels good: the title's Start/Learn/Gym/Forge hub; Mainville with FORGE/GYM/LEARN doors; the pixel UI and 44 px targets on iPhone; the gym with Warden Brace and the evolution scene; audio dock on every page.
+- Feels weak / next: lesson, forge and gym progress are not yet linked (the gym is not gated on lessons; cards do not feed SRS, so C1 is next); the party and Vectorling are not used in battles; one region only; the overworld has no NPC quest pointing at the Academy; audio unverified by ear; the Forge is one long scroll.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (409 pass, native g++), `npm run build`, `build:pages`; `tour.mjs`: no console errors, no horizontal overflow at either size; screenshots reviewed. No new content, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so not confirmed.
+- Next: C1 (SRS and mastery).
