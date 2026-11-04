@@ -344,3 +344,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: nothing calls `applyAttempt` yet (battle/forge/lesson wiring and the sprite rust overlay land with C2/C3/C5); the Interview ×1.25 mastery weight is not modelled.
 - Next: C2 (Daily Rift).
+
+## 2026-11-04: C2a Daily Rift engine
+- Split C2 into C2a (done) and C2b (the `/rift` screen). Added pure `lib/rift/`: `day.ts` (local day keys, `daysBetween`, FNV hash seed), `streak.ts` (consecutive-day streak, gap restart, clock-back restart, display lapse), `plan.ts` (`planRift`: five rooms seeded by the day: up to 4 due reviews interleaved across patterns, 5 blitz cards, easiest unlocked unsolved problem, one debug encounter, optional bonus hard; empty rooms are skipped), `progress.ts` (rooms done stored in save `flags`, `rewardFor`, claim-once `claimReward`; no schema change). GDD §6.3 gained the exact rules.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (16 new tests in `tests/rift.test.ts`), `npm run build`, `build:pages`. No visual change, so no screenshots; `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: no UI yet; blitz cards and debug encounters have no content pool (C2b will feed the existing card library; Team Undefined encounters arrive with later content); the plan is not yet wired to `applyAttempt`.
+- Next: C2b.

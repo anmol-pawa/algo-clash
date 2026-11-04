@@ -184,6 +184,8 @@ A seeded daily dungeon with five rooms:
 
 Rewards scale with completion. A streak counter is shown with no punishment beyond losing the counter. The Rift is the primary 10-minute session.
 
+**Rules (`lib/rift/`):** the plan is seeded by the local calendar day, so it is the same on every device. Room 1 holds up to 4 due reviews, most overdue first, interleaved so that two in a row never share a pattern when avoidable. Room 2 holds 5 cards from the blitz pool. Room 3 holds the easiest unsolved problem whose prerequisites are solved. Room 4 holds one debugging encounter. Room 5 (optional) holds a hard problem. Rooms with nothing to put in them are skipped. Rewards: 10 Bits and 25 XP per cleared room, 15 Bits for the bonus room, +2 Bits per cleared room for each streak day (capped at 7 days), +20 Bits for clearing every required room. The reward is claimed once per day. The streak counts a day when any room is cleared; a missed whole day restarts it at 1 and nothing else is lost.
+
 ### 6.4 The Forge (template inscription)
 Scrolls are the reusable templates listed in `docs/CURRICULUM.md` §4. Each scroll has four tiers:
 
