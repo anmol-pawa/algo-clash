@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { AudioDock } from "@/components/AudioDock";
 import { PwaRegister } from "@/components/PwaRegister";
 import { inter, jetbrains, pixel } from "./fonts";
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-full">
         {children}
         <PwaRegister />
+        <AudioDock />
       </body>
     </html>
   );

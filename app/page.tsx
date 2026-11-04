@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Music } from "@/components/Music";
 
 const PILLARS = [
   ["Recognise", "Read a problem and name the pattern on sight."],
@@ -9,6 +10,7 @@ const PILLARS = [
 export default function Title() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-xl flex-col items-center justify-center gap-8 px-4 py-10 text-center">
+      <Music song="mainville" />
       <div>
         <h1 className="font-display text-6xl leading-none text-[var(--accent)] neon-text sm:text-7xl">
           ALGO

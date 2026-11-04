@@ -1,5 +1,6 @@
 "use client";
 
+import { audio } from "@/lib/audio/engine";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { buildArrayling } from "@/game/sprites/arrayling";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
@@ -67,7 +68,7 @@ export function EvolutionScene({ onDone }: { onDone: () => void }) {
       }
       if (s.flash > 0) { ctx.fillStyle = `rgba(255,255,255,${s.flash})`; ctx.fillRect(0, 0, W, H); }
       if (t >= EVOLVE_TOTAL_MS || reduced) {
-        if (!done) { done = true; setFinished(true); }
+        if (!done) { done = true; audio.playSfx("levelup"); setFinished(true); }
         if (reduced) return; // static final frame
       }
       raf = requestAnimationFrame(draw);

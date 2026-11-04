@@ -292,7 +292,7 @@ Typed cards (MCQ, multi-select, trace, predict-output, spot-the-bug, compiler-er
 - **Art:** see the Art quality bar in `CLAUDE.md`. Regions have distinct biome palettes and battle backdrops. Structlings evolve in three stages tied to mastery milestones.
 - **Battle juice:** sprite slide-ins, attack lunges, hit-stop (60 ms), screen shake scaled to damage, damage numbers, "super effective" text, verdict stingers (AC fanfare, WA thud, TLE clock-tick, CE "glitch" effect).
 - **The editor in battle:** in desktop battle layout the battle stage sits on top (compact 30 % height) with the editor and statement in split panes below; the stage reacts live to Run and Submit. On mobile a tab switcher swaps between Stage, Problem and Code.
-- **Audio:** all original, generated with WebAudio. One chiptune loop per region (a small in-repo tracker format), with SFX for menu, hit, verdicts and level-up. Master, music and SFX volume. Muted by default until the first user interaction.
+- **Audio:** all original, generated with WebAudio. One chiptune loop per region (a small in-repo tracker format), with SFX for menu, hit, verdicts and level-up. Master, music and SFX volume. Muted by default until the first user interaction. Implemented in `lib/audio/` (tracker format: channels of step tokens such as `C4 _ - E4`; songs `mainville` and `battle`; SFX `menu hit hurt ac wa tle ce levelup`). Volumes and the mute switch are a device preference in `localStorage` (`algo-clash:audio`), not part of the game save; the speaker button (top right, every page) opens the sliders. Nested music claims hand back to the outer song (battle inside the gym).
 - **UI:** pixel font, handheld-style windows, a blinking cursor, everything keyboard-navigable, with tap targets ≥ 44 px.
 
 ---

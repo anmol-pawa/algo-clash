@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import BattleArena, { type ArenaProblem, type ArenaResult } from "@/components/BattleArena";
+import { audio } from "@/lib/audio/engine";
+import { useMusic } from "@/components/Music";
 import { EvolutionScene } from "@/components/EvolutionScene";
 import { GymScene } from "@/components/GymScene";
 import { gymKits, type GymKit } from "@/content/gyms/kits";
@@ -85,6 +87,7 @@ function Blitz({ state, onAnswer }: { state: GymState; onAnswer: (choice: string
 
 /** The Syntax Shores gym (GDD §5.5): intro, recognition blitz, core battle, signature battle (-Werror twist), badge. */
 export default function GymScreen() {
+  useMusic("battle");
   const warden = useMemo(() => buildWarden(), []);
   const [state, setState] = useState<GymState>(() => startGym(gym));
   const [screen, setScreen] = useState<Screen>("intro");
@@ -136,7 +139,7 @@ export default function GymScreen() {
   function onBattle(r: ArenaResult) {
     const next = battleResult(gym, state, r);
     setState(next);
-    if (next.phase === "won") { void win(next).then((first) => setScreen(first ? "evolve" : "end")); }
+    if (next.phase === "won") { audio.playSfx("levelup"); void win(next).then((first) => setScreen(first ? "evolve" : "end")); }
     else if (next.phase === "abandoned") setScreen("end");
     else setScreen("retry");
   }

@@ -11,6 +11,9 @@ import { DEFAULT_EDITOR_SETTINGS } from "@/lib/editor/settings";
 import { compileCpp, runWasm } from "@/lib/judge/client";
 import { judgeProblem } from "@/lib/judge/judge";
 import type { DriverSpec } from "@/lib/judge/harness/driver";
+import { audio } from "@/lib/audio/engine";
+import { verdictSfx } from "@/lib/audio/sfx";
+import { useMusic } from "@/components/Music";
 import type { TestCase } from "@/lib/judge/verdict";
 import { DraftAutosaver } from "@/lib/save/autosave";
 import { IdbBackend } from "@/lib/save/idb";
@@ -51,6 +54,7 @@ const FOE_HP = 100;
 
 /** One coding battle: stage + statement + editor, Run (visible tests) chips the foe, Submit (all tests) decides the fight. */
 export default function BattleArena({ problem, foeStartHp, scene, compileFlags, onResult }: { problem: ArenaProblem } & ArenaOptions) {
+  useMusic("battle");
   const statement = useMemo(() => parseStatement(problem.statement), [problem.statement]);
   const visible = useMemo(() => problem.tests.filter((t) => t.group === "basic"), [problem.tests]);
   const [tab, setTab] = useState<BattleTab>("code");
@@ -100,6 +104,10 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     setView(v);
     setBusy(false);
     const out = battleOutcome(kind, v.verdict, v.passed, v.total, FOE_HP);
+    if (kind === "submit" || v.verdict !== "AC") audio.playSfx(verdictSfx(v.verdict));
+    else audio.playSfx("menu");
+    if (out.foeDamage > 0) { window.setTimeout(() => audio.playSfx("hit"), 250); }
+    if (out.playerHearts > 0) { window.setTimeout(() => audio.playSfx("hurt"), 250); }
     if (out.foeDamage > 0) stage.current?.hitFoe(out.foeDamage, kind === "submit", kind === "submit" ? "burst" : "slash");
     if (out.playerHearts > 0) {
       stage.current?.hitPlayer(out.playerHearts);

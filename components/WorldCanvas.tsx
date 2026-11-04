@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMusic } from "@/components/Music";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { Dir, GameMap, parseMap } from "@/lib/overworld/map";
@@ -24,6 +25,7 @@ const KEYS: Record<string, Dir> = {
 
 /** The overworld scene: smooth tile-to-tile walking, camera, NPCs, warps. Renders with 2D canvas. */
 export function WorldCanvas() {
+  useMusic("mainville");
   const cvRef = useRef<HTMLCanvasElement>(null);
   const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1) }), []);
   const world = useRef<WorldState>(newWorld(maps.mainville));
