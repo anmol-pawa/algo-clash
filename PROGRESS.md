@@ -365,3 +365,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota note no longer applies (after 2026-11-01), but `gh` is unavailable here, so CI/Pages status was not confirmed.
 - Known gaps: problem rooms still not driven end to end in the browser (need WASM compile); after adding a problem, run `npm run catalog:gen` (the test fails if stale).
 - Next: C3 (party and moves).
+
+## 2026-11-04: C3 Party, move loadouts and Structdex
+- Added `content/moves.ts` (one move per scroll, mastery tied to the scroll's problem), `content/structlings.ts` (Arrayling, Vectorling), pure `lib/party/loadout.ts` (equip/unequip, max 4 moves, unlearned moves refused, ghost moves ignored) and `lib/party/dex.ts` (evolution lines, current form, Structdex status). Save gained optional `loadouts` (sanitised, no version bump). New `/party` screen (party & moves tab with sprite, level from `structlingLevel`, 4 slots; Structdex tab with silhouettes for unmet species) and a PARTY & DEX title button. GDD §5.2 notes the saved loadout.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (450 pass), `npm run build`, `build:pages`; new `scripts/smoke-party.mjs` on the static export at desktop and iPhone 14: all ok, no console errors, no overflow; screenshots reviewed (readable, 44 px targets). No new problems, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: equipping was not driven in the browser (needs an inscribed scroll in IndexedDB; covered by unit tests); only one move and one party member exist so far; moves are not yet used in battle Strategise.
+- Next: C4 (Debrief and Solution Journal).

@@ -36,6 +36,7 @@ export default function Title() {
         <Link href="/gym/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">GYM</Link>
         <Link href="/forge/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">FORGE</Link>
       </div>
+      <Link href="/party/" className="px-btn flex min-h-11 w-full max-w-xs items-center justify-center text-sm">PARTY &amp; DEX</Link>
       <p className="text-xs text-white/40">C++17 · LeetCode medium → hard · works offline once loaded</p>
     </main>
   );

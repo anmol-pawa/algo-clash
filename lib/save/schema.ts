@@ -71,6 +71,8 @@ export interface CoreSave {
   settings: Settings;
   /** Forge progress per scroll id (GDD §6.4). Optional in old saves; sanitised to `{}`. */
   forge: Record<string, ScrollProgress>;
+  /** Equipped move ids per Structling (max 4 each, GDD §5.2). Optional in old saves; sanitised to `{}`. */
+  loadouts: Record<string, string[]>;
   flags: Record<string, boolean | number | string>;
 }
 
@@ -89,6 +91,7 @@ export function newCoreSave(now: number, name = "Trainer"): CoreSave {
     mastery: {},
     settings: { ...DEFAULT_SETTINGS, editor: { ...DEFAULT_SETTINGS.editor } },
     forge: {},
+    loadouts: {},
     flags: {},
   };
 }
@@ -130,6 +133,15 @@ function sanitizeForge(raw: unknown): Record<string, ScrollProgress> {
   return out;
 }
 
+function sanitizeLoadouts(raw: unknown): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const [id, v] of Object.entries(rec(raw)).slice(0, 50)) {
+    const moves = (Array.isArray(v) ? v : []).filter((m): m is string => typeof m === "string").map((m) => m.slice(0, 64));
+    out[id.slice(0, 64)] = [...new Set(moves)].slice(0, 4);
+  }
+  return out;
+}
+
 /** Coerce untrusted data (storage, imported JSON) into a valid v1 core save. Never throws. */
 export function sanitizeCore(raw: unknown, now: number): CoreSave {
   const r = rec(raw);
@@ -167,6 +179,7 @@ export function sanitizeCore(raw: unknown, now: number): CoreSave {
       },
     },
     forge: sanitizeForge(r.forge),
+    loadouts: sanitizeLoadouts(r.loadouts),
     flags,
   };
 }
