@@ -42,6 +42,18 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
   await page.waitForTimeout(500);
   await shot("battle-stage");
   if (name === "iphone") await page.getByRole("tab", { name: "Code" }).click();
+  // After a win the Debrief (editorial, reference diff) shows before the gym continues.
+  const debrief = async (tag) => {
+    await page.getByTestId("debrief").waitFor({ timeout: 15000 }).catch(() => fail(`${name}: no debrief after ${tag}`));
+    if (tag === "core") {
+      await page.getByText("Editorial (").click();
+      await page.getByText("Your code vs the reference").click();
+      if (!(await page.getByTestId("debrief-editorial").innerText()).includes("Key insight")) fail(`${name}: editorial missing Key insight`);
+      if (!(await page.getByTestId("debrief-diff").innerText()).length) fail(`${name}: empty diff`);
+      await shot("debrief"); await overflow("debrief");
+    }
+    await page.getByTestId("debrief").getByRole("button", { name: /^Continue/ }).click();
+  };
   const solve = async (id, code, tag) => {
     await page.locator(".cm-content").waitFor({ timeout: 60000 });
     await page.locator(".cm-content").click();
@@ -55,6 +67,7 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
   await page.getByRole("button", { name: /Foe beaten/ }).waitFor({ timeout: 180000 });
   await shot("core-won"); await overflow("core-won");
   await page.getByRole("button", { name: /Foe beaten/ }).click();
+  await debrief("core");
   await page.getByTestId("gym-interstitial").waitFor();
   await page.getByRole("button", { name: /Begin/ }).click();
   // signature: an unused variable is a warning, which -Werror turns into a compile error
@@ -65,6 +78,7 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
   await solve("step-counter", sol("step-counter"), "sig");
   await page.getByRole("button", { name: /Foe beaten/ }).waitFor({ timeout: 180000 });
   await page.getByRole("button", { name: /Foe beaten/ }).click();
+  await debrief("sig");
   await page.getByTestId("evolution").waitFor({ timeout: 15000 }).catch(() => fail(`${name}: no evolution scene after the first badge`));
   await page.waitForTimeout(1500); await shot("evolve-morph"); await overflow("evolve");
   await page.getByTestId("evolution-text").filter({ hasText: "evolved into Vectorling" }).waitFor({ timeout: 15000 }).catch(() => fail(`${name}: evolution did not finish`));

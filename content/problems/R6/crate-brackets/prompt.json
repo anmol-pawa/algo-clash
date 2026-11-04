@@ -1,0 +1,11 @@
+{
+  "question": "Why is a stack the right structure for matching brackets, rather than one counter per bracket kind?",
+  "options": [
+    "Counters are slower than a stack",
+    "Only the most recently opened bracket may close next, so order matters and counters lose it",
+    "A stack uses less memory than three integers",
+    "A counter cannot go above 100000"
+  ],
+  "answer": 1,
+  "why": "Counters accept \"([)]\" because every kind balances out. The stack remembers the order of the unclosed openers, which is exactly the last-in, first-out rule of the problem."
+}

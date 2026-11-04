@@ -5,6 +5,8 @@ import { pixelFamily } from "@/app/fonts";
 import BattleLayout from "@/components/BattleLayout";
 import { BattleStage, type BattleStageHandle } from "@/components/BattleStage";
 import CodeEditor from "@/components/CodeEditor";
+import DebriefPanel, { type DebriefDone } from "@/components/DebriefPanel";
+import { problemCatalog } from "@/content/gyms/catalog";
 import StatementPanel from "@/components/StatementPanel";
 import VerdictPanel from "@/components/VerdictPanel";
 import { DEFAULT_EDITOR_SETTINGS } from "@/lib/editor/settings";
@@ -64,6 +66,10 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [note, setNote] = useState("");
   const [ended, setEnded] = useState<"won" | "fainted" | null>(null);
   const [confirmRetreat, setConfirmRetreat] = useState(false);
+  const [debrief, setDebrief] = useState(false);
+  const [startedAt] = useState(() => Date.now());
+  const [won, setWon] = useState({ seconds: 0, hearts: PLAYER_HEARTS });
+  const catalogEntry = problemCatalog[problem.id];
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
@@ -115,9 +121,29 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       if (hearts.current === 0) setEnded("fainted");
     }
     if (kind === "submit") stage.current?.verdict(v.verdict);
-    if (kind === "submit" && v.verdict === "AC") { stage.current?.faint("foe"); setEnded("won"); }
+    if (kind === "submit" && v.verdict === "AC") { setWon({ seconds: Math.round((Date.now() - startedAt) / 1000), hearts: hearts.current }); stage.current?.faint("foe"); setEnded("won"); }
     stage.current?.say(out.line);
     setTab((cur) => tabAfterJudge(cur, kind, v.verdict));
+  }
+
+  /** Journal the accepted solution (GDD §6.1 step 6), then report the win. Failure to save never blocks play. */
+  function finishDebrief(d: DebriefDone) {
+    const svc = new SaveService(new IdbBackend());
+    svc.recordJournal({
+      problemId: problem.id, at: Date.now(), code, seconds: won.seconds, hintsUsed: 0, assisted: false,
+      patterns: catalogEntry?.meta.patterns ?? [], promptChoice: d.promptChoice, promptCorrect: d.promptCorrect,
+    }).catch(() => {}).finally(() => onResult?.("won"));
+  }
+
+  if (debrief && catalogEntry) {
+    return (
+      <main className="mx-auto flex h-dvh max-w-3xl flex-col p-2">
+        <DebriefPanel
+          info={{ title: problem.title, editorial: catalogEntry.editorial, reference: catalogEntry.reference, prompt: catalogEntry.prompt, parSeconds: catalogEntry.meta.parSeconds }}
+          code={code} seconds={won.seconds} heartsLeft={won.hearts} onContinue={finishDebrief}
+        />
+      </main>
+    );
   }
 
   return (
@@ -136,8 +162,8 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       }
       actions={
         ended && onResult ? (
-          <button className="px-btn px-btn-primary min-h-11 w-full" onClick={() => onResult(ended)}>
-            {ended === "won" ? "Foe beaten! Continue ▶" : "You fainted. Continue ▶"}
+          <button className="px-btn px-btn-primary min-h-11 w-full" onClick={() => (ended === "won" && catalogEntry ? setDebrief(true) : onResult(ended))}>
+            {ended === "won" ? (catalogEntry ? "Foe beaten! Debrief ▶" : "Foe beaten! Continue ▶") : "You fainted. Continue ▶"}
           </button>
         ) : (
           <div className="flex gap-2">

@@ -1,3 +1,4 @@
+import { gradePrompt, promptIssues } from "../lib/journal/prompt";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -110,5 +111,21 @@ describe("journal persistence", () => {
     delete old.journal;
     await svc.importJson(JSON.stringify(old));
     expect(await svc.journal()).toEqual([]);
+  });
+});
+
+describe("elaborative prompt", () => {
+  const p = { question: "q", options: ["a", "b", "c"], answer: 1, why: "w" };
+  it("accepts a well-formed prompt and grades the answer", () => {
+    expect(promptIssues(p)).toEqual([]);
+    expect(gradePrompt(p, 1)).toBe(true);
+    expect(gradePrompt(p, 0)).toBe(false);
+    expect(gradePrompt(p, -1)).toBe(false);
+  });
+  it("reports malformed prompts", () => {
+    expect(promptIssues({ ...p, answer: 3 })).toContain("answer out of range");
+    expect(promptIssues({ ...p, options: ["a", "A", "c"] })).toContain("duplicate options");
+    expect(promptIssues({ ...p, options: ["a", "b"] })).toContain("needs 3 or 4 options");
+    expect(promptIssues({ ...p, why: " " })).toContain("empty explanation");
   });
 });

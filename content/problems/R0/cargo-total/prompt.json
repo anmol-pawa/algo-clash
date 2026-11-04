@@ -1,0 +1,11 @@
+{
+  "question": "Why does `accumulate(w.begin(), w.end(), 0)` give a wrong total here even though `total` is returned as a long long?",
+  "options": [
+    "The initial value 0 is an int, so every addition is done in int and overflows silently",
+    "accumulate only reads the first half of the vector",
+    "Returning a long long from a function truncates it to int",
+    "The vector must be sorted before it is summed"
+  ],
+  "answer": 0,
+  "why": "accumulate uses the type of its initial value as the accumulator type. 0LL makes every partial sum a long long; the return type cannot repair an overflow that already happened."
+}

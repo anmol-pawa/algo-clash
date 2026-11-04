@@ -379,3 +379,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: nothing writes journal entries yet (C4b); elaborative-prompt content format still to be defined (plan: optional `prompt.json` per problem, validated by a test).
 - Next: C4b.
+
+## 2026-11-04: C4b Debrief after a win
+- Catalog now embeds each problem's `editorial.md`, reference `solution.cpp` and an optional `prompt.json` (elaborative question; authored for `cargo-total` and `crate-brackets`, validated by `promptIssues`). New pure `lib/journal/prompt.ts`. New `components/DebriefPanel.tsx`: time vs par, hearts left, quick-check question with explanation, collapsible line diff of your code vs the reference, and the editorial in debrief order. `BattleArena` shows the Debrief after a win for any catalog problem; Continue writes the journal entry (hints/assisted are 0/false until C5) and then reports the win to Gym/Rift.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (466 pass), `npm run build:pages`; `smoke-gym.mjs` (updated to click through the Debrief) on the static export at desktop and iPhone 14: all pass, no console errors, no overflow; both Debrief screenshots reviewed (readable, 44 px targets). `content:verify` unchanged (no new problems).
+- Env note: `npm ci` here installed only the musl SWC binary; `npm install --no-save --no-package-lock @next/swc-linux-x64-gnu@16.4.3` fixes `next build` locally.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: only 2 of 26 problems have an elaborative prompt; the Debrief is not shown for non-catalog problems; the journal entry is saved on Continue only.
+- Next: C4c (`/journal` screen).
