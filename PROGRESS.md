@@ -344,3 +344,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: nothing calls `applyAttempt` yet (battle/forge/lesson wiring and the sprite rust overlay land with C2/C3/C5); the Interview ×1.25 mastery weight is not modelled.
 - Next: C2 (Daily Rift).
+
+## 2026-11-04: C2a Daily Rift planner
+- Added pure `lib/rift/` (`planRift`, `advanceStreak`, `visibleStreak`, `riftReward`, cleared-room bitmask helpers): a deterministic five-room plan seeded by the UTC day (round-robin due reviews, blitz cards, frontier problem, debug card, optional bonus hard). GDD §6.3 updated with the exact rules. Split C2 into C2a (done) and C2b (the `/rift` screen).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (433 pass, 9 new in `tests/rift.test.ts`), `npm run build`, `build:pages`. No visual change, so no screenshots; no new content, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: no UI yet; the card catalog has no `debug` cards tagged, so room 4 is empty until C2b tags the compilerError cards.
+- Next: C2b.

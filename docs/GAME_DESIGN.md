@@ -184,6 +184,10 @@ A seeded daily dungeon with five rooms:
 
 Rewards scale with completion. A streak counter is shown with no punishment beyond losing the counter. The Rift is the primary 10-minute session.
 
+- **Planner (`lib/rift/`):** seeded by the UTC day (FNV-1a of `YYYY-MM-DD`), so the same day, save and catalog give the same plan. Room 1 holds up to 4 due problems, taken round-robin across regions (most overdue first). Room 2 holds 5 cards from regions the player has touched. Room 3 is the easiest unlearned problem in the lowest region whose prerequisites are all learned. Room 4 is a seeded debug card. Room 5 (optional) is an unlearned hard. Empty rooms are skipped.
+- **Streak:** +1 when a Rift is completed the day after the last completion, restarts at 1 after a gap, unchanged for a second completion the same day. A stale streak simply reads 0.
+- **Rewards:** Bits per cleared room (reviews 20, blitz 10, fresh 25, debug 15, bonus 40), +25 for clearing every required room, ×(1 + 0.1 per streak day beyond the first, capped at +50 %); XP = 2 × Bits. Cleared rooms are kept in the save flag `rift:<day>:cleared` (bitmask).
+
 ### 6.4 The Forge (template inscription)
 Scrolls are the reusable templates listed in `docs/CURRICULUM.md` §4. Each scroll has four tiers:
 

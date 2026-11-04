@@ -96,7 +96,8 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 ## Phase C: Core systems
 
 - [x] C1. **SRS and mastery** (`lib/srs/`, GDD §6.2): states, intervals, assisted handling and rust (sprite rust overlay + multiplier cap). Property tests.
-- [ ] C2. **Daily Rift** (GDD §6.3): the seeded five-room dungeon, streak counter and rewards.
+- [x] C2a. **Daily Rift planner** (GDD §6.3): pure `lib/rift/` seeded five-room plan, streak and rewards, with tests.
+- [ ] C2b. **Daily Rift screen:** `/rift` page (room list, play each item via the existing battle/card screens, streak counter, rewards written to the save), a door or title button, and applying `applyAttempt` to the SRS state.
 - [ ] C3. **Party and moves:** a party screen, a move loadout (4 per Structling), and learning moves via lessons + the Forge. The Structdex.
 - [ ] C4. **Debrief and Solution Journal:** the editorial renderer (GDD §8.3), elaborative prompt, journal with diffs (yours vs past, yours vs reference).
 - [ ] C5. **Hints and items:** the 3-rung hint ladder, the Mart, Bits economy, Debug Lens, Complexity Compass and Rematch Ticket, all with the mastery rules from GDD §6.6.
