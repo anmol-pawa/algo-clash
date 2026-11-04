@@ -168,6 +168,8 @@ Trainer level 1–60 drives cosmetic unlocks and the Arena bracket. Structling l
 | Mastered | 3+ spaced solves, under 2× par | 16 days |
 | Ingrained | solved from blank under par after ≥ 30 days | 35+ days |
 
+- **Scheduling details (`lib/srs/`):** only an unassisted solve made when the item is **due** counts as a *spaced* solve; solving early (cramming) is recorded but earns no credit and does not reschedule. A failed attempt on a learned item is a **lapse**: it drops one tier and is due in a day. Practiced is 3 days after the 2nd spaced solve and 7 days after later ones; Mastered needs a solve under 2× par; Ingrained needs a from-blank solve under par at least 30 days after the first solve, then its interval grows ×1.5 per review (cap 180 days).
+- **Rust levels:** 1 = overdue by less than half an interval (at least 2 days of grace), 2 = longer. Item score = tier credit × (1 − 0.2 × level). Tier credit: Seen 0.1, Learning 0.3, Practiced 0.55, Mastered 0.85, Ingrained 1.0. Pattern mastery weights E:M:H = 1:2:3.
 - **Pattern mastery** is aggregated from its problems (weighted towards mediums and hards). Shown on the **Mastery Map** (a constellation per region).
 - **Assisted solves** (editorial read, more than 2 hints, Guided mode) never advance a state. They reschedule the problem for 1 day later.
 - **Rust:** an overdue item shows a rust overlay. The move's icon and the Structling's sprite gain rust pixels, and the type multiplier caps at ×1.25 until it's reviewed. This is a visible, fictional reason to review.

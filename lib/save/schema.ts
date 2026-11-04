@@ -4,7 +4,8 @@ export const SAVE_VERSION = 1;
 
 import type { ScrollProgress } from "../forge/types";
 
-export type MasteryState = "unseen" | "learning" | "solved" | "mastered" | "rusty";
+/** "solved" and "rusty" are legacy placeholders from early saves; `lib/srs` normalises them to tiers. */
+export type MasteryState = "unseen" | "seen" | "learning" | "practiced" | "mastered" | "ingrained" | "solved" | "rusty";
 
 export interface ProblemMastery {
   state: MasteryState;
@@ -17,6 +18,10 @@ export interface ProblemMastery {
   /** SRS ease factor. */
   ease: number;
   lastSolvedAt: number;
+  /** Spaced, unassisted solves counted towards the tier (GDD §6.2). Optional in older saves. */
+  spacedSolves?: number;
+  /** Epoch ms of the first unassisted solve (Ingrained needs 30 days of age). */
+  firstSolvedAt?: number;
 }
 
 export type Verdict = "AC" | "WA" | "TLE" | "RE" | "CE";
@@ -93,13 +98,13 @@ const num = (v: unknown, d: number, min = -Infinity, max = Infinity): number =>
 const str = (v: unknown, d: string, maxLen = 200): string => (typeof v === "string" ? v.slice(0, maxLen) : d);
 const rec = (v: unknown): Record<string, unknown> => (v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 
-const MASTERY_STATES: readonly MasteryState[] = ["unseen", "learning", "solved", "mastered", "rusty"];
+const MASTERY_STATES: readonly MasteryState[] = ["unseen", "seen", "learning", "practiced", "mastered", "ingrained", "solved", "rusty"];
 const VERDICTS: readonly Verdict[] = ["AC", "WA", "TLE", "RE", "CE"];
 const MODES = ["learn", "practice", "interview"] as const;
 
 function sanitizeMastery(raw: unknown): ProblemMastery {
   const r = rec(raw);
-  return {
+  const out: ProblemMastery = {
     state: MASTERY_STATES.includes(r.state as MasteryState) ? (r.state as MasteryState) : "unseen",
     solves: Math.round(num(r.solves, 0, 0)),
     due: num(r.due, 0, 0),
@@ -107,6 +112,9 @@ function sanitizeMastery(raw: unknown): ProblemMastery {
     ease: num(r.ease, 2.5, 1.3, 3.5),
     lastSolvedAt: num(r.lastSolvedAt, 0, 0),
   };
+  if (typeof r.spacedSolves === "number") out.spacedSolves = Math.round(num(r.spacedSolves, 0, 0, 1000));
+  if (typeof r.firstSolvedAt === "number") out.firstSolvedAt = num(r.firstSolvedAt, 0, 0);
+  return out;
 }
 
 const FORGE_TIER_IDS = ["trace", "cloze30", "cloze70", "blank"];

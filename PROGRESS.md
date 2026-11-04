@@ -337,3 +337,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (409 pass, native g++), `npm run build`, `build:pages`; `tour.mjs`: no console errors, no horizontal overflow at either size; screenshots reviewed. No new content, so `content:verify` unchanged.
 - CI/deploy: `gh` is unavailable here, so not confirmed.
 - Next: C1 (SRS and mastery).
+
+## 2026-11-04: C1 SRS and mastery
+- Added `lib/srs/` (pure, clock-free): `scheduler.ts` (six tiers unseen→ingrained, `applyAttempt`, `markSeen`, `dueItems`; only due unassisted solves count as spaced, assisted solves reschedule +1 day without advancing, failed reviews lapse one tier), `rust.ts` (rust levels 0-2, ×1.25 multiplier cap), `aggregate.ts` (item score, weighted pattern mastery, Structling level = avg move mastery × 10). Save schema: `MasteryState` widened (legacy `solved`/`rusty` normalised by `tierOf`), optional `spacedSolves`/`firstSolvedAt` sanitised; no version bump needed. GDD §6.2 updated with the exact rules.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (424 pass, 15 new in `tests/srs.test.ts` incl. 300 seeded random-history property runs), `npm run build`, `build:pages`. No visual change, so no screenshots; `content:verify` unchanged (no content).
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: nothing calls `applyAttempt` yet (battle/forge/lesson wiring and the sprite rust overlay land with C2/C3/C5); the Interview ×1.25 mastery weight is not modelled.
+- Next: C2 (Daily Rift).
