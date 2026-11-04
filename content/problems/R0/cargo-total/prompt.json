@@ -1,0 +1,11 @@
+{
+  "question": "Why is `accumulate(w.begin(), w.end(), 0)` risky here?",
+  "options": [
+    "The init value 0 is an int, so the running sum is computed in int and can overflow silently.",
+    "accumulate cannot be used on a vector.",
+    "It sums the elements in the wrong order.",
+    "It allocates a new vector every call."
+  ],
+  "answer": 0,
+  "explanation": "std::accumulate takes its accumulator type from the init argument. Pass 0LL so every addition happens in long long."
+}

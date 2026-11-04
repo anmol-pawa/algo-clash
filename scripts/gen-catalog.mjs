@@ -16,7 +16,11 @@ for (const { region, id } of entries) out += `import { meta as ${ident(id)} } fr
 out += `\nexport const problemCatalog: Record<string, CatalogProblem> = {\n`;
 for (const { region, id } of entries) {
   const md = readFileSync(join(root, region, id, "problem.md"), "utf8");
+  const dir = join(root, region, id);
   out += `  ${JSON.stringify(id)}: {\n    meta: ${ident(id)},\n    statement: ${JSON.stringify(md)},\n`;
+  out += `    editorial: ${JSON.stringify(readFileSync(join(dir, "editorial.md"), "utf8"))},\n`;
+  out += `    reference: ${JSON.stringify(readFileSync(join(dir, "solution.cpp"), "utf8"))},\n`;
+  if (existsSync(join(dir, "prompt.json"))) out += `    prompt: ${JSON.stringify(JSON.parse(readFileSync(join(dir, "prompt.json"), "utf8")))},\n`;
   out += `    loadTests: async () => (await import("../problems/${region}/${id}/tests.json")).default as TestCase[],\n  },\n`;
 }
 out += `};\n`;

@@ -379,3 +379,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: nothing writes journal entries yet (C4b); elaborative-prompt content format still to be defined (plan: optional `prompt.json` per problem, validated by a test).
 - Next: C4b.
+
+## 2026-11-04: C4b Debrief after a win
+- `gen-catalog` now embeds each problem's `editorial.md`, `solution.cpp` and optional `prompt.json` (elaborative prompt: question, options, answer, explanation; first one for `cargo-total`). New `components/Debrief.tsx` (prompt, then the eight editorial sections in debrief order, collapsible reference solution, innerHTML-free inline rendering). `BattleArena` shows "Debrief ▶" after a win when the problem carries an editorial, and appends the journal entry (code, seconds, prompt answer) when the Debrief ends; Rift and Gym wire it from the catalog. New `/dev/debrief` review page and `scripts/smoke-debrief.mjs`.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (464 pass; new catalog tests check editorial/reference embeds, 8 house sections for all 26 problems, prompt validity), `npm run build`, `build:pages`; `smoke-debrief.mjs` on the static export at desktop and iPhone 14: all ok, no console errors, no overflow; iPhone screenshot reviewed (readable, 44 px targets). No new problems, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: the in-battle win -> Debrief -> journal write was not driven end to end in a browser (needs the WASM compiler); only one elaborative prompt authored; hints are not yet counted in journal entries (C5).
+- Next: C4c (`/journal` screen).

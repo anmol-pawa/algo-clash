@@ -74,7 +74,7 @@ export default function RiftScreen() {
       if (!alive) return;
       const m = kit.meta;
       startedAt.current = Date.now();
-      setLoaded({ key: item.id, problem: { id: item.id, title: m.title, difficulty: m.difficulty, statement: kit.statement, starter: starterFor(m.spec), spec: m.spec, timeLimitMs: m.timeLimitMs, tests, foeName: "Rift Echo", foeLevel: FOE_LEVEL[m.difficulty] } });
+      setLoaded({ key: item.id, problem: { id: item.id, title: m.title, difficulty: m.difficulty, statement: kit.statement, starter: starterFor(m.spec), spec: m.spec, timeLimitMs: m.timeLimitMs, tests, foeName: "Rift Echo", foeLevel: FOE_LEVEL[m.difficulty], editorial: kit.editorial, reference: kit.reference, prompt: kit.prompt, patterns: m.patterns } });
     }).catch(() => alive && setNote("Could not load the battle."));
     return () => { alive = false; };
   }, [kit, item]);

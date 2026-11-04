@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { problemCatalog } from "@/content/gyms/catalog";
 import BattleArena, { type ArenaProblem, type ArenaResult } from "@/components/BattleArena";
 import { audio } from "@/lib/audio/engine";
 import { useMusic } from "@/components/Music";
@@ -112,7 +113,7 @@ export default function GymScreen() {
     const id = state.phase === "core" ? gym.coreProblemId : gym.signatureProblemId;
     kit.loadTests().then((tests: TestCase[]) => {
       if (!alive) return;
-      setLoaded({ key: `${state.phase}`, problem: { id, title: kit.title, difficulty: kit.difficulty, statement: kit.statement, starter: kit.starter, spec: kit.spec, timeLimitMs: kit.timeLimitMs, tests, foeName: kit.foeName, foeLevel: kit.foeLevel } });
+      setLoaded({ key: `${state.phase}`, problem: { id, title: kit.title, difficulty: kit.difficulty, statement: kit.statement, starter: kit.starter, spec: kit.spec, timeLimitMs: kit.timeLimitMs, tests, foeName: kit.foeName, foeLevel: kit.foeLevel, editorial: problemCatalog[id]?.editorial, reference: problemCatalog[id]?.reference, prompt: problemCatalog[id]?.prompt, patterns: problemCatalog[id]?.meta.patterns } });
     }).catch((e) => alive && setLoadErr(String(e)));
     return () => { alive = false; };
   }, [kit, screen, state.phase]);

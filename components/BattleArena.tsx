@@ -14,6 +14,8 @@ import type { DriverSpec } from "@/lib/judge/harness/driver";
 import { audio } from "@/lib/audio/engine";
 import { verdictSfx } from "@/lib/audio/sfx";
 import { useMusic } from "@/components/Music";
+import Debrief from "@/components/Debrief";
+import type { ElaborativePrompt } from "@/content/gyms/catalogTypes";
 import type { TestCase } from "@/lib/judge/verdict";
 import { DraftAutosaver } from "@/lib/save/autosave";
 import { IdbBackend } from "@/lib/save/idb";
@@ -33,6 +35,11 @@ export interface ArenaProblem {
   tests: TestCase[];
   foeName: string;
   foeLevel: number;
+  /** House-style editorial, reference code and prompt: when set, a win leads to the Debrief and a journal entry. */
+  editorial?: string;
+  reference?: string;
+  prompt?: ElaborativePrompt;
+  patterns?: string[];
 }
 
 export type ArenaResult = "won" | "fainted" | "retreated";
@@ -64,12 +71,17 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [note, setNote] = useState("");
   const [ended, setEnded] = useState<"won" | "fainted" | null>(null);
   const [confirmRetreat, setConfirmRetreat] = useState(false);
+  const [debrief, setDebrief] = useState(false);
+  const startedAt = useRef(0);
+  const winRef = useRef<{ code: string; at: number; seconds: number } | null>(null);
+  const promptResult = useRef<{ choice: number; correct: boolean }>({ choice: -1, correct: false });
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
 
   useEffect(() => {
     let alive = true;
+    startedAt.current = Date.now();
     const svc = new SaveService(new IdbBackend());
     const a = new DraftAutosaver(svc, problem.id, problem.starter);
     saver.current = a;
@@ -95,6 +107,19 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     saver.current?.update(c);
   }
 
+  /** Saved once, when the Debrief ends, so the elaborative-prompt answer travels with the entry. */
+  async function recordWin() {
+    const w = winRef.current;
+    if (!w || !problem.editorial) return;
+    winRef.current = null;
+    try {
+      await new SaveService(new IdbBackend()).recordJournal({
+        problemId: problem.id, at: w.at, code: w.code, seconds: w.seconds, hintsUsed: 0, assisted: false,
+        patterns: problem.patterns ?? [], promptChoice: promptResult.current.choice, promptCorrect: promptResult.current.correct,
+      });
+    } catch { /* the journal is best-effort; a failed write must not block the win */ }
+  }
+
   async function judge(kind: JudgeKind) {
     const tests = kind === "run" ? visible : problem.tests;
     setBusy(true);
@@ -115,9 +140,17 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       if (hearts.current === 0) setEnded("fainted");
     }
     if (kind === "submit") stage.current?.verdict(v.verdict);
-    if (kind === "submit" && v.verdict === "AC") { stage.current?.faint("foe"); setEnded("won"); }
+    if (kind === "submit" && v.verdict === "AC") { stage.current?.faint("foe"); setEnded("won"); winRef.current = { code, at: Date.now(), seconds: Math.round((Date.now() - startedAt.current) / 1000) }; }
     stage.current?.say(out.line);
     setTab((cur) => tabAfterJudge(cur, kind, v.verdict));
+  }
+
+  if (debrief && problem.editorial && problem.reference) {
+    return (
+      <Debrief title={problem.title} editorial={problem.editorial} reference={problem.reference} prompt={problem.prompt}
+        onPrompt={(choice, correct) => { promptResult.current = { choice, correct }; }}
+        onContinue={() => { void recordWin(); setDebrief(false); if (onResult && ended) onResult(ended); }} />
+    );
   }
 
   return (
@@ -135,9 +168,9 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
         </>
       }
       actions={
-        ended && onResult ? (
-          <button className="px-btn px-btn-primary min-h-11 w-full" onClick={() => onResult(ended)}>
-            {ended === "won" ? "Foe beaten! Continue ▶" : "You fainted. Continue ▶"}
+        ended && (onResult || (ended === "won" && problem.editorial)) ? (
+          <button className="px-btn px-btn-primary min-h-11 w-full" onClick={() => (ended === "won" && problem.editorial ? setDebrief(true) : onResult?.(ended))}>
+            {ended === "won" ? (problem.editorial ? "Foe beaten! Debrief ▶" : "Foe beaten! Continue ▶") : "You fainted. Continue ▶"}
           </button>
         ) : (
           <div className="flex gap-2">
