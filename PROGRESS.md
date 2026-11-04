@@ -344,3 +344,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: nothing calls `applyAttempt` yet (battle/forge/lesson wiring and the sprite rust overlay land with C2/C3/C5); the Interview ×1.25 mastery weight is not modelled.
 - Next: C2 (Daily Rift).
+
+## 2026-11-04: C2 Daily Rift
+- Added `lib/rift/` (pure): `day.ts` (local-day keys, day arithmetic, FNV seed), `plan.ts` (`buildRift`: five seeded rooms with an independent RNG stream per room; Rust Hall = due items interleaved across regions, Blitz Gate = 5 cards, Frontier = easiest untouched problem with learned prerequisites, Den = debug encounter, Vault = unmastered hard), `progress.ts` (`clearRoom`, `currentStreak`, rewards, flags `rift:day|cleared|done`; no save schema change), `pool.ts`. `content/problems/index.ts` now lists every problem's metadata. New `/rift` screen (RIFT button on the title): status bar (streak, Bits), five room cards, playable Blitz Gate (clears at 3/5), other rooms preview their draw. GDD §6.3 updated with the exact rules.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (447 pass, native g++; 24 in `tests/rift.test.ts` incl. a 120-day property run), `build`, `build:pages`; new `scripts/smoke-rift.mjs` on the static export at desktop and iPhone 14 (five rooms, blitz playable, miss/pass state and Bits persist across reload, no console errors, no overflow). Screenshot-driven fix: empty rooms read "Quiet", not "Clear". No new problem content, so `content:verify` is unchanged.
+- Known gaps: problem, scroll and debug rooms only preview their draw (no in-app problem catalogue loader yet, C2b); no Rift entry on the overworld map; reward screen has no fanfare; the Blitz does not feed SRS yet.
+- Branch note: work was pushed to the session branch `claude/eloquent-ritchie-pqk192`, not `main`, per the session's branch instruction. `gh` is unavailable, so CI/Pages status was not checked.
+- Next: C3 (party and moves), or C2b if the problem catalogue loader is built first.

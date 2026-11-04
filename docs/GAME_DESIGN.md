@@ -184,6 +184,16 @@ A seeded daily dungeon with five rooms:
 
 Rewards scale with completion. A streak counter is shown with no punishment beyond losing the counter. The Rift is the primary 10-minute session.
 
+**Implementation (`lib/rift/`, `/rift`):** the plan is seeded by `hash("algo-clash-rift:" + local day)` with an independent RNG stream per room, so the same day, save and content give the same dungeon on every device.
+- *Rust Hall* holds up to four due problems and scrolls, most overdue first and interleaved across regions. On a quiet day it falls back to two Learning-tier items.
+- *Blitz Gate* is five concept cards from mixed regions. It clears at 3 of 5 correct, so guessing does not pass.
+- *The Frontier* is the easiest untouched problem whose prerequisites are all Learning or better.
+- *Team Undefined Den* draws a debugging encounter (the room is quiet until that content exists).
+- *Treasure Vault* (optional) is an unmastered hard, or a medium when no hard is left.
+- A room with nothing to offer is *Quiet*: it counts as cleared and pays nothing.
+
+Bits: 10 / 10 / 15 / 15 for the four main rooms and 30 for the vault, plus 20 and 5 per streak day (capped at 7) for clearing the four main rooms, and 20 XP per room. The streak lives in `profile.streakDays` and advances once per local day on completion. A skipped day makes it read 0 on the next visit and nothing else is lost. Per-day progress is stored in save flags (`rift:day`, `rift:cleared`, `rift:done`).
+
 ### 6.4 The Forge (template inscription)
 Scrolls are the reusable templates listed in `docs/CURRICULUM.md` §4. Each scroll has four tiers:
 

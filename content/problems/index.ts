@@ -1,0 +1,31 @@
+import type { ProblemMeta } from "@/lib/content/types";
+import { meta as m_cargo_total } from "./R0/cargo-total/meta";
+import { meta as m_charge_meter } from "./R0/charge-meter/meta";
+import { meta as m_drop_negatives } from "./R0/drop-negatives/meta";
+import { meta as m_echo_chamber } from "./R0/echo-chamber/meta";
+import { meta as m_field_split } from "./R0/field-split/meta";
+import { meta as m_forge_chain } from "./R0/forge-chain/meta";
+import { meta as m_grid_turn } from "./R0/grid-turn/meta";
+import { meta as m_leaf_sum } from "./R0/leaf-sum/meta";
+import { meta as m_ledger_digits } from "./R0/ledger-digits/meta";
+import { meta as m_letter_tally } from "./R0/letter-tally/meta";
+import { meta as m_middle_link } from "./R0/middle-link/meta";
+import { meta as m_overlap_count } from "./R0/overlap-count/meta";
+import { meta as m_pocket_calendar } from "./R0/pocket-calendar/meta";
+import { meta as m_pouch_sum } from "./R0/pouch-sum/meta";
+import { meta as m_rank_roster } from "./R0/rank-roster/meta";
+import { meta as m_run_squash } from "./R0/run-squash/meta";
+import { meta as m_safe_midpoint } from "./R0/safe-midpoint/meta";
+import { meta as m_shelf_rank } from "./R0/shelf-rank/meta";
+import { meta as m_step_counter } from "./R0/step-counter/meta";
+import { meta as m_toll_booth } from "./R0/toll-booth/meta";
+import { meta as m_tree_height } from "./R0/tree-height/meta";
+import { meta as m_vowel_census } from "./R0/vowel-census/meta";
+import { meta as m_wrap_dial } from "./R0/wrap-dial/meta";
+import { meta as m_calm_window } from "./R3/calm-window/meta";
+import { meta as m_crate_brackets } from "./R6/crate-brackets/meta";
+import { meta as m_skyline_hall } from "./R6/skyline-hall/meta";
+
+/** Every problem's metadata (statements, tests and solutions are loaded lazily elsewhere). Keep sorted by region, then id. */
+export const allProblemMetas: ProblemMeta[] = [m_cargo_total, m_charge_meter, m_drop_negatives, m_echo_chamber, m_field_split, m_forge_chain, m_grid_turn, m_leaf_sum, m_ledger_digits, m_letter_tally, m_middle_link, m_overlap_count, m_pocket_calendar, m_pouch_sum, m_rank_roster, m_run_squash, m_safe_midpoint, m_shelf_rank, m_step_counter, m_toll_booth, m_tree_height, m_vowel_census, m_wrap_dial, m_calm_window, m_crate_brackets, m_skyline_hall];
+export const problemMetaById = (id: string): ProblemMeta | undefined => allProblemMetas.find((p) => p.id === id);

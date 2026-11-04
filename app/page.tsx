@@ -31,6 +31,7 @@ export default function Title() {
         START
       </Link>
       <div className="flex w-full max-w-xs gap-3">
+        <Link href="/rift/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">RIFT</Link>
         <Link href="/learn/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">LEARN</Link>
         <Link href="/gym/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">GYM</Link>
         <Link href="/forge/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">FORGE</Link>
