@@ -288,7 +288,7 @@ Typed cards (MCQ, multi-select, trace, predict-output, spot-the-bug, compiler-er
 
 - **Trainer Card / Readiness Report:** the gates from §1 with progress bars; per-pattern strength radar; calibration (confidence vs actual); median time vs par per difficulty; WA-cause histogram (off-by-one, overflow, edge cases…); "next best action" recommendation.
 - **Mastery Map:** a constellation per region; nodes are problems and scrolls coloured by state, with rust visible.
-- **Solution Journal:** every AC, searchable by pattern; diff your current solution against your past attempt and against the reference.
+- **Solution Journal:** every AC, searchable by pattern; diff your current solution against your past attempt and against the reference. Each entry stores code, time, hints, an assisted flag, the problem's patterns and the elaborative-prompt answer (`lib/journal/entry.ts`); diffs are line-based LCS (`lib/journal/diff.ts`).
 - **Library:** codex of lessons, cheat sheets (printable), and the visualisers (`docs/CURRICULUM.md` §6).
 - **Settings:** text speed, audio, reduce motion, editor (font size, keymap including vim, tab width, theme), mode defaults, save export/import.
 

@@ -372,3 +372,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: equipping was not driven in the browser (needs an inscribed scroll in IndexedDB; covered by unit tests); only one move and one party member exist so far; moves are not yet used in battle Strategise.
 - Next: C4 (Debrief and Solution Journal).
+
+## 2026-11-04: C4a Editorial parser and Solution Journal core
+- Split C4 into C4a (done), C4b (catalog editorial, Debrief panel, elaborative prompt, IDB journal store) and C4c (`/journal` screen with diffs). Added pure `lib/debrief/editorial.ts` (markdown to typed sections/blocks: paragraphs, lists, fenced code, inline code/bold; house-style ordering; `##` inside fences ignored) and `lib/journal/` (`JournalEntry`, sanitiser, search by pattern/text/assisted, per-problem history, previous-attempt lookup, summary, LCS line diff). GDD §9 notes the entry fields.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (462 pass; 12 new in `tests/debrief-journal.test.ts` incl. parsing every shipped editorial and 100 seeded diff round-trips), `npm run build`, `build:pages`. No visual change, so no screenshots; no new content, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: nothing renders the editorial or writes journal entries yet; no IDB store.
+- Next: C4b.
