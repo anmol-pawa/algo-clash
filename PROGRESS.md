@@ -351,3 +351,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: no UI yet; the card catalog has no `debug` cards tagged, so room 4 is empty until C2b tags the compilerError cards.
 - Next: C2b.
+
+## 2026-11-04: C2b Daily Rift screen
+- Added `/rift` (`components/RiftScreen.tsx`), a DAILY RIFT button on the title, pure `lib/rift/progress.ts` (cleared-room bitmask in save flags, `claimRift` pays Bits/XP and advances the streak once per day, `recordProblemAttempt` feeds `applyAttempt`) and `content/rift.ts` (catalog: only problems with a battle kit are scheduled; compilerError cards are the Team Undefined debug room). Card rooms reuse `CardBattle`, problem rooms reuse `BattleArena`; the day's plan is frozen at load. A lost problem battle records a failed SRS attempt and leaves the room open. Empty rooms are skipped and never block the streak.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (437 pass), `npm run build`, `build:pages`; new `scripts/smoke-rift.mjs` on the static export at desktop and iPhone 14 (5 rooms, clear the Den room, persists on reload, no overflow, no console errors). Screenshots of hub and card room reviewed: readable. The problem-battle path (Frontier Gate) is covered by unit tests only, not by a Playwright run.
+- CI/deploy: `gh` is unavailable here; not confirmed. Work was pushed to branch `claude/eloquent-ritchie-pl10hu` (the session's designated branch), not `main`, so Pages will not deploy until it is merged.
+- Known gaps: the Blitz room is not smoke-tested end to end; reward is shown only on the finishing run; only 2 problems have kits.
+- Next: C3 (party and moves).

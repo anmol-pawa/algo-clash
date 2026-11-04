@@ -102,3 +102,37 @@ describe("streak and rewards", () => {
     expect(dayKey(Date.parse("2026-11-04T23:59:59Z"))).toBe("2026-11-04");
   });
 });
+
+import { claimRift, clearedRooms, markRoomCleared, recordProblemAttempt, riftComplete } from "@/lib/rift";
+import { newCoreSave } from "@/lib/save/schema";
+import { riftCatalog } from "@/content/rift";
+
+describe("rift progress", () => {
+  const day = "2026-11-04";
+  const plan = planRift(day, {}, catalog, T0);
+  it("tracks cleared rooms idempotently and pays once", () => {
+    let core = newCoreSave(T0);
+    for (const i of playableRooms(plan)) core = markRoomCleared(markRoomCleared(core, day, i), day, i);
+    expect(clearedRooms(core, day)).toEqual(playableRooms(plan));
+    expect(riftComplete(plan, clearedRooms(core, day))).toBe(true);
+    const a = claimRift(core, plan);
+    expect(a.reward!.bits).toBeGreaterThan(0);
+    expect(a.core.profile.streakDays).toBe(1);
+    expect(a.core.profile.bits).toBe(a.reward!.bits);
+    expect(claimRift(a.core, plan).reward).toBeNull();
+  });
+  it("pays nothing while a required room is open", () => {
+    const core = markRoomCleared(newCoreSave(T0), day, 1);
+    expect(claimRift(core, plan).reward).toBeNull();
+  });
+  it("applies attempts to SRS", () => {
+    const core = recordProblemAttempt(newCoreSave(T0), "a", { at: T0, solved: true, assisted: false, seconds: 50, parSeconds: 300 });
+    expect(core.mastery.a.solves).toBe(1);
+  });
+  it("the real catalog plans a playable day-one rift", () => {
+    const p = planRift(day, {}, riftCatalog, T0);
+    expect(p.rooms[1].items).toHaveLength(5);
+    expect(p.rooms[3].items).toHaveLength(1); // a compiler-error card
+    expect(p.rooms[2].items).toHaveLength(1);
+  });
+});
