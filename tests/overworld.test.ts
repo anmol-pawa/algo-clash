@@ -160,6 +160,6 @@ describe("doors", () => {
   it("Mainville doors sit on walkable tiles and lead to real screens", async () => {
     const { MAINVILLE } = await import("@/lib/overworld/mainville");
     const m = parseMap(MAINVILLE);
-    expect(m.doors.map((d) => d.href)).toEqual(["/forge/", "/gym/"]);
+    expect(m.doors.map((d) => d.href)).toEqual(["/forge/", "/learn/", "/gym/"]);
   });
 });

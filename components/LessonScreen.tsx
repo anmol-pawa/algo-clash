@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardBattle from "@/components/CardBattle";
 import type { Card, ComputedMap } from "@/lib/cards/types";
 import { inlineRuns, lessonKey, type Lesson, type LessonBlock, type LessonOutputs } from "@/lib/lessons/types";
@@ -50,11 +50,13 @@ function Block({ block, output }: { block: LessonBlock; output?: string }) {
 }
 
 /** Lesson screens (handheld window, one page at a time), then the lesson's practice cards and linked exercises. */
-export default function LessonScreen({ lesson, cards, computed, outputs }: { lesson: Lesson; cards: Card[]; computed: ComputedMap; outputs: LessonOutputs }) {
+export default function LessonScreen({ lesson, cards, computed, outputs, onComplete }: { lesson: Lesson; cards: Card[]; computed: ComputedMap; outputs: LessonOutputs; onComplete?: () => void }) {
   const [page, setPage] = useState(0);
   const total = lesson.pages.length;
   const practising = page >= total;
   const practice = cards.filter((c) => lesson.cardIds.includes(c.id));
+  // Reaching the practice page means the lesson has been read through.
+  useEffect(() => { if (practising) onComplete?.(); }, [practising, onComplete]);
 
   if (practising) {
     return (

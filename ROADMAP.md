@@ -87,7 +87,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 - [ ] B11. **Vertical-slice polish pass:**
   - [x] B11a. Screenshot tour of every player-facing screen (`scripts/tour.mjs`, desktop + iPhone 14), fix overlap of the sound button with page headers, save reference shots in `docs/slice/`.
   - [x] B11b1. Mainville doors lead to the Forge and the Gym (`doors` in map defs, FORGE/GYM tags, `scripts/smoke-doors.mjs`).
-  - [ ] B11b2. (rest of B11b: lesson door/NPC and wiring lessons and cards into progression.) Original: play the slice end to end from a fresh save (title → Mainville → lesson → forge → gym → evolution) and fix flow gaps: link the overworld to the lesson, forge and gym; wire lessons and cards into progression.
+  - [x] B11b2. Academy (`/learn`) with a Mainville LEARN door, lesson progress saved in flags. (rest of B11b: lesson door/NPC and wiring lessons and cards into progression.) Original: play the slice end to end from a fresh save (title → Mainville → lesson → forge → gym → evolution) and fix flow gaps: link the overworld to the lesson, forge and gym; wire lessons and cards into progression.
   - [ ] B11c. Slice review entry in PROGRESS.md after B11b.
   - play the whole slice from a fresh save via Playwright on desktop and iPhone 14, screenshot every screen, fix rough edges
   - record a playthrough GIF or screenshots in `docs/`

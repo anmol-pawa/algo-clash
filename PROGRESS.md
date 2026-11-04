@@ -322,3 +322,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so not confirmed.
 - Known gaps: no lesson entry point yet; Forge/Gym have no door back to the map beyond their own links.
 - Next: B11b2.
+
+## 2026-11-04: B11b2 The Academy (`/learn`) and lesson progress
+- Added a third Mainville building (east house, LEARN door at 12,5) leading to `/learn/`; the villager moved to keep the path clear; a LEARN button on the title. `components/LessonsScreen.tsx` lists the 12 lessons (section, summary, Read/Next/New chip, "N of 12 lessons read · up next") and opens `LessonScreen`; reaching the practice page fires the new `onComplete` and persists `lesson:<id>:done` in the core save flags via pure `lib/lessons/progress.ts` (idempotent; `nextLesson` follows curriculum order).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (409 pass, native g++), `npm run build`, `build:pages`; new `scripts/smoke-learn.mjs` on the static export at desktop and iPhone 14 (walk to the door, read a lesson through, progress survives reload, no console errors, no overflow); `smoke-doors.mjs` still passes. Screenshots: LEARN tag and door readable, list readable on mobile.
+- CI/deploy: `gh` is unavailable here, so Actions status was not confirmed.
+- Known gaps: cards practised inside lessons and the forge do not feed SRS yet (C1); the gym is not gated on lessons.
+- Next: B11c (slice review entry in PROGRESS.md).
