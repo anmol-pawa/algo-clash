@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { SpriteCanvas } from "@/components/SpriteCanvas";
 import { buildArrayling } from "@/game/sprites/arrayling";
+import { buildVectorling } from "@/game/sprites/vectorling";
+import { EvolutionScene } from "@/components/EvolutionScene";
 import { TileScene } from "@/components/TileScene";
 import { GymScene } from "@/components/GymScene";
 import { buildWarden } from "@/game/sprites/warden";
@@ -15,6 +17,7 @@ const WALKS = ["down", "up", "left", "right"];
 export default function SpritesDev() {
   const sheets = useMemo(() => ({ front: buildArrayling("front"), back: buildArrayling("back") }), []);
   const chars = useMemo(() => [TRAINER, IOTA].map((l) => ({ l, sheet: buildCharacter(l), portrait: buildPortrait(l) })), []);
+  const vec = useMemo(() => ({ front: buildVectorling("front"), back: buildVectorling("back") }), []);
   const warden = useMemo(() => buildWarden(), []);
   const tiles = useMemo(() => buildTileset(), []);
   return (
@@ -34,6 +37,23 @@ export default function SpritesDev() {
           </div>
         </section>
       ))}
+      {(["front", "back"] as const).map((v) => (
+        <section key={"v" + v} className="mb-6">
+          <h2 className="mb-2 font-semibold capitalize">Vectorling {v} (Arrayling stage 2)</h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+            {ANIMS.map((a) => (
+              <figure key={a} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+                <SpriteCanvas sheet={vec[v]} anim={a} scale={3} />
+                <figcaption className="text-xs text-black">{a}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ))}
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Evolution scene</h2>
+        <div className="max-w-md"><EvolutionScene onDone={() => {}} /></div>
+      </section>
       <section className="mb-6">
         <h2 className="mb-2 font-semibold">Warden Brace (96x96 gym leader)</h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

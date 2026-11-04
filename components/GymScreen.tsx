@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import BattleArena, { type ArenaProblem, type ArenaResult } from "@/components/BattleArena";
+import { EvolutionScene } from "@/components/EvolutionScene";
 import { GymScene } from "@/components/GymScene";
 import { gymKits, type GymKit } from "@/content/gyms/kits";
 import { syntaxShoresGym as gym } from "@/content/gyms/r0";
 import { buildWarden } from "@/game/sprites/warden";
 import { FOE_MAX_HP } from "@/lib/battle/damage";
 import { answerBlitz, battleResult, blitzCorrect, coreFoeHp, shuffledOptions, startGym, SHIELD_START } from "@/lib/gym/machine";
+import { applyEvolution } from "@/lib/evolution/progress";
 import { applyGymWin, blitzSecondsLeft, hasBadge } from "@/lib/gym/progress";
 import type { GymState } from "@/lib/gym/types";
 import type { TestCase } from "@/lib/judge/verdict";
@@ -17,7 +19,7 @@ import { SaveService } from "@/lib/save/service";
 
 const WERROR_FLAGS = ["-O2", "-Wall", "-Wextra", "-Werror"];
 const nowMs = (): number => Date.now();
-type Screen = "intro" | "play" | "retry" | "end";
+type Screen = "intro" | "play" | "retry" | "evolve" | "end";
 
 function Shield({ value }: { value: number }) {
   return (
@@ -112,14 +114,17 @@ export default function GymScreen() {
     return () => { alive = false; };
   }, [kit, screen, state.phase]);
 
-  const win = useCallback(async (s: GymState) => {
-    if (!s.reward) return;
+  /** Saves the win; returns true when this is the first badge (the evolution checkpoint). */
+  const win = useCallback(async (s: GymState): Promise<boolean> => {
+    if (!s.reward) return false;
     try {
       const sv = svc.current ?? new SaveService(new IdbBackend());
       const core = await sv.load();
-      await sv.save(applyGymWin(core, gym));
+      const first = !hasBadge(core, gym);
+      await sv.save(applyEvolution(applyGymWin(core, gym), "arrayling", 2));
       setOwned(true);
-    } catch { /* the win still shows; saving is retried on the next win */ }
+      return first;
+    } catch { return false; /* the win still shows; saving is retried on the next win */ }
   }, []);
 
   function onBlitz(choice: string | null, seconds: number) {
@@ -131,7 +136,7 @@ export default function GymScreen() {
   function onBattle(r: ArenaResult) {
     const next = battleResult(gym, state, r);
     setState(next);
-    if (next.phase === "won") { setScreen("end"); void win(next); }
+    if (next.phase === "won") { void win(next).then((first) => setScreen(first ? "evolve" : "end")); }
     else if (next.phase === "abandoned") setScreen("end");
     else setScreen("retry");
   }
@@ -199,6 +204,8 @@ export default function GymScreen() {
         </section>
       )}
 
+      {screen === "evolve" && <EvolutionScene onDone={() => setScreen("end")} />}
+
       {screen === "end" && (
         <section className="panel flex flex-col gap-3 p-4" data-testid="gym-end">
           {state.phase === "won" ? (
@@ -206,7 +213,7 @@ export default function GymScreen() {
               <p className="font-display text-xl text-[var(--gold)]">★ {gym.badge.name} earned!</p>
               <p>“{gym.leader.lines.win}”</p>
               <p className="text-sm text-white/80">Reward: {gym.badge.name} and {state.reward?.shards ?? 0} Compiler Shard. Saved to your profile.</p>
-              <p className="text-xs text-white/50">Your Arrayling feels something stirring… (evolution scene coming soon)</p>
+              {owned && <p className="text-sm text-emerald-300">Your Arrayling is now a Vectorling (stage 2).</p>}
             </>
           ) : (
             <p>You retreated from the lighthouse. The badge waits; the blitz starts fresh next time.</p>

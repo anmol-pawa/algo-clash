@@ -293,3 +293,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: quota period is over; confirmation attempted below by the routine (no `gh`; see final summary).
 - Known gaps: the intro message box hides the lower half of the Arrayling until it fades; no victory/evolution scene yet; title links are plain buttons.
 - Next: B9d2.
+
+## 2026-11-04: B9d2 Evolution scene and Vectorling (B9 complete)
+- Added the Arrayling's stage-2 form `game/sprites/vectorling.ts` (64x64, front + back, idle/attack/hurt/faint/evolve: five cells with a dashed ghost "capacity" slot, gold three-spike crest, teal ramp), the pure evolution timeline `lib/evolution/timeline.ts` (intro, accelerating silhouette flips, flash, reveal; reduced-motion skips to the end) and `lib/evolution/progress.ts` (`stage:<species>` save flag, idempotent, never lowers). `components/EvolutionScene.tsx` draws it on a canvas (night sky, rings, sparkles, Skip/Continue). `GymScreen` saves the win plus stage 2 together and shows the scene only on the first badge; the end screen reports the new form. Vectorling and the scene are on `/dev/sprites`. GDD §5.5 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (395 pass, native g++), `npm run build`, `build:pages`; `smoke-gym.mjs` extended (evolution morph + finished screens) on the static export at desktop and iPhone 14: full gym run, no console errors, no horizontal overflow. Screenshots read well. The smoke caught a real bug: rAF timestamps earlier than `t0` made the frame index negative (`drawImage` TypeError); clamped.
+- Known gaps: the Vectorling is not yet used in battles or the party UI (the party/overworld integration comes with C-phase systems); the scene has no audio (B10).
+- Next: B10 (Audio v1).

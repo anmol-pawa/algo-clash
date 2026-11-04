@@ -65,6 +65,11 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
   await solve("step-counter", sol("step-counter"), "sig");
   await page.getByRole("button", { name: /Foe beaten/ }).waitFor({ timeout: 180000 });
   await page.getByRole("button", { name: /Foe beaten/ }).click();
+  await page.getByTestId("evolution").waitFor({ timeout: 15000 }).catch(() => fail(`${name}: no evolution scene after the first badge`));
+  await page.waitForTimeout(1500); await shot("evolve-morph"); await overflow("evolve");
+  await page.getByTestId("evolution-text").filter({ hasText: "evolved into Vectorling" }).waitFor({ timeout: 15000 }).catch(() => fail(`${name}: evolution did not finish`));
+  await shot("evolve-done"); await overflow("evolve-done");
+  await page.getByTestId("evolution-continue").click();
   await page.getByTestId("gym-end").waitFor();
   const end = await page.getByTestId("gym-end").innerText();
   if (!/Lighthouse Badge earned/.test(end)) fail(`${name}: no badge: ${end}`);
