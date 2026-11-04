@@ -143,6 +143,7 @@ export default function GymScreen() {
   if (screen === "play" && battlePhase) {
     return problem ? (
       <BattleArena key={`${state.phase}-${attempt}`} problem={problem}
+        scene="gym"
         foeStartHp={state.phase === "core" ? coreFoeHp(state) : undefined}
         compileFlags={state.phase === "signature" ? WERROR_FLAGS : undefined}
         onResult={onBattle} />

@@ -80,7 +80,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] B9a. Pure logic `lib/gym/` (blitz, shield, head start, phase flow, retry/abandon) and the Syntax Shores gym content `content/gyms/r0.ts`, with tests.
   - [x] B9b. Warden Brace leader sprite (96×96, idle/attack/hurt/faint) on `/dev/sprites`, plus the gym backdrop.
   - [x] B9c. Gym UI (`/gym`): intro, blitz screen with 20 s timer and shield, phases 2 and 3 via the coding battle (twist: -Werror), retry/retreat, badge persisted in the save, smoke test.
-  - [ ] B9d. Gym polish: Warden Brace and the lighthouse backdrop on the battle stage itself (replace the recoloured Arrayling foe), the victory scene and the Arrayling evolution animation, a link to `/gym` from the title/overworld.
+  - [x] B9d1. Warden Brace and the lighthouse backdrop on the battle stage itself (`BattleStage scene="gym"`), and links to `/gym` and `/forge` from the title.
+  - [ ] B9d2. The victory scene and the Arrayling evolution animation (white-silhouette morph) after the badge.
+  - (original B9d text) Gym polish: Warden Brace and the lighthouse backdrop on the battle stage itself (replace the recoloured Arrayling foe), the victory scene and the Arrayling evolution animation, a link to `/gym` from the title/overworld.
 - [ ] B10. **Audio v1:** the WebAudio synth, a Mainville theme, a battle theme and SFX (menu, hit, AC, WA, TLE, CE, level-up), with volume settings.
 - [ ] B11. **Vertical-slice polish pass:**
   - play the whole slice from a fresh save via Playwright on desktop and iPhone 14, screenshot every screen, fix rough edges

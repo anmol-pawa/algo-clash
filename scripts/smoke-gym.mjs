@@ -36,6 +36,12 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
   if (!/7\/8/.test(text)) fail(`${name}: expected 7/8 blitz, got: ${text}`);
   await shot("core-card"); await overflow("core-card");
   await page.getByRole("button", { name: /Begin/ }).click();
+  await page.locator(".cm-content").waitFor({ timeout: 60000 });
+  await page.waitForTimeout(2500);
+  if (name === "iphone") await page.getByRole("tab", { name: "Stage" }).click();
+  await page.waitForTimeout(500);
+  await shot("battle-stage");
+  if (name === "iphone") await page.getByRole("tab", { name: "Code" }).click();
   const solve = async (id, code, tag) => {
     await page.locator(".cm-content").waitFor({ timeout: 60000 });
     await page.locator(".cm-content").click();

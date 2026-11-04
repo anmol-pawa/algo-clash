@@ -1,7 +1,8 @@
 "use client";
 
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
-import { LH, LW, PLATFORMS, drawBackdrop } from "@/game/battle/backdrop";
+import { GYM_PLATFORMS, LH, LW, PLATFORMS, drawBackdrop, drawGymBackdrop } from "@/game/battle/backdrop";
+import { buildWarden } from "@/game/sprites/warden";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
 import { buildArrayling } from "@/game/sprites/arrayling";
 import type { SpriteSheet } from "@/game/sprites/grid";
@@ -47,8 +48,8 @@ function freshFx(foeMax: number, foeStart?: number): StageFx {
   return f;
 }
 
-export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; foeStart?: number; font?: string }>(
-  function BattleStage({ foeName = "Bracketeer", foeLevel = 4, playerName = "Arrayling", foeMax = 100, foeStart, font = "monospace" }, ref) {
+export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "gym"; foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; foeStart?: number; font?: string }>(
+  function BattleStage({ scene = "meadow", foeName = "Bracketeer", foeLevel = 4, playerName = "Arrayling", foeMax = 100, foeStart, font = "monospace" }, ref) {
     const cv = useRef<HTMLCanvasElement>(null);
     const fx = useRef<StageFx>(freshFx(foeMax, foeStart));
     useImperativeHandle(ref, () => ({
@@ -61,7 +62,8 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
       verdict: (v) => showVerdict(fx.current, v),
       restart: () => { fx.current = freshFx(foeMax, foeStart); },
     }), [foeMax, foeStart]);
-    const sheets = useMemo(() => ({ player: buildArrayling("back"), foe: foeSheet() }), []);
+    const sheets = useMemo(() => ({ player: buildArrayling("back"), foe: scene === "gym" ? buildWarden() : foeSheet() }), [scene]);
+    const plat = scene === "gym" ? GYM_PLATFORMS : PLATFORMS;
 
     useEffect(() => {
       const canvas = cv.current, ctx = canvas?.getContext("2d");
@@ -77,10 +79,12 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
         })])) as Record<EffectKind, HTMLCanvasElement[]>;
       let raf = 0, last = performance.now();
       const frameOf = (side: "player" | "foe", f: StageFx) => {
-        const p = f.pose[side], sheet = sheets[side], list = frames[side][p.name];
-        const ms = sheet.frameMs[p.name] ?? 200;
-        const i = p.name === "idle" ? Math.floor(f.time / ms) % list.length : Math.min(list.length - 1, Math.floor(p.age / ms));
-        return { img: list[i], meta: sheet.anims[p.name][i] };
+        const p = f.pose[side], sheet = sheets[side];
+        // a leader has no evolve/other poses: fall back to idle
+        const name = frames[side][p.name] ? p.name : "idle", list = frames[side][name];
+        const ms = sheet.frameMs[name] ?? 200;
+        const i = name === "idle" ? Math.floor(f.time / ms) % list.length : Math.min(list.length - 1, Math.floor(p.age / ms));
+        return { img: list[i], meta: sheet.anims[name][i] };
       };
       const hpBox = (x: number, y: number, name: string, lvl: string, frac: number, hearts: string | null) => {
         const h = hearts === null ? 28 : 38;
@@ -103,7 +107,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
         const sh = shakeOffset(f);
         ctx.save();
         ctx.translate(sh.x, sh.y);
-        drawBackdrop(ctx, f.time);
+        if (scene === "gym") drawGymBackdrop(ctx, f.time); else drawBackdrop(ctx, f.time);
         // foe slides in from the right, player from the left
         const foe = frameOf("foe", f), pl = frameOf("player", f);
         const fxOff = Math.round(slideOffset(f.intro, 0) * 140), plOff = Math.round(slideOffset(f.intro, 0.15) * -140);
@@ -120,13 +124,16 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
         };
         // soft contact shadows
         ctx.fillStyle = "rgba(20,50,30,.28)";
-        ctx.fillRect(PLATFORMS.foe.cx - 22 + fxOff, PLATFORMS.foe.cy - 1, 44, 3);
-        ctx.fillRect(PLATFORMS.player.cx - 26 + plOff, PLATFORMS.player.cy - 1, 52, 3);
-        draw(foe, PLATFORMS.foe.cx - 32 + fxOff + lunge("foe"), PLATFORMS.foe.cy - 58);
-        draw(pl, PLATFORMS.player.cx - 32 + plOff + lunge("player"), PLATFORMS.player.cy - 58);
+        const foeW = sheets.foe.w, foeH = sheets.foe.h;
+        ctx.fillRect(plat.foe.cx - foeW / 3 + fxOff, plat.foe.cy - 1, Math.round(foeW * 0.66), 3);
+        ctx.fillRect(plat.player.cx - 26 + plOff, plat.player.cy - 1, 52, 3);
+        // leaders stand slightly into the ledge (feet 6px below its centre line), wild creatures on it
+        const footDrop = scene === "gym" ? 6 : 0;
+        draw(foe, plat.foe.cx - foeW / 2 + fxOff + lunge("foe"), plat.foe.cy + footDrop - foeH);
+        draw(pl, plat.player.cx - 32 + plOff + lunge("player"), plat.player.cy - 58);
         // sprite move effects over the target
         for (const e of f.effects) {
-          const anchor = e.side === "foe" ? PLATFORMS.foe : PLATFORMS.player;
+          const anchor = e.side === "foe" ? plat.foe : plat.player;
           const list = effects[e.kind], i = Math.min(list.length - 1, Math.floor(e.age / EFFECT_FRAME_MS));
           const sc = e.kind === "burst" ? 2 : 1.5;
           const sz = EFFECT_SIZE * sc;
@@ -135,8 +142,8 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
         // damage numbers
         ctx.font = `10px ${font}`; ctx.textAlign = "center";
         for (const n of f.numbers) {
-          const anchor = n.side === "foe" ? PLATFORMS.foe : PLATFORMS.player;
-          const y = anchor.cy - 60 - n.age / 30;
+          const anchor = n.side === "foe" ? plat.foe : plat.player;
+          const y = anchor.cy - (n.side === "foe" ? sheets.foe.h : 64) + 4 - n.age / 30;
           ctx.globalAlpha = Math.max(0, 1 - n.age / 900);
           ctx.fillStyle = "#1c2433"; ctx.fillText(n.text, anchor.cx + 1, y + 1);
           ctx.fillStyle = n.crit ? "#ffd84a" : n.side === "foe" ? "#ffffff" : "#ff7a6b";
@@ -147,8 +154,10 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
         // HP boxes (not shaken, so they stay readable)
         const slideHud = slideOffset(f.intro, 0.4);
         hpBox(6 - Math.round(slideHud * 120), 6, foeName, `Lv${foeLevel}`, f.hp.foe.shown / f.hp.foe.max, null);
-        hpBox(LW - 110 + Math.round(slideHud * 120), 70, playerName, "Lv5",
-          f.hp.player.shown / f.hp.player.max, "♥".repeat(Math.max(0, Math.ceil(f.hp.player.target))));
+        const hearts = "♥".repeat(Math.max(0, Math.ceil(f.hp.player.target))), pFrac = f.hp.player.shown / f.hp.player.max;
+        // gym: the 96px leader fills the right side, so the player's box sits under the foe's on the left
+        if (scene === "gym") hpBox(6 - Math.round(slideHud * 120), 38, playerName, "Lv5", pFrac, hearts);
+        else hpBox(LW - 110 + Math.round(slideHud * 120), 70, playerName, "Lv5", pFrac, hearts);
         // verdict stinger
         if (f.stinger) {
           const st = STINGERS[f.stinger.verdict], a = f.stinger.age;
@@ -189,7 +198,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { foeName?: string; foe
       };
       raf = requestAnimationFrame(loop);
       return () => cancelAnimationFrame(raf);
-    }, [sheets, foeName, foeLevel, playerName, font]);
+    }, [sheets, plat, scene, foeName, foeLevel, playerName, font]);
 
     return (
       <canvas ref={cv} width={LW * SCALE} height={LH * SCALE} aria-label="Battle stage"

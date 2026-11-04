@@ -285,3 +285,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (387 pass), `build`, `build:pages`; new `scripts/smoke-gym.mjs` on the static export at desktop and iPhone 14: full run (7/8 blitz, core AC, -Werror CE, signature AC, badge, persisted on reload), no console errors, no horizontal overflow. Screenshots read well (fixed tiny pixel-font option text and an oversized scene during the blitz).
 - Known gaps: the battle stage still shows the recoloured Arrayling as the foe (not Warden/lighthouse); no victory/evolution scene; `/gym` is not linked from the title/overworld; the editor shows doubled blank lines when code is inserted via Playwright (not investigated).
 - Next: B9d (stage polish, victory + evolution scene, link to `/gym`).
+
+## 2026-11-04: B9d1 Gym stage uses Warden Brace and the lighthouse
+- Split B9d into B9d1 (done) and B9d2 (victory scene + Arrayling evolution animation).
+- `BattleStage` gained `scene: "meadow" | "gym"`: the gym scene draws the lighthouse backdrop and `GYM_PLATFORMS`, shows Warden Brace (96x96) as the foe with idle/attack/hurt/faint (falls back to idle for missing poses), anchors effects and damage numbers to the leader, and moves the player's HP box under the foe's box so it no longer covers the leader. `BattleArena` takes `scene` and uses a gym intro line; `GymScreen` passes `scene="gym"`. The title page links to `/gym/` and `/forge/`.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (387 pass, native g++), `build`, `build:pages`; `smoke-gym.mjs` on the static export at desktop and iPhone 14 (battle-stage screenshot added; full gym run still passes), no console errors, no horizontal overflow. Screenshots: Warden on the ledge with the lighthouse behind, HP boxes clear of the sprite, readable on mobile. Screenshot-driven fixes: HP box overlap, wild-creature intro text.
+- CI/deploy: quota period is over; confirmation attempted below by the routine (no `gh`; see final summary).
+- Known gaps: the intro message box hides the lower half of the Arrayling until it fades; no victory/evolution scene yet; title links are plain buttons.
+- Next: B9d2.

@@ -37,6 +37,8 @@ export type ArenaResult = "won" | "fainted" | "retreated";
 export interface ArenaOptions {
   /** Foe HP at the start of the fight (gym head start). */
   foeStartHp?: number;
+  /** "gym": lighthouse backdrop and Warden Brace as the foe. */
+  scene?: "meadow" | "gym";
   /** clang flags for every Run/Submit (a gym twist such as -Werror). Compile errors never cost a heart. */
   compileFlags?: string[];
   /** When set the fight can end: a Continue button reports the result, and Retreat is offered. */
@@ -48,7 +50,7 @@ const PLAYER_HEARTS = 5;
 const FOE_HP = 100;
 
 /** One coding battle: stage + statement + editor, Run (visible tests) chips the foe, Submit (all tests) decides the fight. */
-export default function BattleArena({ problem, foeStartHp, compileFlags, onResult }: { problem: ArenaProblem } & ArenaOptions) {
+export default function BattleArena({ problem, foeStartHp, scene, compileFlags, onResult }: { problem: ArenaProblem } & ArenaOptions) {
   const statement = useMemo(() => parseStatement(problem.statement), [problem.statement]);
   const visible = useMemo(() => problem.tests.filter((t) => t.group === "basic"), [problem.tests]);
   const [tab, setTab] = useState<BattleTab>("code");
@@ -75,14 +77,14 @@ export default function BattleArena({ problem, foeStartHp, compileFlags, onResul
     }).catch(() => {});
     const onHide = () => { if (document.visibilityState === "hidden") void a.flush(); };
     document.addEventListener("visibilitychange", onHide);
-    const t = setTimeout(() => stage.current?.say(`A wild ${problem.foeName} appeared! Write the code to beat it.`), 900);
+    const t = setTimeout(() => stage.current?.say(scene === "gym" ? `${problem.foeName} holds the line! Write the code to break through.` : `A wild ${problem.foeName} appeared! Write the code to beat it.`), 900);
     return () => {
       alive = false;
       clearTimeout(t);
       document.removeEventListener("visibilitychange", onHide);
       void a.dispose();
     };
-  }, [problem]);
+  }, [problem, scene]);
 
   function edit(c: string) {
     setCode(c);
@@ -115,7 +117,7 @@ export default function BattleArena({ problem, foeStartHp, compileFlags, onResul
       tab={tab}
       onTab={setTab}
       badges={view ? { code: view.verdict } : undefined}
-      stage={<BattleStage ref={stage} font={`${pixelFamily}, monospace`} foeName={problem.foeName} foeLevel={problem.foeLevel} foeMax={FOE_HP} foeStart={foeStartHp} />}
+      stage={<BattleStage ref={stage} scene={scene} font={`${pixelFamily}, monospace`} foeName={problem.foeName} foeLevel={problem.foeLevel} foeMax={FOE_HP} foeStart={foeStartHp} />}
       problem={<StatementPanel statement={statement} badge={<span className="px-btn px-2 text-xs">{problem.difficulty}</span>} />}
       code={
         <>
