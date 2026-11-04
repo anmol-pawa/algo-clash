@@ -105,6 +105,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] C4b. Catalog embeds editorial + reference solution; Debrief screen after a win (editorial, elaborative prompt, journal save) in `BattleArena`.
   - [x] C4c. `/journal` screen: search by pattern, diff yours vs past attempt and vs reference.
 - [ ] C5. **Hints and items:** the 3-rung hint ladder, the Mart, Bits economy, Debug Lens, Complexity Compass and Rematch Ticket, all with the mastery rules from GDD §6.6.
+  - [x] C5a. Pure `lib/items/` (Mart items, Bits purchase/spend, 3-rung hint ladder rules, mastery-credit rules), `inventory` in the save, tests.
+  - [ ] C5b. `/mart` screen (buy items with Bits, inventory view, title button).
+  - [ ] C5c. In-battle hint ladder UI (spends Hint Tokens), Debug Lens, Complexity Compass, Rematch Ticket wiring; `hints.md` embedded in the catalog; `masteryCredit` applied to the SRS.
 - [ ] C6. **Scaffolding modes** (GDD §6.5): Guided, Standard, Interview and Contest, including "write your own tests before submitting" in Interview mode and the edge-case-class coverage scoring.
 - [ ] C7. **Scout School** (CUR R1 + §5): lessons, the constraint table, recognition blitz cards (first 60 statements), and the complexity/recurrence solver with tests.
 - [ ] C8. **Trainer Card / Readiness Report** (GDD §9): gates, radar, calibration, WA-cause histogram and "next best action".

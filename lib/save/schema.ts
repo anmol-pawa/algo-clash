@@ -73,6 +73,8 @@ export interface CoreSave {
   forge: Record<string, ScrollProgress>;
   /** Equipped move ids per Structling (max 4 each, GDD §5.2). Optional in old saves; sanitised to `{}`. */
   loadouts: Record<string, string[]>;
+  /** Owned consumables by item id (GDD §6.6). Optional in old saves; sanitised to `{}`. */
+  inventory: Record<string, number>;
   flags: Record<string, boolean | number | string>;
 }
 
@@ -92,6 +94,7 @@ export function newCoreSave(now: number, name = "Trainer"): CoreSave {
     settings: { ...DEFAULT_SETTINGS, editor: { ...DEFAULT_SETTINGS.editor } },
     forge: {},
     loadouts: {},
+    inventory: {},
     flags: {},
   };
 }
@@ -142,6 +145,15 @@ function sanitizeLoadouts(raw: unknown): Record<string, string[]> {
   return out;
 }
 
+function sanitizeInventory(raw: unknown): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [id, v] of Object.entries(rec(raw)).slice(0, 50)) {
+    const n = Math.round(num(v, 0, 0, 99));
+    if (n > 0) out[id.slice(0, 64)] = n;
+  }
+  return out;
+}
+
 /** Coerce untrusted data (storage, imported JSON) into a valid v1 core save. Never throws. */
 export function sanitizeCore(raw: unknown, now: number): CoreSave {
   const r = rec(raw);
@@ -180,6 +192,7 @@ export function sanitizeCore(raw: unknown, now: number): CoreSave {
     },
     forge: sanitizeForge(r.forge),
     loadouts: sanitizeLoadouts(r.loadouts),
+    inventory: sanitizeInventory(r.inventory),
     flags,
   };
 }

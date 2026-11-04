@@ -394,3 +394,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: journal entries have no delete/export button (export exists in the save service); no link from Debrief or map to the journal; no pagination for very long journals.
 - Next: C5 (hints and items).
+
+## 2026-11-04: C5a Items, economy and hint-ladder logic
+- Split C5 into C5a (done), C5b (`/mart` screen) and C5c (in-battle wiring). New pure `lib/items/items.ts` (Hint Token 30, Debug Lens 80, Complexity Compass 60, Rematch Ticket 50 Bits; per-item carry caps; `buyItem`/`spendItem`) and `lib/items/hints.ts` (`parseHints` for the 3-section `hints.md`, `requestHint` per scaffolding mode: Guided free, Standard one token per rung, Interview/Contest none; `masteryCredit`: none after Guided/Lens/editorial/3 hints, reduced with Compass). Save gained optional `inventory` (sanitised, no version bump).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (474 pass; `tests/items.test.ts` parses all shipped hints.md), `build:pages`. No visual change, no new problems, so no screenshots and `content:verify` unchanged.
+- Env: this run was told to develop on branch `claude/eloquent-ritchie-ld26kg`, so work was pushed there, not `main` (no Pages deploy until merged). `gh` unavailable; CI/Pages not confirmed.
+- Known gaps: nothing uses the items in the UI yet.
+- Next: C5b.
