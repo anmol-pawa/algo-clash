@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { DiffView } from "@/components/DiffView";
 import { diffLines, diffStats } from "@/lib/journal/diff";
 import { inlineTokens, sectionsForDebrief } from "@/lib/journal/editorial";
 import { gradePrompt, type ElaborativePrompt } from "@/lib/journal/prompt";
@@ -92,13 +93,7 @@ export default function DebriefPanel({ info, code, seconds, heartsLeft, onContin
 
       <details onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) setOpened(true); }}>
         <summary className="min-h-11 cursor-pointer py-2 font-display text-xs uppercase tracking-wider opacity-80">Your code vs the reference ({stats.added} added · {stats.removed} removed · {Math.round(stats.similarity * 100)}% alike)</summary>
-        <pre className="max-h-64 overflow-auto rounded bg-black/30 p-2 font-mono text-xs" data-testid="debrief-diff">
-          {ops.map((o, i) => (
-            <div key={i} className={o.op === "add" ? "bg-emerald-500/20" : o.op === "del" ? "bg-rose-500/20" : "opacity-70"}>
-              {o.op === "add" ? "+ " : o.op === "del" ? "- " : "  "}{o.text}
-            </div>
-          ))}
-        </pre>
+        <DiffView ops={ops} testId="debrief-diff" />
         <p className="mt-1 text-xs opacity-70">+ is in your code only, - is in the reference only. Different is fine; compare the idea, not the lines.</p>
       </details>
 

@@ -387,3 +387,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: only 2 of 26 problems have an elaborative prompt; the Debrief is not shown for non-catalog problems; the journal entry is saved on Continue only.
 - Next: C4c (`/journal` screen).
+
+## 2026-11-04: C4c Solution Journal screen (C4 complete)
+- New `/journal` page (`components/JournalScreen.tsx`): newest-first list of accepted solutions (title, UTC date, time, hints, assisted, patterns), search by problem/pattern/code, and per entry three views: your code, diff vs your previous attempt of the same problem, diff vs the reference. Empty state links to Gym/Rift. Shared `components/DiffView.tsx` now also renders the Debrief diff. JOURNAL button on the title.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (466 pass), `build:pages`; new `scripts/smoke-journal.mjs` (seeds IndexedDB, checks list/search/both diffs/first-attempt note, no console errors, no overflow) and `smoke-gym.mjs` on the static export at desktop and iPhone 14: all pass; iPhone screenshot reviewed (readable, 44 px targets). No new content, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: journal entries have no delete/export button (export exists in the save service); no link from Debrief or map to the journal; no pagination for very long journals.
+- Next: C5 (hints and items).
