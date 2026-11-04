@@ -176,7 +176,7 @@ export function WorldCanvas() {
   );
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-3">
-      <div className="panel flex items-center justify-between px-3 py-2 text-sm">
+      <div className="panel mr-14 flex sm:mr-0 items-center justify-between px-3 py-2 text-sm">
         <span className="whitespace-nowrap font-display text-[var(--gold)]">{mapName}</span>
         <span className="hidden text-white/50 sm:inline">Arrows/WASD move · Z or Enter talk · tap to walk</span>
       </div>

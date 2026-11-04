@@ -306,3 +306,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: sound was verified through a spy context and unit tests, not by ear; no region-specific songs yet (one per region comes with later regions); no tab-hidden auto-pause; SFX volume is not normalised by listening tests.
 - CI/deploy: Actions quota note ended 2026-11-01, but `gh` is unavailable here, so CI/deploy status was not confirmed this run.
 - Next: B11 (vertical-slice polish pass).
+
+## 2026-11-04: B11a Slice screenshot tour and header overlap fix
+- Split B11 into B11a (done), B11b (play the slice end to end and fix the flow gaps) and B11c (slice review entry).
+- Added `scripts/tour.mjs` (screenshots title, `/play`, `/forge`, `/gym` and the dev pages at desktop and iPhone 14, reports console errors and horizontal overflow). Reference shots are in `docs/slice/`.
+- Slice observations so far: the title, overworld, gym intro and forge list read well and have 44 px targets. Rough edge found and fixed: on iPhone the fixed sound button covered the "Back to the map" link (Forge), the Leave button (Gym) and the Mainville bar. Those headers now reserve 3.5 rem on the right.
+- Observed for B11b: the overworld has only Mainville with no door or NPC leading to the lesson, forge or gym (they are reachable only through title buttons); the forge screen is a single scroll; lessons and cards are not wired into progression.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (405 pass), `npm run build`, `build:pages`; `tour.mjs` on the static export: no console errors, no horizontal overflow at either size; screenshots reviewed.
+- CI/deploy: `gh` is unavailable in this environment, so CI and the Pages deploy were not confirmed (the Actions quota period ended 2026-11-01).
+- Next: B11b.

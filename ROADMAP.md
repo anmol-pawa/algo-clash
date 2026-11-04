@@ -85,6 +85,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - (original B9d text) Gym polish: Warden Brace and the lighthouse backdrop on the battle stage itself (replace the recoloured Arrayling foe), the victory scene and the Arrayling evolution animation, a link to `/gym` from the title/overworld.
 - [x] B10. **Audio v1:** the WebAudio synth, a Mainville theme, a battle theme and SFX (menu, hit, AC, WA, TLE, CE, level-up), with volume settings.
 - [ ] B11. **Vertical-slice polish pass:**
+  - [x] B11a. Screenshot tour of every player-facing screen (`scripts/tour.mjs`, desktop + iPhone 14), fix overlap of the sound button with page headers, save reference shots in `docs/slice/`.
+  - [ ] B11b. Play the slice end to end from a fresh save (title → Mainville → lesson → forge → gym → evolution) and fix flow gaps: link the overworld to the lesson, forge and gym; wire lessons and cards into progression.
+  - [ ] B11c. Slice review entry in PROGRESS.md after B11b.
   - play the whole slice from a fresh save via Playwright on desktop and iPhone 14, screenshot every screen, fix rough edges
   - record a playthrough GIF or screenshots in `docs/`
   - write a short "slice review" entry in PROGRESS.md (what feels good, what doesn't)

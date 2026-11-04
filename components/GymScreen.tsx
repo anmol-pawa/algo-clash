@@ -160,7 +160,7 @@ export default function GymScreen() {
 
   return (
     <main className={shell}>
-      <header className="flex items-center justify-between gap-2">
+      <header className="flex pr-14 items-center justify-between gap-2">
         <h1 className="font-display text-2xl text-[var(--gold)]">{gym.name}</h1>
         <Link href="/" className="px-btn flex min-h-11 items-center px-3 text-sm">Leave</Link>
       </header>

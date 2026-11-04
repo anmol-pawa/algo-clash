@@ -240,7 +240,7 @@ export default function ForgeScreen() {
   const scroll = allScrolls.find((s) => s.id === open);
   return (
     <main className="min-h-dvh p-3 sm:p-6">
-      <header className="mx-auto mb-3 flex max-w-3xl items-baseline justify-between">
+      <header className="mx-auto mb-3 flex pr-14 max-w-3xl items-baseline justify-between">
         <h1 className="font-display text-2xl text-[var(--gold)]">The Forge</h1>
         <a href="/play/" className="text-sm underline opacity-80">Back to the map</a>
       </header>
