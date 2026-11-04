@@ -1,4 +1,4 @@
-import { DELTA, Dir, GameMap, WarpDef } from "./map";
+import { DELTA, Dir, GameMap, WarpDef, doorAt } from "./map";
 import { Interaction, Player, arrive, findPath, interact, step } from "./walk";
 
 /** Milliseconds a one-tile walk takes. */
@@ -22,7 +22,8 @@ export interface WorldState {
 export type WorldEvent =
   | { type: "map"; id: string }
   | { type: "encounter"; pool?: string }
-  | { type: "bump" };
+  | { type: "bump" }
+  | { type: "door"; href: string; label: string };
 
 export function newWorld(map: GameMap): WorldState {
   return { map, player: { ...map.spawn }, moving: null, path: [], held: null, steps: 0, warp: null };
@@ -45,6 +46,13 @@ export function tickWorld(s: WorldState, dtMs: number, rng: () => number, maps: 
       }
       budget -= need;
       s.moving = null;
+      const door = doorAt(s.map, s.player.x, s.player.y);
+      if (door) {
+        s.path = [];
+        s.held = null;
+        events.push({ type: "door", href: door.href, label: door.label });
+        return events;
+      }
       if (s.warp) {
         const w = s.warp;
         s.warp = null;

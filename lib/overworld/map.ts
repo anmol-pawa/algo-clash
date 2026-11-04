@@ -37,6 +37,16 @@ export interface WarpDef {
   /** Facing after arriving; defaults to the walking direction. */
   facing?: Dir;
 }
+/** A door that leaves the overworld for another screen (a route such as `/forge`). */
+export interface DoorDef {
+  x: number;
+  y: number;
+  href: string;
+  /** Shown as a toast while the screen changes. */
+  label: string;
+  /** Short name drawn above the door. */
+  tag: string;
+}
 export interface SignDef {
   x: number;
   y: number;
@@ -52,6 +62,7 @@ export interface MapDef {
   npcs?: NpcDef[];
   warps?: WarpDef[];
   signs?: SignDef[];
+  doors?: DoorDef[];
   /** Chance (0..1) that one step on an encounter tile starts a battle. */
   encounterRate?: number;
   /** Pool id for the encounter table (lib/battle, B4). */
@@ -68,6 +79,7 @@ export interface GameMap {
   npcs: NpcDef[];
   warps: WarpDef[];
   signs: SignDef[];
+  doors: DoorDef[];
   encounterRate: number;
   encounterPool?: string;
 }
@@ -88,7 +100,7 @@ export function parseMap(def: MapDef): GameMap {
   });
   const m: GameMap = {
     id: def.id, name: def.name, width, height: tiles.length, tiles,
-    spawn: def.spawn, npcs: def.npcs ?? [], warps: def.warps ?? [], signs: def.signs ?? [],
+    spawn: def.spawn, npcs: def.npcs ?? [], warps: def.warps ?? [], signs: def.signs ?? [], doors: def.doors ?? [],
     encounterRate: def.encounterRate ?? 0, encounterPool: def.encounterPool,
   };
   if (m.encounterRate < 0 || m.encounterRate > 1) fail("encounterRate must be within 0..1");
@@ -105,6 +117,10 @@ export function parseMap(def: MapDef): GameMap {
     if (!inside(m, w.x, w.y)) fail(`warp at ${w.x},${w.y} is outside the map`);
     if (SOLID_TILES.has(tiles[w.y][w.x])) fail(`warp at ${w.x},${w.y} is on a solid tile`);
   }
+  for (const d of m.doors) {
+    if (!inside(m, d.x, d.y)) fail(`door at ${d.x},${d.y} is outside the map`);
+    if (SOLID_TILES.has(tiles[d.y][d.x])) fail(`door at ${d.x},${d.y} is on a solid tile`);
+  }
   for (const s of m.signs) if (!inside(m, s.x, s.y) || !READABLE_TILES.has(tiles[s.y][s.x])) fail(`sign at ${s.x},${s.y} is not on a readable tile`);
   return m;
 }
@@ -117,6 +133,9 @@ export function npcAt(map: GameMap, x: number, y: number): NpcDef | undefined {
 }
 export function warpAt(map: GameMap, x: number, y: number): WarpDef | undefined {
   return map.warps.find((w) => w.x === x && w.y === y);
+}
+export function doorAt(map: GameMap, x: number, y: number): DoorDef | undefined {
+  return map.doors.find((d) => d.x === x && d.y === y);
 }
 /** True when a walker cannot enter the tile: off-map, solid tile or an NPC. */
 export function isBlocked(map: GameMap, x: number, y: number): boolean {

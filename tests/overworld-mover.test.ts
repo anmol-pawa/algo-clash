@@ -102,3 +102,17 @@ describe("NPC facing and dialogue flags", () => {
     expect(raiseFlags(base, [])).toBe(base);
   });
 });
+
+describe("door events", () => {
+  it("stepping onto a door raises a door event once the step finishes", async () => {
+    const { MAINVILLE } = await import("@/lib/overworld/mainville");
+    const { parseMap } = await import("@/lib/overworld/map");
+    const m = parseMap(MAINVILLE);
+    const w = newWorld(m);
+    w.player = { x: 8, y: 3, facing: "up" };
+    w.held = "up";
+    const ev = tickWorld(w, 1000, () => 0.99, { mainville: m });
+    expect(ev.find((e) => e.type === "door")).toMatchObject({ href: "/forge/" });
+    expect(w.held).toBeNull();
+  });
+});

@@ -315,3 +315,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (405 pass), `npm run build`, `build:pages`; `tour.mjs` on the static export: no console errors, no horizontal overflow at either size; screenshots reviewed.
 - CI/deploy: `gh` is unavailable in this environment, so CI and the Pages deploy were not confirmed (the Actions quota period ended 2026-11-01).
 - Next: B11b.
+
+## 2026-11-04: B11b1 Overworld doors to Forge and Gym
+- Split B11b into B11b1 (done) and B11b2 (lesson entry, progression wiring). Maps gained `doors` (`DoorDef`: tile, href, label, tag; validated by `parseMap`); `tickWorld` raises a `door` event when a step ends on a door tile; `WorldCanvas` shows the toast, navigates with the router and draws FORGE/GYM tags above the doors. Mainville: north house door -> `/forge/`, west house door -> `/gym/`. GDD unchanged.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (407 pass), `build`, `build:pages`; new `scripts/smoke-doors.mjs` on the static export at desktop and iPhone 14: both doors navigate, no page errors. Screenshots: tags readable, doors visible.
+- CI/deploy: `gh` is unavailable here, so not confirmed.
+- Known gaps: no lesson entry point yet; Forge/Gym have no door back to the map beyond their own links.
+- Next: B11b2.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useMusic } from "@/components/Music";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
@@ -26,6 +27,7 @@ const KEYS: Record<string, Dir> = {
 /** The overworld scene: smooth tile-to-tile walking, camera, NPCs, warps. Renders with 2D canvas. */
 export function WorldCanvas() {
   useMusic("mainville");
+  const router = useRouter();
   const cvRef = useRef<HTMLCanvasElement>(null);
   const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1) }), []);
   const world = useRef<WorldState>(newWorld(maps.mainville));
@@ -125,6 +127,16 @@ export function WorldCanvas() {
       const pf = people.trainer[`${walking ? "walk" : "idle"}-${w.player.facing}`];
       const frame = walking ? pf[(w.steps * 2 + (w.moving!.t > 0.5 ? 1 : 0)) % pf.length] : pf[0];
       sprites.push({ y: pos.y, draw: () => ctx.drawImage(frame, Math.round(ox + pos.x * TILE), Math.round(oy + pos.y * TILE - 8)) });
+      ctx.font = "bold 7px monospace";
+      ctx.textAlign = "center";
+      for (const d of m.doors) {
+        const cx = ox + d.x * TILE + TILE / 2, cy = oy + d.y * TILE - 2;
+        const tw = ctx.measureText(d.tag).width + 4;
+        ctx.fillStyle = "rgba(20,16,28,0.85)";
+        ctx.fillRect(Math.round(cx - tw / 2), cy - 8, Math.round(tw), 9);
+        ctx.fillStyle = "#ffd866";
+        ctx.fillText(d.tag, cx, cy - 1);
+      }
       sprites.sort((a, b) => a.y - b.y).forEach((s) => s.draw());
     };
     const loop = (now: number) => {
@@ -134,6 +146,7 @@ export function WorldCanvas() {
       const events = tickWorld(world.current, dt, Math.random, maps);
       for (const e of events) {
         if (e.type === "map") setMapName(world.current.map.name);
+        if (e.type === "door") { setNote(e.label); router.push(e.href); }
         if (e.type === "encounter") setNote("A wild Structling rustles in the grass… (battles arrive in B3)");
       }
       draw();
@@ -141,7 +154,7 @@ export function WorldCanvas() {
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [maps]);
+  }, [maps, router]);
 
   useEffect(() => {
     if (!note) return;
