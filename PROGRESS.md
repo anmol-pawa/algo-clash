@@ -293,3 +293,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: quota period is over; confirmation attempted below by the routine (no `gh`; see final summary).
 - Known gaps: the intro message box hides the lower half of the Arrayling until it fades; no victory/evolution scene yet; title links are plain buttons.
 - Next: B9d2.
+
+## 2026-11-04: B9d2 Vectorling and the evolution scene (B9 complete)
+- Added `game/sprites/vectorling.ts` (Arrayling's evolved form: 64x64, shared palette, front + back, idle/attack/hurt/faint/evolve; brass crest, tapering cells 1-4, dashed spare-capacity slot), `game/sprites/morph.ts` (pure `evolutionSteps`: white pulses, dithered silhouette dissolve, colour fade-in), `components/EvolutionScene.tsx` (glow stage, sparkles, captions) shown on the gym badge screen, and both on `/dev/sprites`. Digit font gained "4". Tests in `tests/sprites-vectorling.test.ts`.
+- Verified: lint (2 existing warnings), typecheck, `npm test` (393 pass), `build:pages`; `smoke-gym.mjs` on the static export at desktop and iPhone 14 (evolution finishes, caption, no console errors, no overflow). Screenshots read well after fixing a digit "0" mislabel and a head-tag/crest collision.
+- Known gaps: evolution is not persisted as a save stage and the Vectorling is not yet used in battles/overworld (needs the stage field with C1 mastery); head has no index tag.
+- Process note: pushed to the session branch `claude/eloquent-ritchie-j44fbg`, not `main`, per the session's branch rule. CI/deploy not checked (no `gh` in this environment).
+- Next: B10 (Audio v1).

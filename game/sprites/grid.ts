@@ -78,6 +78,7 @@ export const DIGITS: Record<string, string[]> = {
   "1": ["010", "110", "010", "010", "111"],
   "2": ["111", "001", "111", "100", "111"],
   "3": ["111", "001", "111", "001", "111"],
+  "4": ["101", "101", "111", "001", "001"],
 };
 
 export function drawDigit(g: Grid, ch: string, x: number, y: number, c: number): void {

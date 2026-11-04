@@ -68,6 +68,9 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
   await page.getByTestId("gym-end").waitFor();
   const end = await page.getByTestId("gym-end").innerText();
   if (!/Lighthouse Badge earned/.test(end)) fail(`${name}: no badge: ${end}`);
+  await page.waitForTimeout(900); await shot("evolving");
+  await page.locator('[data-testid="evolution-scene"][data-done="true"]').waitFor({ timeout: 15000 }).catch(() => fail(`${name}: evolution scene did not finish`));
+  if (!/evolved into Vectorling/.test(await page.getByTestId("evolution-caption").innerText())) fail(`${name}: no evolution caption`);
   await shot("badge"); await overflow("badge");
   await page.reload();
   await page.getByText(/already hold the Lighthouse Badge/).waitFor({ timeout: 15000 }).catch(() => fail(`${name}: badge not persisted`));

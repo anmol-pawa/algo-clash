@@ -9,6 +9,7 @@ import { syntaxShoresGym as gym } from "@/content/gyms/r0";
 import { buildWarden } from "@/game/sprites/warden";
 import { FOE_MAX_HP } from "@/lib/battle/damage";
 import { answerBlitz, battleResult, blitzCorrect, coreFoeHp, shuffledOptions, startGym, SHIELD_START } from "@/lib/gym/machine";
+import { EvolutionScene } from "./EvolutionScene";
 import { applyGymWin, blitzSecondsLeft, hasBadge } from "@/lib/gym/progress";
 import type { GymState } from "@/lib/gym/types";
 import type { TestCase } from "@/lib/judge/verdict";
@@ -206,7 +207,8 @@ export default function GymScreen() {
               <p className="font-display text-xl text-[var(--gold)]">★ {gym.badge.name} earned!</p>
               <p>“{gym.leader.lines.win}”</p>
               <p className="text-sm text-white/80">Reward: {gym.badge.name} and {state.reward?.shards ?? 0} Compiler Shard. Saved to your profile.</p>
-              <p className="text-xs text-white/50">Your Arrayling feels something stirring… (evolution scene coming soon)</p>
+              <EvolutionScene />
+              <p className="text-xs text-white/70">Vectorling grows its capacity: amortised O(1) push_back, with the spare slot shown dashed.</p>
             </>
           ) : (
             <p>You retreated from the lighthouse. The badge waits; the blitz starts fresh next time.</p>
