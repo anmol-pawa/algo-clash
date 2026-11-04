@@ -1,0 +1,149 @@
+"use client";
+
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
+import BattleArena, { type ArenaProblem, type ArenaResult } from "@/components/BattleArena";
+import CardBattle from "@/components/CardBattle";
+import { useMusic } from "@/components/Music";
+import { allCards, computed } from "@/content/cards";
+import { gymKits } from "@/content/gyms/kits";
+import { audio } from "@/lib/audio/engine";
+import { applyRiftProblem, applyRoomClear, clearedRooms, dayKey, planRift, riftReward, visibleStreak, type RiftCatalog, type RiftPlan, type RiftRoom, type RoomKind } from "@/lib/rift";
+import { IdbBackend } from "@/lib/save/idb";
+import type { CoreSave } from "@/lib/save/schema";
+import { SaveService } from "@/lib/save/service";
+import type { TestCase } from "@/lib/judge/verdict";
+
+const ROOM_INFO: Record<RoomKind, { name: string; blurb: string }> = {
+  reviews: { name: "Due reviews", blurb: "Problems the spaced-repetition clock says are fading." },
+  blitz: { name: "Recognition blitz", blurb: "Five quick cards: spot the tool, trace the code." },
+  fresh: { name: "Frontier problem", blurb: "One new problem just past what you have learned." },
+  debug: { name: "Team Undefined", blurb: "A compiler-error encounter: read the diagnostic." },
+  bonus: { name: "Bonus hard (optional)", blurb: "A tougher problem for extra Bits." },
+};
+
+/** Problems the Rift can serve today: the ones with a bundled battle kit. */
+const catalog: RiftCatalog = {
+  problems: Object.entries(gymKits).map(([id, k]) => ({ id, region: "R0", difficulty: k.difficulty as "E" | "M" | "H", prerequisites: [] })),
+  cards: allCards.map((c) => ({ id: c.id, region: c.region, debug: c.kind === "compilerError" })),
+};
+const cardById = new Map(allCards.map((c) => [c.id, c]));
+
+type View = { t: "map" } | { t: "room"; room: number; item: number };
+
+/** The Daily Rift (GDD §6.3): today's five rooms, streak, and rewards. */
+export default function RiftScreen() {
+  useMusic("battle");
+  const svc = useRef<SaveService | null>(null);
+  const [core, setCore] = useState<CoreSave | null>(null);
+  const [plan, setPlan] = useState<RiftPlan | null>(null);
+  const [view, setView] = useState<View>({ t: "map" });
+  const [loaded, setLoaded] = useState<{ key: string; problem: ArenaProblem } | null>(null);
+  const [note, setNote] = useState("");
+
+  useEffect(() => {
+    const s = new SaveService(new IdbBackend());
+    svc.current = s;
+    s.load().then((c) => {
+      const now = Date.now();
+      setCore(c);
+      setPlan(planRift(dayKey(now), c.mastery, catalog, now)); // frozen for the session
+    }).catch(() => setNote("Could not read the save."));
+  }, []);
+
+  const commit = useCallback((fn: (c: CoreSave) => CoreSave) => {
+    setCore((prev) => {
+      if (!prev) return prev;
+      const next = fn(prev);
+      void svc.current?.save(next).catch(() => {});
+      return next;
+    });
+  }, []);
+
+  const room: RiftRoom | undefined = view.t === "room" && plan ? plan.rooms[view.room] : undefined;
+  const item = room && view.t === "room" ? room.items[view.item] : undefined;
+  const kit = item?.type === "problem" ? gymKits[item.id] : undefined;
+
+  useEffect(() => {
+    if (!kit || !item) return;
+    let alive = true;
+    kit.loadTests().then((tests: TestCase[]) => {
+      if (alive) setLoaded({ key: item.id, problem: { id: item.id, title: kit.title, difficulty: kit.difficulty, statement: kit.statement, starter: kit.starter, spec: kit.spec, timeLimitMs: kit.timeLimitMs, tests, foeName: "Rift Echo", foeLevel: kit.foeLevel } });
+    }).catch(() => alive && setNote("Could not load the battle."));
+    return () => { alive = false; };
+  }, [kit, item]);
+
+  const clearRoom = (idx: number) => { if (plan) commit((c) => applyRoomClear(c, plan, idx)); audio.playSfx("levelup"); setView({ t: "map" }); };
+
+  function onBattle(r: ArenaResult) {
+    if (view.t !== "room" || !plan || !item) return;
+    const now = Date.now();
+    if (r === "retreated") { setView({ t: "map" }); return; }
+    commit((c) => applyRiftProblem(c, item.id, r === "won", now, 0, 600));
+    if (r === "fainted") { setView({ t: "map" }); return; }
+    if (view.item + 1 < plan.rooms[view.room].items.length) setView({ t: "room", room: view.room, item: view.item + 1 });
+    else clearRoom(view.room);
+  }
+
+  const shell = "mx-auto flex w-full max-w-3xl flex-col gap-3 p-3";
+
+  if (view.t === "room" && room && item) {
+    if (item.type === "problem") {
+      const problem = loaded && loaded.key === item.id ? loaded.problem : null;
+      return problem ? <BattleArena key={`${view.room}-${view.item}`} problem={problem} onResult={onBattle} /> : <main className={shell}><p role="status">{note || "Loading the battle…"}</p></main>;
+    }
+    const cards = room.items.flatMap((i) => (cardById.get(i.id) ? [cardById.get(i.id)!] : []));
+    return (
+      <main className={shell}>
+        <header className="flex items-center justify-between gap-2 pr-14">
+          <h1 className="font-display text-xl text-[var(--gold)]">{ROOM_INFO[room.kind].name}</h1>
+          <button className="px-btn flex min-h-11 items-center px-3 text-sm" onClick={() => setView({ t: "map" })}>Back</button>
+        </header>
+        <CardBattle cards={cards} computed={computed} size={cards.length} seed={plan?.seed ?? 1} onFinish={() => clearRoom(view.room)} />
+      </main>
+    );
+  }
+
+  const cleared = plan && core ? clearedRooms(core, plan.day) : [];
+  const streak = core && plan ? visibleStreak(core.profile, plan.day) : 0;
+  const earned = plan && core ? riftReward(plan, cleared, streak) : { bits: 0, xp: 0 };
+  const firstOpen = plan ? plan.rooms.findIndex((r, i) => r.items.length && !r.optional && !cleared.includes(i)) : -1;
+
+  return (
+    <main className={shell} data-testid="rift">
+      <header className="flex items-center justify-between gap-2 pr-14">
+        <h1 className="font-display text-2xl text-[var(--gold)]">Daily Rift</h1>
+        <Link href="/" className="px-btn flex min-h-11 items-center px-3 text-sm">Leave</Link>
+      </header>
+      {!plan || !core ? <p role="status">{note || "Opening the rift…"}</p> : (
+        <>
+          <section className="panel flex flex-wrap items-center justify-between gap-2 p-3 text-sm" aria-label="Rift status">
+            <span data-testid="rift-day">{plan.day}</span>
+            <span data-testid="rift-streak">🔥 Streak {streak}</span>
+            <span data-testid="rift-earned">Today: {earned.bits} Bits · {earned.xp} XP</span>
+            <span>Bank: {core.profile.bits} Bits</span>
+          </section>
+          <ol className="flex flex-col gap-2" aria-label="Rooms">
+            {plan.rooms.map((r, i) => {
+              const info = ROOM_INFO[r.kind];
+              const empty = r.items.length === 0;
+              const done = cleared.includes(i) || empty;
+              return (
+                <li key={r.kind} className={`panel flex items-center justify-between gap-3 p-3 ${done ? "opacity-70" : ""}`} data-testid={`room-${r.kind}`}>
+                  <div className="min-w-0">
+                    <p className="font-display">{i + 1}. {info.name}</p>
+                    <p className="text-xs text-white/70">{empty ? "Nothing here today." : `${info.blurb} (${r.items.length} ${r.items[0].type === "card" ? "card" : "problem"}${r.items.length > 1 ? "s" : ""})`}</p>
+                  </div>
+                  {empty ? <span className="text-xs text-white/50">skipped</span>
+                    : done ? <span className="text-emerald-300" aria-label="Cleared">✓ Cleared</span>
+                    : <button className={`px-btn min-h-11 px-4 ${i === firstOpen ? "px-btn-primary" : ""}`} onClick={() => setView({ t: "room", room: i, item: 0 })}>Enter ▶</button>}
+                </li>
+              );
+            })}
+          </ol>
+          {firstOpen < 0 && <p className="panel p-3 text-emerald-300" data-testid="rift-done">Rift complete! Come back tomorrow to keep your streak.</p>}
+        </>
+      )}
+    </main>
+  );
+}

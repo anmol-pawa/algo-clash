@@ -351,3 +351,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: no UI yet; the card catalog has no `debug` cards tagged, so room 4 is empty until C2b tags the compilerError cards.
 - Next: C2b.
+
+## 2026-11-04: C2b Daily Rift screen
+- Added `lib/rift/progress.ts` (`applyRoomClear` pays the Bits difference once and advances the streak on completion; `applyRiftProblem` feeds `applyAttempt`), `components/RiftScreen.tsx` + `app/rift/page.tsx` (day, streak, today's earnings, five room cards, Enter/Cleared/skipped states; card rooms via `CardBattle`, problem rooms via `BattleArena`), and a DAILY RIFT button on the title. Debug room = the `compilerError` cards. GDD §6.3 updated; new box C2c (full problem catalog).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (436 pass), `npm run build`, `build:pages`; new `scripts/smoke-rift.mjs` on the static export at desktop and iPhone 14 (blitz room cleared with all five card kinds, 10 Bits paid, persisted over reload, no console errors, no overflow). Screenshots reviewed: readable, 44 px targets.
+- Known gaps: the problem rooms (fresh/reviews/bonus) were not driven end to end in the browser (they need the WASM compiler) and can only serve the two gym-kit problems until C2c; no completion fanfare screen yet; per-problem seconds are passed as 0.
+- CI/deploy: `gh` is unavailable here, so CI and the Pages deploy were not confirmed.
+- Next: C2c.
