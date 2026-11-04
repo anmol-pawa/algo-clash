@@ -1,8 +1,9 @@
+import type { JournalEntry } from "../journal/entry";
 import type { SaveBackend } from "./backend";
 import type { Attempt, CoreSave, Draft } from "./schema";
 
 const DB_NAME = "algo-clash";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const CORE_KEY = "main";
 
 function wrap<T>(req: IDBRequest<T>): Promise<T> {
@@ -37,6 +38,10 @@ export class IdbBackend implements SaveBackend {
           db.createObjectStore("attempts", { autoIncrement: true }).createIndex("problemId", "problemId");
         }
         if (!db.objectStoreNames.contains("drafts")) db.createObjectStore("drafts", { keyPath: "problemId" });
+        // v2: Solution Journal (append-only).
+        if (!db.objectStoreNames.contains("journal")) {
+          db.createObjectStore("journal", { autoIncrement: true }).createIndex("problemId", "problemId");
+        }
       };
       open.onsuccess = () => resolve(open.result);
       open.onerror = () => reject(open.error);
@@ -44,7 +49,7 @@ export class IdbBackend implements SaveBackend {
     return this.dbPromise;
   }
 
-  private async store(name: "core" | "attempts" | "drafts", mode: IDBTransactionMode) {
+  private async store(name: "core" | "attempts" | "drafts" | "journal", mode: IDBTransactionMode) {
     const tx = (await this.db()).transaction(name, mode);
     return { store: tx.objectStore(name), tx };
   }
@@ -85,10 +90,20 @@ export class IdbBackend implements SaveBackend {
     const { store } = await this.store("drafts", "readonly");
     return wrap(store.getAll());
   }
+  async addJournal(e: JournalEntry) {
+    const { store, tx } = await this.store("journal", "readwrite");
+    store.add(e);
+    await done(tx);
+  }
+  async listJournal() {
+    const { store } = await this.store("journal", "readonly");
+    return wrap(store.getAll());
+  }
   async clear() {
     const db = await this.db();
-    const tx = db.transaction(["core", "attempts", "drafts"], "readwrite");
-    for (const n of ["core", "attempts", "drafts"]) tx.objectStore(n).clear();
+    const names = ["core", "attempts", "drafts", "journal"];
+    const tx = db.transaction(names, "readwrite");
+    for (const n of names) tx.objectStore(n).clear();
     await done(tx);
   }
 }

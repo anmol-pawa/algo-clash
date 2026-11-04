@@ -1,3 +1,4 @@
+import { sanitizeJournalEntry, type JournalEntry } from "../journal/entry";
 import type { SaveBackend } from "./backend";
 import { migrateCore, SaveVersionError } from "./migrations";
 import { SAVE_VERSION, newCoreSave, sanitizeAttempt, sanitizeDraft, type Attempt, type CoreSave, type Draft } from "./schema";
@@ -11,6 +12,8 @@ export interface ExportFile {
   core: CoreSave;
   attempts: Attempt[];
   drafts: Draft[];
+  /** Optional: files exported before the journal existed omit it. */
+  journal?: JournalEntry[];
 }
 
 /** High-level save API on top of any backend. `now` is injectable for tests. */
@@ -58,6 +61,17 @@ export class SaveService {
     return sanitizeDraft(await this.backend.getDraft(problemId));
   }
 
+  async recordJournal(entry: JournalEntry): Promise<void> {
+    const clean = sanitizeJournalEntry(entry);
+    if (!clean) throw new Error("Invalid journal entry");
+    await this.backend.addJournal(clean);
+  }
+
+  async journal(problemId?: string): Promise<JournalEntry[]> {
+    const all = (await this.backend.listJournal()).map(sanitizeJournalEntry).filter((e): e is JournalEntry => e !== null);
+    return problemId ? all.filter((e) => e.problemId === problemId) : all;
+  }
+
   clearDraft(problemId: string): Promise<void> {
     return this.backend.deleteDraft(problemId);
   }
@@ -70,6 +84,7 @@ export class SaveService {
       core: await this.load(),
       attempts: await this.attempts(),
       drafts: (await this.backend.listDrafts()).map(sanitizeDraft).filter((d): d is Draft => d !== null),
+      journal: await this.journal(),
     };
     return JSON.stringify(file, null, 2);
   }
@@ -87,8 +102,10 @@ export class SaveService {
     const core = migrateCore({ ...(f.core as object), version: f.version }, this.now());
     const attempts = (Array.isArray(f.attempts) ? f.attempts : []).map(sanitizeAttempt).filter((a): a is Attempt => a !== null);
     const drafts = (Array.isArray(f.drafts) ? f.drafts : []).map(sanitizeDraft).filter((d): d is Draft => d !== null);
+    const journal = (Array.isArray(f.journal) ? f.journal : []).map(sanitizeJournalEntry).filter((e): e is JournalEntry => e !== null);
     await this.backend.clear();
     await this.backend.putCore(core);
+    for (const e of journal) await this.backend.addJournal(e);
     for (const a of attempts) await this.backend.addAttempt(a);
     for (const d of drafts) await this.backend.putDraft(d);
     return core;

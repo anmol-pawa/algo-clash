@@ -372,3 +372,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: equipping was not driven in the browser (needs an inscribed scroll in IndexedDB; covered by unit tests); only one move and one party member exist so far; moves are not yet used in battle Strategise.
 - Next: C4 (Debrief and Solution Journal).
+
+## 2026-11-04: C4a Journal logic and storage
+- Split C4 into C4a (done), C4b (catalog embeds editorial + reference; Debrief after a win) and C4c (`/journal` screen). New pure `lib/journal/`: `editorial.ts` (section parser, debrief ordering, innerHTML-free inline tokenizer), `diff.ts` (LCS line diff + stats), `entry.ts` (`JournalEntry`, sanitiser, search by id/title/pattern/code, `previousEntry`). Save: `journal` store (IndexedDB v2 upgrade branch, `addJournal`/`listJournal` on the backend, `SaveService.recordJournal/journal`, included in export/import; older exports without it still import).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (462 pass; new `tests/journal.test.ts` parses all 26 shipped editorials into the 8 house sections, 200-case diff reconstruction property test, persistence round trip), `npm run build`, `build:pages`. No visual change, so no screenshots; no new content, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: nothing writes journal entries yet (C4b); elaborative-prompt content format still to be defined (plan: optional `prompt.json` per problem, validated by a test).
+- Next: C4b.

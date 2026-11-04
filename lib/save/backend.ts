@@ -1,3 +1,4 @@
+import type { JournalEntry } from "../journal/entry";
 import type { Attempt, CoreSave, Draft } from "./schema";
 
 /** Storage contract. The IndexedDB adapter and the in-memory test double both implement it. */
@@ -10,6 +11,8 @@ export interface SaveBackend {
   putDraft(draft: Draft): Promise<void>;
   deleteDraft(problemId: string): Promise<void>;
   listDrafts(): Promise<unknown[]>;
+  addJournal(entry: JournalEntry): Promise<void>;
+  listJournal(): Promise<unknown[]>;
   /** Wipes everything (used by import-replace and "reset save"). */
   clear(): Promise<void>;
 }
@@ -18,6 +21,7 @@ export class MemoryBackend implements SaveBackend {
   private core: unknown;
   private attempts: unknown[] = [];
   private drafts = new Map<string, unknown>();
+  private journal: unknown[] = [];
 
   async getCore() {
     return this.core === undefined ? undefined : structuredClone(this.core);
@@ -44,7 +48,14 @@ export class MemoryBackend implements SaveBackend {
   async listDrafts() {
     return structuredClone([...this.drafts.values()]);
   }
+  async addJournal(e: JournalEntry) {
+    this.journal.push(structuredClone(e));
+  }
+  async listJournal() {
+    return structuredClone(this.journal);
+  }
   async clear() {
+    this.journal = [];
     this.core = undefined;
     this.attempts = [];
     this.drafts.clear();

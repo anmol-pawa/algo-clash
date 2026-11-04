@@ -101,6 +101,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 - [x] C2c. **Rift problem catalog:** a bundled catalog of every R0/R3/R6 problem (statement, starter, spec, lazy tests) so Rift rooms 1, 3 and 5 can serve more than the two gym kits; Interview-style timing passed to `applyRiftProblem`.
 - [x] C3. **Party and moves:** `/party` screen with a 4-slot move loadout per Structling, moves learned by inscribing Forge scrolls, and the Structdex. (Lesson-gated moves and multi-Structling parties land when more species and scrolls exist.)
 - [ ] C4. **Debrief and Solution Journal:** the editorial renderer (GDD §8.3), elaborative prompt, journal with diffs (yours vs past, yours vs reference).
+  - [x] C4a. Pure `lib/journal/` (editorial parser, line diff, journal entry sanitiser), a `journal` store in the save backend (IndexedDB v2, export/import), with tests.
+  - [ ] C4b. Catalog embeds editorial + reference solution; Debrief screen after a win (editorial, elaborative prompt, journal save) in `BattleArena`.
+  - [ ] C4c. `/journal` screen: search by pattern, diff yours vs past attempt and vs reference.
 - [ ] C5. **Hints and items:** the 3-rung hint ladder, the Mart, Bits economy, Debug Lens, Complexity Compass and Rematch Ticket, all with the mastery rules from GDD §6.6.
 - [ ] C6. **Scaffolding modes** (GDD §6.5): Guided, Standard, Interview and Contest, including "write your own tests before submitting" in Interview mode and the edge-case-class coverage scoring.
 - [ ] C7. **Scout School** (CUR R1 + §5): lessons, the constraint table, recognition blitz cards (first 60 statements), and the complexity/recurrence solver with tests.
