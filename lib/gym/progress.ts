@@ -6,6 +6,10 @@ import { SHARDS_PER_GYM } from "./machine";
 export const badgeFlag = (badgeId: string): string => `badge:${badgeId}`;
 export const gymWonFlag = (gymId: string): string => `gym:${gymId}:won`;
 export const SHARDS_FLAG = "compilerShards";
+/** Set by the first gym win: the starter has evolved Arrayling → Vectorling (GDD §5.5). */
+export const EVOLVED_FLAG = "evolved:arrayling";
+
+export const isEvolved = (core: CoreSave): boolean => core.flags[EVOLVED_FLAG] === true;
 
 export const hasBadge = (core: CoreSave, def: GymDef): boolean => core.flags[badgeFlag(def.badge.id)] === true;
 
@@ -13,7 +17,7 @@ export const hasBadge = (core: CoreSave, def: GymDef): boolean => core.flags[bad
 export function applyGymWin(core: CoreSave, def: GymDef): CoreSave {
   if (hasBadge(core, def)) return core;
   const shards = typeof core.flags[SHARDS_FLAG] === "number" ? (core.flags[SHARDS_FLAG] as number) : 0;
-  return { ...core, flags: { ...core.flags, [badgeFlag(def.badge.id)]: true, [gymWonFlag(def.id)]: true, [SHARDS_FLAG]: shards + SHARDS_PER_GYM } };
+  return { ...core, flags: { ...core.flags, [badgeFlag(def.badge.id)]: true, [gymWonFlag(def.id)]: true, [SHARDS_FLAG]: shards + SHARDS_PER_GYM, [EVOLVED_FLAG]: true } };
 }
 
 /** Whole seconds left on a blitz item (never negative). */

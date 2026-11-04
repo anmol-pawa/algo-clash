@@ -9,6 +9,7 @@ import { syntaxShoresGym as gym } from "@/content/gyms/r0";
 import { buildWarden } from "@/game/sprites/warden";
 import { FOE_MAX_HP } from "@/lib/battle/damage";
 import { answerBlitz, battleResult, blitzCorrect, coreFoeHp, shuffledOptions, startGym, SHIELD_START } from "@/lib/gym/machine";
+import { EvolutionScene } from "@/components/EvolutionScene";
 import { applyGymWin, blitzSecondsLeft, hasBadge } from "@/lib/gym/progress";
 import type { GymState } from "@/lib/gym/types";
 import type { TestCase } from "@/lib/judge/verdict";
@@ -87,6 +88,7 @@ export default function GymScreen() {
   const [state, setState] = useState<GymState>(() => startGym(gym));
   const [screen, setScreen] = useState<Screen>("intro");
   const [owned, setOwned] = useState(false);
+  const [evolved, setEvolved] = useState(false);
   const [loaded, setLoaded] = useState<{ key: string; problem: ArenaProblem } | null>(null);
   const [loadErr, setLoadErr] = useState("");
   const svc = useRef<SaveService | null>(null);
@@ -206,7 +208,12 @@ export default function GymScreen() {
               <p className="font-display text-xl text-[var(--gold)]">★ {gym.badge.name} earned!</p>
               <p>“{gym.leader.lines.win}”</p>
               <p className="text-sm text-white/80">Reward: {gym.badge.name} and {state.reward?.shards ?? 0} Compiler Shard. Saved to your profile.</p>
-              <p className="text-xs text-white/50">Your Arrayling feels something stirring… (evolution scene coming soon)</p>
+              <div className="mx-auto w-full max-w-sm" data-testid="gym-evolution">
+                <EvolutionScene scale={4} onDone={() => setEvolved(true)} />
+                <p className="mt-2 min-h-6 text-center text-sm" role="status">
+                  {evolved ? <>Your Arrayling evolved into <b className="text-[var(--gold)]">Vectorling</b>! It grows with capacity to spare.</> : "What? Your Arrayling is changing…"}
+                </p>
+              </div>
             </>
           ) : (
             <p>You retreated from the lighthouse. The badge waits; the blitz starts fresh next time.</p>

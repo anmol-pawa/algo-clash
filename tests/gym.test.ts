@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { allGyms, syntaxShoresGym as gym } from "../content/gyms/r0";
 import { FOE_MAX_HP } from "../lib/battle/damage";
 import { GymError, SHIELD_MAX, SHIELD_START, answerBlitz, battleResult, shuffledOptions, blitzCorrect, coreFoeHp, startGym } from "../lib/gym/machine";
-import { applyGymWin, blitzSecondsLeft, hasBadge, SHARDS_FLAG } from "../lib/gym/progress";
+import { applyGymWin, blitzSecondsLeft, hasBadge, isEvolved, SHARDS_FLAG } from "../lib/gym/progress";
 import { newCoreSave } from "../lib/save/schema";
 import type { GymState } from "../lib/gym/types";
 
@@ -110,6 +110,8 @@ describe("gym persistence", () => {
     const c0 = newCoreSave(0);
     expect(hasBadge(c0, gym)).toBe(false);
     const c1 = applyGymWin(c0, gym);
+    expect(isEvolved(c0)).toBe(false);
+    expect(isEvolved(c1)).toBe(true);
     expect(hasBadge(c1, gym)).toBe(true);
     expect(c1.flags[SHARDS_FLAG]).toBe(1);
     expect(applyGymWin(c1, gym)).toBe(c1);

@@ -293,3 +293,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: quota period is over; confirmation attempted below by the routine (no `gh`; see final summary).
 - Known gaps: the intro message box hides the lower half of the Arrayling until it fades; no victory/evolution scene yet; title links are plain buttons.
 - Next: B9d2.
+
+## 2026-11-04: B9d2 Vectorling and the evolution scene (B9 complete)
+- Added `game/sprites/vectorling.ts` (64x64 evolved Arrayling, front + back, idle/attack/hurt/faint/evolve), `lib/evolution/timeline.ts` (pure charge, accelerating flicker, hold, reveal timeline) and `components/EvolutionScene.tsx`. The gym badge screen now plays the Arrayling -> Vectorling evolution; the first win sets `evolved:arrayling` in the save flags (`isEvolved`). Both are previewed on `/dev/sprites`. GDD §5.5 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (392 pass), `build`, `build:pages`; `smoke-gym.mjs` on the static export at desktop and iPhone 14 (full gym run + evolution screenshots): no failures, no console errors, no overflow. Screenshots: white silhouette flicker with glow and sparkles, then Vectorling revealed with its text; readable on mobile.
+- Known gaps: battle stage and overworld still show the Arrayling after evolution (`isEvolved` is not consumed there yet); the Vectorling has no dedicated art review beyond `/dev/sprites`; no audio. Work was pushed to the session branch `claude/eloquent-ritchie-aahu7o`, not `main`. CI/deploy not confirmed (no `gh` access in this session).
+- Next: B10 (Audio v1), also use `isEvolved` for the player sprite in battles.
