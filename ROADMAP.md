@@ -99,7 +99,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 - [x] C2a. **Daily Rift planner** (GDD §6.3): pure `lib/rift/` seeded five-room plan, streak and rewards, with tests.
 - [x] C2b. **Daily Rift screen:** `/rift` page (room list, play each item via the existing battle/card screens, streak counter, rewards written to the save), a door or title button, and applying `applyAttempt` to the SRS state.
 - [x] C2c. **Rift problem catalog:** a bundled catalog of every R0/R3/R6 problem (statement, starter, spec, lazy tests) so Rift rooms 1, 3 and 5 can serve more than the two gym kits; Interview-style timing passed to `applyRiftProblem`.
-- [ ] C3. **Party and moves:** a party screen, a move loadout (4 per Structling), and learning moves via lessons + the Forge. The Structdex.
+- [x] C3. **Party and moves:** a party screen, a move loadout (4 per Structling), and learning moves via lessons + the Forge. The Structdex.
 - [ ] C4. **Debrief and Solution Journal:** the editorial renderer (GDD §8.3), elaborative prompt, journal with diffs (yours vs past, yours vs reference).
 - [ ] C5. **Hints and items:** the 3-rung hint ladder, the Mart, Bits economy, Debug Lens, Complexity Compass and Rematch Ticket, all with the mastery rules from GDD §6.6.
 - [ ] C6. **Scaffolding modes** (GDD §6.5): Guided, Standard, Interview and Contest, including "write your own tests before submitting" in Interview mode and the edge-case-class coverage scoring.

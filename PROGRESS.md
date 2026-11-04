@@ -365,3 +365,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota note no longer applies (after 2026-11-01), but `gh` is unavailable here, so CI/Pages status was not confirmed.
 - Known gaps: problem rooms still not driven end to end in the browser (need WASM compile); after adding a problem, run `npm run catalog:gen` (the test fails if stale).
 - Next: C3 (party and moves).
+
+## 2026-11-04: C3 Party, moves and Structdex
+- Added pure `lib/party/` (move status: starter / needs-lesson / needs-scroll / sealed; four-slot loadouts stored in `flags["loadout:<id>"]` and re-validated on read; effective party; move mastery from catalog pattern tags; level = mean equipped-move mastery × 10; Structdex states) and `content/party.ts` (13 species, 7 moves; only Plain Loop and Running Total are learnable today). `/party` screen (party + loadout + move book with Learn/Forge links, Structdex tab) and a PARTY button on the title. GDD §5.2 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (450 pass, 10 new in `tests/party.test.ts`), `npm run build`, `build:pages`; new `scripts/smoke-party.mjs` on the static export at desktop and iPhone 14: default loadout, unequip/re-equip persisted over reload, dex lists, no console errors, no overflow. Screenshots reviewed: readable, 44 px targets.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed. Pushed to the session branch `claude/eloquent-ritchie-hu7442` (session rules), not `main`.
+- Known gaps: loadout is not yet used by battles (type chart / strategise step); only the starter line has art (others are silhouettes); no door on the overworld for Party.
+- Next: C4 (Debrief and Solution Journal).

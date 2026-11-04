@@ -31,6 +31,7 @@ export default function Title() {
         START
       </Link>
       <Link href="/rift/" className="px-btn flex min-h-11 w-full max-w-xs items-center justify-center text-sm">DAILY RIFT</Link>
+      <Link href="/party/" className="px-btn flex min-h-11 w-full max-w-xs items-center justify-center text-sm">PARTY</Link>
       <div className="flex w-full max-w-xs gap-3">
         <Link href="/learn/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">LEARN</Link>
         <Link href="/gym/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">GYM</Link>
