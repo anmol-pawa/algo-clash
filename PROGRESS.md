@@ -358,3 +358,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: the problem rooms (fresh/reviews/bonus) were not driven end to end in the browser (they need the WASM compiler) and can only serve the two gym-kit problems until C2c; no completion fanfare screen yet; per-problem seconds are passed as 0.
 - CI/deploy: `gh` is unavailable here, so CI and the Pages deploy were not confirmed.
 - Next: C2c.
+
+## 2026-11-04: C2c Rift problem catalog
+- `npm run catalog:gen` (`scripts/gen-catalog.mjs`) writes `content/gyms/catalog.ts`: every problem package (26 across R0/R3/R6) with its meta, embedded `problem.md` statement and lazy `tests.json`. New pure `lib/judge/starter.ts` builds editor starters from the driver spec. `RiftScreen` now plans from the full catalog (real region, difficulty, prerequisites), builds the battle from it, and passes real elapsed seconds and the problem's `parSeconds` to `applyRiftProblem`. Foe level follows difficulty (E 8, M 18, H 30). Gym kits are unchanged.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (440 pass, 4 new in `tests/catalog.test.ts` incl. a stale-catalog check), `npm run build`, `build:pages`; `smoke-rift.mjs` on the static export at desktop and iPhone 14: all checks ok, no console errors, no overflow; iPhone screenshot reviewed. `content:verify` unchanged (no new content).
+- CI/deploy: Actions quota note no longer applies (after 2026-11-01), but `gh` is unavailable here, so CI/Pages status was not confirmed.
+- Known gaps: problem rooms still not driven end to end in the browser (need WASM compile); after adding a problem, run `npm run catalog:gen` (the test fails if stale).
+- Next: C3 (party and moves).
