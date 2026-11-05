@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { HINT_RUNGS, parseHints } from "@/lib/items/hints";
-import { ITEMS, applyCompassPenalty, buy, consume, countOf, grantStarterKit, isAssisted, NO_ASSISTANCE, rematchNow } from "@/lib/items/items";
+import { ITEMS, applyCompassPenalty, buy, consume, countOf, grantStarterKit, isAssisted, NO_ASSISTANCE, rematchNow, spendRematchTicket } from "@/lib/items/items";
 import { newCoreSave, sanitizeCore } from "@/lib/save/schema";
 import { emptyMastery } from "@/lib/srs/scheduler";
 
@@ -100,5 +100,17 @@ describe("assisted wins in the Rift", () => {
     const assisted = applyRiftProblem(newCoreSave(0), "p", true, now, 60, 600, true);
     expect(clean.mastery.p.state).toBe("learning");
     expect(assisted.mastery.p.state).not.toBe("learning");
+  });
+});
+
+describe("rematch ticket spend", () => {
+  it("consumes one ticket and makes the problem due now; refuses without a ticket or record", () => {
+    const m = { ...emptyMastery(), solves: 1, due: 9_000 };
+    const held = { ...newCoreSave(0), inventory: { "rematch-ticket": 2 }, mastery: { p: m } };
+    const out = spendRematchTicket(held, "p", 1_000);
+    expect(out?.mastery.p.due).toBe(1_000);
+    expect(countOf(out!, "rematch-ticket")).toBe(1);
+    expect(spendRematchTicket({ ...held, inventory: {} }, "p", 1_000)).toBeNull();
+    expect(spendRematchTicket(held, "unknown", 1_000)).toBeNull();
   });
 });

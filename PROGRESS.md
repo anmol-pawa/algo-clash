@@ -415,3 +415,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Decision: the Gym has no mastery write (it only records badges), so "Gym passes assisted" was dropped from C5d rather than invented.
 - Known gaps: Compass has no animation/sound beyond the menu blip; Debug Lens and Rematch use are in C5e. Note: a stray pre-existing overlap of the sound button on the Code tab at iPhone width (cosmetic).
 - Next: C5e.
+
+## 2026-11-05: C5e Debug Lens and Rematch Ticket (C5 complete)
+- `VerdictView.failInput` (first failing test's input for WA/RE/TLE), new `components/LensPanel.tsx` (two-tap confirm, spends a Debug Lens, shows the failing input; the win counts as assisted via `ArenaInfo.lens`), and a Rematch Tickets section on the Rift map (`spendRematchTicket` in `lib/items/items.ts`: consume + make due now, then replan). GDD §6.6 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (485 pass; new tests for `failInput` and `spendRematchTicket`), `npm run build`, `build:pages`; new `scripts/smoke-lens.mjs` plus `smoke-rift`, `smoke-compass`, `smoke-hints` on the static export at desktop and iPhone 14: all ok, no console errors, no overflow; iPhone screenshots of the Lens and the Rift rematch section reviewed (readable, 44 px targets). No new content, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: the Lens after a real failing run was not driven in the browser (needs the WASM compiler; `failInput` is unit-tested); the Lens adds little until Interview mode hides the WA diff (C6); the Rift replan after a ticket may reorder today's rooms.
+- Next: C6 (scaffolding modes).

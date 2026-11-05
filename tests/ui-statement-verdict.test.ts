@@ -35,6 +35,12 @@ describe("verdict view", () => {
     expect(v.detail).toContain("Test 2 (edge)");
     expect(v.diff).toEqual({ input: "\"(\"", expected: "false", got: "true", firstDiff: 0 });
   });
+  it("exposes the failing input for WA, TLE and RE but not for AC or CE (Debug Lens)", () => {
+    const fail = (verdict: "WA" | "TLE" | "RE") => buildVerdictView({ verdict, failedAt: 1, maxMs: 3, outcomes: [{ verdict: "AC", wallMs: 1 }, { verdict, wallMs: 2 }] }, tests);
+    for (const v of ["WA", "TLE", "RE"] as const) expect(fail(v).failInput).toBe("\"(\"");
+    expect(buildVerdictView({ verdict: "AC", failedAt: null, maxMs: 1, outcomes: [] }, tests).failInput).toBeUndefined();
+    expect(buildVerdictView({ verdict: "CE", failedAt: null, maxMs: 0, outcomes: [], diagnostics: "x" }, tests).failInput).toBeUndefined();
+  });
   it("reports AC and CE", () => {
     const ac = buildVerdictView({ verdict: "AC", failedAt: null, maxMs: 7, outcomes: tests.map(() => ({ verdict: "AC" as const, wallMs: 7 })) }, tests);
     expect(ac.tone).toBe("win");

@@ -6,6 +6,7 @@ import BattleLayout from "@/components/BattleLayout";
 import { BattleStage, type BattleStageHandle } from "@/components/BattleStage";
 import CodeEditor from "@/components/CodeEditor";
 import CompassPanel from "@/components/CompassPanel";
+import LensPanel from "@/components/LensPanel";
 import DebriefPanel, { type DebriefDone } from "@/components/DebriefPanel";
 import { problemCatalog } from "@/content/gyms/catalog";
 import HintPanel from "@/components/HintPanel";
@@ -49,6 +50,8 @@ export interface ArenaInfo {
   assisted: boolean;
   /** The Complexity Compass was used: the tier gained by a win is cut by one. */
   compass: boolean;
+  /** The Debug Lens was used: the win counts as assisted. */
+  lens: boolean;
 }
 
 export interface ArenaOptions {
@@ -87,8 +90,11 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [revealed, setRevealed] = useState(0);
   const [compassTokens, setCompassTokens] = useState(0);
   const [compassUsed, setCompassUsed] = useState(false);
-  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed });
-  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed };
+  const [lensTokens, setLensTokens] = useState(0);
+  const [lensUsed, setLensUsed] = useState(false);
+  const [lastFail, setLastFail] = useState<string | undefined>();
+  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed, lens: lensUsed });
+  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed, lens: lensUsed };
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
@@ -121,7 +127,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     svc.load().then(async (c) => {
       const kit = grantStarterKit(c);
       if (kit !== c) await svc.save(kit);
-      if (alive) { setTokens(countOf(kit, "hint-token")); setCompassTokens(countOf(kit, "complexity-compass")); }
+      if (alive) { setTokens(countOf(kit, "hint-token")); setCompassTokens(countOf(kit, "complexity-compass")); setLensTokens(countOf(kit, "debug-lens")); }
     }).catch(() => {});
     return () => { alive = false; };
   }, []);
@@ -154,6 +160,20 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     } catch { /* storage unavailable: no compass, no charge */ }
   }
 
+  /** Spends one Debug Lens (read-modify-write on the save); the win will count as assisted. */
+  async function useLens() {
+    if (lensUsed) return;
+    try {
+      const svc = new SaveService(new IdbBackend());
+      const next = consume(grantStarterKit(await svc.load()), "debug-lens");
+      if (!next) { setLensTokens(0); return; }
+      await svc.save(next);
+      setLensTokens(countOf(next, "debug-lens"));
+      setLensUsed(true);
+      audio.playSfx("menu");
+    } catch { /* storage unavailable: no lens, no charge */ }
+  }
+
   function edit(c: string) {
     setCode(c);
     saver.current?.update(c);
@@ -166,6 +186,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s, compileFlags), run: runWasm });
     const v = buildVerdictView(r, tests);
     setView(v);
+    if (v.failInput !== undefined) setLastFail(v.failInput);
     setBusy(false);
     const out = battleOutcome(kind, v.verdict, v.passed, v.total, FOE_HP);
     if (kind === "submit" || v.verdict !== "AC") audio.playSfx(verdictSfx(v.verdict));
@@ -215,6 +236,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
         <>
           <div className="min-h-0 flex-1"><CodeEditor value={code} onChange={edit} settings={DEFAULT_EDITOR_SETTINGS} /></div>
           {catalogEntry && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
+          <LensPanel input={lastFail} used={lensUsed} count={lensTokens} disabled={busy || !!ended} onUse={useLens} />
           {hints.length > 0 && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} />}
           <div className="max-h-[30dvh] overflow-auto lg:max-h-[24dvh]"><VerdictPanel view={view} /></div>
           {note && <p className="text-xs opacity-70" data-testid="draft-note">{note}</p>}

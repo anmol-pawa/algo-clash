@@ -7,6 +7,7 @@ import CardBattle from "@/components/CardBattle";
 import { useMusic } from "@/components/Music";
 import { allCards, computed } from "@/content/cards";
 import { problemCatalog } from "@/content/gyms/catalog";
+import { countOf, spendRematchTicket } from "@/lib/items/items";
 import { starterFor } from "@/lib/judge/starter";
 import { audio } from "@/lib/audio/engine";
 import { applyRiftProblem, applyRoomClear, clearedRooms, dayKey, planRift, riftReward, visibleStreak, type RiftCatalog, type RiftPlan, type RiftRoom, type RoomKind } from "@/lib/rift";
@@ -42,6 +43,7 @@ export default function RiftScreen() {
   const [view, setView] = useState<View>({ t: "map" });
   const [loaded, setLoaded] = useState<{ key: string; problem: ArenaProblem } | null>(null);
   const [note, setNote] = useState("");
+  const [openedAt, setOpenedAt] = useState(0);
 
   useEffect(() => {
     const s = new SaveService(new IdbBackend());
@@ -49,6 +51,7 @@ export default function RiftScreen() {
     s.load().then((c) => {
       const now = Date.now();
       setCore(c);
+      setOpenedAt(now);
       setPlan(planRift(dayKey(now), c.mastery, catalog, now)); // frozen for the session
     }).catch(() => setNote("Could not read the save."));
   }, []);
@@ -149,6 +152,29 @@ export default function RiftScreen() {
               );
             })}
           </ol>
+          {countOf(core, "rematch-ticket") > 0 && (() => {
+            const waiting = Object.entries(core.mastery).filter(([id, m]) => problemCatalog[id] && m.due > openedAt).slice(0, 5);
+            return waiting.length === 0 ? null : (
+              <section className="panel flex flex-col gap-2 p-3 text-sm" aria-label="Rematch Tickets" data-testid="rematch">
+                <p className="font-display">Rematch Tickets ({countOf(core, "rematch-ticket")})</p>
+                <p className="text-xs text-white/70">Bring a problem back right now instead of waiting for its review day. You still have to solve it.</p>
+                {waiting.map(([id]) => (
+                  <button key={id} className="px-btn min-h-11 px-3 text-left" data-testid={`rematch-${id}`} onClick={() => {
+                    const now = Date.now();
+                    const next = spendRematchTicket(core, id, now);
+                    if (!next) return;
+                    commit(() => next);
+                    setPlan(planRift(dayKey(now), next.mastery, catalog, now));
+                    audio.playSfx("menu");
+                    setNote(`${problemCatalog[id].meta.title} is due now. Check the Due reviews room.`);
+                  }}>
+                    Rematch: {problemCatalog[id].meta.title}
+                  </button>
+                ))}
+              </section>
+            );
+          })()}
+          {note && <p role="status" className="text-sm text-emerald-300" data-testid="rift-note">{note}</p>}
           {firstOpen < 0 && <p className="panel p-3 text-emerald-300" data-testid="rift-done">Rift complete! Come back tomorrow to keep your streak.</p>}
         </>
       )}

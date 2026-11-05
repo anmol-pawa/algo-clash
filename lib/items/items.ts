@@ -103,3 +103,9 @@ export function rematchNow(core: CoreSave, problemId: string, now: number): Core
   if (!m) return null;
   return { ...core, mastery: { ...core.mastery, [problemId]: { ...m, due: Math.min(m.due || now, now) } } };
 }
+
+/** Spends one Rematch Ticket on `problemId`. Null when none is held or the problem has no mastery record. */
+export function spendRematchTicket(core: CoreSave, problemId: string, now: number): CoreSave | null {
+  const spent = consume(core, "rematch-ticket");
+  return spent ? rematchNow(spent, problemId, now) : null;
+}

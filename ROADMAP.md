@@ -104,12 +104,12 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] C4a. Pure `lib/journal/` (editorial parser, line diff, journal entry sanitiser), a `journal` store in the save backend (IndexedDB v2, export/import), with tests.
   - [x] C4b. Catalog embeds editorial + reference solution; Debrief screen after a win (editorial, elaborative prompt, journal save) in `BattleArena`.
   - [x] C4c. `/journal` screen: search by pattern, diff yours vs past attempt and vs reference.
-- [ ] C5. **Hints and items:** the 3-rung hint ladder, the Mart, Bits economy, Debug Lens, Complexity Compass and Rematch Ticket, all with the mastery rules from GDD §6.6.
+- [x] C5. **Hints and items:** the 3-rung hint ladder, the Mart, Bits economy, Debug Lens, Complexity Compass and Rematch Ticket, all with the mastery rules from GDD §6.6.
   - [x] C5a. Pure `lib/items/` (hint parser, item catalog, buy/consume, starter kit, assisted rule, Compass penalty, Rematch), save `inventory`, tests.
   - [x] C5b. Hint ladder in the battle (Hint Tokens spent from the save, assisted wiring to the Rift SRS and the journal), `HintPanel`, `smoke-hints.mjs`.
   - [x] C5c. `/mart` screen (buy items with Bits, inventory) and a title button.
   - [x] C5d. Per-problem `complexity` in `meta.ts` (validated against the editorial's Optimal section) and the Complexity Compass in the battle (cuts the tier gained by one in the Rift's SRS write). The Gym has no mastery write yet, so nothing to wire there.
-  - [ ] C5e. Debug Lens: reveal one failing input (from the last failed test), marks the win assisted; Rematch Ticket use on the Rift screen.
+  - [x] C5e. Debug Lens: reveal one failing input (from the last failed test), marks the win assisted; Rematch Ticket use on the Rift screen.
 - [ ] C6. **Scaffolding modes** (GDD §6.5): Guided, Standard, Interview and Contest, including "write your own tests before submitting" in Interview mode and the edge-case-class coverage scoring.
 - [ ] C7. **Scout School** (CUR R1 + §5): lessons, the constraint table, recognition blitz cards (first 60 statements), and the complexity/recurrence solver with tests.
 - [ ] C8. **Trainer Card / Readiness Report** (GDD §9): gates, radar, calibration, WA-cause histogram and "next best action".

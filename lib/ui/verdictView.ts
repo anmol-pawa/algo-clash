@@ -21,6 +21,8 @@ export interface VerdictView {
   total: number;
   rows: { index: number; group?: string; verdict: Verdict; ms: number }[];
   diff?: DiffView;
+  /** The input of the first failing test (WA, RE or TLE). The Debug Lens reveals it; null-safe for AC and CE. */
+  failInput?: string;
   /** CE only: the first error, with the friendly explanation when the table knows it. */
   compile?: { line: number; message: string; title?: string; why?: string; fix?: string };
 }
@@ -62,6 +64,7 @@ export function buildVerdictView(result: JudgeResult, tests: TestCase[]): Verdic
   else if (result.failedAt !== null) {
     const o = result.outcomes[result.failedAt];
     const t = tests[result.failedAt];
+    if (t) view.failInput = t.input;
     view.detail = `Test ${result.failedAt + 1}${t?.group ? ` (${t.group})` : ""}: ${o.reason ?? HEADLINES[verdict]}`;
     if (verdict === "WA" && t && o.got !== undefined) {
       view.diff = { input: t.input, expected: o.expected ?? t.expected.trim(), got: o.got, firstDiff: firstDiffIndex(o.got, o.expected ?? t.expected.trim()) };
