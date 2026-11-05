@@ -401,3 +401,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: Debug Lens and Complexity Compass are logic-only (no per-problem complexity data yet); Gym does not yet pass `assisted` into its mastery write; no Mart screen; the 3 starter tokens do not refill except via the Mart (C5c).
 - Next: C5c (`/mart`).
+
+## 2026-11-05: C5c Mart screen
+- New `/mart` page (`components/MartScreen.tsx`): Bits balance, the four items with price, carry cap, count held and the honest mastery cost, BUY buttons (disabled when short of Bits or at the cap) that read-modify-write the save through `buy()`, and a MART button on the title (third in the second row). Reasons for refusals are shown in a status line.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (477 pass), `build:pages`; new `scripts/smoke-mart.mjs` on the static export at desktop and iPhone 14: seeded 50 Bits, bought a Hint Token and a Rematch Ticket, balance and counts persisted over reload, disabled states, no console errors, no overflow. iPhone screenshots of `/mart` and the title reviewed: readable, 44 px targets. `content:verify` unchanged (no new content).
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: no purchase animation or sound; no sell/refund; Bits earning is only via battles and the Rift.
+- Next: C5d (Debug Lens and Complexity Compass in the battle; per-problem `complexity` field).
