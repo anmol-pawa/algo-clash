@@ -401,3 +401,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: Debug Lens and Complexity Compass are logic-only (no per-problem complexity data yet); Gym does not yet pass `assisted` into its mastery write; no Mart screen; the 3 starter tokens do not refill except via the Mart (C5c).
 - Next: C5c (`/mart`).
+
+## 2026-11-05: C5c Mart screen
+- New `/mart` page (`components/MartScreen.tsx`): Bits balance, the four items with owned/cap, price and the honest mastery cost, Buy buttons disabled when unaffordable or at the cap, and Rematch Ticket use on any problem with a scheduled review (consumes a ticket, makes it due now). Grants and persists the starter kit on first visit; saves only the fields it owns on top of a fresh load. MART button on the title. GDD §6.6 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (477 pass), `npm run build`, `build:pages`; new `scripts/smoke-mart.mjs` on the static export at desktop and iPhone 14: all ok (starter kit, buy, spend, persistence, disabled states, no console errors, no overflow); iPhone screenshot reviewed (readable, 44 px targets). `content:verify` unchanged (no new content).
+- Env: this run developed on branch `claude/eloquent-ritchie-kbckkx` (harness-designated), not `main`; the lock/release commits and work are on that branch. `gh` unavailable, so CI/Pages not confirmed.
+- Known gaps: no Mart unit test for the screen logic beyond `lib/items`; the Rematch list shows only catalog problems with a future due date; cosmetics not sold yet.
+- Next: C5d (Debug Lens and Complexity Compass in the battle).
