@@ -210,6 +210,8 @@ Implementation: a scroll is a normal judged problem package (spec, reference, wr
 | Interview | no autocomplete, no snippets, limited runs, must write own tests | none | yes (×1.25 mastery) |
 | Contest | as Interview, timed | none | yes |
 
+**Implementation (`lib/modes/`):** `modes.ts` holds the four `ModeDef`s (autocomplete, hints, items, run cap, own tests, clock, Guided = assisted, mastery multiplier). Interview and Contest allow 5 Runs (Submit is unlimited), hide the hint ladder, Compass and Debug Lens, turn autocomplete off, and block Submit until the player has written at least one own test (`ownTests.ts`: input lines, then `=> expected`; blocks separated by a blank line; "Run my tests" is free). After the first Submit, `coverage.ts` scores the own tests by edge-case class (empty, single, duplicates, all-equal, negative, zero, large, sorted, unsorted, null gap) against the classes the problem's own test inputs exercise, and names the classes missed. The x1.25 bonus is applied by `effectiveSeconds` (the SRS sees a 25 % faster solve against par). Guided wins are assisted. The mode is chosen in `ModePicker` before the first Run/Submit and remembered in `localStorage`. The Contest clock and the Guided skeleton/approach card are still to do (C6d).
+
 ### 6.6 Economy
 - **Bits** are earned from battles, the Rift and achievements. They are spent at the **Mart** on:
   - Hint Tokens

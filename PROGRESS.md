@@ -422,3 +422,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: the Lens after a real failing run was not driven in the browser (needs the WASM compiler; `failInput` is unit-tested); the Lens adds little until Interview mode hides the WA diff (C6); the Rift replan after a ticket may reorder today's rooms.
 - Next: C6 (scaffolding modes).
+
+## 2026-11-05: C6a/C6b Scaffolding modes (Guided, Standard, Interview, Contest)
+- New pure `lib/modes/`: `modes.ts` (four mode defs, run cap, clock, submit gate, `effectiveSeconds` for the x1.25), `ownTests.ts` (own-test text format), `coverage.ts` (edge-case-class scoring). `ModePicker` and `OwnTestsPanel` in `BattleArena`: autocomplete off in Interview/Contest, hint ladder/Compass/Lens hidden there, 5 Runs, Submit blocked until one own test exists, free "Run my tests", coverage shown after the first Submit. Guided wins are assisted; Rift applies `effectiveSeconds`. Mode remembered in `localStorage`, read after hydration (a lazy initializer caused React #418). GDD §6.5 updated; ROADMAP C6 split (C6d left).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (492 pass incl. native content verify), `build:pages`; new `scripts/smoke-modes.mjs` plus `smoke-hints`, `smoke-rift`, `smoke-gym` on the static export at desktop and iPhone 14: all ok, no console errors, no overflow. iPhone screenshot reviewed: the first version squeezed the editor to one line, so the own-tests panel is now collapsed by default and the editor has a minimum height.
+- CI/deploy: confirmation skipped because the Actions quota note was not applicable (date 2026-11-05) but `gh` is unavailable here, so Actions/Pages status was not confirmed. Work was pushed to the session branch `claude/eloquent-ritchie-p2554y`, not `main`, per the session's branch rule.
+- Known gaps: the "Run my tests" and coverage paths need the WASM compiler and were not driven end to end in the browser (parser and coverage are unit-tested); Contest has no countdown yet; Guided has no skeleton/approach card.
+- Next: C6d.

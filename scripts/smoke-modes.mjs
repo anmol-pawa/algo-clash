@@ -1,0 +1,44 @@
+// Usage: node scripts/smoke-modes.mjs <baseUrl>. Scaffolding modes smoke on /dev/arena: picker, Interview rules, Guided, mode persists over reload.
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const { chromium, devices } = require("playwright");
+const base = process.argv[2] ?? "http://localhost:3000";
+const shots = process.env.SHOT_DIR;
+const browser = await chromium.launch();
+let failed = false;
+const fail = (m) => { console.error("FAIL", m); failed = true; };
+for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 } }], ["iphone", devices["iPhone 14"]]]) {
+  const ctx = await browser.newContext(opts);
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(`${base}/dev/arena/`);
+  const picker = page.getByTestId("mode-picker");
+  await picker.waitFor();
+  await page.waitForTimeout(600);
+  if (!(await page.getByTestId("hint-panel").count())) fail(`${name}: Standard should show hints`);
+  if (await page.getByTestId("own-tests").count()) fail(`${name}: Standard should not show own tests`);
+  await picker.getByRole("radio", { name: "Interview" }).click();
+  if (await page.getByTestId("hint-panel").count()) fail(`${name}: Interview must hide hints`);
+  await page.getByTestId("own-tests").waitFor();
+  if (!/5 left/.test(await page.getByRole("button", { name: /^Run \(/ }).innerText())) fail(`${name}: expected 5 runs left`);
+  await page.getByRole("button", { name: /^Submit/ }).click();
+  await page.getByTestId("draft-note").waitFor();
+  if (!/test of your own/.test(await page.getByTestId("draft-note").innerText())) fail(`${name}: submit should be blocked`);
+  await page.getByTestId("own-tests").locator("summary").click();
+  await page.getByLabel("My tests").fill("[1,2,3]\n=> 3");
+  if (!/My tests \(1\)/.test(await page.getByTestId("own-tests").innerText())) fail(`${name}: own test not counted`);
+  if (shots) await page.screenshot({ path: `${shots}/modes-${name}.png` });
+  if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`${name}: horizontal overflow`);
+  await page.reload();
+  await page.getByTestId("mode-picker").waitFor();
+  if ((await page.getByRole("radio", { name: "Interview" }).getAttribute("aria-checked")) !== "true") fail(`${name}: mode did not persist`);
+  await page.getByRole("radio", { name: "Guided" }).click();
+  if (await page.getByTestId("own-tests").count()) fail(`${name}: Guided should not show own tests`);
+  if (errors.length) fail(`${name}: console errors ${errors.join(" | ")}`);
+  await ctx.close();
+}
+await browser.close();
+if (failed) process.exit(1);
+console.log("modes smoke ok");
