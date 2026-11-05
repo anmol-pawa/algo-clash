@@ -7,6 +7,7 @@ import { BattleStage, type BattleStageHandle } from "@/components/BattleStage";
 import CodeEditor from "@/components/CodeEditor";
 import DebriefPanel, { type DebriefDone } from "@/components/DebriefPanel";
 import { problemCatalog } from "@/content/gyms/catalog";
+import HintPanel from "@/components/HintPanel";
 import StatementPanel from "@/components/StatementPanel";
 import VerdictPanel from "@/components/VerdictPanel";
 import { DEFAULT_EDITOR_SETTINGS } from "@/lib/editor/settings";
@@ -17,6 +18,8 @@ import { audio } from "@/lib/audio/engine";
 import { verdictSfx } from "@/lib/audio/sfx";
 import { useMusic } from "@/components/Music";
 import type { TestCase } from "@/lib/judge/verdict";
+import { parseHints } from "@/lib/items/hints";
+import { NO_ASSISTANCE, consume, countOf, grantStarterKit, isAssisted } from "@/lib/items/items";
 import { DraftAutosaver } from "@/lib/save/autosave";
 import { IdbBackend } from "@/lib/save/idb";
 import { SaveService } from "@/lib/save/service";
@@ -39,6 +42,12 @@ export interface ArenaProblem {
 
 export type ArenaResult = "won" | "fainted" | "retreated";
 
+/** What the fight cost the player, for the SRS (GDD §6.2): more than two hints makes a win assisted. */
+export interface ArenaInfo {
+  hintsUsed: number;
+  assisted: boolean;
+}
+
 export interface ArenaOptions {
   /** Foe HP at the start of the fight (gym head start). */
   foeStartHp?: number;
@@ -47,7 +56,7 @@ export interface ArenaOptions {
   /** clang flags for every Run/Submit (a gym twist such as -Werror). Compile errors never cost a heart. */
   compileFlags?: string[];
   /** When set the fight can end: a Continue button reports the result, and Retreat is offered. */
-  onResult?: (r: ArenaResult) => void;
+  onResult?: (r: ArenaResult, info?: ArenaInfo) => void;
 }
 
 const PLAYER_HEARTS = 5;
@@ -70,6 +79,11 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [startedAt] = useState(() => Date.now());
   const [won, setWon] = useState({ seconds: 0, hearts: PLAYER_HEARTS });
   const catalogEntry = problemCatalog[problem.id];
+  const hints = useMemo(() => parseHints(catalogEntry?.hints ?? ""), [catalogEntry]);
+  const [tokens, setTokens] = useState(0);
+  const [revealed, setRevealed] = useState(0);
+  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed });
+  const info: ArenaInfo = { hintsUsed: revealed, assisted };
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
@@ -95,6 +109,31 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       void a.dispose();
     };
   }, [problem, scene]);
+
+  useEffect(() => {
+    let alive = true;
+    const svc = new SaveService(new IdbBackend());
+    svc.load().then(async (c) => {
+      const kit = grantStarterKit(c);
+      if (kit !== c) await svc.save(kit);
+      if (alive) setTokens(countOf(kit, "hint-token"));
+    }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
+  /** Spends one Hint Token (read-modify-write on the save) and reveals the next rung. */
+  async function revealHint() {
+    if (revealed >= hints.length) return;
+    try {
+      const svc = new SaveService(new IdbBackend());
+      const next = consume(grantStarterKit(await svc.load()), "hint-token");
+      if (!next) { setTokens(0); return; }
+      await svc.save(next);
+      setTokens(countOf(next, "hint-token"));
+      setRevealed((n) => n + 1);
+      audio.playSfx("menu");
+    } catch { /* offline storage unavailable: no hint, no charge */ }
+  }
 
   function edit(c: string) {
     setCode(c);
@@ -130,9 +169,9 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   function finishDebrief(d: DebriefDone) {
     const svc = new SaveService(new IdbBackend());
     svc.recordJournal({
-      problemId: problem.id, at: Date.now(), code, seconds: won.seconds, hintsUsed: 0, assisted: false,
+      problemId: problem.id, at: Date.now(), code, seconds: won.seconds, hintsUsed: revealed, assisted,
       patterns: catalogEntry?.meta.patterns ?? [], promptChoice: d.promptChoice, promptCorrect: d.promptCorrect,
-    }).catch(() => {}).finally(() => onResult?.("won"));
+    }).catch(() => {}).finally(() => onResult?.("won", info));
   }
 
   if (debrief && catalogEntry) {
@@ -156,13 +195,14 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       code={
         <>
           <div className="min-h-0 flex-1"><CodeEditor value={code} onChange={edit} settings={DEFAULT_EDITOR_SETTINGS} /></div>
+          {hints.length > 0 && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} />}
           <div className="max-h-[30dvh] overflow-auto lg:max-h-[24dvh]"><VerdictPanel view={view} /></div>
           {note && <p className="text-xs opacity-70" data-testid="draft-note">{note}</p>}
         </>
       }
       actions={
         ended && onResult ? (
-          <button className="px-btn px-btn-primary min-h-11 w-full" onClick={() => (ended === "won" && catalogEntry ? setDebrief(true) : onResult(ended))}>
+          <button className="px-btn px-btn-primary min-h-11 w-full" onClick={() => (ended === "won" && catalogEntry ? setDebrief(true) : onResult(ended, info))}>
             {ended === "won" ? (catalogEntry ? "Foe beaten! Debrief ▶" : "Foe beaten! Continue ▶") : "You fainted. Continue ▶"}
           </button>
         ) : (

@@ -10,6 +10,8 @@ export interface CatalogProblem {
   editorial: string;
   /** The reference `solution.cpp`, for the journal diff. */
   reference: string;
+  /** The 3-rung hint ladder (`hints.md`), parsed by `lib/items/hints`. */
+  hints?: string;
   /** Optional `prompt.json`: the elaborative question. */
   prompt?: ElaborativePrompt;
   loadTests: () => Promise<TestCase[]>;

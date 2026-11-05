@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import BattleArena, { type ArenaProblem, type ArenaResult } from "@/components/BattleArena";
+import BattleArena, { type ArenaInfo, type ArenaProblem, type ArenaResult } from "@/components/BattleArena";
 import CardBattle from "@/components/CardBattle";
 import { useMusic } from "@/components/Music";
 import { allCards, computed } from "@/content/cards";
@@ -81,11 +81,13 @@ export default function RiftScreen() {
 
   const clearRoom = (idx: number) => { if (plan) commit((c) => applyRoomClear(c, plan, idx)); audio.playSfx("levelup"); setView({ t: "map" }); };
 
-  function onBattle(r: ArenaResult) {
+  async function onBattle(r: ArenaResult, info?: ArenaInfo) {
     if (view.t !== "room" || !plan || !item) return;
     const now = Date.now();
     if (r === "retreated") { setView({ t: "map" }); return; }
-    commit((c) => applyRiftProblem(c, item.id, r === "won", now, Math.max(0, Math.round((now - startedAt.current) / 1000)), kit?.meta.parSeconds ?? 600));
+    // The battle may have spent items in the save; start from the stored copy so that is not overwritten.
+    try { const fresh = await svc.current?.load(); if (fresh) setCore(fresh); } catch { /* keep in-memory copy */ }
+    commit((c) => applyRiftProblem(c, item.id, r === "won", now, Math.max(0, Math.round((now - startedAt.current) / 1000)), kit?.meta.parSeconds ?? 600, info?.assisted ?? false));
     if (r === "fainted") { setView({ t: "map" }); return; }
     if (view.item + 1 < plan.rooms[view.room].items.length) setView({ t: "room", room: view.room, item: view.item + 1 });
     else clearRoom(view.room);

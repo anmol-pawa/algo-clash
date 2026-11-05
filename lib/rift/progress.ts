@@ -36,7 +36,7 @@ export function applyRoomClear(core: CoreSave, plan: RiftPlan, room: number): Co
 }
 
 /** Feeds a Rift problem result into the SRS record. */
-export function applyRiftProblem(core: CoreSave, id: string, solved: boolean, now: number, seconds: number, parSeconds: number): CoreSave {
+export function applyRiftProblem(core: CoreSave, id: string, solved: boolean, now: number, seconds: number, parSeconds: number, assisted = false): CoreSave {
   const prev = core.mastery[id] ?? emptyMastery();
-  return { ...core, mastery: { ...core.mastery, [id]: applyAttempt(prev, { at: now, solved, assisted: false, seconds, parSeconds }) } };
+  return { ...core, mastery: { ...core.mastery, [id]: applyAttempt(prev, { at: now, solved, assisted, seconds, parSeconds }) } };
 }

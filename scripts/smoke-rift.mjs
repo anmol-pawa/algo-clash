@@ -24,7 +24,7 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
     if (await sec.locator("textarea").count()) await sec.locator("textarea").fill("0");
     else if (await sec.locator("input[aria-label^='blank']").count()) { const n = await sec.locator("input[aria-label^='blank']").count(); for (let k = 0; k < n; k++) await sec.locator("input[aria-label^='blank']").nth(k).fill("x"); }
     else if (await sec.locator("[data-testid=parsons-answer]").count()) { for (let k = 0; k < 40; k++) { const b = sec.locator("div.grid > div").first().locator("button:not([disabled])").first(); if (!(await b.count())) break; await b.click(); } }
-    else await sec.locator("[role=group][aria-label=choices] button").first().click();
+    else await sec.locator("[aria-label=choices] button").first().click();
     await page.getByRole("button", { name: "Check" }).click({ timeout: 3000 }).catch(async (e) => { console.log(await sec.innerText()); throw e; });
     await page.waitForSelector("[data-testid=feedback]", { timeout: 5000 });
     if (i === 0) await page.screenshot({ path: `${dir}/rift-card-${name}.png` });

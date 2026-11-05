@@ -19,6 +19,8 @@ for (const { region, id } of entries) {
   out += `  ${JSON.stringify(id)}: {\n    meta: ${ident(id)},\n    statement: ${JSON.stringify(md)},\n`;
   out += `    editorial: ${JSON.stringify(readFileSync(join(root, region, id, "editorial.md"), "utf8"))},\n`;
   out += `    reference: ${JSON.stringify(readFileSync(join(root, region, id, "solution.cpp"), "utf8"))},\n`;
+  const hintsPath = join(root, region, id, "hints.md");
+  if (existsSync(hintsPath)) out += `    hints: ${JSON.stringify(readFileSync(hintsPath, "utf8"))},\n`;
   const promptPath = join(root, region, id, "prompt.json");
   if (existsSync(promptPath)) out += `    prompt: ${JSON.stringify(JSON.parse(readFileSync(promptPath, "utf8")))},\n`;
   out += `    loadTests: async () => (await import("../problems/${region}/${id}/tests.json")).default as TestCase[],\n  },\n`;

@@ -394,3 +394,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: journal entries have no delete/export button (export exists in the save service); no link from Debrief or map to the journal; no pagination for very long journals.
 - Next: C5 (hints and items).
+
+## 2026-11-05: C5a/C5b Items, Mart logic and the hint ladder
+- New pure `lib/items/`: `hints.ts` (parse `hints.md` into the 3 rungs), `items.ts` (four items with prices and carry caps, `buy`/`consume`, one-time starter kit of 3 Hint Tokens, `isAssisted` rule, `applyCompassPenalty`, `rematchNow`). Save gained a sanitised `inventory` (no version bump). The catalog now embeds `hints.md`. `BattleArena` shows a `HintPanel` (collapsed by default; each rung costs one token read-modify-written to the save; the 3rd rung warns that the win becomes assisted) and reports `{hintsUsed, assisted}` to its caller and the journal. The Rift reloads the save after a battle (so spent tokens are not overwritten) and passes `assisted` into `applyRiftProblem`. GDD §6.6 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (477 pass incl. 11 new in `tests/items.test.ts`, which also asserts all shipped problems have a full ladder), `build:pages`; new `scripts/smoke-hints.mjs` (starter kit, 3 reveals, tokens persist over reload, no console errors, no overflow) and `smoke-rift.mjs`, `smoke-journal.mjs` on the static export at desktop and iPhone 14. The first screenshot showed the open ladder squeezing the editor to one line, so revealed hints now scroll in an 18dvh box; re-checked on iPhone. `smoke-rift.mjs` selector widened (today's card used `aria-label=choices` with `role=radiogroup`).
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: Debug Lens and Complexity Compass are logic-only (no per-problem complexity data yet); Gym does not yet pass `assisted` into its mastery write; no Mart screen; the 3 starter tokens do not refill except via the Mart (C5c).
+- Next: C5c (`/mart`).
