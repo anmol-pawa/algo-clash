@@ -31,6 +31,15 @@ export const IOTA: CharacterLook = {
   glasses: true,
 };
 
+/** Mainville villager: green tunic, brown hair, no tuft. */
+export const VILLAGER: CharacterLook = {
+  name: "villager",
+  colors: ["#f0c8a0", "#d4a07a", "#7a4a2a", "#55321c", "#4f9a4a", "#357234", "#e8d8a0", "#c4b078",
+    "#7a6a52", "#574a38", "#4a3322", "#ffffff", "#141018", "#d8a030", "#f0a090", "#7a2c2c"],
+};
+
+export const LOOKS: Record<string, CharacterLook> = { trainer: TRAINER, iota: IOTA, villager: VILLAGER };
+
 export function lookPalette(l: CharacterLook): string[] {
   // index 0 transparent, 1 outline, 2..17 from look
   return ["", "#1a1420", ...l.colors];

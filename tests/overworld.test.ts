@@ -59,7 +59,7 @@ describe("walking", () => {
     const r = step(map, { x: 8, y: 9, facing: "down" }, "down", never);
     const w = r.events.find((e) => e.type === "warp");
     if (w?.type !== "warp") throw new Error("expected a warp event");
-    expect(arrive(w.warp, "down")).toEqual({ x: 8, y: 0, facing: "down" });
+    expect(arrive(w.warp, "down")).toEqual({ x: 8, y: 1, facing: "down" });
   });
   it("rolls encounters only on tall grass", () => {
     const grass = step(map, { x: 9, y: 6, facing: "down" }, "down", always);

@@ -27,7 +27,7 @@ export const MAINVILLE: MapDef = {
     { id: "villager", x: 12, y: 6, facing: "down", sprite: "villager", dialogue: "villager-grass" },
   ],
   signs: [{ x: 13, y: 9, dialogue: "sign-welcome" }],
-  warps: [{ x: 8, y: 10, to: "route-1", tx: 8, ty: 0 }],
+  warps: [{ x: 8, y: 10, to: "route-1", tx: 8, ty: 1, facing: "down" }],
   encounterRate: 0.25,
   encounterPool: "mainville-grass",
 };
