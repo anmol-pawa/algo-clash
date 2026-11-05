@@ -408,3 +408,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: no purchase animation or sound; no sell/refund; Bits earning is only via battles and the Rift.
 - Next: C5d (Debug Lens and Complexity Compass in the battle; per-problem `complexity` field).
+
+## 2026-11-05: C5d Complexity Compass and per-problem complexity
+- `ProblemMeta.complexity` ({time, space}) added to all 26 problems; new `validateComplexityClaim` (run by `content:verify` and a catalog test) requires the editorial's Optimal section to state exactly those bounds, and `validateMeta` checks the O(...) shape. New `components/CompassPanel.tsx` in the battle (hidden when none held; two-tap confirm naming the mastery cost; then shows the target time/space). `ArenaInfo.compass` is passed by the Rift into `applyRiftProblem(..., compass)`, which applies `applyCompassPenalty` on a solve (tests in `tests/rift.test.ts`). Catalog regenerated. GDD §6.6 and ROADMAP updated (C5d done, new C5e for the Debug Lens).
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (483 pass, includes native content verify), `npm run build`, `build:pages`; new `scripts/smoke-compass.mjs` plus `smoke-hints.mjs` and `smoke-rift.mjs` on the static export at desktop and iPhone 14: all ok, no console errors, no overflow; iPhone screenshot reviewed (readable, 44 px target).
+- Decision: the Gym has no mastery write (it only records badges), so "Gym passes assisted" was dropped from C5d rather than invented.
+- Known gaps: Compass has no animation/sound beyond the menu blip; Debug Lens and Rematch use are in C5e. Note: a stray pre-existing overlap of the sound button on the Code tab at iPhone width (cosmetic).
+- Next: C5e.

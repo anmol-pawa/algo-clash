@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["write this function", "exponent up to 10^18", "answer modulo a prime", "recursion that halves the input"],
   prerequisites: ["cargo-total"],
   parSeconds: 420,
+  complexity: { time: "O(log e)", space: "O(log e)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.25, adversarial: 0.25, perf: 0.3 },
   similar: [{ name: "Pow(x, n)", lcNumber: 50 }],

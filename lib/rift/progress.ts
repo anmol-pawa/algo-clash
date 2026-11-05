@@ -1,5 +1,6 @@
 /** Rift progress in the core save (GDD §6.3): pure and idempotent. Cleared rooms and paid Bits live in `flags`. */
 import type { CoreSave } from "../save/schema";
+import { applyCompassPenalty } from "../items/items";
 import { applyAttempt, emptyMastery } from "../srs";
 import { advanceStreak, clearedFromMask, maskWith, playableRooms, riftFlagKey, riftReward, visibleStreak, type RiftPlan } from "./rift";
 
@@ -36,7 +37,9 @@ export function applyRoomClear(core: CoreSave, plan: RiftPlan, room: number): Co
 }
 
 /** Feeds a Rift problem result into the SRS record. */
-export function applyRiftProblem(core: CoreSave, id: string, solved: boolean, now: number, seconds: number, parSeconds: number, assisted = false): CoreSave {
+export function applyRiftProblem(core: CoreSave, id: string, solved: boolean, now: number, seconds: number, parSeconds: number, assisted = false, compass = false): CoreSave {
   const prev = core.mastery[id] ?? emptyMastery();
-  return { ...core, mastery: { ...core.mastery, [id]: applyAttempt(prev, { at: now, solved, assisted, seconds, parSeconds }) } };
+  let next = applyAttempt(prev, { at: now, solved, assisted, seconds, parSeconds });
+  if (solved && compass) next = applyCompassPenalty(prev, next); // Complexity Compass: one tier less gained (GDD §6.6)
+  return { ...core, mastery: { ...core.mastery, [id]: next } };
 }

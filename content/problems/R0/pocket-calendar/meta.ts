@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["write this function", "fixed lookup table", "leap year rule"],
   prerequisites: [],
   parSeconds: 300,
+  complexity: { time: "O(1)", space: "O(1)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.4, adversarial: 0.4, perf: 0 },
   similar: [{ name: "Day of the Year", lcNumber: 1154 }],

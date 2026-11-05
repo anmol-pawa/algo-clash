@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { PATTERNS, PATTERN_IDS, patternById } from "../content/patterns";
-import { EDITORIAL_SECTIONS, findPrerequisiteCycle, validateEditorial, validateHints, validateMeta, validateStatement, validateTests } from "../lib/content/validate";
+import { EDITORIAL_SECTIONS, findPrerequisiteCycle, validateComplexityClaim, validateEditorial, validateHints, validateMeta, validateStatement, validateTests } from "../lib/content/validate";
 import type { ProblemMeta } from "../lib/content/types";
 
 const meta: ProblemMeta = {
@@ -12,6 +12,7 @@ const meta: ProblemMeta = {
   signals: ["pair summing to"],
   prerequisites: [],
   parSeconds: 300,
+  complexity: { time: "O(n)", space: "O(n)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.3, edge: 0.2, adversarial: 0.3, perf: 0.2 },
   similar: [{ name: "Two Sum", lcNumber: 1 }],
@@ -45,6 +46,10 @@ describe("validateMeta", () => {
     expect(errs.join("\n")).toMatch(/parSeconds/);
     expect(errs.join("\n")).toMatch(/sum to 1/);
     expect(errs.join("\n")).toMatch(/https/);
+  });
+  it("rejects a malformed complexity", () => {
+    const errs = validateMeta({ ...meta, complexity: { time: "linear", space: "" } }, new Set());
+    expect(errs).toEqual(["complexity.time must look like O(...)", "complexity.space must look like O(...)"]);
   });
 });
 
@@ -88,5 +93,15 @@ describe("findPrerequisiteCycle", () => {
   it("finds cycles and accepts DAGs", () => {
     expect(findPrerequisiteCycle([{ id: "a", prerequisites: ["b"] }, { id: "b", prerequisites: [] }])).toBeNull();
     expect(findPrerequisiteCycle([{ id: "a", prerequisites: ["b"] }, { id: "b", prerequisites: ["a"] }])).toEqual(["a", "b", "a"]);
+  });
+});
+
+describe("validateComplexityClaim", () => {
+  it("accepts a claim the Optimal section states", () => expect(validateComplexityClaim({ time: "O(n)", space: "O(n)" }, editorial)).toEqual([]));
+  it("flags a claim the editorial does not state", () => {
+    expect(validateComplexityClaim({ time: "O(n log n)", space: "O(1)" }, editorial)).toEqual([
+      'editorial "Optimal" never states time O(n log n)',
+      'editorial "Optimal" never states space O(1)',
+    ]);
   });
 });

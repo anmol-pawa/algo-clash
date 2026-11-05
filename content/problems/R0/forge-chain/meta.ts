@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["write this function", "build a ListNode list with new", "return nullptr for empty input", "keep a tail pointer"],
   prerequisites: [],
   parSeconds: 420,
+  complexity: { time: "O(n)", space: "O(n)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.2, perf: 0.4 },
   similar: [{ name: "Merge Two Sorted Lists", lcNumber: 21 }],

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { advanceStreak, clearedFromMask, dayKey, maskWith, planRift, playableRooms, riftReward, seedForDay, visibleStreak, type RiftCatalog } from "@/lib/rift";
+import { applyRiftProblem, advanceStreak, clearedFromMask, dayKey, maskWith, planRift, playableRooms, riftReward, seedForDay, visibleStreak, type RiftCatalog } from "@/lib/rift";
 import { applyAttempt, DAY_MS, emptyMastery } from "@/lib/srs";
+import { newCoreSave } from "@/lib/save/schema";
+import { tierOf, tierIndex } from "@/lib/srs/scheduler";
 import type { ProblemMastery } from "@/lib/save/schema";
 
 const T0 = Date.parse("2026-11-04T12:00:00Z");
@@ -100,5 +102,20 @@ describe("streak and rewards", () => {
     mask = maskWith(maskWith(mask, 2), 4);
     expect(clearedFromMask(mask)).toEqual([2, 4]);
     expect(dayKey(Date.parse("2026-11-04T23:59:59Z"))).toBe("2026-11-04");
+  });
+});
+
+describe("applyRiftProblem with the Complexity Compass", () => {
+  it("cuts the tier gained by one, and never lowers it", () => {
+    const core = newCoreSave(0);
+    // a first solve on a rich problem to get past "unseen"
+    const plain = applyRiftProblem(core, "p", true, T0, 100, 600).mastery.p;
+    const compass = applyRiftProblem(core, "p", true, T0, 100, 600, false, true).mastery.p;
+    expect(tierIndex(tierOf(compass))).toBe(Math.max(0, tierIndex(tierOf(plain)) - 1));
+    expect(tierIndex(tierOf(compass))).toBeLessThan(tierIndex(tierOf(plain)));
+  });
+  it("does nothing on a failed fight", () => {
+    const core = newCoreSave(0);
+    expect(applyRiftProblem(core, "p", false, T0, 100, 600, false, true).mastery.p).toEqual(applyRiftProblem(core, "p", false, T0, 100, 600).mastery.p);
   });
 });

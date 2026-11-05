@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["histogram area", "previous smaller and next smaller", "widest span where a bar is the minimum"],
   prerequisites: ["crate-brackets"],
   parSeconds: 1500,
+  complexity: { time: "O(n)", space: "O(n)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.3, perf: 0.3 },
   similar: [{ name: "Largest Rectangle in Histogram", lcNumber: 84 }],

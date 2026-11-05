@@ -27,6 +27,8 @@ export interface ProblemMeta {
   /** Problem ids that should be solved first. */
   prerequisites: string[];
   parSeconds: number;
+  /** Target complexity of the reference, shown by the Complexity Compass; must appear in the editorial's Optimal section. */
+  complexity: { time: string; space: string };
   /** Per-test wall time for the judge (native reference runs well inside it). */
   timeLimitMs: number;
   /** Relative weight of each hidden test group in the score. */

@@ -5,7 +5,7 @@ import { outputsMatch } from "../judge/lc";
 import { compileNative, runNative, type GenModule, type ProblemPackage } from "./native";
 import { makeRng, seedFor } from "./rng";
 import { TEST_GROUPS, type HiddenTest, type TestGroup } from "./types";
-import { validateEditorial, validateHints, validateMeta, validateStatement, validateTests } from "./validate";
+import { validateComplexityClaim, validateEditorial, validateHints, validateMeta, validateStatement, validateTests } from "./validate";
 
 export interface VerifyOptions {
   /** Random small cases for reference-vs-brute stress. Default 200. */
@@ -60,6 +60,7 @@ export function verifyPackage(pkg: ProblemPackage, opts: VerifyOptions = {}): Ve
   for (const e of validateStatement(pkg.statement)) fail(`statement: ${e}`);
   for (const e of validateHints(pkg.hints)) fail(`hints: ${e}`);
   for (const e of validateEditorial(pkg.editorial)) fail(`editorial: ${e}`);
+  for (const e of validateComplexityClaim(meta.complexity, pkg.editorial)) fail(`complexity: ${e}`);
   if (pkg.wrong.length < 2) fail(`needs at least 2 wrong solutions (has ${pkg.wrong.length})`);
   if (meta.difficulty !== "E" && !pkg.wrong.some((w) => /tle/i.test(w.name))) fail("mediums and hards need a wrong/*tle*.cpp brute force");
 

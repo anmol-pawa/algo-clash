@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["pair summing to", "count frequency"],
   prerequisites: [],
   parSeconds: 300,
+  complexity: { time: "O(n)", space: "O(n)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.3, edge: 0.2, adversarial: 0.2, perf: 0.3 },
   similar: [{ name: "Two Sum", lcNumber: 1 }],

@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { problemCatalog } from "../content/gyms/catalog";
 import { starterFor } from "../lib/judge/starter";
+import { validateComplexityClaim, validateMeta } from "../lib/content/validate";
 import { promptIssues } from "../lib/journal/prompt";
 
 const root = join(process.cwd(), "content", "problems");
@@ -24,6 +25,12 @@ describe("problem catalog", () => {
       expect(s).toContain("// TODO");
       if (meta.spec.kind === "function") expect(s).toContain(`${meta.spec.name}(`);
       else for (const m of meta.spec.methods) expect(s).toContain(`${m.name}(`);
+    }
+  });
+  it("every shipped problem has a complexity its editorial states", () => {
+    for (const e of Object.values(problemCatalog)) {
+      expect(validateMeta(e.meta, new Set([e.meta.id, ...e.meta.prerequisites])).filter((x) => x.startsWith("complexity"))).toEqual([]);
+      expect(validateComplexityClaim(e.meta.complexity, e.editorial), e.meta.id).toEqual([]);
     }
   });
   it("loads lazy tests", async () => {

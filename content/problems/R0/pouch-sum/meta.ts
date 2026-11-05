@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["add up only the values that qualify", "total may exceed 32 bits", "one pass with an accumulator"],
   prerequisites: ["cargo-total"],
   parSeconds: 180,
+  complexity: { time: "O(n)", space: "O(1)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.3, adversarial: 0.2, perf: 0.3 },
   similar: [{ name: "Sum of All Odd Length Subarrays", lcNumber: 1588 }],

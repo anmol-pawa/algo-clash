@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["design a class", "constructor with a member initialiser list", "this-> to avoid shadowing", "clamp to a range"],
   prerequisites: [],
   parSeconds: 540,
+  complexity: { time: "O(1)", space: "O(1)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.2, perf: 0.4 },
   similar: [{ name: "Design Parking System", lcNumber: 1603 }],

@@ -87,7 +87,7 @@ export default function RiftScreen() {
     if (r === "retreated") { setView({ t: "map" }); return; }
     // The battle may have spent items in the save; start from the stored copy so that is not overwritten.
     try { const fresh = await svc.current?.load(); if (fresh) setCore(fresh); } catch { /* keep in-memory copy */ }
-    commit((c) => applyRiftProblem(c, item.id, r === "won", now, Math.max(0, Math.round((now - startedAt.current) / 1000)), kit?.meta.parSeconds ?? 600, info?.assisted ?? false));
+    commit((c) => applyRiftProblem(c, item.id, r === "won", now, Math.max(0, Math.round((now - startedAt.current) / 1000)), kit?.meta.parSeconds ?? 600, info?.assisted ?? false, info?.compass ?? false));
     if (r === "fainted") { setView({ t: "map" }); return; }
     if (view.item + 1 < plan.rooms[view.room].items.length) setView({ t: "room", room: view.room, item: view.item + 1 });
     else clearRoom(view.room);

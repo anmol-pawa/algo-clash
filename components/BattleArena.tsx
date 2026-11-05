@@ -5,6 +5,7 @@ import { pixelFamily } from "@/app/fonts";
 import BattleLayout from "@/components/BattleLayout";
 import { BattleStage, type BattleStageHandle } from "@/components/BattleStage";
 import CodeEditor from "@/components/CodeEditor";
+import CompassPanel from "@/components/CompassPanel";
 import DebriefPanel, { type DebriefDone } from "@/components/DebriefPanel";
 import { problemCatalog } from "@/content/gyms/catalog";
 import HintPanel from "@/components/HintPanel";
@@ -46,6 +47,8 @@ export type ArenaResult = "won" | "fainted" | "retreated";
 export interface ArenaInfo {
   hintsUsed: number;
   assisted: boolean;
+  /** The Complexity Compass was used: the tier gained by a win is cut by one. */
+  compass: boolean;
 }
 
 export interface ArenaOptions {
@@ -82,8 +85,10 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const hints = useMemo(() => parseHints(catalogEntry?.hints ?? ""), [catalogEntry]);
   const [tokens, setTokens] = useState(0);
   const [revealed, setRevealed] = useState(0);
-  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed });
-  const info: ArenaInfo = { hintsUsed: revealed, assisted };
+  const [compassTokens, setCompassTokens] = useState(0);
+  const [compassUsed, setCompassUsed] = useState(false);
+  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed });
+  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed };
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
@@ -116,7 +121,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     svc.load().then(async (c) => {
       const kit = grantStarterKit(c);
       if (kit !== c) await svc.save(kit);
-      if (alive) setTokens(countOf(kit, "hint-token"));
+      if (alive) { setTokens(countOf(kit, "hint-token")); setCompassTokens(countOf(kit, "complexity-compass")); }
     }).catch(() => {});
     return () => { alive = false; };
   }, []);
@@ -133,6 +138,20 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       setRevealed((n) => n + 1);
       audio.playSfx("menu");
     } catch { /* offline storage unavailable: no hint, no charge */ }
+  }
+
+  /** Spends one Complexity Compass (read-modify-write on the save) and shows the target complexity. */
+  async function useCompass() {
+    if (compassUsed) return;
+    try {
+      const svc = new SaveService(new IdbBackend());
+      const next = consume(grantStarterKit(await svc.load()), "complexity-compass");
+      if (!next) { setCompassTokens(0); return; }
+      await svc.save(next);
+      setCompassTokens(countOf(next, "complexity-compass"));
+      setCompassUsed(true);
+      audio.playSfx("menu");
+    } catch { /* storage unavailable: no compass, no charge */ }
   }
 
   function edit(c: string) {
@@ -195,6 +214,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       code={
         <>
           <div className="min-h-0 flex-1"><CodeEditor value={code} onChange={edit} settings={DEFAULT_EDITOR_SETTINGS} /></div>
+          {catalogEntry && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
           {hints.length > 0 && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} />}
           <div className="max-h-[30dvh] overflow-auto lg:max-h-[24dvh]"><VerdictPanel view={view} /></div>
           {note && <p className="text-xs opacity-70" data-testid="draft-note">{note}</p>}

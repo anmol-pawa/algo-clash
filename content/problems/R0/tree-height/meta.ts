@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["write this function", "TreeNode", "nullptr is the base case", "recursion on left and right"],
   prerequisites: [],
   parSeconds: 420,
+  complexity: { time: "O(n)", space: "O(h)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.2, perf: 0.4 },
   similar: [{ name: "Maximum Depth of Binary Tree", lcNumber: 104 }],

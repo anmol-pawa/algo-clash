@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["write this function", "loop over a string", "count matching characters"],
   prerequisites: [],
   parSeconds: 240,
+  complexity: { time: "O(n)", space: "O(1)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.3, edge: 0.3, adversarial: 0.2, perf: 0.2 },
   similar: [{ name: "Reverse Vowels of a String", lcNumber: 345 }],

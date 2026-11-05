@@ -32,6 +32,9 @@ export function validateMeta(meta: ProblemMeta, knownIds: ReadonlySet<string>): 
     else if (!knownIds.has(q)) errs.push(`unknown prerequisite "${q}"`);
   }
   if (!(meta.parSeconds > 0)) errs.push("parSeconds must be set");
+  for (const k of ["time", "space"] as const) {
+    if (!/^O\(.+\)$/.test(meta.complexity?.[k] ?? "")) errs.push(`complexity.${k} must look like O(...)`);
+  }
   if (!(meta.timeLimitMs > 0)) errs.push("timeLimitMs must be set");
   const total = TEST_GROUPS.reduce((s, g) => s + (meta.testWeights[g] ?? 0), 0);
   if (TEST_GROUPS.some((g) => !(meta.testWeights[g] >= 0)) || Math.abs(total - 1) > 1e-9) errs.push("testWeights must be non-negative and sum to 1");
@@ -61,6 +64,14 @@ export function validateEditorial(md: string): string[] {
   const optimal = /##\s+Optimal([\s\S]*?)(?=^##\s|$(?![\r\n]))/m.exec(md)?.[1] ?? "";
   if (!/O\(/.test(optimal)) errs.push('"Optimal" must state time and space complexity as O(...)');
   return errs;
+}
+
+/** The Compass shows `meta.complexity`, so the editorial's "Optimal" section must state exactly those bounds. */
+export function validateComplexityClaim(complexity: { time: string; space: string }, md: string): string[] {
+  const optimal = /##\s+Optimal([\s\S]*?)(?=^##\s|$(?![\r\n]))/m.exec(md)?.[1] ?? "";
+  return (["time", "space"] as const)
+    .filter((k) => !optimal.includes(complexity[k]))
+    .map((k) => `editorial "Optimal" never states ${k} ${complexity[k]}`);
 }
 
 /** Hints are a 3-rung ladder: `## Nudge`, `## Approach`, `## Key insight`. */

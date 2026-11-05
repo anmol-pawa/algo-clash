@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["write this function", "digits of a number", "values beyond 32 bits"],
   prerequisites: [],
   parSeconds: 240,
+  complexity: { time: "O(d)", space: "O(1)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.3, edge: 0.4, adversarial: 0.3, perf: 0 },
   similar: [{ name: "Add Digits", lcNumber: 258 }],

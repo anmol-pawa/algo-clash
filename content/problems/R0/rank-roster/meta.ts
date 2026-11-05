@@ -9,6 +9,7 @@ export const meta: ProblemMeta = {
   signals: ["write this function", "custom ordering on a struct", "operator< decides sort order"],
   prerequisites: [],
   parSeconds: 480,
+  complexity: { time: "O(n log n)", space: "O(n)" },
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.2, perf: 0.4 },
   similar: [{ name: "Relative Ranks", lcNumber: 506 }],
