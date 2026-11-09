@@ -443,3 +443,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed. Pushed with `HEAD:main` from the session branch.
 - Known gaps: `content:verify` unchanged (no coding problems added); R1 has no judged exercises; lessons not yet reachable from the map door; mastery does not yet unlock the Compass.
 - Next: C7b (recognition blitz).
+
+## 2026-11-09: C7b Recognition blitz format and statement bank
+- New pure `lib/recognition/recognition.ts` (`gradeRecognition` exact-set + 20 s rule with missed/extra, `highlight` for signal words, seeded `optionsFor`, `pickBlitz` that prefers unseen statements and spreads patterns, `summarize` with the GDD §1 target) and 68 original statements in `content/recognition/statements.ts` covering 30+ patterns, each with constraints, 3+ distractors, verbatim signals and an explanation that rules out the tempting wrong answer. `tests/recognition.test.ts` (83 tests) checks pattern ids, signals occur in the text, option shuffling, grading edge cases, summary and picking. CUR §5 documents the format.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test`, `npm run build:pages` (see run summary). No UI changed, so no screenshots; `content:verify` unchanged (no coding problems).
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: no UI yet (C7c); the blitz is not wired to the Rift/Gym, which still use the older card/blitz items; accepted-pattern sets for borderline statements (e.g. LIS, coins) are judgement calls documented in each explanation.
+- Next: C7c (Scout School screen/door and mastery for the Compass unlock).

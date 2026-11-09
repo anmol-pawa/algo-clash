@@ -302,6 +302,8 @@ A signal library, each signal with 5–10 original example statements:
 
 Blitz cards show only a statement plus constraints, and the player picks a pattern (or several) within 20 seconds. The explanation highlights the signal words.
 
+**Implementation (`lib/recognition/`, `content/recognition/statements.ts`):** each statement lists its accepted pattern ids (one or two; the player must pick exactly that set), at least three plausible distractors, verbatim `signals` phrases (a test checks each occurs in the text, and the explanation view highlights them) and an explanation that also rules out the tempting wrong answer. An answer after 20 s or a timeout is a miss. The GDD §1 target (≥ 90 % on ≥ 50 statements) is `summarize(...).meetsTarget`. `pickBlitz` prefers unseen statements and does not repeat a pattern within a session.
+
 ---
 
 ## 6. Visualisers (Library, all driven by tested solver code)
