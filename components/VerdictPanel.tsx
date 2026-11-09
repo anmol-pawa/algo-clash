@@ -18,7 +18,7 @@ function DiffLine({ label, text, mark }: { label: string; text: string; mark?: n
 }
 
 /** Run/Submit result: headline, per-test chips, and for a wrong answer the input with expected vs got. */
-export default function VerdictPanel({ view }: { view: VerdictView | null }) {
+export default function VerdictPanel({ view, hideDiff = false }: { view: VerdictView | null; hideDiff?: boolean }) {
   if (!view) return <div className="panel p-4 text-sm opacity-70">Run your code to see the verdict here.</div>;
   return (
     <section className="panel flex flex-col gap-2 p-4 text-sm" aria-live="polite" aria-label="Verdict">
@@ -40,7 +40,10 @@ export default function VerdictPanel({ view }: { view: VerdictView | null }) {
           ))}
         </ol>
       )}
-      {view.diff && (
+      {view.diff && hideDiff && (
+        <p className="rounded bg-black/30 p-2 text-xs" data-testid="diff-hidden">Interview rules: the failing input and diff are hidden. Reproduce it with your own test (or spend a Debug Lens).</p>
+      )}
+      {view.diff && !hideDiff && (
         <div className="flex flex-col gap-1 rounded bg-black/30 p-2 text-xs">
           <DiffLine label="input" text={view.diff.input.replace(/\n/g, " ⏎ ")} />
           <DiffLine label="expected" text={view.diff.expected} />

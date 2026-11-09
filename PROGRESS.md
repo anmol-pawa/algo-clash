@@ -429,3 +429,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: the Run limit and Contest expiry were not driven in the browser (Run needs the WASM compiler); Gym ignores mode credit; Guided win is marked assisted in the journal/Rift only.
 - Next: C6c.
+
+## 2026-11-09: C6c Own-tests gate, edge coverage, hidden WA diff (C6 complete)
+- New pure `lib/modes/owntests.ts` (edge-class detection, applicable classes derived from each problem's hidden non-basic tests, coverage ratio, Submit gate, diff hiding) with `tests/owntests.test.ts` (also checks all shipped problems reach full coverage with their own edge tests). New `components/OwnTestsPanel.tsx` in Interview/Contest: write input + expected, "Run my tests" judges them on your code (no Run spent), Submit shows a lock until 2 pass. `VerdictPanel` hides the WA diff in those modes. `ArenaInfo.edgeCoverage` added (null outside the gate). GDD §6.5 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (501 pass), `npm run build:pages`; `scripts/smoke-modes.mjs` (extended: gate starts 0/2, Submit locked in Interview, absent in Standard) on the static export at desktop and iPhone 14: ok, no console errors, no overflow; iPhone screenshot reviewed (readable, 44 px targets). `content:verify` unchanged (no new content).
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: own-test expected output is not checked against the reference (a wrong-but-consistent test passes); "Run my tests" with a real compile was not driven in the browser (needs WASM); edgeCoverage is not yet shown in the Debrief or journal; the panel is tall on iPhone.
+- Next: C7 (Scout School).

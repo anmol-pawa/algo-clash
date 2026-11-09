@@ -8,6 +8,8 @@ import CodeEditor from "@/components/CodeEditor";
 import CompassPanel from "@/components/CompassPanel";
 import LensPanel from "@/components/LensPanel";
 import ModePanel from "@/components/ModePanel";
+import OwnTestsPanel from "@/components/OwnTestsPanel";
+import { applicableClasses, coverage, hidesDiff, ownTestIssue, ownTestsGate, type OwnTest } from "@/lib/modes/owntests";
 import { DEFAULT_MODE, modeAssists, modeDef, runsLeft as runsLeftOf, sanitizeMode, timerSeconds, type ModeId } from "@/lib/modes/modes";
 import DebriefPanel, { type DebriefDone } from "@/components/DebriefPanel";
 import { problemCatalog } from "@/content/gyms/catalog";
@@ -58,6 +60,8 @@ export interface ArenaInfo {
   mode: ModeId;
   /** Divide elapsed seconds by this before comparing with par (Interview and Contest slack). */
   creditMultiplier: number;
+  /** Share (0..1) of the problem's edge-case classes your own tests covered; null when the mode has no own-tests gate. */
+  edgeCoverage: number | null;
 }
 
 export interface ArenaOptions {
@@ -102,6 +106,8 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [modeId, setModeId] = useState<ModeId>(DEFAULT_MODE);
   const [runs, setRuns] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [ownTests, setOwnTests] = useState<OwnTest[]>([{ input: "", expected: "" }, { input: "", expected: "" }]);
+  const [ownStatus, setOwnStatus] = useState("");
   const [now, setNow] = useState(() => Date.now());
   const mode = modeDef(modeId);
   const parSeconds = catalogEntry?.meta.parSeconds ?? 600;
@@ -110,7 +116,10 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const runsLeft = runsLeftOf(mode, runs);
   const ended = endedState ?? (timeLeft === 0 ? "fainted" : null); // Contest: the clock ending is a faint
   const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed, lens: lensUsed, guided: modeAssists(mode) });
-  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed, lens: lensUsed, mode: mode.id, creditMultiplier: mode.multiplier };
+  const applicable = useMemo(() => applicableClasses(problem.tests), [problem.tests]);
+  const cov = coverage(ownTests.filter((t) => ownTestIssue(t) === null), applicable);
+  const gate = ownTestsGate(mode.ownTests, ownTests);
+  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed, lens: lensUsed, mode: mode.id, creditMultiplier: mode.multiplier, edgeCoverage: mode.ownTests ? cov.ratio : null };
 
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
@@ -218,6 +227,22 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     saver.current?.update(c);
   }
 
+  /** Judge the player's own tests against their own code. Does not use up a Run. */
+  async function runOwnTests() {
+    const tests = ownTests.filter((t) => ownTestIssue(t) === null);
+    if (tests.length === 0) return;
+    setBusy(true);
+    setOwnStatus("Judging your tests…");
+    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s, compileFlags), run: runWasm });
+    setBusy(false);
+    if (r.verdict === "CE") { setOwnStatus("Your code does not compile yet. Fix that first."); return; }
+    const verdicts = tests.map((_, i) => r.outcomes[i]?.verdict);
+    let k = 0;
+    setOwnTests(ownTests.map((t) => (ownTestIssue(t) === null ? { ...t, passed: verdicts[k] === undefined ? undefined : verdicts[k++] === "AC" } : t)));
+    const bad = verdicts.findIndex((v) => v !== undefined && v !== "AC");
+    setOwnStatus(bad < 0 ? "All your tests pass." : `Your test #${bad + 1} fails: either the expected output or your code is wrong. Work out which.`);
+  }
+
   async function judge(kind: JudgeKind) {
     if (kind === "run" && runsLeft === 0) return;
     const tests = kind === "run" ? visible : problem.tests;
@@ -281,7 +306,8 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
           {catalogEntry && mode.items && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
           <LensPanel input={lastFail} used={lensUsed} count={lensTokens} disabled={busy || !!ended} onUse={useLens} />
           {hints.length > 0 && mode.hints && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} free={mode.approachCard} />}
-          <div className="max-h-[30dvh] overflow-auto lg:max-h-[24dvh]"><VerdictPanel view={view} /></div>
+          {mode.ownTests && <OwnTestsPanel tests={ownTests} onChange={setOwnTests} onRun={runOwnTests} busy={busy || !!ended} gate={gate} cov={cov} status={ownStatus} />}
+          <div className="max-h-[30dvh] overflow-auto lg:max-h-[24dvh]"><VerdictPanel view={view} hideDiff={hidesDiff(mode.ownTests)} /></div>
           {note && <p className="text-xs opacity-70" data-testid="draft-note">{note}</p>}
         </>
       }
@@ -297,7 +323,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
                 onBlur={() => setConfirmRetreat(false)}>{confirmRetreat ? "Sure?" : "Retreat"}</button>
             )}
             <button className="px-btn min-h-11 flex-1" disabled={busy || runsLeft === 0} onClick={() => judge("run")}>Run ({visible.length})</button>
-            <button className="px-btn px-btn-primary min-h-11 flex-1" disabled={busy} onClick={() => judge("submit")}>{busy ? "Judging…" : `Submit (${problem.tests.length})`}</button>
+            <button className="px-btn px-btn-primary min-h-11 flex-1" disabled={busy || !gate.unlocked} title={gate.unlocked ? undefined : gate.message} onClick={() => judge("submit")}>{busy ? "Judging…" : gate.unlocked ? `Submit (${problem.tests.length})` : `Submit 🔒 ${gate.passing}/${gate.need}`}</button>
           </div>
         )
       }

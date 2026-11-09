@@ -24,6 +24,16 @@ for (const [name, opts] of [["desktop", { viewport: { width: 1280, height: 800 }
   if (!/Runs left: 6/.test(await page.getByTestId("runs-left").innerText())) fail(`${name}: Interview shows 6 runs`);
   if (await page.getByTestId("hint-panel").count()) fail(`${name}: Interview hides hints`);
   if (shots) await page.screenshot({ path: `${shots}/modes-interview-${name}.png` });
+  const own = page.getByTestId("own-tests");
+  await own.waitFor();
+  if (!/0\/2 passing/.test(await page.getByTestId("own-gate").innerText())) fail(`${name}: own-tests gate starts at 0/2`);
+  if (!(await page.getByRole("button", { name: /Submit 🔒/ }).isDisabled())) fail(`${name}: Submit must be locked in Interview`);
+  await own.getByRole("button", { name: "+ Add test" }).click();
+  await own.getByLabel("Input of test 3").fill("[]");
+  if (shots) await page.screenshot({ path: `${shots}/modes-owntests-${name}.png` });
+  await pick("Standard");
+  if (await page.getByTestId("own-tests").count()) fail(`${name}: Standard has no own-tests gate`);
+  if (await page.getByRole("button", { name: /Submit 🔒/ }).count()) fail(`${name}: Standard Submit is open`);
   await pick("Contest");
   await page.getByTestId("timer").waitFor();
   await pick("Guided");
