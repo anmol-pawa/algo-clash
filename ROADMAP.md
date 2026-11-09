@@ -111,6 +111,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] C5d. Per-problem `complexity` in `meta.ts` (validated against the editorial's Optimal section) and the Complexity Compass in the battle (cuts the tier gained by one in the Rift's SRS write). The Gym has no mastery write yet, so nothing to wire there.
   - [x] C5e. Debug Lens: reveal one failing input (from the last failed test), marks the win assisted; Rematch Ticket use on the Rift screen.
 - [ ] C6. **Scaffolding modes** (GDD §6.5): Guided, Standard, Interview and Contest, including "write your own tests before submitting" in Interview mode and the edge-case-class coverage scoring.
+  - [x] C6a. Pure logic in `lib/modes/`: mode table, run limits, clock, mastery rule (×1.25 interval), own-test edge-class classifier and coverage gate, unit-tested against all shipped tests.
+  - [ ] C6b. Mode picker and wiring in `BattleArena`: autocomplete/hint/Lens rules, run counter, Contest countdown, Guided approach card, mode saved on attempts and journal.
+  - [ ] C6c. Own-tests panel in Interview/Contest (inputs + expected, coverage chips, Submit locked until the gate passes) and `applyRiftProblem` using `masteryRule`.
 - [ ] C7. **Scout School** (CUR R1 + §5): lessons, the constraint table, recognition blitz cards (first 60 statements), and the complexity/recurrence solver with tests.
 - [ ] C8. **Trainer Card / Readiness Report** (GDD §9): gates, radar, calibration, WA-cause histogram and "next best action".
 - [ ] C9. **Visualiser framework** (CUR §6), plus the first two: the array/sort stepper and the two-pointer/window animator.

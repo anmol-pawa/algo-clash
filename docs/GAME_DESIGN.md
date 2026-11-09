@@ -207,7 +207,7 @@ Implementation: a scroll is a normal judged problem package (spec, reference, wr
 |---|---|---|---|
 | Guided | skeleton + approach card | unlimited hints | no |
 | Standard | signature only, autocomplete on | 3-hint ladder | yes |
-| Interview | no autocomplete, no snippets, limited runs, must write own tests | none | yes (×1.25 mastery) |
+| Interview | no autocomplete, no snippets, 5 runs, must write own tests (≥2 tests covering ≥50% of the edge classes the hidden tests exercise: empty, single, duplicates, negative, zero, extreme, large) | none | yes (×1.25 review interval) |
 | Contest | as Interview, timed | none | yes |
 
 ### 6.6 Economy

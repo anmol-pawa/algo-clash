@@ -422,3 +422,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: the Lens after a real failing run was not driven in the browser (needs the WASM compiler; `failInput` is unit-tested); the Lens adds little until Interview mode hides the WA diff (C6); the Rift replan after a ticket may reorder today's rooms.
 - Next: C6 (scaffolding modes).
+
+## 2026-11-09: C6a Scaffolding modes logic
+- Split C6 into C6a (done), C6b (mode picker + `BattleArena` wiring) and C6c (own-tests panel + SRS multiplier). New pure `lib/modes/modes.ts` (Guided/Standard/Interview/Contest table, `runsLeft`, `timeLimitSeconds`, `hintsAllowed`, `masteryRule` with the ×1.25 review-interval multiplier) and `lib/modes/ownTests.ts` (edge-class classifier over judge-format inputs: empty, single, duplicates, negative, zero, extreme, large; `coverage()` scores own tests against the classes the hidden tests exercise; gate = ≥2 tests and ≥50% coverage; `coverageNudge`). GDD §6.5 updated to state these numbers.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (492 pass; `tests/modes.test.ts` includes a sweep over every shipped problem's `tests.json`), `npm run build:pages`. No visual change, so no screenshots; no new problems, so `content:verify` unchanged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Process note: this session was assigned branch `claude/eloquent-ritchie-o9l4me`, so work was pushed there rather than `main`; merge to `main` needed for deploy.
+- Known gaps: nothing in the UI uses the modes yet; expected output of own tests is not validated.
+- Next: C6b.
