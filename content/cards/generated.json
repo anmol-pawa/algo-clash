@@ -181,5 +181,32 @@
   },
   "forge-accumulate-trace-empty": {
     "output": "0 0\n"
-  }
+  },
+  "r1-drop-constants": {},
+  "r1-triangle-loop": {
+    "output": "45\n"
+  },
+  "r1-halving-loop": {
+    "output": "9\n"
+  },
+  "r1-sqrt-loop": {
+    "output": "1000\n"
+  },
+  "r1-amortized-push": {},
+  "r1-sort-then-scan": {},
+  "r1-bsearch-in-loop": {},
+  "r1-recursion-space": {},
+  "r1-which-linear": {},
+  "r1-budget-1": {},
+  "r1-budget-2": {},
+  "r1-budget-3": {},
+  "r1-budget-4": {},
+  "r1-budget-5": {},
+  "r1-budget-6": {},
+  "r1-recurrence-1": {},
+  "r1-recurrence-2": {},
+  "r1-recurrence-3": {},
+  "r1-recurrence-4": {},
+  "r1-recurrence-5": {},
+  "r1-recurrence-6": {}
 }

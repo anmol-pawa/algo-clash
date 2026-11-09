@@ -436,3 +436,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: own-test expected output is not checked against the reference (a wrong-but-consistent test passes); "Run my tests" with a real compile was not driven in the browser (needs WASM); edgeCoverage is not yet shown in the Debrief or journal; the panel is tall on iPhone.
 - Next: C7 (Scout School).
+
+## 2026-11-09: C7a Scout School content and solvers
+- New pure `lib/complexity/constraints.ts` (constraint to complexity table, op counts, `fits` at ~10^8 ops/s and a 2 s limit) and `recurrence.ts` (Master theorem with log factor, numeric `ratioSettles` check of a closed form, the six textbook recurrences), tests in `tests/complexity.test.ts`. Two R1 lessons (`content/lessons/R1/scout.ts`) and 21 R1 cards (`content/cards/R1/scout.ts`): hand-written loop/amortised/space cards, predict cards computed by g++, and budget and recurrence MCQs generated from the solvers; `tests/r1-content.test.ts` checks keyed answers and lesson coverage. Both lessons appear in the Academy list.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (530 pass), `npm run build:pages`; Playwright on the static export at desktop and iPhone 14 opened an R1 lesson: no console errors, no horizontal overflow, readable text.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed. Pushed with `HEAD:main` from the session branch.
+- Known gaps: `content:verify` unchanged (no coding problems added); R1 has no judged exercises; lessons not yet reachable from the map door; mastery does not yet unlock the Compass.
+- Next: C7b (recognition blitz).
