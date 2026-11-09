@@ -13,6 +13,7 @@ import HintPanel from "@/components/HintPanel";
 import StatementPanel from "@/components/StatementPanel";
 import VerdictPanel from "@/components/VerdictPanel";
 import { DEFAULT_EDITOR_SETTINGS } from "@/lib/editor/settings";
+import { MODE_RULES, SCAFFOLD_MODES, runBudget, sanitizeMode, type ScaffoldMode } from "@/lib/scaffold/modes";
 import { compileCpp, runWasm } from "@/lib/judge/client";
 import { judgeProblem } from "@/lib/judge/judge";
 import type { DriverSpec } from "@/lib/judge/harness/driver";
@@ -52,6 +53,8 @@ export interface ArenaInfo {
   compass: boolean;
   /** The Debug Lens was used: the win counts as assisted. */
   lens: boolean;
+  /** Scaffolding mode the fight was played in (GDD §6.5). */
+  mode: ScaffoldMode;
 }
 
 export interface ArenaOptions {
@@ -93,8 +96,14 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [lensTokens, setLensTokens] = useState(0);
   const [lensUsed, setLensUsed] = useState(false);
   const [lastFail, setLastFail] = useState<string | undefined>();
-  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed, lens: lensUsed });
-  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed, lens: lensUsed };
+  const [mode, setMode] = useState<ScaffoldMode>("standard");
+  const [runs, setRuns] = useState(0);
+  const [submits, setSubmits] = useState(0);
+  const rules = MODE_RULES[mode];
+  const budget = runBudget(mode, runs);
+  const settings = useMemo(() => ({ ...DEFAULT_EDITOR_SETTINGS, autocomplete: rules.autocomplete }), [rules.autocomplete]);
+  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed, lens: lensUsed, guided: rules.id === "guided" });
+  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed, lens: lensUsed, mode };
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
@@ -132,9 +141,23 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     return () => { alive = false; };
   }, []);
 
-  /** Spends one Hint Token (read-modify-write on the save) and reveals the next rung. */
+  useEffect(() => {
+    // Read after mount so the static HTML and first client render agree.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    try { setMode(sanitizeMode(window.localStorage.getItem("algo-clash.mode"))); } catch { /* storage blocked: Standard */ }
+  }, []);
+
+  /** The mode can only change before the first Run/Submit, so a hard mode cannot be dropped once help is needed. */
+  function pickMode(m: ScaffoldMode) {
+    if (runs > 0 || submits > 0) return;
+    setMode(m);
+    try { window.localStorage.setItem("algo-clash.mode", m); } catch { /* ignore */ }
+  }
+
+  /** Spends one Hint Token (read-modify-write on the save) and reveals the next rung. Guided hints are free. */
   async function revealHint() {
     if (revealed >= hints.length) return;
+    if (rules.hints === "unlimited") { setRevealed((n) => n + 1); audio.playSfx("menu"); return; }
     try {
       const svc = new SaveService(new IdbBackend());
       const next = consume(grantStarterKit(await svc.load()), "hint-token");
@@ -181,6 +204,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
 
   async function judge(kind: JudgeKind) {
     const tests = kind === "run" ? visible : problem.tests;
+    if (kind === "run") { if (!budget.allowed) return; setRuns((n) => n + 1); } else setSubmits((n) => n + 1);
     setBusy(true);
     setView(null);
     const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s, compileFlags), run: runWasm });
@@ -234,10 +258,17 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       problem={<StatementPanel statement={statement} badge={<span className="px-btn px-2 text-xs">{problem.difficulty}</span>} />}
       code={
         <>
-          <div className="min-h-0 flex-1"><CodeEditor value={code} onChange={edit} settings={DEFAULT_EDITOR_SETTINGS} /></div>
+          <div className="min-h-0 flex-1"><CodeEditor value={code} onChange={edit} settings={settings} /></div>
+          <div className="flex flex-wrap items-center gap-1 text-xs" role="radiogroup" aria-label="Scaffolding mode" data-testid="mode-picker">
+            {SCAFFOLD_MODES.map((m) => (
+              <button key={m} role="radio" aria-checked={m === mode} disabled={runs > 0 || submits > 0 || !!ended} onClick={() => pickMode(m)}
+                className={`px-btn min-h-11 px-3 ${m === mode ? "px-btn-primary" : ""}`}>{MODE_RULES[m].label}</button>
+            ))}
+            <span className="opacity-70" data-testid="mode-blurb">{rules.blurb}</span>
+          </div>
           {catalogEntry && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
           <LensPanel input={lastFail} used={lensUsed} count={lensTokens} disabled={busy || !!ended} onUse={useLens} />
-          {hints.length > 0 && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} />}
+          {hints.length > 0 && rules.hints !== "none" && <HintPanel hints={hints} revealed={revealed} tokens={tokens} free={rules.hints === "unlimited"} disabled={busy || !!ended} onReveal={revealHint} />}
           <div className="max-h-[30dvh] overflow-auto lg:max-h-[24dvh]"><VerdictPanel view={view} /></div>
           {note && <p className="text-xs opacity-70" data-testid="draft-note">{note}</p>}
         </>
@@ -253,7 +284,8 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
               <button className="px-btn min-h-11 px-3 text-sm" disabled={busy} onClick={() => (confirmRetreat ? onResult("retreated") : setConfirmRetreat(true))}
                 onBlur={() => setConfirmRetreat(false)}>{confirmRetreat ? "Sure?" : "Retreat"}</button>
             )}
-            <button className="px-btn min-h-11 flex-1" disabled={busy} onClick={() => judge("run")}>Run ({visible.length})</button>
+            <button className="px-btn min-h-11 flex-1" disabled={busy || !budget.allowed} onClick={() => judge("run")}>
+              {Number.isFinite(rules.maxRuns) ? `Run (${budget.left} left)` : `Run (${visible.length})`}</button>
             <button className="px-btn px-btn-primary min-h-11 flex-1" disabled={busy} onClick={() => judge("submit")}>{busy ? "Judging…" : `Submit (${problem.tests.length})`}</button>
           </div>
         )

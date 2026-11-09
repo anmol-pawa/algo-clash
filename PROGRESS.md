@@ -422,3 +422,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: the Lens after a real failing run was not driven in the browser (needs the WASM compiler; `failInput` is unit-tested); the Lens adds little until Interview mode hides the WA diff (C6); the Rift replan after a ticket may reorder today's rooms.
 - Next: C6 (scaffolding modes).
+
+## 2026-11-09: C6a/C6b Scaffolding modes (logic + picker)
+- Split C6 into C6a (done), C6b (done) and C6c. New pure `lib/scaffold/modes.ts` (the GDD §6.5 table as data, `runBudget`, `timeLeft`, `submitAllowed`, `sanitizeMode`) and `lib/scaffold/edgeCases.ts` (7 edge-case classes from parsed LC literals; `scoreOwnTests` counts only classes the hidden tests exercise, so constraints that rule a class out never penalise). `BattleArena` has a mode picker (persisted in localStorage, locked after the first Run/Submit so help cannot be dodged by switching mid-fight): Interview/Contest turn autocomplete off, hide hints and cap Run at 6; Guided gives free hints and counts as assisted; `ArenaInfo.mode` is reported. `HintPanel` gained `free`.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (492 pass; 7 new in `tests/scaffold-modes.test.ts`, including parsing every shipped test input), `npm run build:pages`; new `scripts/smoke-modes.mjs` plus `smoke-hints`, `smoke-rift` on the static export at desktop and iPhone 14: all ok, no console errors, no overflow; screenshots of Guided (desktop) and Interview (iPhone) reviewed: readable, 44 px targets. No new problems, so `content:verify` unchanged.
+- Branch note: the session harness required pushing to `claude/eloquent-ritchie-24a37q`, not `main`, so `main` and the Pages deploy are not updated until that branch is merged.
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: the x1.25 mastery weight is data only (not in the Rift SRS yet, so blurbs do not promise it); no own-tests editor, no contest clock, no Guided skeleton/approach card (all C6c); Lens/Compass remain usable in Interview.
+- Next: C6c.
