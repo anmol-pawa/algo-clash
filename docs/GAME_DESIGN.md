@@ -210,6 +210,8 @@ Implementation: a scroll is a normal judged problem package (spec, reference, wr
 | Interview | no autocomplete, no snippets, limited runs, must write own tests | none | yes (×1.25 mastery) |
 | Contest | as Interview, timed | none | yes |
 
+**Implementation (`lib/modes/`, `components/ModePanel.tsx`):** the picker sits above the editor in the battle (default Standard, last choice remembered in `localStorage`, locked after the first Run/Submit). Interview and Contest turn autocomplete off, hide hints and the Compass (the Debug Lens stays), and allow 6 Runs (Submit is unlimited); Contest adds a clock of 2x par (min 60 s) whose expiry counts as a faint. Guided shows the Approach rung as a card, makes hints free and always marks the win assisted. The "x1.25 mastery" is implemented as 25% time slack: elapsed seconds are divided by 1.25 before the par comparison (`creditedSeconds`, applied by the Rift). Own-tests gate and edge-case coverage: C6c.
+
 ### 6.6 Economy
 - **Bits** are earned from battles, the Rift and achievements. They are spent at the **Mart** on:
   - Hint Tokens

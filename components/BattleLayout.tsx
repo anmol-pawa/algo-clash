@@ -44,7 +44,7 @@ export default function BattleLayout({ tab, onTab, stage, problem, code, actions
         <section id="pane-problem" role="tabpanel" aria-labelledby="tab-problem" className={`${show("problem")} min-h-0 min-w-0 flex-col lg:flex`}>
           <div className="min-h-0 flex-1 overflow-auto">{problem}</div>
         </section>
-        <section id="pane-code" role="tabpanel" aria-labelledby="tab-code" className={`${show("code")} min-h-0 min-w-0 flex-col gap-2 lg:flex`}>
+        <section id="pane-code" role="tabpanel" aria-labelledby="tab-code" className={`${show("code")} min-h-0 min-w-0 flex-col gap-2 overflow-y-auto lg:flex`}>
           {code}
         </section>
       </div>

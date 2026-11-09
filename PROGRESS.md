@@ -422,3 +422,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
 - Known gaps: the Lens after a real failing run was not driven in the browser (needs the WASM compiler; `failInput` is unit-tested); the Lens adds little until Interview mode hides the WA diff (C6); the Rift replan after a ticket may reorder today's rooms.
 - Next: C6 (scaffolding modes).
+
+## 2026-11-09: C6a/C6b Scaffolding modes
+- Split C6 into C6a (done), C6b (done), C6c (own-tests gate, edge-case coverage, hide WA diff in Interview). New pure `lib/modes/modes.ts` and `tests/modes.test.ts`; `components/ModePanel.tsx` (Guided/Standard/Interview/Contest picker, runs-left, Contest clock, approach card); `BattleArena` gates autocomplete, hints, Compass, Run count and the clock by mode; `HintPanel` gained a `free` prop; `ArenaInfo` gained `mode` and `creditMultiplier` (Rift divides elapsed time by it). Code pane now scrolls and the editor keeps 200 px minimum (Guided stacked panels had squeezed it to a line). GDD §6.5 updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (492 pass), `npm run build:pages`; new `scripts/smoke-modes.mjs` plus `smoke-hints`, `smoke-rift`, `smoke-compass`, `smoke-lens` on the static export at desktop and iPhone 14: all ok, no console errors, no overflow; screenshots of Interview and Guided reviewed (readable, 44 px targets, editor visible).
+- CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed.
+- Known gaps: the Run limit and Contest expiry were not driven in the browser (Run needs the WASM compiler); Gym ignores mode credit; Guided win is marked assisted in the journal/Rift only.
+- Next: C6c.

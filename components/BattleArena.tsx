@@ -7,6 +7,8 @@ import { BattleStage, type BattleStageHandle } from "@/components/BattleStage";
 import CodeEditor from "@/components/CodeEditor";
 import CompassPanel from "@/components/CompassPanel";
 import LensPanel from "@/components/LensPanel";
+import ModePanel from "@/components/ModePanel";
+import { DEFAULT_MODE, modeAssists, modeDef, runsLeft as runsLeftOf, sanitizeMode, timerSeconds, type ModeId } from "@/lib/modes/modes";
 import DebriefPanel, { type DebriefDone } from "@/components/DebriefPanel";
 import { problemCatalog } from "@/content/gyms/catalog";
 import HintPanel from "@/components/HintPanel";
@@ -52,6 +54,10 @@ export interface ArenaInfo {
   compass: boolean;
   /** The Debug Lens was used: the win counts as assisted. */
   lens: boolean;
+  /** Scaffolding mode the fight was played in (GDD 6.5). */
+  mode: ModeId;
+  /** Divide elapsed seconds by this before comparing with par (Interview and Contest slack). */
+  creditMultiplier: number;
 }
 
 export interface ArenaOptions {
@@ -79,7 +85,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [view, setView] = useState<VerdictView | null>(null);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState("");
-  const [ended, setEnded] = useState<"won" | "fainted" | null>(null);
+  const [endedState, setEnded] = useState<"won" | "fainted" | null>(null);
   const [confirmRetreat, setConfirmRetreat] = useState(false);
   const [debrief, setDebrief] = useState(false);
   const [startedAt] = useState(() => Date.now());
@@ -93,8 +99,19 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [lensTokens, setLensTokens] = useState(0);
   const [lensUsed, setLensUsed] = useState(false);
   const [lastFail, setLastFail] = useState<string | undefined>();
-  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed, lens: lensUsed });
-  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed, lens: lensUsed };
+  const [modeId, setModeId] = useState<ModeId>(DEFAULT_MODE);
+  const [runs, setRuns] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+  const mode = modeDef(modeId);
+  const parSeconds = catalogEntry?.meta.parSeconds ?? 600;
+  const limit = timerSeconds(mode, parSeconds);
+  const timeLeft = limit === null ? null : Math.max(0, limit - Math.floor((now - startedAt) / 1000));
+  const runsLeft = runsLeftOf(mode, runs);
+  const ended = endedState ?? (timeLeft === 0 ? "fainted" : null); // Contest: the clock ending is a faint
+  const assisted = isAssisted({ ...NO_ASSISTANCE, hintsUsed: revealed, compass: compassUsed, lens: lensUsed, guided: modeAssists(mode) });
+  const info: ArenaInfo = { hintsUsed: revealed, assisted, compass: compassUsed, lens: lensUsed, mode: mode.id, creditMultiplier: mode.multiplier };
+
   const hearts = useRef(PLAYER_HEARTS);
   const stage = useRef<BattleStageHandle>(null);
   const saver = useRef<DraftAutosaver | null>(null);
@@ -122,6 +139,27 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   }, [problem, scene]);
 
   useEffect(() => {
+    let saved: ModeId = DEFAULT_MODE;
+    try { saved = sanitizeMode(window.localStorage.getItem("algo-clash.mode")); } catch { /* storage blocked: Standard */ }
+    void Promise.resolve().then(() => setModeId(saved));
+  }, []);
+
+  function pickMode(id: ModeId) {
+    setModeId(id);
+    try { window.localStorage.setItem("algo-clash.mode", id); } catch { /* optional */ }
+  }
+
+  // Contest clock: when it runs out the foe wins.
+  useEffect(() => {
+    if (limit === null || ended) return;
+    const t = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(t);
+  }, [limit, ended]);
+  useEffect(() => {
+    if (timeLeft === 0) stage.current?.say("Time! The foe wins this round.");
+  }, [timeLeft]);
+
+  useEffect(() => {
     let alive = true;
     const svc = new SaveService(new IdbBackend());
     svc.load().then(async (c) => {
@@ -135,6 +173,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   /** Spends one Hint Token (read-modify-write on the save) and reveals the next rung. */
   async function revealHint() {
     if (revealed >= hints.length) return;
+    if (mode.approachCard) { setRevealed((n) => n + 1); audio.playSfx("menu"); return; } // Guided: free hints
     try {
       const svc = new SaveService(new IdbBackend());
       const next = consume(grantStarterKit(await svc.load()), "hint-token");
@@ -180,7 +219,9 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   }
 
   async function judge(kind: JudgeKind) {
+    if (kind === "run" && runsLeft === 0) return;
     const tests = kind === "run" ? visible : problem.tests;
+    if (kind === "run") setRuns((n) => n + 1); else setSubmitted(true);
     setBusy(true);
     setView(null);
     const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s, compileFlags), run: runWasm });
@@ -234,10 +275,12 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       problem={<StatementPanel statement={statement} badge={<span className="px-btn px-2 text-xs">{problem.difficulty}</span>} />}
       code={
         <>
-          <div className="min-h-0 flex-1"><CodeEditor value={code} onChange={edit} settings={DEFAULT_EDITOR_SETTINGS} /></div>
-          {catalogEntry && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
+          <ModePanel mode={mode} onPick={pickMode} locked={runs > 0 || submitted || !!ended} runsLeft={runsLeft} timeLeft={timeLeft}
+            approach={hints.find((h) => h.rung === "Approach")?.text} />
+          <div className="min-h-[200px] flex-1"><CodeEditor value={code} onChange={edit} settings={{ ...DEFAULT_EDITOR_SETTINGS, autocomplete: mode.autocomplete }} /></div>
+          {catalogEntry && mode.items && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
           <LensPanel input={lastFail} used={lensUsed} count={lensTokens} disabled={busy || !!ended} onUse={useLens} />
-          {hints.length > 0 && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} />}
+          {hints.length > 0 && mode.hints && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} free={mode.approachCard} />}
           <div className="max-h-[30dvh] overflow-auto lg:max-h-[24dvh]"><VerdictPanel view={view} /></div>
           {note && <p className="text-xs opacity-70" data-testid="draft-note">{note}</p>}
         </>
@@ -253,7 +296,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
               <button className="px-btn min-h-11 px-3 text-sm" disabled={busy} onClick={() => (confirmRetreat ? onResult("retreated") : setConfirmRetreat(true))}
                 onBlur={() => setConfirmRetreat(false)}>{confirmRetreat ? "Sure?" : "Retreat"}</button>
             )}
-            <button className="px-btn min-h-11 flex-1" disabled={busy} onClick={() => judge("run")}>Run ({visible.length})</button>
+            <button className="px-btn min-h-11 flex-1" disabled={busy || runsLeft === 0} onClick={() => judge("run")}>Run ({visible.length})</button>
             <button className="px-btn px-btn-primary min-h-11 flex-1" disabled={busy} onClick={() => judge("submit")}>{busy ? "Judging…" : `Submit (${problem.tests.length})`}</button>
           </div>
         )
