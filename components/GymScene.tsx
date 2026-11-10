@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { LH, LW, GYM_PLATFORMS, drawGymBackdrop } from "@/game/battle/backdrop";
+import { LH, LW, GYM_PLATFORMS, drawAtollBackdrop, drawGymBackdrop } from "@/game/battle/backdrop";
 import type { SpriteSheet } from "@/game/sprites/grid";
 import { toRGBA } from "@/game/sprites/grid";
 
 /** The gym backdrop with a leader sprite standing on the foe platform (review + reuse by the gym UI). */
-export function GymScene({ sheet, anim = "idle", scale = 3 }: { sheet: SpriteSheet; anim?: string; scale?: number }) {
+export function GymScene({ sheet, anim = "idle", scale = 3, region = "R1" }: { sheet: SpriteSheet; anim?: string; scale?: number; region?: "R1" | "R2" }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const cv = ref.current;
@@ -26,7 +26,7 @@ export function GymScene({ sheet, anim = "idle", scale = 3 }: { sheet: SpriteShe
       const t = Math.max(0, now - t0);
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
       ctx.imageSmoothingEnabled = false;
-      drawGymBackdrop(ctx, t);
+      if (region === "R2") drawAtollBackdrop(ctx, t); else drawGymBackdrop(ctx, t);
       const i = Math.floor(t / (sheet.frameMs[anim] ?? 200)) % frames.length;
       const f = frames[i];
       ctx.globalAlpha = f.alpha;
@@ -37,7 +37,7 @@ export function GymScene({ sheet, anim = "idle", scale = 3 }: { sheet: SpriteShe
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [sheet, anim, scale]);
+  }, [sheet, anim, scale, region]);
   return <canvas ref={ref} width={LW * scale} height={LH * scale}
     style={{ imageRendering: "pixelated", maxWidth: "100%", height: "auto" }} />;
 }

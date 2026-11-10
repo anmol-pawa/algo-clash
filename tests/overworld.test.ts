@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SOLID } from "@/game/sprites/tiles";
+import { ATOLL_SOLID } from "@/game/sprites/atoll";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { SOLID_TILES, parseMap, isBlocked, type MapDef } from "@/lib/overworld/map";
 import { arrive, findPath, interact, step, type Player } from "@/lib/overworld/walk";
@@ -12,7 +13,7 @@ const always = () => 0;
 
 describe("map format", () => {
   it("keeps SOLID_TILES in sync with the tileset", () => {
-    expect([...SOLID_TILES].sort()).toEqual([...SOLID].sort());
+    expect([...SOLID_TILES].sort()).toEqual([...new Set([...SOLID, ...ATOLL_SOLID])].sort());
   });
   it("parses Mainville", () => {
     expect(map.width).toBe(16);

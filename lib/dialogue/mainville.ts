@@ -30,6 +30,11 @@ export const MAINVILLE_DIALOGUES: Record<string, DialogueScript> = {
     start: "s",
     nodes: { s: { pages: ["MAINVILLE. Where every journey through the data begins."] } },
   },
+  "sign-atoll": {
+    id: "sign-atoll",
+    start: "s",
+    nodes: { s: { pages: ["ARRAY ATOLL. Every sandbar has a number. The tide always comes back to index zero."] } },
+  },
   "villager-grass": {
     id: "villager-grass",
     start: "v",

@@ -493,3 +493,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: no `prompt.json` for the new problems; not yet placed on a map or gym; no R2 lessons/cards yet.
 - Next: D1d (art: Tidecaller Mira, atoll tileset, backdrop, overworld map).
+
+## 2026-11-10: D1d Array Atoll art (Tidecaller Mira, tileset, backdrop, map)
+- New `game/sprites/mira.ts`: Tidecaller Mira, 96x96 front sprite with idle (4), attack (4, water-swell ribbon), hurt (2) and faint (4) frames. Design reads as the region: `[ ]` bracket buckle, evenly scalloped "indexed" hem, braids with pearl ends, spiral-conch staff. New `game/sprites/atoll.ts`: 18-tile 16x16 atoll tileset (animated water, deep water, shore surge, tide pool, coral, palm, dune). `drawAtollBackdrop` in `game/battle/backdrop.ts` (lagoon, numbered pier posts, Tide Hall hut, islet, sun). `lib/overworld/atoll.ts`: Array Atoll map with a Tide Hall door, sign and tide-pool encounter tiles (`ENCOUNTER_TILES` and `SOLID_TILES` extended; sync test now covers both tilesets). `/dev/sprites` shows Mira, the tileset and the map; `GymScene` and `TileScene` take a region/rows.
+- Verified: `npm run lint` (0 errors; 9 warnings, all in earlier R0/R2 problem generators), `typecheck`, `npm test` (587 pass, new `tests/atoll.test.ts` and `tests/mira-sprite.test.ts`), `build`, `build:pages`. Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (Mira and the map read well; hurt frame is a clean white silhouette).
+- CI/deploy: not confirmed (no `gh` in this session). Pushed to the session branch `claude/eloquent-ritchie-s51lnd`, not `main`, because this session's instructions require the designated branch.
+- Known gaps: Mira's face is small at 1x; the atoll map is not yet registered in `WorldCanvas` (no warp from Route 1), the door points at `/gym/` (the R1 gym) until D1f; no atoll NPC sprites or 2 trainer sprites; palms are small; no back-view or evolve frames (gym leader needs none).
+- Next: D1e (lessons, C++ Corner, ~40 cards and a recognition set for R2).

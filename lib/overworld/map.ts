@@ -9,12 +9,14 @@ export const DELTA: Record<Dir, { dx: number; dy: number }> = {
   right: { dx: 1, dy: 0 },
 };
 
-/** Tiles that block movement. Kept in sync with `SOLID` in game/sprites/tiles.ts by a test. */
+/** Tiles that block movement. Kept in sync with `SOLID` (tiles.ts) plus `ATOLL_SOLID` (atoll.ts) by a test. */
 export const SOLID_TILES: ReadonlySet<string> = new Set([
   "water", "tree", "bush", "fence", "sign", "wallHouse", "roofHouse", "windowHouse", "wallLab", "roofLab",
+  // Array Atoll (game/sprites/atoll.ts)
+  "deepWater", "palm", "rock", "coral", "post", "hutWall", "hutRoof", "hutWindow",
 ]);
 /** Tiles that can trigger wild encounters. */
-export const ENCOUNTER_TILES: ReadonlySet<string> = new Set(["tallGrass"]);
+export const ENCOUNTER_TILES: ReadonlySet<string> = new Set(["tallGrass", "tidePool"]);
 /** Solid tiles the player can read by facing them and pressing the action button. */
 export const READABLE_TILES: ReadonlySet<string> = new Set(["sign"]);
 

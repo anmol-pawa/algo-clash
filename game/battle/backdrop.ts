@@ -104,3 +104,54 @@ export function drawGymBackdrop(c: CanvasRenderingContext2D, time: number): void
     ellipseFill(c, "#8a85aa", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
   }
 }
+
+/** Array Atoll gym: bright lagoon at midday, numbered pier posts, the Tide Hall hut, sand ledges. */
+export function drawAtollBackdrop(c: CanvasRenderingContext2D, time: number): void {
+  const sky = ["#6cc6ee", "#82d2f2", "#9adcf4", "#b4e6f6", "#cdeff8", "#e2f6fa"];
+  sky.forEach((b, i) => rect(c, b, 0, i * 10, LW, 10));
+  // sun with a soft ring, and drifting clouds
+  rect(c, "#fff6b8", 196, 8, 16, 16); rect(c, "#ffe27a", 198, 10, 12, 12); rect(c, "#ffd24a", 200, 12, 8, 8);
+  const drift = (time / 260) % (LW + 60);
+  for (const [k, y] of [[10, 12], [120, 26], [190, 40]] as const) {
+    const x = ((k + drift) % (LW + 60)) - 30;
+    rect(c, "#ffffff", x, y, 28, 6); rect(c, "#ffffff", x + 6, y - 3, 14, 4); rect(c, "#d9f0f8", x, y + 5, 28, 2);
+  }
+  // far islet with palms
+  rect(c, "#e6cc92", 120, 56, 70, 4); rect(c, "#d2b57a", 126, 52, 56, 5);
+  for (const px of [134, 150, 168]) {
+    rect(c, "#6b4a2a", px, 38, 2, 16);
+    rect(c, "#3d9b55", px - 6, 36, 14, 2); rect(c, "#5ab86a", px - 4, 34, 10, 2); rect(c, "#2c7a46", px - 7, 38, 5, 2); rect(c, "#2c7a46", px + 4, 38, 5, 2);
+  }
+  // lagoon: bands from teal horizon to bright shallows, scrolling glints
+  const water = ["#1f8fc0", "#2aa3d0", "#3db7dc", "#5ccbe6", "#7fdcee"];
+  water.forEach((b, i) => rect(c, b, 0, 58 + i * 11, LW, 11));
+  for (let i = 0; i < 46; i++) {
+    const y = 60 + ((i * 13) % 54), x = Math.round(((i * 37 + time / 70 * (1 + (i % 3) * 0.5)) % (LW + 20)) - 10);
+    rect(c, i % 4 === 0 ? "#ffffff" : "#b6f1fb", x, y, 4 + (i % 3) * 2, 1);
+  }
+  // pier with numbered posts (indices 0..3) and the Tide Hall hut at the left
+  rect(c, "#8a5a34", 0, 70, 96, 5); rect(c, "#a87a46", 0, 70, 96, 2); rect(c, "#5e3a22", 0, 75, 96, 1);
+  for (let i = 0; i < 4; i++) {
+    const x = 6 + i * 26;
+    rect(c, "#5e3a22", x, 74, 5, 16); rect(c, "#7e5733", x, 74, 2, 16);
+    rect(c, "#f2fbff", x - 1, 88, 7, 1); // wave ring
+    rect(c, "#3d7a8e", x, 60, 5, 10); rect(c, "#1a1420", x + 1, 62, 3, 1); // post cap tag
+    rect(c, "#fbeec6", x + 1, 63, 3, 5); rect(c, "#1a1420", x + 1, 63 + (i % 2), 3, 1);
+  }
+  rect(c, "#a8802c", 6, 36, 66, 8); rect(c, "#cfa843", 8, 33, 62, 5); rect(c, "#ecd070", 12, 31, 54, 3);
+  for (let x = 8; x < 70; x += 6) rect(c, "#8a6a3a", x, 40, 2, 6);
+  rect(c, "#b8924f", 12, 44, 54, 16); rect(c, "#8a6a3a", 12, 44, 54, 1);
+  rect(c, "#3d1f12", 33, 48, 12, 12); rect(c, "#5e3a22", 34, 49, 10, 11);
+  rect(c, "#a7d4f2", 16, 48, 12, 8); rect(c, "#35507a", 16, 48, 12, 2); rect(c, "#a7d4f2", 50, 48, 12, 8); rect(c, "#35507a", 50, 48, 12, 2);
+  // sandy foreground with a foam surge line that breathes
+  const surge = Math.round(Math.sin(time / 600) * 2);
+  rect(c, "#e6cc92", 0, 112, LW, LH - 112);
+  for (let x = 0; x < LW; x += 6) rect(c, (x / 6) % 3 === 0 ? "#f2dcab" : "#d2b57a", x, 114 + ((x * 5) % 6), 6, 2);
+  rect(c, "#a8e4f0", 0, 108 + surge, LW, 4); rect(c, "#f2fbff", 0, 107 + surge, LW, 1);
+  for (const [x, y, col] of [[20, 126, "#ec7a8a"], [96, 122, "#fff4f0"], [200, 128, "#f0a0b8"], [150, 124, "#ffb0b4"]] as const) rect(c, col, x, y, 3, 2);
+  for (const p of [GYM_PLATFORMS.foe, GYM_PLATFORMS.player]) {
+    ellipseFill(c, "#a8803c", p.cx, p.cy + 3, p.rx, p.ry);
+    ellipseFill(c, "#e6cc92", p.cx, p.cy, p.rx, p.ry);
+    ellipseFill(c, "#f2dcab", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
+  }
+}

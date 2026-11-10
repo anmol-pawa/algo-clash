@@ -8,6 +8,9 @@ import { EvolutionScene } from "@/components/EvolutionScene";
 import { TileScene } from "@/components/TileScene";
 import { GymScene } from "@/components/GymScene";
 import { buildWarden } from "@/game/sprites/warden";
+import { buildMira } from "@/game/sprites/mira";
+import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atoll";
+import { ATOLL } from "@/lib/overworld/atoll";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
@@ -20,6 +23,8 @@ export default function SpritesDev() {
   const vec = useMemo(() => ({ front: buildVectorling("front"), back: buildVectorling("back") }), []);
   const warden = useMemo(() => buildWarden(), []);
   const tiles = useMemo(() => buildTileset(), []);
+  const mira = useMemo(() => buildMira(), []);
+  const atoll = useMemo(() => buildAtollTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
       <h1 className="mb-1 text-xl font-bold">Sprites</h1>
@@ -69,6 +74,35 @@ export default function SpritesDev() {
           <GymScene sheet={warden} anim="idle" scale={3} />
           <GymScene sheet={warden} anim="attack" scale={3} />
         </div>
+      </section>
+      <section className="mb-6" id="mira">
+        <h2 className="mb-2 font-semibold">Tidecaller Mira (96x96 gym leader, Array Atoll)</h2>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {["idle", "attack", "hurt", "faint"].map((a) => (
+            <figure key={a} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+              <SpriteCanvas sheet={mira} anim={a} scale={3} />
+              <figcaption className="text-xs text-black">{a}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Atoll backdrop (idle / attack)</h3>
+        <div className="grid gap-3 md:grid-cols-2">
+          <GymScene sheet={mira} anim="idle" scale={3} region="R2" />
+          <GymScene sheet={mira} anim="attack" scale={3} region="R2" />
+        </div>
+      </section>
+      <section className="mb-6" id="atoll">
+        <h2 className="mb-2 font-semibold">Array Atoll tileset (16x16)</h2>
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-9">
+          {ATOLL_TILE_NAMES.map((n) => (
+            <figure key={n} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+              <SpriteCanvas sheet={atoll} anim={n} scale={4} />
+              <figcaption className="text-xs text-black">{n}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Overworld map: {ATOLL.name}</h3>
+        <TileScene sheet={atoll} rows={ATOLL.rows} legend={ATOLL.legend} />
       </section>
       <section className="mb-6">
         <h2 className="mb-2 font-semibold">Mainville tileset (16x16)</h2>
