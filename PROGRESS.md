@@ -521,3 +521,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: skipped (the run prompt's Actions quota note; no `gh`).
 - Known gaps: lesson renderer has no bold support (older R1 lessons still contain `**`); R2 content not yet reachable from the map (D1f).
 - Next: D1f (Forge scrolls, visualisers, Mira gym, dialogue, music).
+
+## 2026-11-10: D1f-1 Forge scrolls for Array Atoll
+- ROADMAP D1f split into D1f-1..D1f-4. D1f-1 done: two scrolls in `content/scrolls/` (`hashing.ts` Earlier Prefix = Exact Stretches reference; `twoPointers.ts` Closing Walls = Widest Basin reference), each with line annotations, common bugs and 5 trace cards (`content/cards/R2/forge.ts`, outputs computed by g++ into `generated.json`; all match the hand-written explanations). Scroll kits (statement, starter, lazy tests) added to `content/scrolls/kits.ts`; existing forge tests cover template == solution.cpp and statement == problem.md.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (646 pass incl. native content verify), `build:pages`; Playwright on the static export at desktop and iPhone 14: forge list and an opened scroll render, no console errors, no horizontal overflow; screenshot reviewed (annotations line up, trace card readable).
+- CI/deploy: confirmation not possible here (no `gh`); pushed to `main`.
+- Known gaps: later scroll tiers (cloze/blank) not exercised in a browser for the new scrolls (same code path as the first scroll, unit-tested); scrolls not unlocked by map progress yet.
+- Next: D1f-2 (visualisers).

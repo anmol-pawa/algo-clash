@@ -278,5 +278,35 @@
   },
   "r2-kadane-negative": {},
   "r2-circular": {},
-  "r2-ps-overflow": {}
+  "r2-ps-overflow": {},
+  "forge-prefix-hash-trace-basic": {
+    "output": "2\n"
+  },
+  "forge-prefix-hash-trace-zeros": {
+    "output": "6\n"
+  },
+  "forge-prefix-hash-trace-negative": {
+    "output": "4\n"
+  },
+  "forge-prefix-hash-trace-none": {
+    "output": "0\n"
+  },
+  "forge-prefix-hash-trace-wide": {
+    "output": "2\n"
+  },
+  "forge-opposite-trace-basic": {
+    "output": "49\n"
+  },
+  "forge-opposite-trace-tie": {
+    "output": "10\n"
+  },
+  "forge-opposite-trace-single": {
+    "output": "0\n"
+  },
+  "forge-opposite-trace-valley": {
+    "output": "36\n"
+  },
+  "forge-opposite-trace-wide": {
+    "output": "8000000000\n"
+  }
 }
