@@ -4,10 +4,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMusic } from "@/components/Music";
 import { MAINVILLE } from "@/lib/overworld/mainville";
+import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
+import { buildAtollTileset } from "@/game/sprites/atollTiles";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { Dir, GameMap, parseMap } from "@/lib/overworld/map";
 import { faceNpc, newWorld, playerDrawPos, press, tapTo, tickWorld, WorldState } from "@/lib/overworld/mover";
-import { MAINVILLE_DIALOGUES } from "@/lib/dialogue/mainville";
+import { MAINVILLE_DIALOGUES as TOWN_DIALOGUES } from "@/lib/dialogue/mainville";
+import { ATOLL_DIALOGUES } from "@/lib/dialogue/atoll";
+
+const MAINVILLE_DIALOGUES = { ...TOWN_DIALOGUES, ...ATOLL_DIALOGUES };
 import { DialogueState, advance, choose, startDialogue } from "@/lib/dialogue/script";
 import { DialogueBox, DIALOGUE_CONFIRM } from "@/components/DialogueBox";
 import { flagSet, raiseFlags } from "@/lib/dialogue/flags";
@@ -29,7 +34,7 @@ export function WorldCanvas() {
   useMusic("mainville");
   const router = useRouter();
   const cvRef = useRef<HTMLCanvasElement>(null);
-  const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1) }), []);
+  const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL) }), []);
   const world = useRef<WorldState>(newWorld(maps.mainville));
   const keys = useRef<Dir[]>([]);
   const [mapName, setMapName] = useState(maps.mainville.name);
@@ -94,7 +99,7 @@ export function WorldCanvas() {
     const ctx = cv?.getContext("2d");
     if (!cv || !ctx) return;
     ctx.imageSmoothingEnabled = false;
-    const tiles = sheetToCanvases(buildTileset());
+    const tiles = { ...sheetToCanvases(buildTileset()), ...sheetToCanvases(buildAtollTileset()) };
     const tileMs = 350;
     const people: Record<string, Record<string, HTMLCanvasElement[]>> = {
       trainer: sheetToCanvases(buildCharacter(TRAINER)),
@@ -147,7 +152,7 @@ export function WorldCanvas() {
       for (const e of events) {
         if (e.type === "map") setMapName(world.current.map.name);
         if (e.type === "door") { setNote(e.label); router.push(e.href); }
-        if (e.type === "encounter") setNote("A wild Structling rustles in the grass… (battles arrive in B3)");
+        if (e.type === "encounter") setNote("A wild Structling rustles nearby… (battles arrive in B3)");
       }
       draw();
       raf = requestAnimationFrame(loop);

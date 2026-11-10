@@ -4,7 +4,8 @@ import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { STEP_MS, newWorld, playerDrawPos, press, tapTo, tickWorld } from "@/lib/overworld/mover";
 
-const maps = { mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1) };
+import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
+const maps = { mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL) };
 const never = () => 1;
 
 describe("overworld mover", () => {

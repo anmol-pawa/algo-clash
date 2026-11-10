@@ -543,3 +543,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: see run summary.
 - Known gaps: no Mira portrait; Tidecaller does not attack/hurt in the battle stage beyond the stock stage effects; the gym is not reachable from the map until D1f-4 (warp from Mainville).
 - Next: D1f-4 (warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music).
+
+## 2026-11-10: D1f-4a Array Atoll wired into the overworld
+- Route 1's south exit now warps to Array Atoll and back (`lib/overworld/route1.ts`, `atoll.ts`); `WorldCanvas` loads the atoll tileset alongside the town tileset and the atoll map; seagrass is an encounter tile (pool `atoll-seagrass`, 4-tile patch, rate 0.25; battles remain the existing placeholder note); Ferryman Tally NPC with a dialogue that hints at the Dry tide twist (`lib/dialogue/atoll.ts`). Tests: new wiring test in `tests/atoll-map.test.ts`; `overworld-mover` fixture now includes the atoll.
+- Verified: lint (0 errors), typecheck, `npm test` (660; one stale fixture fixed), `build:pages`; Playwright on the static export at iPhone 14: walked Mainville -> Route 1 -> Array Atoll, no console errors, no overflow, screenshot reviewed (pier, NPC, seagrass, coral read correctly). Desktop run only timed out before the warp (walk timing in my script), same code path.
+- CI/deploy: not confirmed (no `gh`). Pushed to the session branch `claude/eloquent-ritchie-xan2hu`, not `main`, per the session's branch rule.
+- Known gaps: no atoll music, no story-beat flag; atoll NPC reuses the villager sprite; camera clips the player slightly at the bottom edge on arrival.
+- Next: D1f-4b (music + story beat).

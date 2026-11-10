@@ -32,3 +32,20 @@ describe("Array Atoll map", () => {
     expect(seen.size).toBeGreaterThan(100);
   });
 });
+
+describe("atoll world wiring", () => {
+  it("links Route 1 and the atoll both ways and has a valid ferryman script", async () => {
+    const { ROUTE_1 } = await import("@/lib/overworld/route1");
+    const { parseMap } = await import("@/lib/overworld/map");
+    const { ATOLL_DIALOGUES } = await import("@/lib/dialogue/atoll");
+    const { validateScript } = await import("@/lib/dialogue/script");
+    const r = parseMap(ROUTE_1), a = parseMap(ARRAY_ATOLL);
+    for (const w of r.warps.filter((x) => x.to === "array-atoll")) {
+      expect(a.solid.has(a.tiles[w.ty][w.tx])).toBe(false);
+      expect(a.warps.some((b) => b.to === "route-1")).toBe(true);
+    }
+    for (const w of a.warps) expect(r.solid.has(r.tiles[w.ty][w.tx])).toBe(false);
+    for (const n of a.npcs) expect(validateScript(ATOLL_DIALOGUES[n.dialogue])).toEqual([]);
+    expect(a.encounterRate).toBeGreaterThan(0);
+  });
+});
