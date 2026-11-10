@@ -37,6 +37,19 @@ export const VILLAGER: CharacterLook = {
     "#8a6a4a", "#664a30", "#3a2a2a", "#ffffff", "#141018", "#f0c040", "#f0a090", "#7a2c2c"],
 };
 
+export const DIVER: CharacterLook = {
+  name: "diver",
+  colors: ["#e8b48a", "#c48a62", "#2a2f4a", "#1a1e34", "#2fa6a0", "#1e7570", "#f2e6c9", "#cdbd96",
+    "#1e5a78", "#143f58", "#2a2a3a", "#ffffff", "#141018", "#f0c040", "#f0a090", "#7a2c2c"],
+  tuft: true,
+};
+
+export const ANGLER: CharacterLook = {
+  name: "angler",
+  colors: ["#d9a67c", "#b88258", "#c8c2b4", "#9a9486", "#e8c04a", "#b8922a", "#f2e6c9", "#cdbd96",
+    "#6a5a3a", "#4a3e28", "#3a2a2a", "#ffffff", "#141018", "#d8503c", "#e8a090", "#7a2c2c"],
+};
+
 export function lookPalette(l: CharacterLook): string[] {
   // index 0 transparent, 1 outline, 2..17 from look
   return ["", "#1a1420", ...l.colors];

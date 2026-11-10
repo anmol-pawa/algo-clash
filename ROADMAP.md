@@ -133,7 +133,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 7. Gym with its signature mechanic (GDD §5.5).
 8. Dialogue, story beat and region music.
 
-- [ ] D1. Array Atoll (CUR R2), split by the region recipe:
+- [x] D1. Array Atoll (CUR R2), split by the region recipe:
   - [x] D1a. Problems batch 1: hashing basics (Matching Pairs, Echo Gate, Scramble Check, Badge Chain, Scramble Clans).
   - [x] D1b. Problems batch 2: two pointers (Mirror Check, Triple Tally, Widest Basin, Ferry Pairs, Tide Pools). Dutch flag is in-place only, so it goes to a Forge scroll/card in D1e/D1f.
   - [x] D1c. Problems batch 3: prefix sums and difference arrays, Kadane (Range Ledger, Hot Streak, Exact Stretches, Sprinkler Lanes, Ring Gain).
@@ -142,11 +142,11 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D1d-2. Atoll tileset (sand, shallows, palms, boardwalk, shells) on `/dev/sprites`.
     - [x] D1d-3. Atoll battle/gym backdrop and overworld map (Array Atoll).
   - [x] D1e. Lessons (3, with the C++ Corner unordered_map API), 36 cards; the R2 recognition statements already existed (9).
-  - [ ] D1f. Forge scrolls, visualisers, Mira gym with signature mechanic, dialogue and music, split:
+  - [x] D1f. Forge scrolls, visualisers, Mira gym with signature mechanic, dialogue and music, split:
     - [x] D1f-1. Forge scrolls: Earlier Prefix (prefix + hash map) and Closing Walls (opposite pointers), 10 native trace cards.
     - [x] D1f-2. Visualisers: hash-map insert/lookup stepper and prefix-sum/Kadane stepper.
     - [x] D1f-3. Mira gym (data + signature mechanic, per GDD §5.5) wired to the atoll map door.
-    - [ ] D1f-4. Warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music.
+    - [x] D1f-4. Warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music.
 - [ ] D2. Window Woods (R3)
 - [ ] D3. Hashwood Harbor (R4)
 - [ ] D4. Stackspire (R6)

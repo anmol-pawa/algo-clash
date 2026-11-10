@@ -19,7 +19,8 @@ export const ROUTE_1: MapDef = {
   ],
   legend: { T: "tree", g: "grass", ".": "grass2", f: "flowers", p: "path", b: "bush", E: "tallGrass" },
   spawn: { x: 7, y: 1, facing: "down" },
-  warps: [{ x: 7, y: 0, to: "mainville", tx: 8, ty: 9, facing: "up" }, { x: 8, y: 0, to: "mainville", tx: 8, ty: 9, facing: "up" }],
+  warps: [{ x: 7, y: 0, to: "mainville", tx: 8, ty: 9, facing: "up" }, { x: 8, y: 0, to: "mainville", tx: 8, ty: 9, facing: "up" },
+    { x: 7, y: 10, to: "array-atoll", tx: 10, ty: 12, facing: "up" }, { x: 8, y: 10, to: "array-atoll", tx: 11, ty: 12, facing: "up" }],
   encounterRate: 0.2,
   encounterPool: "route-1-grass",
 };

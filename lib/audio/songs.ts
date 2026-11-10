@@ -70,5 +70,49 @@ export const BATTLE_THEME: Song = {
   ],
 };
 
-export const SONGS = { mainville: MAINVILLE_THEME, battle: BATTLE_THEME } as const;
+/** Array Atoll: a breezy, lilting G-major island theme (4 bars, 64 steps). */
+export const ATOLL_THEME: Song = {
+  id: "atoll",
+  bpm: 96,
+  stepsPerBeat: 2,
+  channels: [
+    {
+      wave: "triangle",
+      gain: 0.7,
+      pattern: [
+        "B4 _ D5 _ G5 _ D5 _   B4 _ A4 _ G4 - - -",
+        "C5 _ E5 _ A5 _ E5 _   C5 _ B4 _ A4 - - -",
+        "D5 _ F#5 _ A5 _ F#5 _  D5 _ E5 _ F#5 _ E5 _",
+        "D5 _ B4 _ G4 _ A4 _   G4 - - - - - - -",
+      ].join(" "),
+    },
+    {
+      wave: "square",
+      gain: 0.18,
+      pattern: [
+        "- - G4 - - - B4 -   - - G4 - - - B4 -",
+        "- - A4 - - - C5 -   - - A4 - - - C5 -",
+        "- - A4 - - - D5 -   - - A4 - - - D5 -",
+        "- - G4 - - - B4 -   - - G4 - - - - -",
+      ].join(" "),
+    },
+    {
+      wave: "triangle",
+      gain: 0.8,
+      pattern: [
+        "G2 - - - D3 - - -   G2 - - - D3 - - -",
+        "A2 - - - E3 - - -   A2 - - - E3 - - -",
+        "D3 - - - A3 - - -   D3 - - - A3 - - -",
+        "G2 - - - D3 - - -   G2 - - - - - - -",
+      ].join(" "),
+    },
+    {
+      wave: "noise",
+      gain: 0.08,
+      pattern: Array.from({ length: 8 }, () => "- - - - A5 - - -").join(" "),
+    },
+  ],
+};
+
+export const SONGS = { mainville: MAINVILLE_THEME, atoll: ATOLL_THEME, battle: BATTLE_THEME } as const;
 export type SongId = keyof typeof SONGS;

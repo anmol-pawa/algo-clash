@@ -5,31 +5,41 @@ import { useRouter } from "next/navigation";
 import { useMusic } from "@/components/Music";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
+import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
 import { Dir, GameMap, parseMap } from "@/lib/overworld/map";
 import { faceNpc, newWorld, playerDrawPos, press, tapTo, tickWorld, WorldState } from "@/lib/overworld/mover";
-import { MAINVILLE_DIALOGUES } from "@/lib/dialogue/mainville";
+import { WORLD_DIALOGUES } from "@/lib/dialogue/world";
 import { DialogueState, advance, choose, startDialogue } from "@/lib/dialogue/script";
 import { DialogueBox, DIALOGUE_CONFIRM } from "@/components/DialogueBox";
 import { flagSet, raiseFlags } from "@/lib/dialogue/flags";
 import { SaveService } from "@/lib/save/service";
 import { IdbBackend } from "@/lib/save/idb";
 import type { CoreSave } from "@/lib/save/schema";
-import { IOTA, TRAINER, VILLAGER, buildCharacter } from "@/game/sprites/character";
+import { ANGLER, DIVER, IOTA, TRAINER, VILLAGER, buildCharacter } from "@/game/sprites/character";
 import { buildTileset, TILE } from "@/game/sprites/tiles";
+import { buildAtollTileset } from "@/game/sprites/atollTiles";
+import type { SongId } from "@/lib/audio/songs";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
 
 const VIEW_W = 11;
 const VIEW_H = 9;
+const WORLD_KEY = "algo-clash.world";
+/** Region music by map id; maps not listed play the Mainville theme. */
+const MAP_SONG: Record<string, SongId> = { "array-atoll": "atoll" };
+const ENCOUNTER_TEXT: Record<string, string> = {
+  "atoll-seagrass": "Something rustles in the seagrass… (battles arrive in B3)",
+};
 const KEYS: Record<string, Dir> = {
   ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", w: "up", s: "down", a: "left", d: "right",
 };
 
 /** The overworld scene: smooth tile-to-tile walking, camera, NPCs, warps. Renders with 2D canvas. */
 export function WorldCanvas() {
-  useMusic("mainville");
+  const [mapId, setMapId] = useState("mainville");
+  useMusic(MAP_SONG[mapId] ?? "mainville");
   const router = useRouter();
   const cvRef = useRef<HTMLCanvasElement>(null);
-  const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1) }), []);
+  const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL) }), []);
   const world = useRef<WorldState>(newWorld(maps.mainville));
   const keys = useRef<Dir[]>([]);
   const [mapName, setMapName] = useState(maps.mainville.name);
@@ -42,6 +52,21 @@ export function WorldCanvas() {
   const [note, setNote] = useState("");
   const svc = useRef<SaveService | null>(null);
   const core = useRef<CoreSave | null>(null);
+  // Coming back from a gym or the Forge, stand on the door we left through instead of restarting in Mainville.
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(WORLD_KEY);
+      if (!raw) return;
+      sessionStorage.removeItem(WORLD_KEY);
+      const saved = JSON.parse(raw) as { map?: string; x?: number; y?: number };
+      const m = saved.map ? maps[saved.map] : undefined;
+      if (!m || !Number.isInteger(saved.x) || !Number.isInteger(saved.y)) return;
+      world.current = newWorld(m);
+      world.current.player = { x: saved.x!, y: saved.y!, facing: "down" };
+      // Deferred so the state updates are not synchronous inside the effect.
+      queueMicrotask(() => { setMapName(m.name); setMapId(m.id); });
+    } catch { /* private mode: start at the default spawn */ }
+  }, [maps]);
   useEffect(() => {
     svc.current = new SaveService(new IdbBackend());
     svc.current.load().then((c) => { core.current = c; }).catch(() => undefined);
@@ -69,11 +94,11 @@ export function WorldCanvas() {
       return;
     }
     const r = press(world.current);
-    if ((r.type === "npc" || r.type === "sign") && MAINVILLE_DIALOGUES[r.dialogue]) {
+    if ((r.type === "npc" || r.type === "sign") && WORLD_DIALOGUES[r.dialogue]) {
       keys.current = [];
       syncHeld();
       if (r.type === "npc") faceNpc(world.current, r.npcId, r.faceBack);
-      setTalk(startDialogue(MAINVILLE_DIALOGUES[r.dialogue], flagSet(core.current?.flags ?? {})));
+      setTalk(startDialogue(WORLD_DIALOGUES[r.dialogue], flagSet(core.current?.flags ?? {})));
     }
   }, [syncHeld]);
 
@@ -94,12 +119,14 @@ export function WorldCanvas() {
     const ctx = cv?.getContext("2d");
     if (!cv || !ctx) return;
     ctx.imageSmoothingEnabled = false;
-    const tiles = sheetToCanvases(buildTileset());
+    const tiles = { ...sheetToCanvases(buildTileset()), ...sheetToCanvases(buildAtollTileset()) };
     const tileMs = 350;
     const people: Record<string, Record<string, HTMLCanvasElement[]>> = {
       trainer: sheetToCanvases(buildCharacter(TRAINER)),
       iota: sheetToCanvases(buildCharacter(IOTA)),
       villager: sheetToCanvases(buildCharacter(VILLAGER)),
+      diver: sheetToCanvases(buildCharacter(DIVER)),
+      angler: sheetToCanvases(buildCharacter(ANGLER)),
     };
     let raf = 0;
     let last = performance.now();
@@ -145,9 +172,16 @@ export function WorldCanvas() {
       clock += dt;
       const events = tickWorld(world.current, dt, Math.random, maps);
       for (const e of events) {
-        if (e.type === "map") setMapName(world.current.map.name);
-        if (e.type === "door") { setNote(e.label); router.push(e.href); }
-        if (e.type === "encounter") setNote("A wild Structling rustles in the grass… (battles arrive in B3)");
+        if (e.type === "map") { setMapName(world.current.map.name); setMapId(world.current.map.id); }
+        if (e.type === "door") {
+          setNote(e.label);
+          try {
+            const p = world.current.player;
+            sessionStorage.setItem(WORLD_KEY, JSON.stringify({ map: world.current.map.id, x: p.x, y: p.y }));
+          } catch { /* storage unavailable */ }
+          router.push(e.href);
+        }
+        if (e.type === "encounter") setNote((e.pool && ENCOUNTER_TEXT[e.pool]) || "A wild Structling rustles in the grass… (battles arrive in B3)");
       }
       draw();
       raf = requestAnimationFrame(loop);

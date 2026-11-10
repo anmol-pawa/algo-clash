@@ -543,3 +543,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: see run summary.
 - Known gaps: no Mira portrait; Tidecaller does not attack/hurt in the battle stage beyond the stock stage effects; the gym is not reachable from the map until D1f-4 (warp from Mainville).
 - Next: D1f-4 (warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music).
+
+## 2026-11-10: D1f-4 Array Atoll wired into the world (D1f and D1 complete)
+- Route 1's south road now warps to Array Atoll (and back from the atoll's south shore). Seagrass is an encounter tile (new patches on the atoll, pool `atoll-seagrass`, rate 0.2; the encounter is still a toast until world battles land). Two NPCs (Diver Pell, Angler Ru; new `DIVER`/`ANGLER` looks) with original dialogue in `lib/dialogue/atoll.ts` that teaches indexing, previews the "dry tide" rule and nudges two pointers / prefix sums / `long long`; `lib/dialogue/world.ts` merges all overworld scripts. New original `atoll` theme in `lib/audio/songs.ts`, played by map via `MAP_SONG`. `WorldCanvas` draws the atoll tileset and remembers the door you left through (sessionStorage) so returning from a gym or the Forge no longer restarts in Mainville.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (665 pass incl. native content verify; new `tests/atoll-world.test.ts`), `build:pages`; Playwright on the static export at desktop and iPhone 14: walked Mainville to Route 1 to the atoll, no console errors, no horizontal overflow, screenshots reviewed (NPCs, seagrass, boardwalk, d-pad readable). The NPC dialogue box itself was only covered by unit tests this run (the scripted walk missed the NPC tile).
+- CI/deploy: confirmation skipped: no `gh` in this session.
+- Known gaps: encounters are still a toast (no wild battles on the map); no Mira portrait; `content:verify` ran as part of `npm test`.
+- Next: D2 (Window Woods): split by the region recipe.
