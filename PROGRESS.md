@@ -493,3 +493,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: no `prompt.json` for the new problems; not yet placed on a map or gym; no R2 lessons/cards yet.
 - Next: D1d (art: Tidecaller Mira, atoll tileset, backdrop, overworld map).
+
+## 2026-11-10: D1d-1 Tidecaller Mira sprite
+- ROADMAP D1d split into D1d-1 (sprite), D1d-2 (tileset), D1d-3 (backdrop + map). D1d-1 done: `game/sprites/tidecaller.ts`, a 96x96 shaded leader sprite (teal coat, aqua hair, shell clip, `[ ]` belt buckle, tide-staff topped with four indexed cells that light in sequence) with idle (4), attack (wind-up, sweep, crest with wave splash, recover), hurt (white flash + eyes-shut) and faint (sink + fade) animations. Shown on `/dev/sprites`; `tests/tidecaller-sprite.test.ts`.
+- Verified: `npm run lint` (0 errors, 9 existing warnings), `typecheck`, `build:pages`, `npm test` (582 pass, includes native content verify); Playwright on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed, all four animations read cleanly and nothing is clipped at the sprite edge after tightening the wind-up tilt.
+- CI/deploy: no `gh` in this session; not confirmed. Pushed to `main` from the session branch.
+- Known gaps: Mira is not yet wired into the gym scene; the splash cone is only visible in attack frames 2-4; no portrait yet.
+- Next: D1d-2 (atoll tileset).

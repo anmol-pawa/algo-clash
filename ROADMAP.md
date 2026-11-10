@@ -137,7 +137,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] D1a. Problems batch 1: hashing basics (Matching Pairs, Echo Gate, Scramble Check, Badge Chain, Scramble Clans).
   - [x] D1b. Problems batch 2: two pointers (Mirror Check, Triple Tally, Widest Basin, Ferry Pairs, Tide Pools). Dutch flag is in-place only, so it goes to a Forge scroll/card in D1e/D1f.
   - [x] D1c. Problems batch 3: prefix sums and difference arrays, Kadane (Range Ledger, Hot Streak, Exact Stretches, Sprinkler Lanes, Ring Gain).
-  - [ ] D1d. Art: Tidecaller Mira (96x96), atoll tileset, backdrop, overworld map.
+  - [ ] D1d. Art, split:
+    - [x] D1d-1. Tidecaller Mira 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
+    - [ ] D1d-2. Atoll tileset (sand, shallows, palms, boardwalk, shells) on `/dev/sprites`.
+    - [ ] D1d-3. Atoll battle/gym backdrop and overworld map (Array Atoll).
   - [ ] D1e. Lessons, C++ Corner, ~40 cards and a recognition set for R2.
   - [ ] D1f. Forge scrolls, visualisers, Mira gym with signature mechanic, dialogue and music.
 - [ ] D2. Window Woods (R3)

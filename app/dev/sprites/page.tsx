@@ -8,6 +8,7 @@ import { EvolutionScene } from "@/components/EvolutionScene";
 import { TileScene } from "@/components/TileScene";
 import { GymScene } from "@/components/GymScene";
 import { buildWarden } from "@/game/sprites/warden";
+import { buildTidecaller } from "@/game/sprites/tidecaller";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
@@ -19,6 +20,7 @@ export default function SpritesDev() {
   const chars = useMemo(() => [TRAINER, IOTA].map((l) => ({ l, sheet: buildCharacter(l), portrait: buildPortrait(l) })), []);
   const vec = useMemo(() => ({ front: buildVectorling("front"), back: buildVectorling("back") }), []);
   const warden = useMemo(() => buildWarden(), []);
+  const tidecaller = useMemo(() => buildTidecaller(), []);
   const tiles = useMemo(() => buildTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
@@ -68,6 +70,17 @@ export default function SpritesDev() {
         <div className="grid gap-3 md:grid-cols-2">
           <GymScene sheet={warden} anim="idle" scale={3} />
           <GymScene sheet={warden} anim="attack" scale={3} />
+        </div>
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Tidecaller Mira (96x96 gym leader, Array Atoll)</h2>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {["idle", "attack", "hurt", "faint"].map((a) => (
+            <figure key={a} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+              <SpriteCanvas sheet={tidecaller} anim={a} scale={3} />
+              <figcaption className="text-xs text-black">{a}</figcaption>
+            </figure>
+          ))}
         </div>
       </section>
       <section className="mb-6">
