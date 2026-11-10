@@ -564,3 +564,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: see run summary.
 - Known gaps: new problems not yet used by a gym, lesson or map.
 - Next: D2b-2 (Minimum Window, Subarrays with K Different Integers).
+
+## 2026-11-10: D2b-2 Window Woods problems batch 2b
+- D2b-2 done: Cover Strip (H; shortest stretch covering a multiset of letters, ties go leftmost, upper and lower case differ; `need[]` + `missing` counter) and Distinct Picks (H; count stretches with exactly k colours via atMost(k) - atMost(k-1), `long long`). Each has reference, brute, 4 wrong solutions (incl. a TLE one), seeded generator, four test groups, hint ladder, house-style editorial. Catalog regenerated (49 problems).
+- Verified: `npm run content:gen` then `content:verify` (50 tests pass natively with g++, every wrong solution rejected), `npm run lint` (0 errors), `typecheck`, `npm test`, `build`, `build:pages` (see exit codes in the run summary). No visual change, so no screenshots.
+- Known gaps: new problems not yet used by a gym, lesson or map. `distinct-picks/tests.json` is 2 MB (same order as odd-picks at 3.3 MB); trim perf cases if repo size matters.
+- Next: D2b-3 (Sliding Window Maximum with a monotonic deque, Shortest Subarray with Sum at Least K).
