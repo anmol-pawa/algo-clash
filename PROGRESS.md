@@ -464,3 +464,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: not confirmed (no `gh` in this session). Pushed to `main` from the session branch.
 - Known gaps: radar has no spoke labels (names listed beneath; a 4-spoke radar is a diamond); no confidence calibration or debrief cause tags; Mock gate reads a `mocks:streak` flag that nothing sets yet; Gym fights do not record attempts through this path unless they use BattleArena Submit (they do).
 - Next: C9 (visualiser framework).
+
+## 2026-11-10: C9 Visualiser framework, sort stepper, two-pointer/window animator
+- New pure `lib/visualiser/` (`types.ts` Frame/Trace, `sort.ts` bubble/selection/insertion traces, `window.ts` pair-sum, fixed-window max sum and longest-distinct-window traces, `parse.ts` input parsing). New `/library` page (`LibraryScreen`, `VisualiserPlayer`): step back/forward, autoplay, replay, own input (up to 16 numbers) with validation, pointer and mark rendering, complexity line. Links from the title and the Academy. Adding a visualiser means writing a solver that returns a `Trace`.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (564 pass; new `tests/visualiser.test.ts` checks every frame is a permutation, sorted result, and pair/window/distinct results against brute force over random inputs), `build:pages`; new `scripts/smoke-library.mjs` on the static export at desktop and iPhone 14: stepping, custom input, autoplay, error path, no console errors, no overflow; screenshots reviewed (readable, 44 px targets). `content:verify` unchanged (no coding problems).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: no animation between frames (cells just recolour); on iPhone the player sits below the input panel so needs a scroll; no per-visualiser "predict the next step" quiz; no map door.
+- Next: D1 (Array Atoll).

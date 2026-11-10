@@ -119,7 +119,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] C7b. Recognition blitz card format (statement + constraints, pick pattern(s) in 20 s) and the first 60 original statements with signal highlights; `lib/recognition/` pure grading with tests. (78 statements shipped.)
   - [x] C7c. Scout School screen (`/scout`, title button, Academy link): blitz rounds, latest outcomes saved, mastery (>= 50 seen, >= 90 % in time) gives the free Compass reading in battle. (A map-world door is left to the overworld work in D1.)
 - [x] C8. **Trainer Card / Readiness Report** (GDD §9): gates, radar, WA-cause histogram and "next best action" (`/card`). Confidence calibration and debrief cause tags are left for later (needs a confidence prompt and a cause picker).
-- [ ] C9. **Visualiser framework** (CUR §6), plus the first two: the array/sort stepper and the two-pointer/window animator.
+- [x] C9. **Visualiser framework** (CUR §6), plus the first two: the array/sort stepper and the two-pointer/window animator. (`/library`; trace-based `lib/visualiser/`; remaining CUR §6 visualisers land with their regions.)
 
 ## Phase D: Regions (repeat the region recipe for each)
 

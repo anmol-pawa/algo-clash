@@ -48,6 +48,7 @@ export default function LessonsScreen() {
       ) : (
         <div className="mx-auto flex max-w-3xl flex-col gap-2">
           <a href="/scout/" className="px-btn flex min-h-11 items-center justify-center text-sm" data-testid="scout-link">Scout School: recognition blitz</a>
+          <a href="/library/" className="px-btn flex min-h-11 items-center justify-center text-sm" data-testid="library-link">Library: step-by-step visualisers</a>
           <p className="text-sm opacity-80" data-testid="lessons-progress">{lessonsDoneCount(view, allLessons)} of {allLessons.length} lessons read{next ? ` · up next: ${next.title}` : " · all done"}</p>
           <ul className="flex flex-col gap-2" aria-label="Lessons">
             {allLessons.map((l) => {
