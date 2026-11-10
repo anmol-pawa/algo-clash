@@ -114,10 +114,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] C6a. Pure `lib/modes/` (mode table, run limit, Contest timer, speed credit, Guided assists) with tests.
   - [x] C6b. Mode picker in the battle (autocomplete off, hints/items gated, Run limit, Contest clock, Guided free hints + approach card), Rift speed credit.
   - [x] C6c. Interview/Contest "write your own tests" gate before Submit, edge-case-class coverage scoring (per-problem `edgeClasses`), and hiding the WA diff in Interview.
-- [ ] C7. **Scout School** (CUR R1 + §5): lessons, the constraint table, recognition blitz cards (first 60 statements), and the complexity/recurrence solver with tests.
+- [x] C7. **Scout School** (CUR R1 + §5): lessons, the constraint table, recognition blitz cards (first 60 statements), and the complexity/recurrence solver with tests.
   - [x] C7a. Pure `lib/complexity/` (constraint table, op counts, master-theorem recurrence solver with numeric check), two R1 lessons and 21 R1 cards (loop counting predicts via g++; budget and recurrence cards generated from the solvers), with tests.
   - [x] C7b. Recognition blitz card format (statement + constraints, pick pattern(s) in 20 s) and the first 60 original statements with signal highlights; `lib/recognition/` pure grading with tests. (78 statements shipped.)
-  - [ ] C7c. Scout School screen/door: R1 lessons and blitz reachable from the map, mastery recorded for the Complexity Compass unlock.
+  - [x] C7c. Scout School screen (`/scout`, title button, Academy link): blitz rounds, latest outcomes saved, mastery (>= 50 seen, >= 90 % in time) gives the free Compass reading in battle. (A map-world door is left to the overworld work in D1.)
 - [ ] C8. **Trainer Card / Readiness Report** (GDD §9): gates, radar, calibration, WA-cause histogram and "next best action".
 - [ ] C9. **Visualiser framework** (CUR §6), plus the first two: the array/sort stepper and the two-pointer/window animator.
 

@@ -450,3 +450,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: skipped because of the Actions quota. Pushed with `HEAD:main` from the session branch.
 - Known gaps: no UI yet; labels are single-author judgement (alsoOk lists the defensible alternatives); the Gym blitz still uses cards, not these statements.
 - Next: C7c (Scout School screen/door, blitz UI, mastery for the Compass unlock).
+
+## 2026-11-10: C7c Scout School screen (C7 complete)
+- New pure `lib/recognition/progress.ts` (per-statement latest outcome in save `flags`, `scoutProgress`, mastery rule, deterministic `pickRound`) with `tests/scout-progress.test.ts`. New `/scout` page (`components/ScoutScreen.tsx`): 10-statement rounds, 20 s timer that locks on expiry, multi-select pattern buttons, feedback with highlighted signals and the explanation, round summary, persisted progress. Title SCOUT button and an Academy link. Mastery gives a free Complexity Compass reading in battle (`CompassPanel` `free`, no penalty). GDD §6.5 area updated.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (544 pass, includes native content verify), `npm run build`, `build:pages`; new `scripts/smoke-scout.mjs` on the static export at desktop and iPhone 14: round of 10, persistence over reload, timeout path, title link, no console errors, no overflow; iPhone screenshots of feedback and title reviewed (readable, 44 px targets, four-button title row fits).
+- CI/deploy: Actions quota period is over; confirmation not possible here (no `gh`), see summary. Pushed with `HEAD:main` from the session branch.
+- Known gaps: no world-map door for Scout School (reachable from title and Academy); mastery needs 50 seen so is not driven end-to-end in the browser (unit-tested); R1 lessons themselves are not a gated prerequisite.
+- Next: C8 (Trainer Card / Readiness Report).

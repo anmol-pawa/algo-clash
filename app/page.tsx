@@ -33,6 +33,7 @@ export default function Title() {
       <Link href="/rift/" className="px-btn flex min-h-11 w-full max-w-xs items-center justify-center text-sm">DAILY RIFT</Link>
       <div className="flex w-full max-w-xs gap-3">
         <Link href="/learn/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">LEARN</Link>
+        <Link href="/scout/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">SCOUT</Link>
         <Link href="/gym/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">GYM</Link>
         <Link href="/forge/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">FORGE</Link>
       </div>

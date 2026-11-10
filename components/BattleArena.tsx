@@ -29,6 +29,8 @@ import { NO_ASSISTANCE, consume, countOf, grantStarterKit, isAssisted } from "@/
 import { DraftAutosaver } from "@/lib/save/autosave";
 import { IdbBackend } from "@/lib/save/idb";
 import { SaveService } from "@/lib/save/service";
+import { STATEMENTS } from "@/content/recognition";
+import { scoutProgress } from "@/lib/recognition/progress";
 import { battleOutcome, tabAfterJudge, type BattleTab, type JudgeKind } from "@/lib/ui/battleTabs";
 import { parseStatement } from "@/lib/ui/statement";
 import { buildVerdictView, type VerdictView } from "@/lib/ui/verdictView";
@@ -100,6 +102,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
   const [revealed, setRevealed] = useState(0);
   const [compassTokens, setCompassTokens] = useState(0);
   const [compassUsed, setCompassUsed] = useState(false);
+  const [scoutMastered, setScoutMastered] = useState(false);
   const [lensTokens, setLensTokens] = useState(0);
   const [lensUsed, setLensUsed] = useState(false);
   const [lastFail, setLastFail] = useState<string | undefined>();
@@ -174,7 +177,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     svc.load().then(async (c) => {
       const kit = grantStarterKit(c);
       if (kit !== c) await svc.save(kit);
-      if (alive) { setTokens(countOf(kit, "hint-token")); setCompassTokens(countOf(kit, "complexity-compass")); setLensTokens(countOf(kit, "debug-lens")); }
+      if (alive) { setScoutMastered(scoutProgress(c, STATEMENTS).mastered); setTokens(countOf(kit, "hint-token")); setCompassTokens(countOf(kit, "complexity-compass")); setLensTokens(countOf(kit, "debug-lens")); }
     }).catch(() => {});
     return () => { alive = false; };
   }, []);
@@ -303,7 +306,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
           <ModePanel mode={mode} onPick={pickMode} locked={runs > 0 || submitted || !!ended} runsLeft={runsLeft} timeLeft={timeLeft}
             approach={hints.find((h) => h.rung === "Approach")?.text} />
           <div className="min-h-[200px] flex-1"><CodeEditor value={code} onChange={edit} settings={{ ...DEFAULT_EDITOR_SETTINGS, autocomplete: mode.autocomplete }} /></div>
-          {catalogEntry && mode.items && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
+          {catalogEntry && mode.items && <CompassPanel complexity={catalogEntry.meta.complexity} used={compassUsed || scoutMastered} free={scoutMastered} count={compassTokens} disabled={busy || !!ended} onUse={useCompass} />}
           <LensPanel input={lastFail} used={lensUsed} count={lensTokens} disabled={busy || !!ended} onUse={useLens} />
           {hints.length > 0 && mode.hints && <HintPanel hints={hints} revealed={revealed} tokens={tokens} disabled={busy || !!ended} onReveal={revealHint} free={mode.approachCard} />}
           {mode.ownTests && <OwnTestsPanel tests={ownTests} onChange={setOwnTests} onRun={runOwnTests} busy={busy || !!ended} gate={gate} cov={cov} status={ownStatus} />}

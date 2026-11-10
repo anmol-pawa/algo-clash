@@ -3,14 +3,14 @@
 import { useState } from "react";
 
 /** Complexity Compass (GDD §6.6): spend one to see the target complexity; the win gains one tier less. */
-export default function CompassPanel({ complexity, used, count, disabled, onUse }: {
-  complexity: { time: string; space: string }; used: boolean; count: number; disabled?: boolean; onUse: () => void;
+export default function CompassPanel({ complexity, used, free, count, disabled, onUse }: {
+  complexity: { time: string; space: string }; used: boolean; free?: boolean; count: number; disabled?: boolean; onUse: () => void;
 }) {
   const [sure, setSure] = useState(false);
   if (used) {
     return (
       <p className="panel p-2 text-sm" data-testid="compass-reading" aria-label="Complexity Compass reading">
-        <b className="text-[var(--gold)]">Compass:</b> aim for time <code>{complexity.time}</code>, space <code>{complexity.space}</code>.
+        <b className="text-[var(--gold)]">Compass{free ? " (Scout mastery, free)" : ""}:</b> aim for time <code>{complexity.time}</code>, space <code>{complexity.space}</code>.
       </p>
     );
   }
