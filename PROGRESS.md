@@ -486,3 +486,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: no `prompt.json` for the new problems; not yet placed on a map or gym; no R2 lessons/cards yet.
 - Next: D1c (prefix sums, difference arrays, Kadane).
+
+## 2026-11-10: D1c Array Atoll problems batch 3 (prefix sums, difference arrays, Kadane)
+- Five new R2 packages in `content/problems/R2/`: Range Ledger (E, prefix sums, `long long` totals), Hot Streak (M, Kadane, at least one element), Exact Stretches (M, prefix sums + count map, negatives so no sliding window), Sprinkler Lanes (M, difference array), Ring Gain (M, circular Kadane via total minus min stretch, all-negative guard). Each has solution, brute, 3-4 wrong solutions (TLE, int overflow, off-by-one, missing seed/guard variants), seeded generator, generated tests in four groups, 3-rung hints and a house-style editorial. `content/gyms/catalog.ts` regenerated (41 problems).
+- Verified: native `content:verify` (every wrong solution rejected, reference matches brute on random cases), `npm run lint` (no warnings from the new files), `typecheck`, `npm test`. No UI change, so no screenshots. A first Hot Streak wrong variant turned out to be equivalent to Kadane and was caught by the verifier and replaced.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: no `prompt.json` for the new problems; not yet placed on a map or gym; no R2 lessons/cards yet.
+- Next: D1d (art: Tidecaller Mira, atoll tileset, backdrop, overworld map).
