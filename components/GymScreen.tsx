@@ -8,18 +8,38 @@ import { useMusic } from "@/components/Music";
 import { EvolutionScene } from "@/components/EvolutionScene";
 import { GymScene } from "@/components/GymScene";
 import { gymKits, type GymKit } from "@/content/gyms/kits";
-import { syntaxShoresGym as gym } from "@/content/gyms/r0";
+import { syntaxShoresGym } from "@/content/gyms/r0";
 import { buildWarden } from "@/game/sprites/warden";
+import type { SpriteSheet } from "@/game/sprites/grid";
+import type { ForbiddenRule } from "@/lib/gym/twist";
 import { FOE_MAX_HP } from "@/lib/battle/damage";
 import { answerBlitz, battleResult, blitzCorrect, coreFoeHp, shuffledOptions, startGym, SHIELD_START } from "@/lib/gym/machine";
 import { applyEvolution } from "@/lib/evolution/progress";
 import { applyGymWin, blitzSecondsLeft, hasBadge } from "@/lib/gym/progress";
-import type { GymState } from "@/lib/gym/types";
+import type { GymDef, GymState } from "@/lib/gym/types";
 import type { TestCase } from "@/lib/judge/verdict";
 import { IdbBackend } from "@/lib/save/idb";
 import { SaveService } from "@/lib/save/service";
 
 const WERROR_FLAGS = ["-O2", "-Wall", "-Wextra", "-Werror"];
+/** Everything that differs between gyms: data, kits, the leader sprite, the backdrop and the signature-round twist. */
+export interface GymConfig {
+  gym: GymDef;
+  kits: Record<string, GymKit>;
+  buildLeader: () => SpriteSheet;
+  scene: "gym" | "atoll-gym";
+  region: "syntax-shores" | "array-atoll";
+  /** Compiler flags for the signature round (the Syntax Shores twist). */
+  signatureFlags?: string[];
+  /** Source rules for the signature round (the Array Atoll twist). */
+  signatureRules?: ForbiddenRule[];
+  /** Plays the Arrayling stage-2 evolution on the first win (Syntax Shores only). */
+  evolves?: boolean;
+  placeName: string;
+  /** "the Warden" in "Challenge the Warden ▶". */
+  challenge: string;
+}
+
 const nowMs = (): number => Date.now();
 type Screen = "intro" | "play" | "retry" | "evolve" | "end";
 
@@ -34,7 +54,7 @@ function Shield({ value }: { value: number }) {
   );
 }
 
-function Blitz({ state, onAnswer }: { state: GymState; onAnswer: (choice: string | null, seconds: number) => void }) {
+function Blitz({ gym, state, onAnswer }: { gym: GymDef; state: GymState; onAnswer: (choice: string | null, seconds: number) => void }) {
   const item = gym.blitz[state.blitzIndex];
   const options = useMemo(() => shuffledOptions(item, 1), [item]);
   const [startedAt] = useState(nowMs); // the parent remounts this component per item
@@ -77,7 +97,7 @@ function Blitz({ state, onAnswer }: { state: GymState; onAnswer: (choice: string
           </p>
           <p className="text-sm text-white/80">{item.why}</p>
           <button className="px-btn px-btn-primary min-h-11" onClick={() => onAnswer(picked.choice, picked.seconds)}>
-            {state.blitzIndex + 1 >= gym.blitz.length ? "To the lighthouse ▶" : "Next ▶"}
+            {state.blitzIndex + 1 >= gym.blitz.length ? "To the main battle ▶" : "Next ▶"}
           </button>
         </div>
       )}
@@ -85,10 +105,21 @@ function Blitz({ state, onAnswer }: { state: GymState; onAnswer: (choice: string
   );
 }
 
+const SYNTAX_SHORES: GymConfig = {
+  gym: syntaxShoresGym, kits: gymKits, buildLeader: buildWarden, scene: "gym", region: "syntax-shores",
+  signatureFlags: WERROR_FLAGS, evolves: true, placeName: "the lighthouse", challenge: "the Warden",
+};
+
 /** The Syntax Shores gym (GDD §5.5): intro, recognition blitz, core battle, signature battle (-Werror twist), badge. */
 export default function GymScreen() {
+  return <GymRunner config={SYNTAX_SHORES} />;
+}
+
+/** A gym (GDD §5.5): intro, recognition blitz, core battle, signature battle with the gym's twist, badge. */
+export function GymRunner({ config }: { config: GymConfig }) {
+  const { gym, kits: gymKits } = config;
   useMusic("battle");
-  const warden = useMemo(() => buildWarden(), []);
+  const warden = useMemo(() => config.buildLeader(), [config]);
   const [state, setState] = useState<GymState>(() => startGym(gym));
   const [screen, setScreen] = useState<Screen>("intro");
   const [owned, setOwned] = useState(false);
@@ -124,11 +155,12 @@ export default function GymScreen() {
       const sv = svc.current ?? new SaveService(new IdbBackend());
       const core = await sv.load();
       const first = !hasBadge(core, gym);
-      await sv.save(applyEvolution(applyGymWin(core, gym), "arrayling", 2));
+      const won = applyGymWin(core, gym);
+      await sv.save(config.evolves ? applyEvolution(won, "arrayling", 2) : won);
       setOwned(true);
-      return first;
+      return first && !!config.evolves;
     } catch { return false; /* the win still shows; saving is retried on the next win */ }
-  }, []);
+  }, [gym, config.evolves]);
 
   function onBlitz(choice: string | null, seconds: number) {
     const next = answerBlitz(gym, state, choice, seconds);
@@ -151,9 +183,10 @@ export default function GymScreen() {
   if (screen === "play" && battlePhase) {
     return problem ? (
       <BattleArena key={`${state.phase}-${attempt}`} problem={problem}
-        scene="gym"
+        scene={config.scene}
         foeStartHp={state.phase === "core" ? coreFoeHp(state) : undefined}
-        compileFlags={state.phase === "signature" ? WERROR_FLAGS : undefined}
+        compileFlags={state.phase === "signature" ? config.signatureFlags : undefined}
+        forbidden={state.phase === "signature" ? config.signatureRules : undefined}
         onResult={onBattle} />
     ) : <main className={shell}><p role="status">{loadErr || "Loading the battle…"}</p></main>;
   }
@@ -165,7 +198,7 @@ export default function GymScreen() {
         <Link href="/" className="px-btn flex min-h-11 items-center px-3 text-sm">Leave</Link>
       </header>
       <div className={screen === "play" ? "mx-auto w-full max-w-xs" : "w-full"}>
-        <GymScene sheet={warden} anim={state.phase === "won" ? "faint" : "idle"} scale={3} />
+        <GymScene sheet={warden} anim={state.phase === "won" ? "faint" : "idle"} scale={3} region={config.region} />
       </div>
 
       {screen === "intro" && (
@@ -173,16 +206,16 @@ export default function GymScreen() {
           <p className="font-display text-lg">{gym.leader.name} <span className="text-sm text-white/60">· {gym.leader.title}</span></p>
           <p>“{gym.leader.lines.intro}”</p>
           <ol className="list-decimal pl-5 text-sm text-white/80">
-            <li>Recognition blitz: {gym.blitz.length} problems, {gym.blitzSeconds}s each. Every shield point you break takes {8} HP off Warden Brace in round 2.</li>
+            <li>Recognition blitz: {gym.blitz.length} problems, {gym.blitzSeconds}s each. Every shield point you break takes {8} HP off {gym.leader.name} in round 2.</li>
             <li>Core battle: <b>{gymKits[gym.coreProblemId].title}</b>.</li>
             <li>Signature battle: <b>{gymKits[gym.signatureProblemId].title}</b>. Twist, <b>{gym.twist.title}</b>: {gym.twist.rule}</li>
           </ol>
           {owned && <p className="text-sm text-emerald-300">You already hold the {gym.badge.name}. A rematch pays no second shard.</p>}
-          <button className="px-btn px-btn-primary min-h-11" onClick={() => setScreen("play")}>Challenge the Warden ▶</button>
+          <button className="px-btn px-btn-primary min-h-11" onClick={() => setScreen("play")}>Challenge {config.challenge} ▶</button>
         </section>
       )}
 
-      {screen === "play" && state.phase === "blitz" && <Blitz key={state.blitzIndex} state={state} onAnswer={onBlitz} />}
+      {screen === "play" && state.phase === "blitz" && <Blitz key={state.blitzIndex} gym={gym} state={state} onAnswer={onBlitz} />}
 
       {screen === "retry" && battlePhase && (
         <section className="panel flex flex-col gap-3 p-4" data-testid="gym-interstitial">
@@ -194,7 +227,7 @@ export default function GymScreen() {
           ) : state.phase === "core" ? (
             <>
               <p className="font-display text-lg">Blitz cleared: {blitzCorrect(state)}/{gym.blitz.length} on time</p>
-              <p className="text-sm text-white/80">Shield {state.shield}/{SHIELD_START} start. {headStart > 0 ? `You bit ${headStart} HP off the Warden before round 2.` : "No head start this time."}</p>
+              <p className="text-sm text-white/80">Shield {state.shield}/{SHIELD_START} start. {headStart > 0 ? `You bit ${headStart} HP off ${gym.leader.name} before round 2.` : "No head start this time."}</p>
             </>
           ) : (
             <>
@@ -216,10 +249,10 @@ export default function GymScreen() {
               <p className="font-display text-xl text-[var(--gold)]">★ {gym.badge.name} earned!</p>
               <p>“{gym.leader.lines.win}”</p>
               <p className="text-sm text-white/80">Reward: {gym.badge.name} and {state.reward?.shards ?? 0} Compiler Shard. Saved to your profile.</p>
-              {owned && <p className="text-sm text-emerald-300">Your Arrayling is now a Vectorling (stage 2).</p>}
+              {owned && config.evolves && <p className="text-sm text-emerald-300">Your Arrayling is now a Vectorling (stage 2).</p>}
             </>
           ) : (
-            <p>You retreated from the lighthouse. The badge waits; the blitz starts fresh next time.</p>
+            <p>You retreated from {config.placeName}. The badge waits; the blitz starts fresh next time.</p>
           )}
           <div className="flex gap-2">
             <button className="px-btn min-h-11 flex-1" onClick={() => { setState(startGym(gym)); setScreen("intro"); }}>Rematch</button>

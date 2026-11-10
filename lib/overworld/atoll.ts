@@ -30,6 +30,6 @@ export const ARRAY_ATOLL: MapDef = {
     B: "boardwalkPost", c: "shell", r: "rock", o: "coral", t: "tidePool", g: "seagrass", d: "driftwood",
   },
   spawn: { x: 10, y: 12, facing: "up" },
-  doors: [{ x: 10, y: 1, href: "/gym/", label: "Entering the Tidecaller Gym…", tag: "GYM" }],
+  doors: [{ x: 10, y: 1, href: "/gym/atoll/", label: "Entering the Tidecaller Gym…", tag: "GYM" }],
   solid: ["deepWater", "palm", "rock", "coral", "boardwalkPost", "driftwood"],
 };

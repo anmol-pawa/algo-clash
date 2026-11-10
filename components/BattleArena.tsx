@@ -17,8 +17,9 @@ import HintPanel from "@/components/HintPanel";
 import StatementPanel from "@/components/StatementPanel";
 import VerdictPanel from "@/components/VerdictPanel";
 import { DEFAULT_EDITOR_SETTINGS } from "@/lib/editor/settings";
-import { compileCpp, runWasm } from "@/lib/judge/client";
+import { compileCpp, runWasm, type CompileResult } from "@/lib/judge/client";
 import { judgeProblem } from "@/lib/judge/judge";
+import { findForbidden, type ForbiddenRule } from "@/lib/gym/twist";
 import type { DriverSpec } from "@/lib/judge/harness/driver";
 import { audio } from "@/lib/audio/engine";
 import { verdictSfx } from "@/lib/audio/sfx";
@@ -70,9 +71,11 @@ export interface ArenaOptions {
   /** Foe HP at the start of the fight (gym head start). */
   foeStartHp?: number;
   /** "gym": lighthouse backdrop and Warden Brace as the foe. */
-  scene?: "meadow" | "gym";
+  scene?: "meadow" | "gym" | "atoll-gym";
   /** clang flags for every Run/Submit (a gym twist such as -Werror). Compile errors never cost a heart. */
   compileFlags?: string[];
+  /** Source rules checked before compiling (a gym twist such as "Dry tide"); a violation shows as a compile error and never costs a heart. */
+  forbidden?: ForbiddenRule[];
   /** When set the fight can end: a Continue button reports the result, and Retreat is offered. */
   onResult?: (r: ArenaResult, info?: ArenaInfo) => void;
 }
@@ -82,7 +85,7 @@ const PLAYER_HEARTS = 5;
 const FOE_HP = 100;
 
 /** One coding battle: stage + statement + editor, Run (visible tests) chips the foe, Submit (all tests) decides the fight. */
-export default function BattleArena({ problem, foeStartHp, scene, compileFlags, onResult }: { problem: ArenaProblem } & ArenaOptions) {
+export default function BattleArena({ problem, foeStartHp, scene, compileFlags, forbidden, onResult }: { problem: ArenaProblem } & ArenaOptions) {
   useMusic("battle");
   const statement = useMemo(() => parseStatement(problem.statement), [problem.statement]);
   const visible = useMemo(() => problem.tests.filter((t) => t.group === "basic"), [problem.tests]);
@@ -141,7 +144,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     }).catch(() => {});
     const onHide = () => { if (document.visibilityState === "hidden") void a.flush(); };
     document.addEventListener("visibilitychange", onHide);
-    const t = setTimeout(() => stage.current?.say(scene === "gym" ? `${problem.foeName} holds the line! Write the code to break through.` : `A wild ${problem.foeName} appeared! Write the code to beat it.`), 900);
+    const t = setTimeout(() => stage.current?.say(scene !== "meadow" && scene !== undefined ? `${problem.foeName} holds the line! Write the code to break through.` : `A wild ${problem.foeName} appeared! Write the code to beat it.`), 900);
     return () => {
       alive = false;
       clearTimeout(t);
@@ -230,13 +233,19 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     saver.current?.update(c);
   }
 
+  const compileWith = async (s: string): Promise<CompileResult> => {
+    // The rules apply to the player's own code, not the generated harness around it.
+    const broken = forbidden ? findForbidden(code, forbidden) : null;
+    return broken ? { ok: false, diagnostics: `error: ${broken}`, timings: {} } : compileCpp(s, compileFlags);
+  };
+
   /** Judge the player's own tests against their own code. Does not use up a Run. */
   async function runOwnTests() {
     const tests = ownTests.filter((t) => ownTestIssue(t) === null);
     if (tests.length === 0) return;
     setBusy(true);
     setOwnStatus("Judging your tests…");
-    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s, compileFlags), run: runWasm });
+    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: compileWith, run: runWasm });
     setBusy(false);
     if (r.verdict === "CE") { setOwnStatus("Your code does not compile yet. Fix that first."); return; }
     const verdicts = tests.map((_, i) => r.outcomes[i]?.verdict);
@@ -252,7 +261,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     if (kind === "run") setRuns((n) => n + 1); else setSubmitted(true);
     setBusy(true);
     setView(null);
-    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: (s) => compileCpp(s, compileFlags), run: runWasm });
+    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: compileWith, run: runWasm });
     const v = buildVerdictView(r, tests);
     setView(v);
     if (v.failInput !== undefined) setLastFail(v.failInput);

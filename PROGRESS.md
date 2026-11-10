@@ -535,3 +535,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session, so not confirmed. Pushed to `main`.
 - Known gaps: the map is shown as a text state line, not drawn as buckets; no "predict the next step" quiz.
 - Next: D1f-3 (Mira gym wired to the atoll map door).
+
+## 2026-11-10: D1f-3 Mira gym wired to the atoll door
+- New `content/gyms/r2.ts` (Tidecaller Gym: 8-item blitz with 2 review items, core Exact Stretches (M), signature Tide Pools (H), "Dry tide" twist: no map/set/stack/queue, no second vector, no `new`), `content/gyms/kitsR2.ts` (kits built from the generated catalog + `starterFor`), `lib/gym/twist.ts` (comment/string-aware rule checker), route `/gym/atoll/`. `GymScreen` generalised into `GymRunner` with a `GymConfig` (leader sprite, scene, flags/rules, evolution only for Syntax Shores); `BattleStage` gets an `atoll-gym` scene (atoll backdrop + Mira); `BattleArena` takes `forbidden` rules and shows a violation as a compile error (no heart lost). Atoll map door now points to `/gym/atoll/`. GDD §5.5 updated.
+- Bug caught by the smoke test: the rules must run on the player's code, not the harness-wrapped source (regression test added).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (658 pass incl. native content verify), `build:pages`; new `scripts/smoke-gym-atoll.mjs` (blitz with a miss, core win, Dry tide rejection, signature win, badge, persistence) and the existing `smoke-gym.mjs` pass on the static export at desktop and iPhone 14: no console errors, no overflow; screenshots reviewed (Mira on the atoll backdrop, rejection message, badge screen).
+- CI/deploy: see run summary.
+- Known gaps: no Mira portrait; Tidecaller does not attack/hurt in the battle stage beyond the stock stage effects; the gym is not reachable from the map until D1f-4 (warp from Mainville).
+- Next: D1f-4 (warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music).
