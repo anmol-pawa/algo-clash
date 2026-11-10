@@ -10,6 +10,7 @@ import { GymScene } from "@/components/GymScene";
 import { buildWarden } from "@/game/sprites/warden";
 import { buildTidecaller } from "@/game/sprites/tidecaller";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
+import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
 const ANIMS = ["idle", "attack", "hurt", "faint", "evolve"];
@@ -22,6 +23,7 @@ export default function SpritesDev() {
   const warden = useMemo(() => buildWarden(), []);
   const tidecaller = useMemo(() => buildTidecaller(), []);
   const tiles = useMemo(() => buildTileset(), []);
+  const atoll = useMemo(() => buildAtollTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
       <h1 className="mb-1 text-xl font-bold">Sprites</h1>
@@ -95,6 +97,17 @@ export default function SpritesDev() {
         </div>
         <h3 className="mb-1 mt-3 text-sm font-semibold">Sample scene</h3>
         <TileScene sheet={tiles} />
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Array Atoll tileset (16x16)</h2>
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-9">
+          {ATOLL_TILE_NAMES.map((n) => (
+            <figure key={n} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+              <SpriteCanvas sheet={atoll} anim={n} scale={4} />
+              <figcaption className="truncate text-xs text-black">{n}</figcaption>
+            </figure>
+          ))}
+        </div>
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">

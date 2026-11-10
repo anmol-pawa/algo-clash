@@ -500,3 +500,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed. Pushed to `main` from the session branch.
 - Known gaps: Mira is not yet wired into the gym scene; the splash cone is only visible in attack frames 2-4; no portrait yet.
 - Next: D1d-2 (atoll tileset).
+
+## 2026-11-10: D1d-2 Array Atoll tileset
+- New `game/sprites/atollTiles.ts`: 14 deterministic 16x16 tiles with their own shaded palette (sand x2, wet sand shoreline, animated shallows/deep water/tide pool (4 frames), seagrass (2), palm, boardwalk, boardwalk post, shell, rock, coral, driftwood) plus `ATOLL_SOLID` (deep water, palm, rock, coral, post, driftwood block; shallows are wadeable). Shown on `/dev/sprites`; `tests/atoll-tiles.test.ts`.
+- Verified: `npm run lint` (0 errors, 9 existing warnings), `typecheck`, `npm test` (587 pass, includes native content verify), `build`, `build:pages`; Playwright on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (tiles read as intended; palm fronds thickened after the first look; long caption now truncates).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: tiles are not yet composed into a map or wired into the overworld (D1d-3); no sample scene on the dev page yet.
+- Next: D1d-3 (atoll battle/gym backdrop and overworld map).
