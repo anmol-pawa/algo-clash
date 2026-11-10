@@ -67,6 +67,8 @@ export interface MapDef {
   encounterRate?: number;
   /** Pool id for the encounter table (lib/battle, B4). */
   encounterPool?: string;
+  /** Extra solid tile names for regions with their own tileset (added to SOLID_TILES). */
+  solid?: string[];
 }
 
 export interface GameMap {
@@ -82,6 +84,7 @@ export interface GameMap {
   doors: DoorDef[];
   encounterRate: number;
   encounterPool?: string;
+  solid: ReadonlySet<string>;
 }
 
 const inside = (m: { width: number; height: number }, x: number, y: number) =>
@@ -102,24 +105,25 @@ export function parseMap(def: MapDef): GameMap {
     id: def.id, name: def.name, width, height: tiles.length, tiles,
     spawn: def.spawn, npcs: def.npcs ?? [], warps: def.warps ?? [], signs: def.signs ?? [], doors: def.doors ?? [],
     encounterRate: def.encounterRate ?? 0, encounterPool: def.encounterPool,
+    solid: new Set([...SOLID_TILES, ...(def.solid ?? [])]),
   };
   if (m.encounterRate < 0 || m.encounterRate > 1) fail("encounterRate must be within 0..1");
-  if (!inside(m, m.spawn.x, m.spawn.y) || SOLID_TILES.has(tiles[m.spawn.y][m.spawn.x])) fail("spawn is outside the map or on a solid tile");
+  if (!inside(m, m.spawn.x, m.spawn.y) || m.solid.has(tiles[m.spawn.y][m.spawn.x])) fail("spawn is outside the map or on a solid tile");
   const seen = new Set<string>();
   for (const n of m.npcs) {
     if (!inside(m, n.x, n.y)) fail(`npc ${n.id} is outside the map`);
-    if (SOLID_TILES.has(tiles[n.y][n.x])) fail(`npc ${n.id} stands on a solid tile`);
+    if (m.solid.has(tiles[n.y][n.x])) fail(`npc ${n.id} stands on a solid tile`);
     const k = `${n.x},${n.y}`;
     if (seen.has(k)) fail(`two npcs at ${k}`);
     seen.add(k);
   }
   for (const w of m.warps) {
     if (!inside(m, w.x, w.y)) fail(`warp at ${w.x},${w.y} is outside the map`);
-    if (SOLID_TILES.has(tiles[w.y][w.x])) fail(`warp at ${w.x},${w.y} is on a solid tile`);
+    if (m.solid.has(tiles[w.y][w.x])) fail(`warp at ${w.x},${w.y} is on a solid tile`);
   }
   for (const d of m.doors) {
     if (!inside(m, d.x, d.y)) fail(`door at ${d.x},${d.y} is outside the map`);
-    if (SOLID_TILES.has(tiles[d.y][d.x])) fail(`door at ${d.x},${d.y} is on a solid tile`);
+    if (m.solid.has(tiles[d.y][d.x])) fail(`door at ${d.x},${d.y} is on a solid tile`);
   }
   for (const s of m.signs) if (!inside(m, s.x, s.y) || !READABLE_TILES.has(tiles[s.y][s.x])) fail(`sign at ${s.x},${s.y} is not on a readable tile`);
   return m;
@@ -140,5 +144,5 @@ export function doorAt(map: GameMap, x: number, y: number): DoorDef | undefined 
 /** True when a walker cannot enter the tile: off-map, solid tile or an NPC. */
 export function isBlocked(map: GameMap, x: number, y: number): boolean {
   const t = tileAt(map, x, y);
-  return t === undefined || SOLID_TILES.has(t) || npcAt(map, x, y) !== undefined;
+  return t === undefined || map.solid.has(t) || npcAt(map, x, y) !== undefined;
 }

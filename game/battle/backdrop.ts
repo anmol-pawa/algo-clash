@@ -104,3 +104,63 @@ export function drawGymBackdrop(c: CanvasRenderingContext2D, time: number): void
     ellipseFill(c, "#8a85aa", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
   }
 }
+
+/**
+ * Array Atoll battle scene: bright tropical day, a far islet with palms, sea with drifting foam,
+ * a sand beach and a boardwalk. `gym` uses the lower gym ledges (Tidecaller Mira's platform).
+ */
+export function drawAtollBackdrop(c: CanvasRenderingContext2D, time: number, gym = false): void {
+  const sky = ["#6cc3f0", "#82cff3", "#9ad9f5", "#b4e4f7", "#d2f0f9"];
+  sky.forEach((b, i) => rect(c, b, 0, i * 12, LW, 12));
+  // clouds
+  const drift = (time / 260) % (LW + 60);
+  for (const [k, y] of [[20, 10], [140, 24]] as const) {
+    const x = ((k + drift) % (LW + 60)) - 30;
+    rect(c, "#ffffff", x, y, 28, 5);
+    rect(c, "#ffffff", x + 6, y - 3, 14, 4);
+    rect(c, "#dff3fb", x, y + 4, 28, 2);
+  }
+  // sea
+  rect(c, "#2f8fbf", 0, 52, LW, 40);
+  for (let y = 52; y < 92; y += 4) rect(c, y % 8 === 0 ? "#3a9ccb" : "#2a86b5", 0, y, LW, 2);
+  rect(c, "#bfeaf6", 0, 52, LW, 1);
+  for (let i = 0; i < 36; i++) {
+    const y = 55 + ((i * 7) % 34), x = Math.round(((i * 43 + (time / 110) * (1 + (i % 3) * 0.4)) % (LW + 20)) - 10);
+    rect(c, "#e9fbff", x, y, 4, 1);
+  }
+  // far islet with two palms
+  for (let x = 0; x < 64; x++) {
+    const h = Math.round(Math.sqrt(Math.max(0, 1 - ((x - 32) / 32) ** 2)) * 9);
+    rect(c, "#d8bd7c", 150 + x, 52 - h + 4, 1, h);
+  }
+  for (const px of [172, 188]) {
+    rect(c, "#6b4a2a", px, 36, 2, 17);
+    const sway = Math.round(Math.sin(time / 600 + px) * 1);
+    for (const [dx, dy] of [[-6, 2], [-3, -1], [3, -1], [6, 2], [0, -2]] as const) rect(c, "#2b7a43", px + dx + sway, 36 + dy, 4, 2);
+    rect(c, "#3f9a55", px - 1 + sway, 35, 4, 2);
+  }
+  // beach: wet sand shoreline with foam, then dry sand
+  const surf = Math.round(Math.sin(time / 700) * 2);
+  rect(c, "#b8955a", 0, 90, LW, 6);
+  rect(c, "#ebd6a0", 0, 96, LW, LH - 96);
+  for (let x = 0; x < LW; x++) rect(c, "#e9fbff", x, 88 + surf + Math.round(Math.sin(x / 9 + time / 500) * 1), 1, 2);
+  for (let i = 0; i < 40; i++) {
+    const x = (i * 59) % LW, y = 99 + ((i * 31) % 34);
+    rect(c, i % 4 === 0 ? "#f6e8bd" : "#dcc084", x, y, 2, 1);
+  }
+  rect(c, "#ffc4d0", 20, 108, 3, 2);
+  rect(c, "#e88ba0", 21, 109, 2, 1);
+  rect(c, "#ffc4d0", 214, 120, 3, 2);
+  // boardwalk strip along the horizon of the beach
+  rect(c, "#6a4326", 0, 94, LW, 1);
+  for (let x = 0; x < LW; x += 12) {
+    rect(c, "#8f6238", x, 95, 11, 2);
+    rect(c, "#b58650", x, 95, 11, 1);
+  }
+  const plats = gym ? GYM_PLATFORMS : PLATFORMS;
+  for (const p of [plats.foe, plats.player]) {
+    ellipseFill(c, "#b8955a", p.cx, p.cy + 3, p.rx, p.ry);
+    ellipseFill(c, "#dcc084", p.cx, p.cy, p.rx, p.ry);
+    ellipseFill(c, "#f6e8bd", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
+  }
+}

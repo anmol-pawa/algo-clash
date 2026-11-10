@@ -25,7 +25,7 @@ const LEGEND: Record<string, TileName> = {
 
 
 /** Sample Mainville scene composed from the tileset, animated (water + tall grass). */
-export function TileScene({ sheet, scale = 3 }: { sheet: SpriteSheet; scale?: number }) {
+export function TileScene({ sheet, scale = 3, rows = MAP, legend = LEGEND }: { sheet: SpriteSheet; scale?: number; rows?: string[]; legend?: Record<string, string> }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const cv = ref.current;
@@ -42,16 +42,16 @@ export function TileScene({ sheet, scale = 3 }: { sheet: SpriteSheet; scale?: nu
       });
     let tick = 0;
     const draw = () => {
-      MAP.forEach((row, y) => [...row].forEach((ch, x) => {
-        const n = LEGEND[ch] ?? "grass";
-        const fr = imgs[n];
+      rows.forEach((row, y) => [...row].forEach((ch, x) => {
+        const n = legend[ch] ?? "grass";
+        const fr = imgs[n] ?? imgs.grass ?? Object.values(imgs)[0];
         ctx.drawImage(fr[tick % fr.length], x * sheet.w * scale, y * sheet.h * scale, sheet.w * scale, sheet.h * scale);
       }));
     };
     draw();
     const t = setInterval(() => { tick++; draw(); }, 400);
     return () => clearInterval(t);
-  }, [sheet, scale]);
-  return <canvas ref={ref} width={MAP[0].length * sheet.w * scale} height={MAP.length * sheet.h * scale}
+  }, [sheet, scale, rows, legend]);
+  return <canvas ref={ref} width={rows[0].length * sheet.w * scale} height={rows.length * sheet.h * scale}
     style={{ imageRendering: "pixelated", maxWidth: "100%", height: "auto" }} />;
 }

@@ -6,6 +6,7 @@ import { buildArrayling } from "@/game/sprites/arrayling";
 import { buildVectorling } from "@/game/sprites/vectorling";
 import { EvolutionScene } from "@/components/EvolutionScene";
 import { TileScene } from "@/components/TileScene";
+import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
 import { GymScene } from "@/components/GymScene";
 import { buildWarden } from "@/game/sprites/warden";
 import { buildTidecaller } from "@/game/sprites/tidecaller";
@@ -107,6 +108,12 @@ export default function SpritesDev() {
               <figcaption className="truncate text-xs text-black">{n}</figcaption>
             </figure>
           ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Array Atoll map (22x15) and gym backdrop</h3>
+        <TileScene sheet={atoll} scale={2} rows={ARRAY_ATOLL.rows} legend={ARRAY_ATOLL.legend} />
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <GymScene sheet={tidecaller} anim="idle" scale={3} region="array-atoll" />
+          <GymScene sheet={tidecaller} anim="attack" scale={3} region="array-atoll" />
         </div>
       </section>
       {chars.map(({ l, sheet, portrait }) => (

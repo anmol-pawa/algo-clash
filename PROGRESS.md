@@ -507,3 +507,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: tiles are not yet composed into a map or wired into the overworld (D1d-3); no sample scene on the dev page yet.
 - Next: D1d-3 (atoll battle/gym backdrop and overworld map).
+
+## 2026-11-10: D1d-3 Array Atoll map and battle/gym backdrop (D1d complete)
+- New `lib/overworld/atoll.ts` (22x15 island: boardwalk pier north to a GYM door, palms, tide pools, coral, rocks) built from the atoll tileset; `MapDef.solid` / `GameMap.solid` let a region add solid tile names to the shared `SOLID_TILES` (Mainville sync test untouched). New `drawAtollBackdrop(c, time, gym)` in `game/battle/backdrop.ts` (sunny sky, drifting clouds, sea with foam, far islet with swaying palms, surf line, sand beach, boardwalk strip, sand platforms; gym variant uses the low ledges). `GymScene` takes `region`; `TileScene` takes `rows`/`legend`. `/dev/sprites` shows the map and Mira on the atoll backdrop. `tests/atoll-map.test.ts` (shape, tiles, solid sync, BFS spawn to gym door).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (590 pass, includes native content verify), `build`, `build:pages`; Playwright on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (map and backdrop read cleanly, Mira stands on the foe ledge).
+- CI/deploy: skipped (GitHub Actions quota).
+- Known gaps: map and backdrop are not wired into the world/battle scene selection yet (no warp from Mainville, no encounters on seagrass, no NPCs); the `/gym` door still opens the Syntax Shores gym. All D1f.
+- Next: D1e (Array Atoll lessons, C++ Corner, ~40 cards, recognition set).
