@@ -36,6 +36,8 @@ export interface Attempt {
   mode: "learn" | "practice" | "interview";
   /** Optional WA cause tag chosen in the debrief. */
   cause?: string;
+  /** The attempt used a Compass, Lens or Guided mode (or more hints than free). Optional in older saves. */
+  assisted?: boolean;
 }
 
 export interface Draft {
@@ -210,6 +212,7 @@ export function sanitizeAttempt(raw: unknown): Attempt | null {
     mode: MODES.includes(r.mode as (typeof MODES)[number]) ? (r.mode as Attempt["mode"]) : "practice",
   };
   if (typeof r.cause === "string") a.cause = r.cause.slice(0, 60);
+  if (typeof r.assisted === "boolean") a.assisted = r.assisted;
   return a;
 }
 

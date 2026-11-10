@@ -268,6 +268,13 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       hearts.current = Math.max(0, hearts.current - out.playerHearts);
       if (hearts.current === 0) setEnded("fainted");
     }
+    if (kind === "submit") {
+      // Feeds the Trainer Card (solve rates, time vs par, failure causes). Never blocks play.
+      new SaveService(new IdbBackend()).recordAttempt({
+        problemId: problem.id, at: Date.now(), verdict: v.verdict, seconds: Math.round(((Date.now() - startedAt) / 1000) / mode.multiplier),
+        hintsUsed: revealed, mode: mode.id === "guided" ? "learn" : mode.id === "standard" ? "practice" : "interview", assisted,
+      }).catch(() => {});
+    }
     if (kind === "submit") stage.current?.verdict(v.verdict);
     if (kind === "submit" && v.verdict === "AC") { setWon({ seconds: Math.round((Date.now() - startedAt) / 1000), hearts: hearts.current }); stage.current?.faint("foe"); setEnded("won"); }
     stage.current?.say(out.line);

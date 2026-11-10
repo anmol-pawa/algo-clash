@@ -457,3 +457,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period is over; confirmation not possible here (no `gh`), see summary. Pushed with `HEAD:main` from the session branch.
 - Known gaps: no world-map door for Scout School (reachable from title and Academy); mastery needs 50 seen so is not driven end-to-end in the browser (unit-tested); R1 lessons themselves are not a gated prerequisite.
 - Next: C8 (Trainer Card / Readiness Report).
+
+## 2026-11-10: C8 Trainer Card / Readiness Report
+- New pure `lib/readiness/` (gates, radar, time vs par, failure causes, next best action) with `tests/readiness.test.ts` (13 tests). `Attempt` gained optional `assisted`; `BattleArena` now records an attempt on every Submit (it was never recorded before). New `/card` page (`components/CardScreen.tsx`, title CARD button): summary, next action, five gate bars, pattern radar, median time vs par, failure histogram.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (557 pass, includes native content verify), `build:pages`; new `scripts/smoke-card.mjs` on the static export at desktop and iPhone 14: seeded attempts show up, five gates, radar, title link, no console errors, no overflow; both screenshots reviewed (readable, 44 px GO button).
+- CI/deploy: not confirmed (no `gh` in this session). Pushed to `main` from the session branch.
+- Known gaps: radar has no spoke labels (names listed beneath; a 4-spoke radar is a diamond); no confidence calibration or debrief cause tags; Mock gate reads a `mocks:streak` flag that nothing sets yet; Gym fights do not record attempts through this path unless they use BattleArena Submit (they do).
+- Next: C9 (visualiser framework).

@@ -291,7 +291,7 @@ Typed cards (MCQ, multi-select, trace, predict-output, spot-the-bug, compiler-er
 
 ## 9. Meta screens
 
-- **Trainer Card / Readiness Report:** the gates from §1 with progress bars; per-pattern strength radar; calibration (confidence vs actual); median time vs par per difficulty; WA-cause histogram (off-by-one, overflow, edge cases…); "next best action" recommendation.
+- **Trainer Card / Readiness Report:** the gates from §1 with progress bars; per-pattern strength radar; calibration (confidence vs actual); median time vs par per difficulty; WA-cause histogram (off-by-one, overflow, edge cases…); "next best action" recommendation. *Shipped (C8):* every Submit now logs an attempt (verdict, seconds, hints, mode, assisted); gates count distinct problems solved unassisted under the time limit (16 of 20 mediums, 4 of 10 hards); the cause histogram uses verdicts until debrief cause tags exist; calibration is not yet collected.
 - **Mastery Map:** a constellation per region; nodes are problems and scrolls coloured by state, with rust visible.
 - **Solution Journal:** every AC, searchable by pattern; diff your current solution against your past attempt and against the reference.
 - **Library:** codex of lessons, cheat sheets (printable), and the visualisers (`docs/CURRICULUM.md` §6).
