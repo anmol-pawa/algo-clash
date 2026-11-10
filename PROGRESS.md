@@ -443,3 +443,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: `gh` is unavailable here, so Actions/Pages status was not confirmed. Pushed with `HEAD:main` from the session branch.
 - Known gaps: `content:verify` unchanged (no coding problems added); R1 has no judged exercises; lessons not yet reachable from the map door; mastery does not yet unlock the Compass.
 - Next: C7b (recognition blitz).
+
+## 2026-11-10: C7b Recognition blitz statements and grading
+- New `lib/recognition/` (`types.ts`, `grade.ts`): statement format (text, constraints, required `answer` patterns, `alsoOk` alternatives, verbatim `signals`, explanation), `gradeRecognition` (exact set match, 20 s in-time flag), deterministic `choicesFor` (distractors from neighbouring regions) and `tally` against the GDD target (>= 90 % on >= 50). 78 original statements in `content/recognition/statements.ts`, covering every pattern from R2 to R22; `tests/recognition.test.ts` checks pattern ids, region, that every signal occurs verbatim, coverage, grading and choices.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (540 pass), `npm run build:pages`. No UI change, so no screenshots; `content:verify` unchanged (no coding problems).
+- CI/deploy: skipped because of the Actions quota. Pushed with `HEAD:main` from the session branch.
+- Known gaps: no UI yet; labels are single-author judgement (alsoOk lists the defensible alternatives); the Gym blitz still uses cards, not these statements.
+- Next: C7c (Scout School screen/door, blitz UI, mastery for the Compass unlock).
