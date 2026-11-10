@@ -147,7 +147,13 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D1f-2. Visualisers: hash-map insert/lookup stepper and prefix-sum/Kadane stepper.
     - [x] D1f-3. Mira gym (data + signature mechanic, per GDD §5.5) wired to the atoll map door.
     - [x] D1f-4. Warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music.
-- [ ] D2. Window Woods (R3)
+- [ ] D2. Window Woods (R3), split by the region recipe:
+  - [x] D2a. Problems batch 1: fixed and variable windows (Peak Stretch E, Tidy Tape, Tight Patch, Flip Budget; Calm Window already exists).
+  - [ ] D2b. Problems batch 2: exact-K trick, anagram windows, Minimum Window, Sliding Window Maximum (monotonic deque), Shortest Subarray with Sum at Least K.
+  - [ ] D2c. Art: Pane Warden 96x96 sprite, woods tileset, backdrop and overworld map.
+  - [ ] D2d. Lessons (window template, monotonic deque) and ~36 cards.
+  - [ ] D2e. Forge scrolls, visualisers (window, deque), Pane Warden gym.
+  - [ ] D2f. Warp, encounters, NPC dialogue, story beat, music.
 - [ ] D3. Hashwood Harbor (R4)
 - [ ] D4. Stackspire (R6)
 - [ ] D5. Chainlink Caves (R5), with LRU Cache

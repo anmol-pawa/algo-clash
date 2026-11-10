@@ -550,3 +550,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: confirmation skipped: no `gh` in this session.
 - Known gaps: encounters are still a toast (no wild battles on the map); no Mira portrait; `content:verify` ran as part of `npm test`.
 - Next: D2 (Window Woods): split by the region recipe.
+
+## 2026-11-10: D2a Window Woods problems batch 1
+- ROADMAP D2 split into D2a..D2f. D2a done: four new R3 packages (reference, brute, 3-4 wrong solutions each incl. a TLE one for the mediums, seeded generator, hidden tests in four groups, hint ladder, editorial): Peak Stretch (E, fixed window), Tidy Tape (M, per-letter count limit), Tight Patch (M, shortest window with sum >= target, positives), Flip Budget (M, longest run with at most k flips). Calm Window (existing) completes the batch. Catalog regenerated (45 problems).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (669 pass, includes native g++ content verification of every problem), `build`, `build:pages`. No visual change, so no screenshots. One of my wrong solutions for Peak Stretch was accidentally correct and was caught by `content:verify`; replaced.
+- CI/deploy: Actions quota period is over (date 2026-11-10); confirmation attempted via the GitHub MCP tools, see run summary.
+- Known gaps: new problems are not yet used by a gym, lesson or map; no `prompt.json`.
+- Next: D2b (problems batch 2: exact-K, anagram windows, Minimum Window, Sliding Window Maximum, Shortest Subarray with Sum at Least K).
