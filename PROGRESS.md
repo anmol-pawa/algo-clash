@@ -535,3 +535,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session, so not confirmed. Pushed to `main`.
 - Known gaps: the map is shown as a text state line, not drawn as buckets; no "predict the next step" quiz.
 - Next: D1f-3 (Mira gym wired to the atoll map door).
+
+## 2026-11-10: D1f-3 Tidecaller Mira gym
+- Gym screen generalised: `content/gyms/registry.ts` maps each gym (def, scene, kits, twist flags, evolution on/off); `GymScreen` takes a slug. New `content/gyms/r2.ts` (8-item blitz, Exact Stretches core, Tide Pools signature, twist "Narrowing is an error" = `-Wconversion -Wno-sign-conversion -Werror`), route `/gym/atoll/`, atoll map door now opens it, `BattleStage` scene `atoll-gym` (Mira sprite on the atoll backdrop). No evolution on this badge (Tidal Badge + shard). GDD §5.5 updated.
+- Found by the smoke test: clang's `-Wconversion` includes sign-conversion, which rejected the reference Tide Pools; the twist now disables it (references verified with clang++ and the flags).
+- Verified: lint (0 errors), typecheck, `npm test` (653 pass at the time; gym tests rerun after), `build:pages`; new `scripts/smoke-gym-atoll.mjs` and existing `smoke-gym.mjs` pass at desktop and iPhone 14 (blitz, core, narrowing compile error, badge, persistence); screenshots reviewed, no overflow or console errors.
+- CI/deploy: skipped (Actions quota). Pushed to the session branch `claude/eloquent-ritchie-o8df9d` as instructed by the session, not `main`.
+- Known gaps: foe level/HP flat; blitz options not yet reviewed by a second pass.
+- Next: D1f-4 (warp from Mainville, encounters, dialogue, story beat, music).

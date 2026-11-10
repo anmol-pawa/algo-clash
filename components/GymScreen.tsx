@@ -7,19 +7,19 @@ import { audio } from "@/lib/audio/engine";
 import { useMusic } from "@/components/Music";
 import { EvolutionScene } from "@/components/EvolutionScene";
 import { GymScene } from "@/components/GymScene";
-import { gymKits, type GymKit } from "@/content/gyms/kits";
-import { syntaxShoresGym as gym } from "@/content/gyms/r0";
+import type { GymKit } from "@/content/gyms/kits";
+import { gymBySlug, type GymConfig } from "@/content/gyms/registry";
 import { buildWarden } from "@/game/sprites/warden";
+import { buildTidecaller } from "@/game/sprites/tidecaller";
 import { FOE_MAX_HP } from "@/lib/battle/damage";
 import { answerBlitz, battleResult, blitzCorrect, coreFoeHp, shuffledOptions, startGym, SHIELD_START } from "@/lib/gym/machine";
 import { applyEvolution } from "@/lib/evolution/progress";
 import { applyGymWin, blitzSecondsLeft, hasBadge } from "@/lib/gym/progress";
-import type { GymState } from "@/lib/gym/types";
+import type { GymDef, GymState } from "@/lib/gym/types";
 import type { TestCase } from "@/lib/judge/verdict";
 import { IdbBackend } from "@/lib/save/idb";
 import { SaveService } from "@/lib/save/service";
 
-const WERROR_FLAGS = ["-O2", "-Wall", "-Wextra", "-Werror"];
 const nowMs = (): number => Date.now();
 type Screen = "intro" | "play" | "retry" | "evolve" | "end";
 
@@ -34,7 +34,7 @@ function Shield({ value }: { value: number }) {
   );
 }
 
-function Blitz({ state, onAnswer }: { state: GymState; onAnswer: (choice: string | null, seconds: number) => void }) {
+function Blitz({ gym, doneLabel, state, onAnswer }: { gym: GymDef; doneLabel: string; state: GymState; onAnswer: (choice: string | null, seconds: number) => void }) {
   const item = gym.blitz[state.blitzIndex];
   const options = useMemo(() => shuffledOptions(item, 1), [item]);
   const [startedAt] = useState(nowMs); // the parent remounts this component per item
@@ -77,7 +77,7 @@ function Blitz({ state, onAnswer }: { state: GymState; onAnswer: (choice: string
           </p>
           <p className="text-sm text-white/80">{item.why}</p>
           <button className="px-btn px-btn-primary min-h-11" onClick={() => onAnswer(picked.choice, picked.seconds)}>
-            {state.blitzIndex + 1 >= gym.blitz.length ? "To the lighthouse ▶" : "Next ▶"}
+            {state.blitzIndex + 1 >= gym.blitz.length ? doneLabel : "Next ▶"}
           </button>
         </div>
       )}
@@ -85,10 +85,17 @@ function Blitz({ state, onAnswer }: { state: GymState; onAnswer: (choice: string
   );
 }
 
-/** The Syntax Shores gym (GDD §5.5): intro, recognition blitz, core battle, signature battle (-Werror twist), badge. */
-export default function GymScreen() {
+/** One region's gym (GDD §5.5): intro, recognition blitz, core battle, signature battle (twist flags), badge. */
+export default function GymScreen({ slug = "" }: { slug?: string }) {
+  const config = gymBySlug(slug) ?? gymBySlug("")!;
+  return <Gym key={config.def.id} config={config} />;
+}
+
+function Gym({ config }: { config: GymConfig }) {
+  const gym = config.def;
+  const gymKits = config.kits;
   useMusic("battle");
-  const warden = useMemo(() => buildWarden(), []);
+  const leaderSheet = useMemo(() => (config.scene === "atoll-gym" ? buildTidecaller() : buildWarden()), [config.scene]);
   const [state, setState] = useState<GymState>(() => startGym(gym));
   const [screen, setScreen] = useState<Screen>("intro");
   const [owned, setOwned] = useState(false);
@@ -99,7 +106,7 @@ export default function GymScreen() {
   useEffect(() => {
     svc.current = new SaveService(new IdbBackend());
     svc.current.load().then((c) => setOwned(hasBadge(c, gym))).catch(() => {});
-  }, []);
+  }, [gym]);
 
   const battlePhase = state.phase === "core" || state.phase === "signature";
   const kit: GymKit | undefined = battlePhase ? gymKits[state.phase === "core" ? gym.coreProblemId : gym.signatureProblemId] : undefined;
@@ -115,7 +122,7 @@ export default function GymScreen() {
       setLoaded({ key: `${state.phase}`, problem: { id, title: kit.title, difficulty: kit.difficulty, statement: kit.statement, starter: kit.starter, spec: kit.spec, timeLimitMs: kit.timeLimitMs, tests, foeName: kit.foeName, foeLevel: kit.foeLevel } });
     }).catch((e) => alive && setLoadErr(String(e)));
     return () => { alive = false; };
-  }, [kit, screen, state.phase]);
+  }, [kit, screen, state.phase, gym.coreProblemId, gym.signatureProblemId]);
 
   /** Saves the win; returns true when this is the first badge (the evolution checkpoint). */
   const win = useCallback(async (s: GymState): Promise<boolean> => {
@@ -124,11 +131,12 @@ export default function GymScreen() {
       const sv = svc.current ?? new SaveService(new IdbBackend());
       const core = await sv.load();
       const first = !hasBadge(core, gym);
-      await sv.save(applyEvolution(applyGymWin(core, gym), "arrayling", 2));
+      const won = applyGymWin(core, gym);
+      await sv.save(config.evolveOnFirstWin ? applyEvolution(won, "arrayling", 2) : won);
       setOwned(true);
-      return first;
+      return first && config.evolveOnFirstWin;
     } catch { return false; /* the win still shows; saving is retried on the next win */ }
-  }, []);
+  }, [gym, config.evolveOnFirstWin]);
 
   function onBlitz(choice: string | null, seconds: number) {
     const next = answerBlitz(gym, state, choice, seconds);
@@ -151,9 +159,9 @@ export default function GymScreen() {
   if (screen === "play" && battlePhase) {
     return problem ? (
       <BattleArena key={`${state.phase}-${attempt}`} problem={problem}
-        scene="gym"
+        scene={config.scene}
         foeStartHp={state.phase === "core" ? coreFoeHp(state) : undefined}
-        compileFlags={state.phase === "signature" ? WERROR_FLAGS : undefined}
+        compileFlags={state.phase === "signature" ? config.signatureFlags : undefined}
         onResult={onBattle} />
     ) : <main className={shell}><p role="status">{loadErr || "Loading the battle…"}</p></main>;
   }
@@ -165,7 +173,7 @@ export default function GymScreen() {
         <Link href="/" className="px-btn flex min-h-11 items-center px-3 text-sm">Leave</Link>
       </header>
       <div className={screen === "play" ? "mx-auto w-full max-w-xs" : "w-full"}>
-        <GymScene sheet={warden} anim={state.phase === "won" ? "faint" : "idle"} scale={3} />
+        <GymScene sheet={leaderSheet} anim={state.phase === "won" ? "faint" : "idle"} scale={3} region={config.scene === "atoll-gym" ? "array-atoll" : "syntax-shores"} />
       </div>
 
       {screen === "intro" && (
@@ -173,16 +181,16 @@ export default function GymScreen() {
           <p className="font-display text-lg">{gym.leader.name} <span className="text-sm text-white/60">· {gym.leader.title}</span></p>
           <p>“{gym.leader.lines.intro}”</p>
           <ol className="list-decimal pl-5 text-sm text-white/80">
-            <li>Recognition blitz: {gym.blitz.length} problems, {gym.blitzSeconds}s each. Every shield point you break takes {8} HP off Warden Brace in round 2.</li>
+            <li>Recognition blitz: {gym.blitz.length} problems, {gym.blitzSeconds}s each. Every shield point you break takes {8} HP off {gym.leader.name} in round 2.</li>
             <li>Core battle: <b>{gymKits[gym.coreProblemId].title}</b>.</li>
             <li>Signature battle: <b>{gymKits[gym.signatureProblemId].title}</b>. Twist, <b>{gym.twist.title}</b>: {gym.twist.rule}</li>
           </ol>
           {owned && <p className="text-sm text-emerald-300">You already hold the {gym.badge.name}. A rematch pays no second shard.</p>}
-          <button className="px-btn px-btn-primary min-h-11" onClick={() => setScreen("play")}>Challenge the Warden ▶</button>
+          <button className="px-btn px-btn-primary min-h-11" onClick={() => setScreen("play")}>{config.startLabel}</button>
         </section>
       )}
 
-      {screen === "play" && state.phase === "blitz" && <Blitz key={state.blitzIndex} state={state} onAnswer={onBlitz} />}
+      {screen === "play" && state.phase === "blitz" && <Blitz key={state.blitzIndex} gym={gym} doneLabel={config.doneLabel} state={state} onAnswer={onBlitz} />}
 
       {screen === "retry" && battlePhase && (
         <section className="panel flex flex-col gap-3 p-4" data-testid="gym-interstitial">
@@ -194,7 +202,7 @@ export default function GymScreen() {
           ) : state.phase === "core" ? (
             <>
               <p className="font-display text-lg">Blitz cleared: {blitzCorrect(state)}/{gym.blitz.length} on time</p>
-              <p className="text-sm text-white/80">Shield {state.shield}/{SHIELD_START} start. {headStart > 0 ? `You bit ${headStart} HP off the Warden before round 2.` : "No head start this time."}</p>
+              <p className="text-sm text-white/80">Shield {state.shield}/{SHIELD_START} start. {headStart > 0 ? `You bit ${headStart} HP off ${gym.leader.name} before round 2.` : "No head start this time."}</p>
             </>
           ) : (
             <>
@@ -216,10 +224,10 @@ export default function GymScreen() {
               <p className="font-display text-xl text-[var(--gold)]">★ {gym.badge.name} earned!</p>
               <p>“{gym.leader.lines.win}”</p>
               <p className="text-sm text-white/80">Reward: {gym.badge.name} and {state.reward?.shards ?? 0} Compiler Shard. Saved to your profile.</p>
-              {owned && <p className="text-sm text-emerald-300">Your Arrayling is now a Vectorling (stage 2).</p>}
+              {owned && config.evolveOnFirstWin && <p className="text-sm text-emerald-300">Your Arrayling is now a Vectorling (stage 2).</p>}
             </>
           ) : (
-            <p>You retreated from the lighthouse. The badge waits; the blitz starts fresh next time.</p>
+            <p>{config.loseNote}</p>
           )}
           <div className="flex gap-2">
             <button className="px-btn min-h-11 flex-1" onClick={() => { setState(startGym(gym)); setScreen("intro"); }}>Rematch</button>

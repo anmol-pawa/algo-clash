@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { pixelFamily } from "@/app/fonts";
 import BattleLayout from "@/components/BattleLayout";
-import { BattleStage, type BattleStageHandle } from "@/components/BattleStage";
+import { BattleStage, type BattleScene, type BattleStageHandle } from "@/components/BattleStage";
 import CodeEditor from "@/components/CodeEditor";
 import CompassPanel from "@/components/CompassPanel";
 import LensPanel from "@/components/LensPanel";
@@ -70,7 +70,7 @@ export interface ArenaOptions {
   /** Foe HP at the start of the fight (gym head start). */
   foeStartHp?: number;
   /** "gym": lighthouse backdrop and Warden Brace as the foe. */
-  scene?: "meadow" | "gym";
+  scene?: BattleScene;
   /** clang flags for every Run/Submit (a gym twist such as -Werror). Compile errors never cost a heart. */
   compileFlags?: string[];
   /** When set the fight can end: a Continue button reports the result, and Retreat is offered. */
@@ -141,7 +141,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     }).catch(() => {});
     const onHide = () => { if (document.visibilityState === "hidden") void a.flush(); };
     document.addEventListener("visibilitychange", onHide);
-    const t = setTimeout(() => stage.current?.say(scene === "gym" ? `${problem.foeName} holds the line! Write the code to break through.` : `A wild ${problem.foeName} appeared! Write the code to beat it.`), 900);
+    const t = setTimeout(() => stage.current?.say(scene && scene !== "meadow" ? `${problem.foeName} holds the line! Write the code to break through.` : `A wild ${problem.foeName} appeared! Write the code to beat it.`), 900);
     return () => {
       alive = false;
       clearTimeout(t);

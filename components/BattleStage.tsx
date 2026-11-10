@@ -1,7 +1,8 @@
 "use client";
 
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
-import { GYM_PLATFORMS, LH, LW, PLATFORMS, drawBackdrop, drawGymBackdrop } from "@/game/battle/backdrop";
+import { buildTidecaller } from "@/game/sprites/tidecaller";
+import { GYM_PLATFORMS, LH, LW, PLATFORMS, drawAtollBackdrop, drawBackdrop, drawGymBackdrop } from "@/game/battle/backdrop";
 import { buildWarden } from "@/game/sprites/warden";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
 import { buildArrayling } from "@/game/sprites/arrayling";
@@ -48,7 +49,10 @@ function freshFx(foeMax: number, foeStart?: number): StageFx {
   return f;
 }
 
-export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "gym"; foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; foeStart?: number; font?: string }>(
+/** "gym": Syntax Shores lighthouse (Warden Brace); "atoll-gym": Array Atoll (Tidecaller Mira). */
+export type BattleScene = "meadow" | "gym" | "atoll-gym";
+
+export const BattleStage = forwardRef<BattleStageHandle, { scene?: BattleScene; foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; foeStart?: number; font?: string }>(
   function BattleStage({ scene = "meadow", foeName = "Bracketeer", foeLevel = 4, playerName = "Arrayling", foeMax = 100, foeStart, font = "monospace" }, ref) {
     const cv = useRef<HTMLCanvasElement>(null);
     const fx = useRef<StageFx>(freshFx(foeMax, foeStart));
@@ -62,8 +66,9 @@ export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "g
       verdict: (v) => showVerdict(fx.current, v),
       restart: () => { fx.current = freshFx(foeMax, foeStart); },
     }), [foeMax, foeStart]);
-    const sheets = useMemo(() => ({ player: buildArrayling("back"), foe: scene === "gym" ? buildWarden() : foeSheet() }), [scene]);
-    const plat = scene === "gym" ? GYM_PLATFORMS : PLATFORMS;
+    const sheets = useMemo(() => ({ player: buildArrayling("back"), foe: scene === "atoll-gym" ? buildTidecaller() : scene === "gym" ? buildWarden() : foeSheet() }), [scene]);
+    const isGym = scene !== "meadow";
+    const plat = isGym ? GYM_PLATFORMS : PLATFORMS;
 
     useEffect(() => {
       const canvas = cv.current, ctx = canvas?.getContext("2d");
@@ -107,7 +112,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "g
         const sh = shakeOffset(f);
         ctx.save();
         ctx.translate(sh.x, sh.y);
-        if (scene === "gym") drawGymBackdrop(ctx, f.time); else drawBackdrop(ctx, f.time);
+        if (scene === "atoll-gym") drawAtollBackdrop(ctx, f.time, true); else if (scene === "gym") drawGymBackdrop(ctx, f.time); else drawBackdrop(ctx, f.time);
         // foe slides in from the right, player from the left
         const foe = frameOf("foe", f), pl = frameOf("player", f);
         const fxOff = Math.round(slideOffset(f.intro, 0) * 140), plOff = Math.round(slideOffset(f.intro, 0.15) * -140);
@@ -128,7 +133,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "g
         ctx.fillRect(plat.foe.cx - foeW / 3 + fxOff, plat.foe.cy - 1, Math.round(foeW * 0.66), 3);
         ctx.fillRect(plat.player.cx - 26 + plOff, plat.player.cy - 1, 52, 3);
         // leaders stand slightly into the ledge (feet 6px below its centre line), wild creatures on it
-        const footDrop = scene === "gym" ? 6 : 0;
+        const footDrop = isGym ? 6 : 0;
         draw(foe, plat.foe.cx - foeW / 2 + fxOff + lunge("foe"), plat.foe.cy + footDrop - foeH);
         draw(pl, plat.player.cx - 32 + plOff + lunge("player"), plat.player.cy - 58);
         // sprite move effects over the target
@@ -156,7 +161,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "g
         hpBox(6 - Math.round(slideHud * 120), 6, foeName, `Lv${foeLevel}`, f.hp.foe.shown / f.hp.foe.max, null);
         const hearts = "♥".repeat(Math.max(0, Math.ceil(f.hp.player.target))), pFrac = f.hp.player.shown / f.hp.player.max;
         // gym: the 96px leader fills the right side, so the player's box sits under the foe's on the left
-        if (scene === "gym") hpBox(6 - Math.round(slideHud * 120), 38, playerName, "Lv5", pFrac, hearts);
+        if (isGym) hpBox(6 - Math.round(slideHud * 120), 38, playerName, "Lv5", pFrac, hearts);
         else hpBox(LW - 110 + Math.round(slideHud * 120), 70, playerName, "Lv5", pFrac, hearts);
         // verdict stinger
         if (f.stinger) {
