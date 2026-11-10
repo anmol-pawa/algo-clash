@@ -514,3 +514,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: skipped (GitHub Actions quota).
 - Known gaps: map and backdrop are not wired into the world/battle scene selection yet (no warp from Mainville, no encounters on seagrass, no NPCs); the `/gym` door still opens the Syntax Shores gym. All D1f.
 - Next: D1e (Array Atoll lessons, C++ Corner, ~40 cards, recognition set).
+
+## 2026-11-10: D1e Array Atoll lessons and cards
+- New `content/lessons/R2/atoll.ts`: three lessons (hash lookup with the unordered_map C++ Corner, two pointers, prefix sums/difference arrays/Kadane), each two pages with natively run listings, linked to the 15 R2 problems. New `content/cards/R2/atoll.ts`: 36 cards (all seven kinds; predict/trace/parsons/cloze/compiler-error results computed by g++ into `generated.json`). Tests: `pickDeck` test no longer hard-codes 99 cards; lesson problem-id check now scans every region.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (626 pass, includes native content verify), `build`, `build:pages`; `scripts/smoke-lesson.mjs` on the static export at desktop and iPhone 14: all lessons readable, no console errors, no overflow; screenshots reviewed (found literal `**bold**`, removed it from the new text).
+- CI/deploy: skipped (the run prompt's Actions quota note; no `gh`).
+- Known gaps: lesson renderer has no bold support (older R1 lessons still contain `**`); R2 content not yet reachable from the map (D1f).
+- Next: D1f (Forge scrolls, visualisers, Mira gym, dialogue, music).

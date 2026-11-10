@@ -104,7 +104,7 @@ describe("deck helpers", () => {
     const a = pickDeck(allCards, 3, makeRng(1), seen);
     expect(a.every((c) => !seen.has(c.id))).toBe(true);
     expect(pickDeck(allCards, 3, makeRng(1), seen).map((c) => c.id)).toEqual(a.map((c) => c.id));
-    const all = pickDeck(allCards, 99, makeRng(2), seen);
+    const all = pickDeck(allCards, allCards.length + 10, makeRng(2), seen);
     expect(new Set(all.map((c) => c.id)).size).toBe(allCards.length);
     expect(all.slice(0, 3).every((c) => !seen.has(c.id))).toBe(true);
   });

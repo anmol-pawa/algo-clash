@@ -8,7 +8,7 @@ import { inlineRuns, lessonKey } from "../lib/lessons/types";
 import { verifyLessons } from "../lib/lessons/verify";
 
 const write = process.env.CONTENT_WRITE === "1";
-const problemIds = new Set(readdirSync(join(process.cwd(), "content", "problems", "R0")));
+const problemIds = new Set(readdirSync(join(process.cwd(), "content", "problems")).flatMap((r) => readdirSync(join(process.cwd(), "content", "problems", r))));
 const cardIds = new Set(allCards.map((c) => c.id));
 const { errors, outputs } = verifyLessons(allLessons, lessonOutputs, { cardIds, problemIds }, write);
 if (write) writeFileSync(join(process.cwd(), "content", "lessons", "generated.json"), JSON.stringify(outputs, null, 2) + "\n");

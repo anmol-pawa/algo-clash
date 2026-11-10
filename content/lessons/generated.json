@@ -28,5 +28,12 @@
   "s4-lists:1:3": "1 2 3 \n",
   "s4-trees-solution:0:1": "2\n",
   "s4-trees-solution:1:1": "2\n",
-  "r1-reading-cost:0:2": "45\n"
+  "r1-reading-cost:0:2": "45\n",
+  "r2-hash-lookup:0:2": "4\n",
+  "r2-hash-lookup:1:2": "4\n",
+  "r2-two-pointers:0:1": "1 5\n",
+  "r2-two-pointers:1:1": "4 5 7 2 0 0 0 \n",
+  "r2-prefix-kadane:0:2": "7\n",
+  "r2-prefix-kadane:1:1": "1 5 7 7 2 2 \n",
+  "r2-prefix-kadane:1:3": "-2\n"
 }

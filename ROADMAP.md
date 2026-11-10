@@ -141,7 +141,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D1d-1. Tidecaller Mira 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
     - [x] D1d-2. Atoll tileset (sand, shallows, palms, boardwalk, shells) on `/dev/sprites`.
     - [x] D1d-3. Atoll battle/gym backdrop and overworld map (Array Atoll).
-  - [ ] D1e. Lessons, C++ Corner, ~40 cards and a recognition set for R2.
+  - [x] D1e. Lessons (3, with the C++ Corner unordered_map API), 36 cards; the R2 recognition statements already existed (9).
   - [ ] D1f. Forge scrolls, visualisers, Mira gym with signature mechanic, dialogue and music.
 - [ ] D2. Window Woods (R3)
 - [ ] D3. Hashwood Harbor (R4)
