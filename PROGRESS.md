@@ -478,3 +478,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: not confirmed (no `gh` in this session). Pushed to `main` from the session branch.
 - Known gaps: no `prompt.json` (post-win elaborative question) for the new problems; the problems are not yet placed on an Array Atoll map or gym; no lessons or cards for R2.
 - Next: D1b (two-pointer problems batch).
+
+## 2026-11-10: D1b Array Atoll problems batch 2 (two pointers)
+- Five new R2 packages in `content/problems/R2/`: Mirror Check (E, palindrome with skipping, opposite-end pointers), Triple Tally (M, count distinct zero-sum trios, sort + two pointers), Widest Basin (M, container with most water, `long long` result), Ferry Pairs (M, heaviest-with-lightest greedy; exhaustive brute force), Tide Pools (H, trapping water in O(n)/O(1), `long long` total). Each has solution, brute, 3-4 wrong solutions (TLE and int-overflow variants for the M/H), seeded generator, generated tests in four groups, 3-rung hints and a house-style editorial. `content/gyms/catalog.ts` regenerated (36 problems).
+- Dutch flag was not packaged: the judge compares return values, so an in-place partition cannot be tested without a mutation-observing driver. Planned as a Forge scroll/card in D1e/D1f.
+- Verified: native `content:verify` (37 pass; every wrong solution rejected, reference matches brute on random cases), `npm run lint`, `typecheck`, `npm test`, `build:pages` (see the commit for results). No UI change, so no screenshots. Run took ~8 minutes for content verify alone.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: no `prompt.json` for the new problems; not yet placed on a map or gym; no R2 lessons/cards yet.
+- Next: D1c (prefix sums, difference arrays, Kadane).
