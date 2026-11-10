@@ -149,7 +149,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D1f-4. Warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music.
 - [ ] D2. Window Woods (R3), split by the region recipe:
   - [x] D2a. Problems batch 1: fixed and variable windows (Peak Stretch E, Tidy Tape, Tight Patch, Flip Budget; Calm Window already exists).
-  - [ ] D2b. Problems batch 2: exact-K trick, anagram windows, Minimum Window, Sliding Window Maximum (monotonic deque), Shortest Subarray with Sum at Least K.
+  - [ ] D2b. Problems batch 2, split:
+    - [x] D2b-1. Shuffle Spotter (anagram windows, M) and Odd Picks (exactly-K trick, M).
+    - [ ] D2b-2. Minimum Window (H) and Subarrays with K Different Integers (H, original variant).
+    - [ ] D2b-3. Sliding Window Maximum (monotonic deque, H) and Shortest Subarray with Sum at Least K (H).
   - [ ] D2c. Art: Pane Warden 96x96 sprite, woods tileset, backdrop and overworld map.
   - [ ] D2d. Lessons (window template, monotonic deque) and ~36 cards.
   - [ ] D2e. Forge scrolls, visualisers (window, deque), Pane Warden gym.

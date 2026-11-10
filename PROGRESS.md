@@ -557,3 +557,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period is over (date 2026-11-10); confirmation attempted via the GitHub MCP tools, see run summary.
 - Known gaps: new problems are not yet used by a gym, lesson or map; no `prompt.json`.
 - Next: D2b (problems batch 2: exact-K, anagram windows, Minimum Window, Sliding Window Maximum, Shortest Subarray with Sum at Least K).
+
+## 2026-11-10: D2b-1 Window Woods problems batch 2a
+- ROADMAP D2b split into D2b-1..D2b-3. D2b-1 done: Shuffle Spotter (M, fixed window with a 26-counter table compared by `array ==`) and Odd Picks (M, "exactly k = atMost(k) - atMost(k-1)", `long long` total). Each has reference, brute, 4 wrong solutions (incl. TLE), seeded generator, tests in four groups, hint ladder, house-style editorial. Catalog regenerated (47 problems).
+- Verified: `npm run content:verify` (all 48 pass natively with g++, wrong solutions rejected); full lint/typecheck/test/build/build:pages results below. No visual change, so no screenshots. First pass caught an unknown pattern tag ("counting"), removed.
+- CI/deploy: see run summary.
+- Known gaps: new problems not yet used by a gym, lesson or map.
+- Next: D2b-2 (Minimum Window, Subarrays with K Different Integers).
