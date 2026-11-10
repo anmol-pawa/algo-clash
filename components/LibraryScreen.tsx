@@ -6,9 +6,10 @@ import VisualiserPlayer from "@/components/VisualiserPlayer";
 import { parseNumbers } from "@/lib/visualiser/parse";
 import { SORT_COMPLEXITY, SORT_NAMES, traceSort, type SortKind } from "@/lib/visualiser/sort";
 import type { Trace } from "@/lib/visualiser/types";
+import { traceKadane, tracePrefixCount, traceTwoSumMap } from "@/lib/visualiser/hashprefix";
 import { traceLongestDistinct, tracePairSum, traceWindowMax } from "@/lib/visualiser/window";
 
-type VisId = SortKind | "pair" | "window" | "distinct";
+type VisId = SortKind | "pair" | "window" | "distinct" | "hashpair" | "prefix" | "kadane";
 
 interface VisDef {
   id: VisId;
@@ -31,6 +32,12 @@ const DEFS: VisDef[] = [
     blurb: "Keep a running sum. Each slide adds one value and drops one, so no window is ever re-summed from scratch.", cost: "Time O(n) · space O(1)" },
   { id: "distinct", title: "Variable window: longest with no repeat", group: "Two pointers and windows", sample: "4 1 2 1 3 4 2 5",
     blurb: "Grow on the right. On a repeat, jump the left edge just past the old copy. Each index enters and leaves at most once.", cost: "Time O(n) · space O(n) for the last-seen map" },
+  { id: "hashpair", title: "Hash map: pair sum in one pass", group: "Hashing and prefix sums", sample: "3 8 1 6 4 9", hasParam: { label: "Target", sample: 10 },
+    blurb: "For each value ask the map: have I already seen target minus this? If yes, done. If not, store this value and move on. The map trades O(n) memory for O(1) average lookups.", cost: "Time O(n) average · space O(n)" },
+  { id: "prefix", title: "Prefix sums: count stretches summing to k", group: "Hashing and prefix sums", sample: "3 -1 2 1 -2 4", hasParam: { label: "Target k", sample: 3 },
+    blurb: "A stretch sums to k exactly when two prefix sums differ by k. Count earlier prefixes equal to prefix minus k. It works with negatives, where a sliding window cannot.", cost: "Time O(n) average · space O(n)" },
+  { id: "kadane", title: "Kadane: best stretch sum", group: "Hashing and prefix sums", sample: "-2 1 -3 4 -1 2 1 -5 4",
+    blurb: "Carry the best stretch ending here. If it went negative it can only hurt the next value, so restart. Take the max over all ends.", cost: "Time O(n) · space O(1)" },
 ];
 
 function build(def: VisDef, values: number[], param: number): Trace {
@@ -38,6 +45,9 @@ function build(def: VisDef, values: number[], param: number): Trace {
     case "pair": return tracePairSum([...values].sort((a, b) => a - b), param);
     case "window": return traceWindowMax(values, param);
     case "distinct": return traceLongestDistinct(values);
+    case "hashpair": return traceTwoSumMap(values, param);
+    case "prefix": return tracePrefixCount(values, param);
+    case "kadane": return traceKadane(values);
     default: return traceSort(def.id, values);
   }
 }

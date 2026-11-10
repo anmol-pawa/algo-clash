@@ -528,3 +528,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: confirmation not possible here (no `gh`); pushed to `main`.
 - Known gaps: later scroll tiers (cloze/blank) not exercised in a browser for the new scrolls (same code path as the first scroll, unit-tested); scrolls not unlocked by map progress yet.
 - Next: D1f-2 (visualisers).
+
+## 2026-11-10: D1f-2 Library visualisers for hashing and prefix sums
+- New `lib/visualiser/hashprefix.ts` (pure, no DOM): `traceTwoSumMap` (unordered_map one-pass pair sum, map contents shown per frame), `tracePrefixCount` (prefix sums + count map, seeded with prefix 0, negatives allowed), `traceKadane` (restart when the running sum is negative; best stretch highlighted). Added as a "Hashing and prefix sums" group in `/library` (`components/LibraryScreen.tsx`) with blurbs and complexity lines. Tests in `tests/visualiser.test.ts` compare each against an independent brute force on 300 random inputs.
+- Verified: `npm run lint` (0 errors, 10 existing warnings), `typecheck`, `npm test` (649 pass, includes native content verify), `build:pages`; `scripts/smoke-library.mjs` on the static export at desktop and iPhone 14 passes; custom Playwright run stepped all three new visualisers: no console errors, no horizontal overflow; iPhone screenshot reviewed (cells, state line with map, note and 44px controls all readable).
+- CI/deploy: no `gh` in this session, so not confirmed. Pushed to `main`.
+- Known gaps: the map is shown as a text state line, not drawn as buckets; no "predict the next step" quiz.
+- Next: D1f-3 (Mira gym wired to the atoll map door).

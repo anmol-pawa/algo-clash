@@ -91,3 +91,48 @@ describe("parseNumbers", () => {
     expect(parseNumbers("99999").ok).toBe(false);
   });
 });
+
+import { traceKadane, tracePrefixCount, traceTwoSumMap } from "@/lib/visualiser/hashprefix";
+
+describe("hash and prefix traces", () => {
+  it("two-sum map agrees with brute force", () => {
+    const r = rng(21);
+    for (let t = 0; t < 300; t++) {
+      const a = randArr(r, Math.floor(r() * 10));
+      const target = Math.floor(r() * 30) - 15;
+      let exists = false;
+      for (let i = 0; i < a.length; i++) for (let j = i + 1; j < a.length; j++) if (a[i] + a[j] === target) exists = true;
+      const tr = traceTwoSumMap(a, target);
+      expect(tr.result !== null).toBe(exists);
+      if (tr.result) {
+        const [i, j] = tr.result as number[];
+        expect(i).toBeLessThan(j);
+        expect(a[i] + a[j]).toBe(target);
+      }
+      expect(tr.frames.length).toBeGreaterThan(0);
+    }
+  });
+  it("prefix count agrees with brute force (negatives included)", () => {
+    const r = rng(33);
+    for (let t = 0; t < 300; t++) {
+      const a = randArr(r, Math.floor(r() * 12), 10);
+      const k = Math.floor(r() * 10) - 5;
+      let n = 0;
+      for (let i = 0; i < a.length; i++) { let s = 0; for (let j = i; j < a.length; j++) { s += a[j]; if (s === k) n++; } }
+      expect(tracePrefixCount(a, k).result).toBe(n);
+    }
+  });
+  it("kadane agrees with brute force and highlights the best stretch", () => {
+    const r = rng(44);
+    for (let t = 0; t < 300; t++) {
+      const a = randArr(r, 1 + Math.floor(r() * 12), 12);
+      let best = -Infinity;
+      for (let i = 0; i < a.length; i++) { let s = 0; for (let j = i; j < a.length; j++) { s += a[j]; best = Math.max(best, s); } }
+      const tr = traceKadane(a);
+      expect(tr.result).toBe(best);
+      for (const f of tr.frames) for (const m of f.marks) expect(m.index >= 0 && m.index < a.length).toBe(true);
+    }
+    expect(traceKadane([]).result).toBeNull();
+    expect(traceKadane([-3, -1, -2]).result).toBe(-1);
+  });
+});
