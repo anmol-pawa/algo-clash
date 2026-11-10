@@ -41,6 +41,9 @@ export default function Title() {
         <Link href="/journal/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">JOURNAL</Link>
         <Link href="/mart/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">MART</Link>
       </div>
+      <div className="flex w-full max-w-xs gap-3">
+        <Link href="/scout/" className="px-btn flex min-h-11 flex-1 items-center justify-center text-sm">SCOUT SCHOOL</Link>
+      </div>
       <p className="text-xs text-white/40">C++17 · LeetCode medium → hard · works offline once loaded</p>
     </main>
   );

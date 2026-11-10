@@ -450,3 +450,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: skipped because of the Actions quota. Pushed with `HEAD:main` from the session branch.
 - Known gaps: no UI yet; labels are single-author judgement (alsoOk lists the defensible alternatives); the Gym blitz still uses cards, not these statements.
 - Next: C7c (Scout School screen/door, blitz UI, mastery for the Compass unlock).
+
+## 2026-11-10: C7c Scout School screen (C7 complete)
+- New pure `lib/recognition/progress.ts` (latest result per statement in save flags, `scoutProgress`, mastery at >= 90 % in time on >= 50 statements, `pickRound` prefers unseen then missed) with `tests/scout-progress.test.ts`. New `/scout` page (`components/ScoutScreen.tsx`): 10-statement rounds, 20 s timer, multi-select patterns, graded with `gradeRecognition`, signals highlighted and explanation shown after locking in, round summary, mastery line. SCOUT SCHOOL button on the title.
+- Verified: `npm run lint` (2 existing warnings), `typecheck`, `npm test` (545 pass), `build:pages`; new `scripts/smoke-scout.mjs` on the static export at desktop and iPhone 14: a full round, timer, persistence over reload, no console errors, no overflow; iPhone screenshot reviewed (readable, 44 px targets, signals highlighted).
+- CI/deploy: skipped because of the Actions quota (not applicable date-wise: ran locally only). Pushed to the session branch `claude/eloquent-ritchie-a4mp4b`, not main (session rules name that branch).
+- Known gaps: no door on the overworld map; the Complexity Compass is not yet free once Scout mastery is earned (flag is recorded, wiring pending); time-out path not driven in the browser; the blitz does not yet feed the Gym.
+- Next: C8 (Trainer Card / Readiness Report), after wiring the Compass-free rule if cheap.
