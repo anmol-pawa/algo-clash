@@ -133,7 +133,13 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 7. Gym with its signature mechanic (GDD §5.5).
 8. Dialogue, story beat and region music.
 
-- [ ] D1. Array Atoll (CUR R2)
+- [ ] D1. Array Atoll (CUR R2), split by the region recipe:
+  - [x] D1a. Problems batch 1: hashing basics (Matching Pairs, Echo Gate, Scramble Check, Badge Chain, Scramble Clans).
+  - [ ] D1b. Problems batch 2: two pointers (E/M/H, incl. Dutch flag and a trapping-rain-water variant).
+  - [ ] D1c. Problems batch 3: prefix sums and difference arrays, Kadane.
+  - [ ] D1d. Art: Tidecaller Mira (96x96), atoll tileset, backdrop, overworld map.
+  - [ ] D1e. Lessons, C++ Corner, ~40 cards and a recognition set for R2.
+  - [ ] D1f. Forge scrolls, visualisers, Mira gym with signature mechanic, dialogue and music.
 - [ ] D2. Window Woods (R3)
 - [ ] D3. Hashwood Harbor (R4)
 - [ ] D4. Stackspire (R6)

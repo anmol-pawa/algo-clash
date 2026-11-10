@@ -471,3 +471,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: no animation between frames (cells just recolour); on iPhone the player sits below the input panel so needs a scroll; no per-visualiser "predict the next step" quiz; no map door.
 - Next: D1 (Array Atoll).
+
+## 2026-11-10: D1a Array Atoll problems batch 1 (hashing basics)
+- ROADMAP D1 split into D1a-D1f (problems x3, art, lessons/cards, scrolls/gym). D1a done: five new R2 packages in `content/problems/R2/`: Matching Pairs (E, pair count with a frequency map, `long long`), Echo Gate (E, last-seen index within k), Scramble Check (E, 26-slot balance), Badge Chain (M, hash set, start only at chain beginnings), Scramble Clans (M, canonical sorted key). Each has solution, brute, three wrong solutions (TLE ones for the mediums), seeded generator, generated tests in four groups, 3-rung hints and a house-style editorial. `content/gyms/catalog.ts` regenerated (31 problems).
+- Verified: native `content:verify` (32 pass; every wrong solution rejected, reference matches brute on 200 random cases each), `npm run lint` (2 existing warnings), `typecheck`, `npm test` (569 pass), `build:pages`. No UI change, so no screenshots.
+- CI/deploy: not confirmed (no `gh` in this session). Pushed to `main` from the session branch.
+- Known gaps: no `prompt.json` (post-win elaborative question) for the new problems; the problems are not yet placed on an Array Atoll map or gym; no lessons or cards for R2.
+- Next: D1b (two-pointer problems batch).
