@@ -471,3 +471,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: no animation between frames (cells just recolour); on iPhone the player sits below the input panel so needs a scroll; no per-visualiser "predict the next step" quiz; no map door.
 - Next: D1 (Array Atoll).
+
+## 2026-11-10: D1a Array Atoll problems, batch 1 (hashing)
+- Split D1 into D1a-D1g in ROADMAP. Added four full R2 packages under `content/problems/R2/`: `tide-pair` (E, Two Sum with a deterministic earliest-finishing rule), `twin-badge` (E), `scrambled-tags` (E), `stepping-stones` (M, longest consecutive run). Each has reference, brute force, 2-3 wrong solutions (the M has a TLE one), seeded generator, hidden tests in four groups, 3-rung hints and a house-style editorial. `catalog:gen` regenerated.
+- Verified: `CONTENT_WRITE=1 vitest run tests/content-problems.test.ts` (31 pass: native g++ reference-vs-brute stress and every wrong solution rejected), `npm run lint` (2 existing warnings), `typecheck`, `npm test` (568 pass), `npm run build:pages`. No UI change, so no screenshots.
+- CI/deploy: no `gh` in this session, so not confirmed. Pushed to the designated session branch `claude/eloquent-ritchie-8x7ext` (not main), because the session instructions required that branch.
+- Known gaps: the R2 problems are not yet reachable from a map door or gym (D1e-D1g); a force-push to the branch was blocked, so I pushed normally.
+- Next: D1b.

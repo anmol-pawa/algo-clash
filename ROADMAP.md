@@ -133,7 +133,14 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
 7. Gym with its signature mechanic (GDD §5.5).
 8. Dialogue, story beat and region music.
 
-- [ ] D1. Array Atoll (CUR R2)
+- [ ] D1. Array Atoll (CUR R2), split into:
+  - [x] D1a. Problems batch 1: hashing (Tide Pair, Twin Badge, Scrambled Tags, Stepping Stones).
+  - [ ] D1b. Problems batch 2: Group Anagrams, Top K Frequent, Product Except Self, Valid Sudoku, First Missing Positive (hashing M/H).
+  - [ ] D1c. Problems batch 3: two pointers (Valid Palindrome, Move Zeroes, 3Sum, Container, Sort Colors, Trapping Rain Water).
+  - [ ] D1d. Problems batch 4: prefix sums and Kadane (Range Sum, Subarray Sum = K, Contiguous Array, Car Pooling, Max Subarray, Circular, Product).
+  - [ ] D1e. Art: Array Atoll structling/trainers/Tidecaller Mira (96x96), tileset, backdrop, overworld map.
+  - [ ] D1f. Lessons + C++ Corner, about 40 cards and recognition set.
+  - [ ] D1g. Forge scrolls, visualiser, Gym (Tidecaller Mira), dialogue and music.
 - [ ] D2. Window Woods (R3)
 - [ ] D3. Hashwood Harbor (R4)
 - [ ] D4. Stackspire (R6)
