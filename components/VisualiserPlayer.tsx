@@ -45,6 +45,17 @@ export default function VisualiserPlayer({ trace }: { trace: Trace }) {
   return (
     <section className="panel flex flex-col gap-3 p-3" data-testid="vis-player" aria-label="Visualiser">
       <Cells frame={frame} />
+      {frame.table && (
+        <div className="flex flex-col items-center gap-1" data-testid="vis-table" aria-label={frame.table.title}>
+          <span className="text-xs opacity-70">{frame.table.title}</span>
+          <div className="flex flex-wrap justify-center gap-1.5">
+            {frame.table.entries.length === 0 && <span className="text-xs opacity-50">(empty)</span>}
+            {frame.table.entries.map((e) => (
+              <span key={e.key} className={`border-2 px-2 py-1 font-mono text-xs ${e.hot ? "border-amber-300 bg-amber-400/30" : "border-white/30"}`} data-hot={e.hot ? "1" : ""}>{e.key} → {e.value}</span>
+            ))}
+          </div>
+        </div>
+      )}
       {frame.state && (
         <p className="text-center font-mono text-xs" data-testid="vis-state">
           {Object.entries(frame.state).map(([k, v]) => `${k} = ${v}`).join("   ")}

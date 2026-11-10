@@ -528,3 +528,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: confirmation not possible here (no `gh`); pushed to `main`.
 - Known gaps: later scroll tiers (cloze/blank) not exercised in a browser for the new scrolls (same code path as the first scroll, unit-tested); scrolls not unlocked by map progress yet.
 - Next: D1f-2 (visualisers).
+
+## 2026-11-10: D1f-2 Array Atoll visualisers
+- New `lib/visualiser/hashing.ts`: three step tracers, hash-map two-sum lookup, prefix sums + count map (stretches summing to k, negatives allowed) and Kadane. `Frame` gained an optional `table` (shown as a hash-table strip in `VisualiserPlayer`, just-touched entries highlighted). Three new Library entries under "Hashing and prefix sums" with blurb, cost line and editable input/target. `tests/visualiser-hashing.test.ts` checks each tracer against a brute force on hundreds of random inputs (frame invariants too).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (649 pass, includes native content verify), `build`, `build:pages`; Playwright on the static export at desktop and iPhone 14: all three visualisers stepped, no console errors, no horizontal overflow; screenshots reviewed (table strip and notes readable, buttons 44px+).
+- CI/deploy: skipped (GitHub Actions quota). Pushed to the session branch `claude/eloquent-ritchie-j46h7w`, not `main`, per the session's branch instruction.
+- Known gaps: no "predict the next step" quiz; the visualisers are not linked from the atoll lessons yet.
+- Next: D1f-3 (Mira gym with signature mechanic, wired to the atoll map door).

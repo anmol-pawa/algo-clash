@@ -144,7 +144,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] D1e. Lessons (3, with the C++ Corner unordered_map API), 36 cards; the R2 recognition statements already existed (9).
   - [ ] D1f. Forge scrolls, visualisers, Mira gym with signature mechanic, dialogue and music, split:
     - [x] D1f-1. Forge scrolls: Earlier Prefix (prefix + hash map) and Closing Walls (opposite pointers), 10 native trace cards.
-    - [ ] D1f-2. Visualisers: hash-map insert/lookup stepper and prefix-sum/Kadane stepper.
+    - [x] D1f-2. Visualisers: hash-map insert/lookup stepper and prefix-sum/Kadane stepper.
     - [ ] D1f-3. Mira gym (data + signature mechanic, per GDD §5.5) wired to the atoll map door.
     - [ ] D1f-4. Warp from Mainville to the atoll, seagrass encounters, NPC dialogue, story beat, region music.
 - [ ] D2. Window Woods (R3)

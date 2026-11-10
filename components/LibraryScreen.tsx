@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import VisualiserPlayer from "@/components/VisualiserPlayer";
+import { traceKadane, tracePrefixCount, traceTwoSumMap } from "@/lib/visualiser/hashing";
 import { parseNumbers } from "@/lib/visualiser/parse";
 import { SORT_COMPLEXITY, SORT_NAMES, traceSort, type SortKind } from "@/lib/visualiser/sort";
 import type { Trace } from "@/lib/visualiser/types";
 import { traceLongestDistinct, tracePairSum, traceWindowMax } from "@/lib/visualiser/window";
 
-type VisId = SortKind | "pair" | "window" | "distinct";
+type VisId = SortKind | "pair" | "window" | "distinct" | "twosum" | "prefix" | "kadane";
 
 interface VisDef {
   id: VisId;
@@ -31,12 +32,21 @@ const DEFS: VisDef[] = [
     blurb: "Keep a running sum. Each slide adds one value and drops one, so no window is ever re-summed from scratch.", cost: "Time O(n) · space O(1)" },
   { id: "distinct", title: "Variable window: longest with no repeat", group: "Two pointers and windows", sample: "4 1 2 1 3 4 2 5",
     blurb: "Grow on the right. On a repeat, jump the left edge just past the old copy. Each index enters and leaves at most once.", cost: "Time O(n) · space O(n) for the last-seen map" },
+  { id: "twosum", title: "Hash map: two-sum lookup", group: "Hashing and prefix sums", sample: "3 8 1 6 4 9", hasParam: { label: "Target", sample: 10 },
+    blurb: "For each value, ask the map whether its partner (target minus value) was already seen. If not, remember this value and move on. Unsorted input, one pass.", cost: "Time O(n) average · space O(n)" },
+  { id: "prefix", title: "Prefix sums + map: stretches summing to k", group: "Hashing and prefix sums", sample: "2 -1 3 1 -2 4 0", hasParam: { label: "Target sum k", sample: 3 },
+    blurb: "A stretch ending at i sums to k exactly when an earlier prefix equals (prefix - k). Count earlier prefixes in a map. Works with negatives, where a sliding window fails.", cost: "Time O(n) average · space O(n)" },
+  { id: "kadane", title: "Kadane: best stretch sum", group: "Hashing and prefix sums", sample: "-2 1 -3 4 -1 2 1 -5 4",
+    blurb: "Keep the best stretch ending here. If it is negative, drop it and restart at the current value; otherwise extend it. Track the best seen overall.", cost: "Time O(n) · space O(1)" },
 ];
 
 function build(def: VisDef, values: number[], param: number): Trace {
   switch (def.id) {
     case "pair": return tracePairSum([...values].sort((a, b) => a - b), param);
     case "window": return traceWindowMax(values, param);
+    case "twosum": return traceTwoSumMap(values, param);
+    case "prefix": return tracePrefixCount(values, param);
+    case "kadane": return traceKadane(values);
     case "distinct": return traceLongestDistinct(values);
     default: return traceSort(def.id, values);
   }

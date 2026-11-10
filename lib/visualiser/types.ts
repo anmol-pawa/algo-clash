@@ -22,6 +22,8 @@ export interface Frame {
   note: string;
   /** Named running values, e.g. the current sum. */
   state?: Record<string, number | string>;
+  /** A hash table shown beside the array; `hot` entries were just read or written. */
+  table?: { title: string; entries: { key: string; value: string; hot?: boolean }[] };
 }
 
 export interface Trace {
