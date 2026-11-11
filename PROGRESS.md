@@ -662,3 +662,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` here; not confirmed.
 - Known gaps: not yet linked from lessons (D3e).
 - Next: D3c-2 (Word Chain Window, Substring with Concatenation of All Words variant).
+
+## 2026-11-11: D3c-2 Word Chain Window (D3c complete)
+- Full R4 package **Word Chain Window** (Substring with Concatenation of All Words variant, H): per-alignment word-level sliding window with a count map. Wrongs: set-ignores-duplicates, aligned-only, unsorted output, known-words-only (no counts), rebuild-window TLE (every-start-matches perf cases). Catalog regenerated (60 problems).
+- Verified: native `content-problems` run for the new package (reference vs brute, all wrongs rejected), `npm run lint` (0 errors), `typecheck`; `npm test` (769 pass incl. native g++ verify), `build`, `build:pages` exit 0. No visual change.
+- CI/deploy: no `gh` here; not confirmed.
+- Known gaps: not yet linked from lessons (D3e).
+- Next: D3d (Hydra of Hashwood art, harbor tileset, backdrop, map).
