@@ -17,7 +17,7 @@ export const ARRAY_ATOLL: MapDef = {
     "DhhwwwsSsSbbsSsSswwhhD",
     "DhwsPsSgsSbbSsStsSPwhD",
     "DwggSsscsSbbsSsSsdsswD",
-    "DwggPssSsSbbSsSsPsSswD",
+    "DwggPssSsSbbSsSsPsSsww",
     "DwssSsoSsSbbsSgggSssrD",
     "DhwsSsSssSbbSsSggcSswD",
     "DhwwsSrsSsbbsSsdsSswhD",
@@ -37,6 +37,8 @@ export const ARRAY_ATOLL: MapDef = {
   warps: [
     { x: 10, y: 13, to: "route-1", tx: 7, ty: 9, facing: "up" },
     { x: 11, y: 13, to: "route-1", tx: 8, ty: 9, facing: "up" },
+    // East shore trail into Window Woods.
+    { x: 21, y: 8, to: "window-woods", tx: 1, ty: 12, facing: "right" },
   ],
   encounterRate: 0.2,
   encounterPool: "atoll-seagrass",

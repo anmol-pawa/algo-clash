@@ -627,3 +627,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: map is not yet registered in `WorldCanvas`, so the door is unreachable in play until D2f; Run (visible tests) can also trigger the halving if it TLEs.
 - Next: D2f (warp, encounters, NPC dialogue, story beat, music).
+
+## 2026-11-11: D2f Window Woods wired into the world (D2f and D2 complete)
+- Array Atoll's east shore now warps into Window Woods (and back through a gap in the woods' west pines). Fern is an encounter tile (pool `woods-fern`, toast until world battles land). Two NPCs (Ranger Juniper, Hiker Bram; new `RANGER`/`HIKER` looks) with original dialogue in `lib/dialogue/woods.ts` teaching grow/shrink windows, when to record the answer, the monotonic deque, `long long` prefixes, and previewing Sorrel's "shrinking pane" rule. New original E-minor `woods` theme in `lib/audio/songs.ts`, played by map. `WorldCanvas` draws the woods map with its own tileset (its tile names collide with Mainville's). `tests/woods-world.test.ts`; older warp tests now include the woods map.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (760 pass incl. native content verify), `build:pages`; Playwright on the static export at desktop and iPhone 14: walked the atoll east shore into the woods, fern encounter toast fired, no console errors, no horizontal overflow; screenshots reviewed (woods tiles, bridge, ranger and hiker sprites, d-pad readable).
+- CI/deploy: no `gh` in this session; confirmation via GitHub MCP, see run summary.
+- Known gaps: encounters are still a toast; no portraits for Juniper/Bram; the Pane Warden is not yet shown on the map itself.
+- Next: D3 (Hashwood Harbor, R4), starting with its problem batch.

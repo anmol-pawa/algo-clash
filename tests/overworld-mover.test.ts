@@ -3,9 +3,10 @@ import { parseMap } from "@/lib/overworld/map";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
+import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { STEP_MS, newWorld, playerDrawPos, press, tapTo, tickWorld } from "@/lib/overworld/mover";
 
-const maps = { mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL) };
+const maps = { mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL), "window-woods": parseMap(WINDOW_WOODS) };
 const never = () => 1;
 
 describe("overworld mover", () => {

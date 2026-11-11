@@ -114,5 +114,49 @@ export const ATOLL_THEME: Song = {
   ],
 };
 
-export const SONGS = { mainville: MAINVILLE_THEME, atoll: ATOLL_THEME, battle: BATTLE_THEME } as const;
+/** Window Woods: a hushed, rustling E-minor forest theme with a sliding two-note motif (4 bars, 64 steps). */
+export const WOODS_THEME: Song = {
+  id: "woods",
+  bpm: 88,
+  stepsPerBeat: 2,
+  channels: [
+    {
+      wave: "triangle",
+      gain: 0.7,
+      pattern: [
+        "E5 _ G5 _ B5 _ G5 _   E5 _ F#5 _ G5 - - -",
+        "D5 _ F#5 _ A5 _ F#5 _  D5 _ E5 _ F#5 - - -",
+        "C5 _ E5 _ G5 _ E5 _   C5 _ D5 _ E5 _ D5 _",
+        "B4 _ D5 _ F#5 _ E5 _  D5 _ B4 _ E5 - - -",
+      ].join(" "),
+    },
+    {
+      wave: "square",
+      gain: 0.14,
+      pattern: [
+        "- - B4 - - - E5 -   - - B4 - - - E5 -",
+        "- - A4 - - - D5 -   - - A4 - - - D5 -",
+        "- - G4 - - - C5 -   - - G4 - - - C5 -",
+        "- - F#4 - - - B4 -  - - G4 - - - B4 -",
+      ].join(" "),
+    },
+    {
+      wave: "triangle",
+      gain: 0.8,
+      pattern: [
+        "E2 - - - B2 - - -   E2 - - - B2 - - -",
+        "D2 - - - A2 - - -   D2 - - - A2 - - -",
+        "C2 - - - G2 - - -   C2 - - - G2 - - -",
+        "B1 - - - F#2 - - -  E2 - - - - - - -",
+      ].join(" "),
+    },
+    {
+      wave: "noise",
+      gain: 0.06,
+      pattern: Array.from({ length: 8 }, () => "- - - - - - A5 -").join(" "),
+    },
+  ],
+};
+
+export const SONGS = { mainville: MAINVILLE_THEME, atoll: ATOLL_THEME, woods: WOODS_THEME, battle: BATTLE_THEME } as const;
 export type SongId = keyof typeof SONGS;
