@@ -690,3 +690,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: the map is not registered in `WorldCanvas`, and the door's `/gym/harbor/` route does not exist yet (D3f); no encounter tile in the harbor tileset yet.
 - Next: D3e (lessons: hash internals, key design, rolling hash; ~36 cards).
+
+## 2026-11-11: D3e Hashwood Harbor lessons and cards
+- Three R4 lessons (`content/lessons/R4/harbor.ts`): **Inside the hash table** (buckets/chains, load factor, rehash amortisation, `[]` inserts vs `find`, iterator vs reference invalidation, custom pair hasher with splitmix64 + seed, `map` vs `unordered_map`), **Designing the key** (signatures, packed and delimited keys, two-way bijection, prefix-count map, brick-edge counting, swap-with-last map+vector, window state with erase-at-zero), **Rolling hash** (polynomial slide, negative mod and 64-bit overflow, collisions and verification, 2-bit DNA packing, binary search on length, word-level windows, mod-2^64 / Thue–Morse warning). 11 runnable listings, outputs computed natively. They link all 9 R4 problems.
+- 39 cards in `content/cards/R4/harbor.ts` (mcq, multi, predict, trace, 2 compilerError, 2 parsons-style ordering incl. prefix-sum count, 3 cloze); predict/trace/parsons/cloze outputs and g++ diagnostics regenerated into `generated.json`.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (821 pass, incl. native g++ verification of cards, lessons and all problem packages), `build`, `build:pages` exit 0. No UI code changed (existing lesson renderer), so no new screenshots.
+- CI/deploy: no `gh` in this session; not confirmed. Note: work is on the designated branch `claude/eloquent-ritchie-hh1z03` (not `main`) per the session's branch instructions.
+- Known gaps: the pair-hasher compiler-error card shows g++'s verbose "deleted default constructor" diagnostic; cards are not yet reachable from the harbor map (D3f).
+- Next: D3f (forge scrolls, visualisers, Hydra gym, warp, dialogue, music).

@@ -401,5 +401,69 @@
   },
   "forge-monotonic-deque-trace-falling": {
     "output": "5 4 3\n"
-  }
+  },
+  "r4-hash-signal": {},
+  "r4-hash-cost": {},
+  "r4-hash-chain-load": {
+    "output": "6 2 \n"
+  },
+  "r4-hash-load-factor": {},
+  "r4-hash-rehash-cost": {
+    "output": "127\n"
+  },
+  "r4-hash-reserve": {},
+  "r4-hash-subscript": {
+    "output": "2 1 0\n"
+  },
+  "r4-hash-const-error": {
+    "diagnostic": "line 4: passing 'const std::unordered_map<int, int>' as 'this' argument discards qualifiers [-fpermissive]"
+  },
+  "r4-hash-pair-error": {
+    "diagnostic": "line 5: use of deleted function 'std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map() [with _Key = std::pair<int, int>; _Tp = int; _Hash = std::hash<std::pair<int, int> >; _Pred = std::equal_to<std::pair<int, int> >; _Alloc = std::allocator<std::pair<const std::pair<int, int>, int> >]'"
+  },
+  "r4-hash-erase-iter": {},
+  "r4-hash-ref-valid": {},
+  "r4-hash-anti": {},
+  "r4-hash-order": {},
+  "r4-hash-map-vs-unordered": {},
+  "r4-hash-count-cloze": {
+    "output": "3 3\n"
+  },
+  "r4-key-anagram": {},
+  "r4-key-tuple": {},
+  "r4-key-delimiter": {},
+  "r4-key-bijection": {},
+  "r4-key-bijection-predict": {
+    "output": "101\n"
+  },
+  "r4-key-prefix-parsons": {
+    "output": "5\n"
+  },
+  "r4-key-prefix-init": {},
+  "r4-key-edge-gap": {},
+  "r4-key-swap-last": {},
+  "r4-key-swap-cloze": {
+    "output": "40 3 3\n"
+  },
+  "r4-key-distinct-window": {},
+  "r4-key-distinct-predict": {
+    "output": "2 3\n"
+  },
+  "r4-key-multi-signal": {},
+  "r4-roll-signal": {},
+  "r4-roll-cost": {},
+  "r4-roll-update": {},
+  "r4-roll-mod-neg": {},
+  "r4-roll-mod-ll": {},
+  "r4-roll-verify": {},
+  "r4-roll-dna-predict": {
+    "output": "27\n"
+  },
+  "r4-roll-dna-cloze": {
+    "output": "6 27 44 49 \n"
+  },
+  "r4-roll-binsearch": {},
+  "r4-roll-binsearch-cost": {},
+  "r4-roll-thue": {},
+  "r4-roll-words": {}
 }

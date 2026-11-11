@@ -175,7 +175,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D3d-1. Hydra of Hashwood 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
     - [x] D3d-2. Harbor tileset on `/dev/sprites`.
     - [x] D3d-3. Harbor battle/gym backdrop and overworld map.
-  - [ ] D3e. Lessons (hash internals, key design, rolling hash) and ~36 cards.
+  - [x] D3e. Lessons (hash internals, key design, rolling hash) and ~36 cards.
   - [ ] D3f. Forge scrolls, visualisers, Hydra gym, warp, dialogue, music.
 - [ ] D4. Stackspire (R6)
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
