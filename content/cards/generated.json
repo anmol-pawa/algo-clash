@@ -371,5 +371,35 @@
   "r3-dq-no-push": {
     "diagnostic": "line 5: 'class std::deque<int>' has no member named 'push'"
   },
-  "r3-dq-vs-heap": {}
+  "r3-dq-vs-heap": {},
+  "forge-variable-window-trace-basic": {
+    "output": "\"acb\"\n"
+  },
+  "forge-variable-window-trace-ties": {
+    "output": "\"ab\"\n"
+  },
+  "forge-variable-window-trace-repeat": {
+    "output": "\"abca\"\n"
+  },
+  "forge-variable-window-trace-none": {
+    "output": "\"\"\n"
+  },
+  "forge-variable-window-trace-case": {
+    "output": "\"abAB\"\n"
+  },
+  "forge-monotonic-deque-trace-basic": {
+    "output": "7 7 5 \n"
+  },
+  "forge-monotonic-deque-trace-equal": {
+    "output": "4 4 \n"
+  },
+  "forge-monotonic-deque-trace-single": {
+    "output": "-3 -8 -1 \n"
+  },
+  "forge-monotonic-deque-trace-full": {
+    "output": "9 \n"
+  },
+  "forge-monotonic-deque-trace-expiry": {
+    "output": "5 1 1 2 \n"
+  }
 }

@@ -606,3 +606,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: lessons are not yet reachable from the map (D2f); no visualisers yet.
 - Next: D2e (Forge scrolls, window/deque visualisers, Pane Warden gym).
+
+## 2026-11-11: D2e-1 Window Woods Forge scrolls
+- ROADMAP D2e split into D2e-1..D2e-3. D2e-1 done: scrolls `variable-window` (CUR #4, template = cover-strip reference) and `monotonic-deque` (CUR #7, template = pane-peaks reference) with line annotations, common bugs, kits (statement/starter/tests) and 10 trace cards in `content/cards/R3/forge.ts`; outputs computed by g++ into `generated.json`.
+- Verified: full `npm test` with CONTENT_WRITE=1 (742 pass; the one scroll failure was the pre-generation run), then `tests/forge.test.ts` + `tests/cards.test.ts` pass; `lint` (0 errors), `typecheck`, `build`, `build:pages` exit 0. No visual change, so no screenshots.
+- Note: this session was told to develop on branch `claude/eloquent-ritchie-c6g5zj`, so work is pushed there, not `main`. CI/deploy not confirmed (no gh).
+- Next: D2e-2 (window and deque visualisers).
