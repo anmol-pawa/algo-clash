@@ -1,9 +1,10 @@
 "use client";
 
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
-import { GYM_PLATFORMS, LH, LW, PLATFORMS, drawAtollBackdrop, drawBackdrop, drawGymBackdrop } from "@/game/battle/backdrop";
+import { GYM_PLATFORMS, LH, LW, PLATFORMS, drawAtollBackdrop, drawBackdrop, drawGymBackdrop, drawWoodsBackdrop } from "@/game/battle/backdrop";
 import { buildWarden } from "@/game/sprites/warden";
 import { buildTidecaller } from "@/game/sprites/tidecaller";
+import { buildPaneWarden } from "@/game/sprites/paneWarden";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
 import { buildArrayling } from "@/game/sprites/arrayling";
 import type { SpriteSheet } from "@/game/sprites/grid";
@@ -49,7 +50,7 @@ function freshFx(foeMax: number, foeStart?: number): StageFx {
   return f;
 }
 
-export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "gym" | "atoll-gym"; foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; foeStart?: number; font?: string }>(
+export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "gym" | "atoll-gym" | "woods-gym"; foeName?: string; foeLevel?: number; playerName?: string; foeMax?: number; foeStart?: number; font?: string }>(
   function BattleStage({ scene = "meadow", foeName = "Bracketeer", foeLevel = 4, playerName = "Arrayling", foeMax = 100, foeStart, font = "monospace" }, ref) {
     const cv = useRef<HTMLCanvasElement>(null);
     const fx = useRef<StageFx>(freshFx(foeMax, foeStart));
@@ -63,7 +64,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "g
       verdict: (v) => showVerdict(fx.current, v),
       restart: () => { fx.current = freshFx(foeMax, foeStart); },
     }), [foeMax, foeStart]);
-    const sheets = useMemo(() => ({ player: buildArrayling("back"), foe: scene === "gym" ? buildWarden() : scene === "atoll-gym" ? buildTidecaller() : foeSheet() }), [scene]);
+    const sheets = useMemo(() => ({ player: buildArrayling("back"), foe: scene === "gym" ? buildWarden() : scene === "atoll-gym" ? buildTidecaller() : scene === "woods-gym" ? buildPaneWarden() : foeSheet() }), [scene]);
     const isGym = scene !== "meadow";
     const plat = isGym ? GYM_PLATFORMS : PLATFORMS;
 
@@ -109,7 +110,7 @@ export const BattleStage = forwardRef<BattleStageHandle, { scene?: "meadow" | "g
         const sh = shakeOffset(f);
         ctx.save();
         ctx.translate(sh.x, sh.y);
-        if (scene === "gym") drawGymBackdrop(ctx, f.time); else if (scene === "atoll-gym") drawAtollBackdrop(ctx, f.time, true); else drawBackdrop(ctx, f.time);
+        if (scene === "gym") drawGymBackdrop(ctx, f.time); else if (scene === "atoll-gym") drawAtollBackdrop(ctx, f.time, true); else if (scene === "woods-gym") drawWoodsBackdrop(ctx, f.time, true); else drawBackdrop(ctx, f.time);
         // foe slides in from the right, player from the left
         const foe = frameOf("foe", f), pl = frameOf("player", f);
         const fxOff = Math.round(slideOffset(f.intro, 0) * 140), plOff = Math.round(slideOffset(f.intro, 0.15) * -140);

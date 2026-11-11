@@ -164,3 +164,58 @@ export function drawAtollBackdrop(c: CanvasRenderingContext2D, time: number, gym
     ellipseFill(c, "#f6e8bd", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
   }
 }
+
+/**
+ * Window Woods battle scene: dappled forest light, layered pine ridges, standing glass panes catching
+ * the sun, a stream and a mossy clearing. `gym` uses the lower gym ledges (Pane Warden Sorrel's clearing).
+ */
+export function drawWoodsBackdrop(c: CanvasRenderingContext2D, time: number, gym = false): void {
+  const sky = ["#a9d8c0", "#b9e0c6", "#c9e8cc", "#d9efd2", "#e8f5d8"];
+  sky.forEach((b, i) => rect(c, b, 0, i * 12, LW, 12));
+  // light shafts sway gently
+  for (let i = 0; i < 5; i++) {
+    const x = 20 + i * 52 + Math.round(Math.sin(time / 1800 + i) * 4);
+    for (let y = 0; y < 60; y += 2) rect(c, "rgba(255,248,196,0.16)", x + (y >> 2), y, 10, 2);
+  }
+  // far and near pine ridges (triangle stacks)
+  const ridge = (color: string, base: number, step: number, h: number, phase: number) => {
+    for (let x = -4; x < LW + 8; x += step) {
+      const ph = h + ((x * 7 + phase) % 9);
+      for (let k = 0; k < ph; k += 2) rect(c, color, x - (k >> 1) , base - ph + k, 2 * (k >> 1) + 3, 2);
+      rect(c, color, x, base - 1, 3, 3);
+    }
+  };
+  ridge("#6a9c78", 62, 14, 22, 3);
+  ridge("#3f7a52", 70, 12, 28, 1);
+  ridge("#245a3a", 78, 10, 24, 5);
+  // standing glass panes among the trees: frame + tinted glass + moving glint
+  for (const [px, py] of [[34, 40], [196, 36], [112, 44]] as const) {
+    rect(c, "#6b4a2c", px - 1, py - 1, 14, 22);
+    rect(c, "#7fb6c9", px, py, 12, 20);
+    rect(c, "#b7e0ee", px, py, 12, 4);
+    rect(c, "#6b4a2c", px + 5, py, 2, 20);
+    rect(c, "#6b4a2c", px, py + 9, 12, 2);
+    const g = Math.floor(((time / 90 + px) % 40));
+    if (g < 14) rect(c, "#f2fdff", px + 1 + (g % 10), py + 1 + (g >> 1), 2, 2);
+  }
+  // stream band
+  rect(c, "#2b6f8e", 0, 84, LW, 7);
+  for (let x = 0; x < LW; x += 6) rect(c, "#6cbad3", (x + Math.round(time / 140)) % LW, 85 + ((x >> 1) % 5), 4, 1);
+  rect(c, "#e8fbff", 0, 84, LW, 1);
+  // clearing
+  rect(c, "#3b8346", 0, 91, LW, LH - 91);
+  for (let i = 0; i < 70; i++) {
+    const x = (i * 61) % LW, y = 93 + ((i * 29) % 40);
+    rect(c, i % 5 === 0 ? "#6dba66" : i % 3 === 0 ? "#2f6b3a" : "#4c9d54", x, y, 2, 1);
+  }
+  for (const [mx, my] of [[14, 112], [226, 100], [150, 126]] as const) {
+    rect(c, "#f6ead2", mx + 1, my + 2, 2, 2);
+    rect(c, "#c8433a", mx, my, 4, 2);
+  }
+  const plats = gym ? GYM_PLATFORMS : PLATFORMS;
+  for (const p of [plats.foe, plats.player]) {
+    ellipseFill(c, "#2f6b3a", p.cx, p.cy + 3, p.rx, p.ry);
+    ellipseFill(c, "#7d5736", p.cx, p.cy, p.rx, p.ry);
+    ellipseFill(c, "#a07848", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
+  }
+}

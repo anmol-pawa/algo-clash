@@ -13,6 +13,7 @@ import { buildTidecaller } from "@/game/sprites/tidecaller";
 import { buildPaneWarden } from "@/game/sprites/paneWarden";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
+import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { WOODS_TILE_NAMES, buildWoodsTileset } from "@/game/sprites/woodsTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
@@ -160,6 +161,12 @@ export default function SpritesDev() {
         </div>
         <h3 className="mb-1 mt-3 text-sm font-semibold">Sample woods scene</h3>
         <TileScene sheet={woods} scale={2} rows={WOODS_SAMPLE} legend={WOODS_LEGEND} />
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Window Woods map (22x15) and gym backdrop</h3>
+        <TileScene sheet={woods} scale={2} rows={WINDOW_WOODS.rows} legend={WINDOW_WOODS.legend} />
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <GymScene sheet={paneWarden} anim="idle" scale={3} region="window-woods" />
+          <GymScene sheet={paneWarden} anim="attack" scale={3} region="window-woods" />
+        </div>
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">

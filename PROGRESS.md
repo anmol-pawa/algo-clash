@@ -592,3 +592,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: tiles not yet used by a map or the world canvas (D2c-3); fern is subtle at 1x.
 - Next: D2c-3 (woods battle/gym backdrop and overworld map).
 - Fix (same run): CI on `main` had been red since D2b-3 because `pane-peaks/wrong/tle-rescan.cpp` was not slow enough on the CI runner (g++ -O2 auto-vectorised the max-rescan, so the whole perf batch fit inside 1 s). The wrong solution now tracks the argmax index (a true dependency chain; 8.4 s vs 1.7 s locally per wide case at -O2) and is rejected robustly. Verified `content-problems` for pane-peaks locally; full local suite was green before this one-file change.
+
+## 2026-11-11: D2c-3 Window Woods map and battle backdrop (D2c complete)
+- New `lib/overworld/woods.ts` (22x15 map: pine border, glass-pane gate framing the Pane Warden clearing in the north, a stream with one plank bridge, fern patches as encounter tiles, pool `woods-fern`), `fern` added to `ENCOUNTER_TILES`, new `drawWoodsBackdrop` (light shafts, three pine ridges, standing panes with moving glints, stream, mossy clearing; gym ledges), `BattleStage` scene `woods-gym` (Pane Warden sprite as foe) and `GymScene` region `window-woods`. Both shown on `/dev/sprites`. `tests/woods-map.test.ts` (shape, solid sync, bridge is the only way to the clearing).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (687 pass incl. native content verify), `build`, `build:pages`; Playwright on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (map reads as forest with panes and bridge; backdrop with Warden idle/attack looks right).
+- CI/deploy: Actions quota period is over; no `gh` here, checked via GitHub MCP, see run summary.
+- Known gaps: map is not yet registered in `WorldCanvas` (no warp/doors until D2f/D2e); ridge base is a plain strip.
+- Next: D2d (lessons: window template, monotonic deque; ~36 cards).
