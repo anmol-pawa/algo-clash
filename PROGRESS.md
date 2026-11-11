@@ -704,3 +704,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period is over; no `gh` in this session, so not confirmed.
 - Known gaps: scrolls are not yet reachable from the harbor map (D3f-4); no moves learned screens specific to R4.
 - Next: D3f-2 (visualisers).
+
+## 2026-11-11: D3f-2 Hashwood Harbor visualisers
+- Two Library visualisers (group "Hashwood Harbor"): **Hash table** (`traceChainedTable`: separate chaining, bucket = key mod count, doubling rehash when load would exceed 1, duplicates ignored) and **Rolling key** (`traceRollingRepeats`: O(1) slide hash, tiny modulus 101 so collisions show, content verification on every hash match). `Frame` gained an optional `table`/`tableTitle`; `VisualiserPlayer` draws it as bucket rows (hot row highlighted).
+- Verified: `lint` (0 errors), `typecheck`, `npm test` (844 pass incl. native verify; new tests compare both traces with independent brute force and check rehash timing and collision flagging), `build`, `build:pages` exit 0. Playwright on the static export `/library` at desktop and iPhone 14: both visualisers play, no console errors, no horizontal overflow; screenshots reviewed (bucket rows and chains legible, tap targets large).
+- CI/deploy: no `gh` in this session, so not confirmed.
+- Known gaps: the rolling-key final frame drops the seen-hash table; visualisers not yet linked from the harbor map (D3f-4).
+- Next: D3f-3 (Hydra of Hashwood gym).

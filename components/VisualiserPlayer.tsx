@@ -30,6 +30,23 @@ function Cells({ frame }: { frame: Frame }) {
   );
 }
 
+function Table({ frame }: { frame: Frame }) {
+  if (!frame.table?.length) return null;
+  return (
+    <div className="flex flex-col gap-1" data-testid="vis-table" aria-label={frame.tableTitle ?? "Table"}>
+      {frame.tableTitle && <p className="text-xs uppercase opacity-70">{frame.tableTitle}</p>}
+      {frame.table.map((row) => (
+        <div key={row.label} className={`flex min-h-9 flex-wrap items-center gap-1.5 border-2 px-2 py-1 font-mono text-sm ${row.hot ? "border-amber-300 bg-amber-400/20" : "border-white/20"}`} data-hot={row.hot ? "1" : ""}>
+          <span className="w-24 shrink-0 text-xs opacity-70">{row.label}</span>
+          {row.items.length === 0 ? <span className="opacity-40">empty</span> : row.items.map((it, n) => (
+            <span key={n} className="flex items-center gap-1.5">{n > 0 && <span className="opacity-50">→</span>}<span className="border border-violet-300 bg-violet-500/30 px-1.5">{it}</span></span>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /** Plays a precomputed Trace: step back/forward, autoplay, restart. Pure presentation. */
 export default function VisualiserPlayer({ trace }: { trace: Trace }) {
   const [step, setStep] = useState(0);
@@ -45,6 +62,7 @@ export default function VisualiserPlayer({ trace }: { trace: Trace }) {
   return (
     <section className="panel flex flex-col gap-3 p-3" data-testid="vis-player" aria-label="Visualiser">
       <Cells frame={frame} />
+      <Table frame={frame} />
       {frame.state && (
         <p className="text-center font-mono text-xs" data-testid="vis-state">
           {Object.entries(frame.state).map(([k, v]) => `${k} = ${v}`).join("   ")}

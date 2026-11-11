@@ -7,10 +7,11 @@ import { parseNumbers } from "@/lib/visualiser/parse";
 import { SORT_COMPLEXITY, SORT_NAMES, traceSort, type SortKind } from "@/lib/visualiser/sort";
 import type { Trace } from "@/lib/visualiser/types";
 import { traceKadane, tracePrefixCount, traceTwoSumMap } from "@/lib/visualiser/hashprefix";
+import { traceChainedTable, traceRollingRepeats } from "@/lib/visualiser/hashtable";
 import { traceDequeMax, traceShortestAtLeast } from "@/lib/visualiser/deque";
 import { traceLongestDistinct, tracePairSum, traceWindowMax } from "@/lib/visualiser/window";
 
-type VisId = SortKind | "pair" | "window" | "distinct" | "hashpair" | "prefix" | "kadane" | "shortest" | "deque";
+type VisId = SortKind | "pair" | "window" | "distinct" | "hashpair" | "prefix" | "kadane" | "shortest" | "deque" | "chain" | "rolling";
 
 interface VisDef {
   id: VisId;
@@ -43,6 +44,10 @@ const DEFS: VisDef[] = [
     blurb: "Grow on the right until the sum reaches T, then shrink from the left while it still does, recording the length each time. Values must be non-negative: that is why shrinking never skips a better answer.", cost: "Time O(n) · space O(1)" },
   { id: "deque", title: "Monotonic deque: window maximum", group: "Window Woods", sample: "1 3 -1 -3 5 3 6 7", hasParam: { label: "Window size k", sample: 3 },
     blurb: "Keep indices whose values decrease from front to back. A new value pops every smaller-or-equal one from the back; the front is always the window maximum, and it leaves from the front when it ages out.", cost: "Time O(n) · space O(k)" },
+  { id: "chain", title: "Hash table: buckets, chains, rehash", group: "Hashwood Harbor", sample: "12 5 20 7 15 3 28 10 5", hasParam: { label: "Starting buckets (1 to 8)", sample: 2 },
+    blurb: "Each key lands in bucket (key mod bucket count). Keys sharing a bucket form a chain. When one more key would push the load factor above 1, the table doubles and re-places every key. (libstdc++ uses prime bucket counts; doubling is easier to follow.)", cost: "Insert and lookup O(1) average, O(n) worst case · rehash O(n) but amortised away" },
+  { id: "rolling", title: "Rolling key: repeated windows", group: "Hashwood Harbor", sample: "1 2 3 1 2 3 4 9 2 3 1", hasParam: { label: "Window length k", sample: 3 },
+    blurb: "Hash every window of length k in O(1) per slide by removing the leftmost share, shifting, and adding the new value. A hash match only makes a window a suspect: compare the real values. This demo uses a tiny modulus (101) so you can see collisions.", cost: "Time O(n) average with verification · space O(n)" },
 ];
 
 function build(def: VisDef, values: number[], param: number): Trace {
@@ -55,6 +60,8 @@ function build(def: VisDef, values: number[], param: number): Trace {
     case "kadane": return traceKadane(values);
     case "shortest": return traceShortestAtLeast(values, param);
     case "deque": return traceDequeMax(values, param);
+    case "chain": return traceChainedTable(values, param);
+    case "rolling": return traceRollingRepeats(values, param);
     default: return traceSort(def.id, values);
   }
 }

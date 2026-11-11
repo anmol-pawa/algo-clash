@@ -22,6 +22,15 @@ export interface Frame {
   note: string;
   /** Named running values, e.g. the current sum. */
   state?: Record<string, number | string>;
+  /** Optional rows drawn under the array (hash buckets, seen-hash index...). `hot` highlights the row being touched. */
+  table?: TableRow[];
+  tableTitle?: string;
+}
+
+export interface TableRow {
+  label: string;
+  items: string[];
+  hot?: boolean;
 }
 
 export interface Trace {

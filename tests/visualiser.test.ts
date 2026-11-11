@@ -164,3 +164,50 @@ describe("window and deque traces", () => {
     expect(traceDequeMax([1, 2], 5).result).toEqual([]);
   });
 });
+
+import { traceChainedTable, traceRollingRepeats, ROLL_MOD } from "@/lib/visualiser/hashtable";
+
+describe("hash table and rolling key traces", () => {
+  it("chained table keeps every distinct key in the right bucket with load factor <= 1", () => {
+    const r = rng(91);
+    for (let t = 0; t < 300; t++) {
+      const a = randArr(r, Math.floor(r() * 14), 30);
+      const b0 = 1 + Math.floor(r() * 8);
+      const tr = traceChainedTable(a, b0);
+      const lens = tr.result as number[];
+      const distinct = [...new Set(a)];
+      expect(lens.reduce((x, y) => x + y, 0)).toBe(distinct.length);
+      expect(lens.length).toBeGreaterThanOrEqual(b0);
+      expect(distinct.length).toBeLessThanOrEqual(lens.length);
+      expect(Number.isInteger(Math.log2(lens.length / b0))).toBe(true);
+      lens.forEach((n, j) => expect(n).toBe(distinct.filter((k) => ((k % lens.length) + lens.length) % lens.length === j).length));
+      const last = tr.frames[tr.frames.length - 1]!;
+      expect(last.table!.flatMap((row) => row.items).sort()).toEqual(distinct.map(String).sort());
+    }
+    expect(traceChainedTable([1], 0).result).toBeNull();
+    expect(traceChainedTable([1], 9).result).toBeNull();
+  });
+  it("chained table rehashes exactly when a key would exceed load 1", () => {
+    const tr = traceChainedTable([1, 2, 3], 2);
+    expect(tr.frames.filter((f) => f.note.startsWith("Adding")).length).toBe(1);
+    expect(tr.result).toEqual([0, 1, 1, 1]);
+  });
+  it("rolling repeats agree with a brute-force content comparison, and collisions are flagged", () => {
+    const r = rng(92);
+    let collisions = 0;
+    for (let t = 0; t < 400; t++) {
+      const a = randArr(r, 1 + Math.floor(r() * 16), 60);
+      const k = 1 + Math.floor(r() * a.length);
+      const want: number[] = [];
+      for (let s = 1; s + k <= a.length; s++) {
+        for (let p = 0; p < s; p++) if (a.slice(p, p + k).every((v, d) => v === a[s + d])) { want.push(s); break; }
+      }
+      const tr = traceRollingRepeats(a, k);
+      expect(tr.result).toEqual(want);
+      collisions += tr.frames.filter((f) => f.note.includes("a collision")).length;
+    }
+    expect(ROLL_MOD).toBe(101);
+    expect(collisions).toBeGreaterThan(0);
+    expect(traceRollingRepeats([1, 2], 5).result).toEqual([]);
+  });
+});
