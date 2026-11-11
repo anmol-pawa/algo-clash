@@ -153,7 +153,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D2b-1. Shuffle Spotter (anagram windows, M) and Odd Picks (exactly-K trick, M).
     - [x] D2b-2. Cover Strip (Minimum Window, H) and Distinct Picks (K Different Integers, H, original variant).
     - [x] D2b-3. Sliding Window Maximum (monotonic deque, H) and Shortest Subarray with Sum at Least K (H).
-  - [ ] D2c. Art: Pane Warden 96x96 sprite, woods tileset, backdrop and overworld map.
+  - [ ] D2c. Art, split:
+    - [x] D2c-1. Pane Warden 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
+    - [ ] D2c-2. Woods tileset (grass, pines, glass-pane windows, paths, stumps) on `/dev/sprites`.
+    - [ ] D2c-3. Woods battle/gym backdrop and overworld map (Window Woods).
   - [ ] D2d. Lessons (window template, monotonic deque) and ~36 cards.
   - [ ] D2e. Forge scrolls, visualisers (window, deque), Pane Warden gym.
   - [ ] D2f. Warp, encounters, NPC dialogue, story beat, music.

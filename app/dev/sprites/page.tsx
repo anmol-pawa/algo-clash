@@ -10,6 +10,7 @@ import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
 import { GymScene } from "@/components/GymScene";
 import { buildWarden } from "@/game/sprites/warden";
 import { buildTidecaller } from "@/game/sprites/tidecaller";
+import { buildPaneWarden } from "@/game/sprites/paneWarden";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
@@ -23,6 +24,7 @@ export default function SpritesDev() {
   const vec = useMemo(() => ({ front: buildVectorling("front"), back: buildVectorling("back") }), []);
   const warden = useMemo(() => buildWarden(), []);
   const tidecaller = useMemo(() => buildTidecaller(), []);
+  const paneWarden = useMemo(() => buildPaneWarden(), []);
   const tiles = useMemo(() => buildTileset(), []);
   const atoll = useMemo(() => buildAtollTileset(), []);
   return (
@@ -81,6 +83,17 @@ export default function SpritesDev() {
           {["idle", "attack", "hurt", "faint"].map((a) => (
             <figure key={a} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
               <SpriteCanvas sheet={tidecaller} anim={a} scale={3} />
+              <figcaption className="text-xs text-black">{a}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Pane Warden Sorrel (96x96 gym leader, Window Woods)</h2>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {["idle", "attack", "hurt", "faint"].map((a) => (
+            <figure key={a} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+              <SpriteCanvas sheet={paneWarden} anim={a} scale={3} />
               <figcaption className="text-xs text-black">{a}</figcaption>
             </figure>
           ))}

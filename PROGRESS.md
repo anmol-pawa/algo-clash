@@ -577,3 +577,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session, so not confirmed. Pushed to `main`.
 - Known gaps: new problems not yet used by a gym, lesson or map.
 - Next: D2c (Pane Warden 96x96 sprite, woods tileset, backdrop and overworld map).
+
+## 2026-11-11: D2c-1 Pane Warden Sorrel 96x96 sprite
+- ROADMAP D2c split into D2c-1..D2c-3. D2c-1 done: `game/sprites/paneWarden.ts` (rust-haired ranger in a forest cloak; staff topped by a four-pane window frame with a bright two-pane sliding window, hourglass belt buckle, impatient foot-tap and stern brows; leaf-gust attack). Idle (4 frames), attack (4), hurt (2), faint (4, sink + fade). Shown on `/dev/sprites`; `tests/pane-warden-sprite.test.ts`.
+- Verified: `npm run lint`, `typecheck`, `npm test`, `build`, `build:pages` (see exit codes below); Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (silhouette distinct from Mira and Brace, window staff reads clearly, faint frame fades).
+- CI/deploy: Actions quota period over; no `gh` here, so not confirmed. Pushed to `main`.
+- Known gaps: leaf gust is faint at 3x; no portrait; not yet used in a gym scene (D2e).
+- Next: D2c-2 (woods tileset).
