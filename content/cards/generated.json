@@ -401,5 +401,74 @@
   },
   "forge-monotonic-deque-trace-falling": {
     "output": "5 4 3\n"
-  }
+  },
+  "r4-hash-signal": {},
+  "r4-hash-avg": {},
+  "r4-hash-chain-trace": {
+    "output": "4\n"
+  },
+  "r4-hash-load": {},
+  "r4-hash-rehash": {},
+  "r4-hash-openaddr": {},
+  "r4-hash-subscript": {
+    "output": "2 0 0\n"
+  },
+  "r4-hash-order": {},
+  "r4-hash-pair-error": {
+    "diagnostic": "line 5: use of deleted function 'std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::unordered_map() [with _Key = std::pair<int, int>; _Tp = int; _Hash = std::hash<std::pair<int, int> >; _Pred = std::equal_to<std::pair<int, int> >; _Alloc = std::allocator<std::pair<const std::pair<int, int>, int> >]'"
+  },
+  "r4-hash-anti": {},
+  "r4-hash-set-cloze": {
+    "output": "7\n"
+  },
+  "r4-hash-freq-parsons": {
+    "output": "3\n"
+  },
+  "r4-key-def": {},
+  "r4-key-anagram": {
+    "output": "eilnst 1 0\n"
+  },
+  "r4-key-delim": {},
+  "r4-key-delim-trace": {
+    "output": "1\n"
+  },
+  "r4-key-cell-cloze": {
+    "output": "13 2\n"
+  },
+  "r4-key-bijection": {},
+  "r4-key-bijection-trace": {
+    "output": "100\n"
+  },
+  "r4-key-prefix-predict": {
+    "output": "3\n"
+  },
+  "r4-key-prefix-parsons": {
+    "output": "2\n"
+  },
+  "r4-key-multi": {},
+  "r4-key-ordered": {},
+  "r4-key-const-error": {
+    "diagnostic": "line 4: passing 'const std::unordered_map<int, int>' as 'this' argument discards qualifiers [-fpermissive]"
+  },
+  "r4-rh-signal": {},
+  "r4-rh-update": {},
+  "r4-rh-collision": {},
+  "r4-rh-cost": {},
+  "r4-rh-negative": {},
+  "r4-rh-overflow": {},
+  "r4-rh-2bit-predict": {
+    "output": "27 108 177 \n"
+  },
+  "r4-rh-mask-cloze": {
+    "output": "4\n"
+  },
+  "r4-rh-bsearch-why": {},
+  "r4-rh-bsearch-trace": {
+    "output": "3\n"
+  },
+  "r4-rh-bsearch-parsons": {
+    "output": "6\n"
+  },
+  "r4-rh-anti": {},
+  "r4-rh-words": {}
 }

@@ -690,3 +690,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: the map is not registered in `WorldCanvas`, and the door's `/gym/harbor/` route does not exist yet (D3f); no encounter tile in the harbor tileset yet.
 - Next: D3e (lessons: hash internals, key design, rolling hash; ~36 cards).
+
+## 2026-11-11: D3e Hashwood Harbor lessons and 37 cards
+- Three lessons in `content/lessons/R4/harbor.ts`: `r4-hash-internals` (buckets/chains, load factor, rehash amortisation, open addressing, operator[] vs find, pair hash, iteration order), `r4-key-design` (canonical signatures, separators, cell packing, bijection with two maps, prefix-sum map, const-map pitfall) and `r4-rolling-hash` (Rabin-Karp with verification, 2-bit exact keys, binary search on length, word-level hashing, anti-hash). 11 runnable listings with real g++ output. 37 cards in `content/cards/R4/harbor.ts` (mcq, multi, predict, trace, parsons, cloze, compilerError) with computed fields in the generated JSONs. Lessons link all 9 R4 problems. `tests/r4-content.test.ts`.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (821 pass incl. native verification), `build`, `build:pages` exit 0. No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: lessons are not reachable from the map yet (D3f); no visualisers or scrolls for R4.
+- Next: D3f (Forge scrolls, visualisers, Hydra gym, warp, dialogue, music), likely to be split.
