@@ -131,7 +131,7 @@ Vex's "ghost" is a timeline built from the reference metadata: read (30 s), plan
 3. **Phase 3, Signature mechanic:** a hard problem *or* an interview follow-up on the phase 2 problem (O(1) space, streaming, larger constraints, an online version).
    - Each gym has a unique twist that teaches something real:
      - **Tidecaller Mira (Array Atoll):** "Dry tide": the signature round (Tide Pools, two pointers) is rejected before compiling if the code uses a map/set/stack/queue, a second vector or `new`. Teaches O(n) vs O(1) extra space. Rules live in `content/gyms/r2.ts`, checked by `lib/gym/twist.ts` on the player's own code; a rejection shows as a compile error and costs no heart.
-     - **Pane Warden (sliding window):** the time limit halves after the first TLE, because brute force must be abandoned early.
+     - **Pane Warden Sorrel (Window Woods):** "Shrinking pane": in the signature round (Pane Peaks) the first TLE halves the per-test time limit for the rest of the fight, because brute force must be abandoned early. The rule is `limitAfterVerdict` in `lib/gym/twist.ts`, applied by the arena (`halveOnTle`); the current limit is shown on screen. Data in `content/gyms/r3.ts`; core battle Tidy Tape.
      - **Hydra of Hashwood:** adversarial anti-hash tests for `unordered_map` with a naive key. Teaches custom hashes and when to use `map`.
      - **Grotto Weaver (graphs):** a disconnected-graph trap in the hidden tests.
      - **Memoth Elder (DP):** you must submit the state and transition before the editor unlocks.

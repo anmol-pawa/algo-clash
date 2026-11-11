@@ -46,3 +46,12 @@ export function findForbidden(src: string, rules: readonly ForbiddenRule[]): str
   }
   return null;
 }
+
+/**
+ * "Shrinking pane" (Pane Warden twist, GDD §5.5): the first TLE in the signature round halves the per-test
+ * time limit for the rest of the fight, because a window problem must drop brute force early. Only once.
+ */
+export function limitAfterVerdict(limitMs: number, verdict: string, alreadyHalved: boolean): { limitMs: number; halved: boolean } {
+  if (alreadyHalved || verdict !== "TLE") return { limitMs, halved: alreadyHalved };
+  return { limitMs: Math.max(1, Math.floor(limitMs / 2)), halved: true };
+}

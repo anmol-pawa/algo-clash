@@ -27,12 +27,14 @@ export interface GymConfig {
   gym: GymDef;
   kits: Record<string, GymKit>;
   buildLeader: () => SpriteSheet;
-  scene: "gym" | "atoll-gym";
-  region: "syntax-shores" | "array-atoll";
+  scene: "gym" | "atoll-gym" | "woods-gym";
+  region: "syntax-shores" | "array-atoll" | "window-woods";
   /** Compiler flags for the signature round (the Syntax Shores twist). */
   signatureFlags?: string[];
   /** Source rules for the signature round (the Array Atoll twist). */
   signatureRules?: ForbiddenRule[];
+  /** Halve the time limit after the first TLE in the signature round (the Window Woods twist). */
+  signatureHalveOnTle?: boolean;
   /** Plays the Arrayling stage-2 evolution on the first win (Syntax Shores only). */
   evolves?: boolean;
   placeName: string;
@@ -187,6 +189,7 @@ export function GymRunner({ config }: { config: GymConfig }) {
         foeStartHp={state.phase === "core" ? coreFoeHp(state) : undefined}
         compileFlags={state.phase === "signature" ? config.signatureFlags : undefined}
         forbidden={state.phase === "signature" ? config.signatureRules : undefined}
+        halveOnTle={state.phase === "signature" && config.signatureHalveOnTle}
         onResult={onBattle} />
     ) : <main className={shell}><p role="status">{loadErr || "Loading the battle…"}</p></main>;
   }

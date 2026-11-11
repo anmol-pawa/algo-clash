@@ -620,3 +620,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed here.
 - Known gaps: the visualisers are not yet linked from the lessons; the deque has no separate visual strip beyond the state line.
 - Next: D2e-3 (Pane Warden gym, data + signature mechanic, wired to the woods map door).
+
+## 2026-11-11: D2e-3 Pane Warden gym (D2e complete)
+- Pane Warden Sorrel's gym: `content/gyms/r3.ts` (8-item blitz incl. 2 review; core Tidy Tape M, signature Pane Peaks H), `kitsR3.ts`, `/gym/woods/` route + `WoodsGymScreen`. Twist "Shrinking pane": `limitAfterVerdict` in `lib/gym/twist.ts` halves the per-test limit on the first TLE of the signature round (`halveOnTle` in `BattleArena`, banner `pane-limit` shows the current limit). Woods map gets a gym door at (10,1) between the two glass-pane banks. GDD §5.5 updated. `tests/gym-woods.test.ts`, `scripts/smoke-gym-woods.mjs`.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (754 pass), `build`, `build:pages` exit 0. Playwright smoke on the static export at desktop and iPhone 14: blitz, core win + debrief, TLE rescan halves 1000 -> 500 ms, reference wins, badge persists after reload; no console errors, no overflow; screenshots reviewed (intro, shrunk-limit banner with Time limit overlay).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: map is not yet registered in `WorldCanvas`, so the door is unreachable in play until D2f; Run (visible tests) can also trigger the halving if it TLEs.
+- Next: D2f (warp, encounters, NPC dialogue, story beat, music).

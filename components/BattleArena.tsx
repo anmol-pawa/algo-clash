@@ -19,7 +19,7 @@ import VerdictPanel from "@/components/VerdictPanel";
 import { DEFAULT_EDITOR_SETTINGS } from "@/lib/editor/settings";
 import { compileCpp, runWasm, type CompileResult } from "@/lib/judge/client";
 import { judgeProblem } from "@/lib/judge/judge";
-import { findForbidden, type ForbiddenRule } from "@/lib/gym/twist";
+import { findForbidden, limitAfterVerdict, type ForbiddenRule } from "@/lib/gym/twist";
 import type { DriverSpec } from "@/lib/judge/harness/driver";
 import { audio } from "@/lib/audio/engine";
 import { verdictSfx } from "@/lib/audio/sfx";
@@ -71,11 +71,13 @@ export interface ArenaOptions {
   /** Foe HP at the start of the fight (gym head start). */
   foeStartHp?: number;
   /** "gym": lighthouse backdrop and Warden Brace as the foe. */
-  scene?: "meadow" | "gym" | "atoll-gym";
+  scene?: "meadow" | "gym" | "atoll-gym" | "woods-gym";
   /** clang flags for every Run/Submit (a gym twist such as -Werror). Compile errors never cost a heart. */
   compileFlags?: string[];
   /** Source rules checked before compiling (a gym twist such as "Dry tide"); a violation shows as a compile error and never costs a heart. */
   forbidden?: ForbiddenRule[];
+  /** "Shrinking pane" twist: the first TLE halves the per-test time limit for the rest of the fight. */
+  halveOnTle?: boolean;
   /** When set the fight can end: a Continue button reports the result, and Retreat is offered. */
   onResult?: (r: ArenaResult, info?: ArenaInfo) => void;
 }
@@ -85,13 +87,14 @@ const PLAYER_HEARTS = 5;
 const FOE_HP = 100;
 
 /** One coding battle: stage + statement + editor, Run (visible tests) chips the foe, Submit (all tests) decides the fight. */
-export default function BattleArena({ problem, foeStartHp, scene, compileFlags, forbidden, onResult }: { problem: ArenaProblem } & ArenaOptions) {
+export default function BattleArena({ problem, foeStartHp, scene, compileFlags, forbidden, halveOnTle, onResult }: { problem: ArenaProblem } & ArenaOptions) {
   useMusic("battle");
   const statement = useMemo(() => parseStatement(problem.statement), [problem.statement]);
   const visible = useMemo(() => problem.tests.filter((t) => t.group === "basic"), [problem.tests]);
   const [tab, setTab] = useState<BattleTab>("code");
   const [code, setCode] = useState(problem.starter);
   const [view, setView] = useState<VerdictView | null>(null);
+  const [pane, setPane] = useState({ limitMs: problem.timeLimitMs, halved: false });
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState("");
   const [endedState, setEnded] = useState<"won" | "fainted" | null>(null);
@@ -245,7 +248,7 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     if (tests.length === 0) return;
     setBusy(true);
     setOwnStatus("Judging your tests…");
-    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: compileWith, run: runWasm });
+    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: pane.limitMs }, { compile: compileWith, run: runWasm });
     setBusy(false);
     if (r.verdict === "CE") { setOwnStatus("Your code does not compile yet. Fix that first."); return; }
     const verdicts = tests.map((_, i) => r.outcomes[i]?.verdict);
@@ -261,11 +264,12 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
     if (kind === "run") setRuns((n) => n + 1); else setSubmitted(true);
     setBusy(true);
     setView(null);
-    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: problem.timeLimitMs }, { compile: compileWith, run: runWasm });
+    const r = await judgeProblem(problem.spec, code, tests, { timeLimitMs: pane.limitMs }, { compile: compileWith, run: runWasm });
     const v = buildVerdictView(r, tests);
     setView(v);
     if (v.failInput !== undefined) setLastFail(v.failInput);
     setBusy(false);
+    if (halveOnTle) setPane((p) => { const n = limitAfterVerdict(p.limitMs, v.verdict, p.halved); return n.halved === p.halved ? p : n; });
     const out = battleOutcome(kind, v.verdict, v.passed, v.total, FOE_HP);
     if (kind === "submit" || v.verdict !== "AC") audio.playSfx(verdictSfx(v.verdict));
     else audio.playSfx("menu");
@@ -319,6 +323,11 @@ export default function BattleArena({ problem, foeStartHp, scene, compileFlags, 
       problem={<StatementPanel statement={statement} badge={<span className="px-btn px-2 text-xs">{problem.difficulty}</span>} />}
       code={
         <>
+          {halveOnTle && (
+            <p className={`panel p-2 text-xs ${pane.halved ? "text-red-300" : "text-white/70"}`} data-testid="pane-limit">
+              Shrinking pane: time limit {pane.limitMs} ms per test{pane.halved ? ` (halved from ${problem.timeLimitMs} ms after your first TLE)` : ". Your first TLE halves it for the rest of the fight."}
+            </p>
+          )}
           <ModePanel mode={mode} onPick={pickMode} locked={runs > 0 || submitted || !!ended} runsLeft={runsLeft} timeLeft={timeLeft}
             approach={hints.find((h) => h.rung === "Approach")?.text} />
           <div className="min-h-[200px] flex-1"><CodeEditor value={code} onChange={edit} settings={{ ...DEFAULT_EDITOR_SETTINGS, autocomplete: mode.autocomplete }} /></div>
