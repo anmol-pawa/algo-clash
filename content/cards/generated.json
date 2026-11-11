@@ -308,5 +308,68 @@
   },
   "forge-opposite-trace-wide": {
     "output": "8000000000\n"
-  }
+  },
+  "r3-win-signal": {},
+  "r3-win-fixed-cost": {},
+  "r3-win-fixed-sums": {
+    "output": "7 16 14 15 \n"
+  },
+  "r3-win-monotone": {},
+  "r3-win-cost": {},
+  "r3-win-longest-trace": {
+    "output": "3\n"
+  },
+  "r3-win-update-spot": {},
+  "r3-win-shortest-parsons": {
+    "output": "2\n"
+  },
+  "r3-win-negatives": {},
+  "r3-win-counts": {},
+  "r3-win-exactly-k": {},
+  "r3-win-atmost-count": {
+    "output": "4\n"
+  },
+  "r3-win-count-add": {},
+  "r3-win-long-long": {},
+  "r3-win-lambda-capture": {
+    "diagnostic": "line 6: 'limit' is not captured"
+  },
+  "r3-win-fixed-cloze": {
+    "output": "16\n"
+  },
+  "r3-win-shrink-cloze": {
+    "output": "3\n"
+  },
+  "r3-win-multi-signal": {},
+  "r3-win-anagram": {},
+  "r3-dq-signal": {},
+  "r3-dq-why-pop": {},
+  "r3-dq-indices": {},
+  "r3-dq-cost": {},
+  "r3-dq-window-max": {
+    "output": "9 8 8 8 \n"
+  },
+  "r3-dq-front-trace": {
+    "output": "3\n"
+  },
+  "r3-dq-equal": {},
+  "r3-dq-slide-parsons": {
+    "output": "4 12 12 \n"
+  },
+  "r3-dq-expire": {},
+  "r3-dq-api": {},
+  "r3-dq-empty": {},
+  "r3-dq-min-cloze": {
+    "output": "2 2 3 1 \n"
+  },
+  "r3-dq-prefix-why": {},
+  "r3-dq-prefix-rules": {},
+  "r3-dq-prefix-shortest": {
+    "output": "3\n"
+  },
+  "r3-dq-prefix-ll": {},
+  "r3-dq-no-push": {
+    "diagnostic": "line 5: 'class std::deque<int>' has no member named 'push'"
+  },
+  "r3-dq-vs-heap": {}
 }

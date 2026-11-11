@@ -599,3 +599,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period is over; no `gh` here, checked via GitHub MCP, see run summary.
 - Known gaps: map is not yet registered in `WorldCanvas` (no warp/doors until D2f/D2e); ridge base is a plain strip.
 - Next: D2d (lessons: window template, monotonic deque; ~36 cards).
+
+## 2026-11-11: D2d Window Woods lessons and 37 cards
+- Two lessons in `content/lessons/R3/woods.ts`: `r3-sliding-window` (fixed window, variable window grow/shrink, where to record the answer, at-most/exactly-K counting, overflow) and `r3-monotonic-deque` (window maximum, prefix sums + deque for negatives). 7 runnable listings with real g++ output. 37 cards in `content/cards/R3/woods.ts` (mcq, multi, predict, trace, parsons, cloze, compilerError); computed fields in `generated.json`. Lessons link the 11 R3 problems.
+- Verified: `npm run lint`, `typecheck`, `npm test` (cards + lessons native verification regenerated with CONTENT_WRITE=1), `build`, `build:pages` all exit 0. No visual change, so no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: lessons are not yet reachable from the map (D2f); no visualisers yet.
+- Next: D2e (Forge scrolls, window/deque visualisers, Pane Warden gym).

@@ -157,7 +157,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D2c-1. Pane Warden 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
     - [x] D2c-2. Woods tileset (grass, pines, glass-pane windows, paths, stumps) on `/dev/sprites`.
     - [x] D2c-3. Woods battle/gym backdrop and overworld map (Window Woods).
-  - [ ] D2d. Lessons (window template, monotonic deque) and ~36 cards.
+  - [x] D2d. Lessons (window template, monotonic deque) and ~36 cards.
   - [ ] D2e. Forge scrolls, visualisers (window, deque), Pane Warden gym.
   - [ ] D2f. Warp, encounters, NPC dialogue, story beat, music.
 - [ ] D3. Hashwood Harbor (R4)
