@@ -641,3 +641,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: not confirmed in this session (no gh).
 - Known gaps: problems are not yet linked from lessons (D3e); the first verify run showed the TLE wrong must do real extra work per candidate to exceed 1 s.
 - Next: D3b.
+
+## 2026-11-11: D3b-1 Hashwood Harbor problems batch 2a
+- ROADMAP D3b split into D3b-1 and D3b-2. D3b-1 done: two full R4 packages. **Verse Match** (Word Pattern variant, M: longest prefix of `pattern`/`words` that is a two-way bijection; reference uses letter->word and word->letter maps; wrongs: forward-only, returns 0 instead of failing index, requires equal lengths, quadratic TLE). **Drum Bag** (Insert Delete GetRandom O(1) as a deterministic design, M: `insert`/`erase`/`slot(i)`/`size` with swap-with-last deletion; random pick replaced by `slot(i)` so hidden tests are checkable; wrongs: shifting erase, stale slot map, erase-then-move bug when removing the last ticket, linear-scan TLE). Catalog regenerated (56 problems).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (765 pass incl. native g++ verify of all problems), `build`, `build:pages` all exit 0. No visual change, so no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not yet linked from lessons (D3e).
+- Next: D3b-2 (Repeated DNA with rolling hash, Design HashMap).

@@ -165,7 +165,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] D2f. Warp, encounters, NPC dialogue, story beat, music.
 - [ ] D3. Hashwood Harbor (R4), split by the region recipe:
   - [x] D3a. Problems batch 1: Twin Scripts (isomorphic, M), Brick Gap (Brick Wall, M), Crate Variety (at most K distinct, M).
-  - [ ] D3b. Problems batch 2: Word Pattern variant, Insert Delete GetRandom O(1) (design), Repeated DNA (rolling hash), Design HashMap.
+  - [ ] D3b. Problems batch 2, split:
+    - [x] D3b-1. Verse Match (Word Pattern variant, M) and Drum Bag (Insert Delete GetRandom O(1) as a deterministic slot design, M).
+    - [ ] D3b-2. Repeated DNA (rolling hash) and Design HashMap.
   - [ ] D3c. Problems batch 3 (H): Longest Duplicate Substring, Substring with Concatenation of All Words.
   - [ ] D3d. Art: Hydra of Hashwood 96x96, harbor tileset, backdrop and map.
   - [ ] D3e. Lessons (hash internals, key design, rolling hash) and ~36 cards.
