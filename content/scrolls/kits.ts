@@ -3,6 +3,8 @@ import type { TestCase } from "@/lib/judge/verdict";
 import { meta as pouchMeta } from "../problems/R0/pouch-sum/meta";
 import { meta as stretchMeta } from "../problems/R2/exact-stretches/meta";
 import { meta as basinMeta } from "../problems/R2/widest-basin/meta";
+import { meta as peaksMeta } from "../problems/R3/pane-peaks/meta";
+import { meta as tidyMeta } from "../problems/R3/tidy-tape/meta";
 
 /** Everything the Forge UI needs to judge a scroll: the problem spec, statement, starter and (lazily loaded) hidden tests. */
 export interface ScrollKit {
@@ -71,6 +73,45 @@ Return the largest capacity you can get. If there are fewer than two posts, the 
 Note that the answer can exceed the range of a 32-bit integer. Aim for O(n) time.
 `;
 
+const TIDY_STATEMENT = `# Tidy Tape
+
+A label printer prints one lowercase letter per tick onto a long tape, given as the string \`tape\`. A stretch of consecutive letters is **tidy** if no letter appears more than \`m\` times inside it.
+
+Return the length of the longest tidy stretch. (With \`m = 1\` this asks for the longest stretch of all-different letters.)
+
+## Examples
+
+- \`tape = "abcabcbb"\`, \`m = 1\` gives \`3\` (\`"abc"\`).
+- \`tape = "aabaabaa"\`, \`m = 2\` gives \`4\` (\`"baab"\`; every stretch of 5 holds at least three \`a\`).
+- \`tape = "zzzz"\`, \`m = 10\` gives \`4\`.
+
+## Constraints
+
+- \`0 <= tape.length() <= 100000\`
+- \`tape\` contains only \`a\` to \`z\`.
+- \`1 <= m <= 100000\`
+`;
+
+const PEAKS_STATEMENT = `# Pane Peaks
+
+A greenhouse roof is a row of glass panes. \`heat[i]\` is the temperature reading of pane \`i\` (it can be negative on frosty days). A cleaning frame covers exactly \`width\` neighbouring panes and starts over the first \`width\` panes. It then slides one pane to the right at a time until it reaches the last pane.
+
+For every position of the frame, record the **hottest** reading among the panes it covers. Return all these readings in order, from the leftmost frame position to the rightmost.
+
+## Examples
+
+- \`heat = [2, 7, 1, 5, 3]\`, \`width = 3\` gives \`[7, 7, 5]\`.
+- \`heat = [4, 4, 4]\`, \`width = 2\` gives \`[4, 4]\`.
+- \`heat = [-3, -8, -1]\`, \`width = 1\` gives \`[-3, -8, -1]\`.
+- \`heat = [9, 1, 2]\`, \`width = 3\` gives \`[9]\`.
+
+## Constraints
+
+- \`1 <= heat.size() <= 100000\`
+- \`1 <= width <= heat.size()\`
+- \`-1000000000 <= heat[i] <= 1000000000\`
+`;
+
 export const scrollKits: Record<string, ScrollKit> = {
   accumulate: {
     statement: POUCH_STATEMENT,
@@ -114,5 +155,33 @@ public:
     parSeconds: basinMeta.parSeconds,
     timeLimitMs: basinMeta.timeLimitMs,
     loadTests: async () => (await import("../problems/R2/widest-basin/tests.json")).default as TestCase[],
+  },
+  "variable-window": {
+    statement: TIDY_STATEMENT,
+    starter: `class Solution {
+public:
+    int longestTidy(string tape, int m) {
+        // write the scroll from memory
+    }
+};
+`,
+    spec: tidyMeta.spec as FunctionSpec,
+    parSeconds: tidyMeta.parSeconds,
+    timeLimitMs: tidyMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R3/tidy-tape/tests.json")).default as TestCase[],
+  },
+  "monotonic-deque": {
+    statement: PEAKS_STATEMENT,
+    starter: `class Solution {
+public:
+    vector<int> paneMaxima(vector<int> heat, int width) {
+        // write the scroll from memory
+    }
+};
+`,
+    spec: peaksMeta.spec as FunctionSpec,
+    parSeconds: peaksMeta.parSeconds,
+    timeLimitMs: peaksMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R3/pane-peaks/tests.json")).default as TestCase[],
   },
 };
