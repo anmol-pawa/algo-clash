@@ -570,3 +570,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run content:gen` then `content:verify` (50 tests pass natively with g++, every wrong solution rejected), `npm run lint` (0 errors), `typecheck`, `npm test`, `build`, `build:pages` (see exit codes in the run summary). No visual change, so no screenshots.
 - Known gaps: new problems not yet used by a gym, lesson or map. `distinct-picks/tests.json` is 2 MB (same order as odd-picks at 3.3 MB); trim perf cases if repo size matters.
 - Next: D2b-3 (Sliding Window Maximum with a monotonic deque, Shortest Subarray with Sum at Least K).
+
+## 2026-11-11: D2b-3 Window Woods problems batch 2c (D2b complete)
+- Two new R3 packages (reference, brute, 4 wrong solutions each incl. a TLE one, seeded generator, four test groups, hint ladder, house-style editorial): Pane Peaks (H; window maximum with a monotonic deque of indices) and Quota Run (H; shortest run with sum >= quota with negatives allowed: prefix sums plus a deque of increasing-prefix starts; `long long` prefixes, quota up to 10^10 so int overflow is caught). Catalog regenerated (51 problems).
+- Verified: `content:gen` natively with g++ (reference == brute on random cases, every wrong solution rejected; first run caught that my int-prefix wrong solution passed because quota <= 10^9, so I raised the quota bound and added big-quota perf cases), `npm run lint` (0 errors), `typecheck`, `npm test` (675 pass), `build`, `build:pages`. No visual change, so no screenshots.
+- CI/deploy: no `gh` in this session, so not confirmed. Pushed to `main`.
+- Known gaps: new problems not yet used by a gym, lesson or map.
+- Next: D2c (Pane Warden 96x96 sprite, woods tileset, backdrop and overworld map).
