@@ -584,3 +584,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period over; no `gh` here, so not confirmed. Pushed to `main`.
 - Known gaps: leaf gust is faint at 3x; no portrait; not yet used in a gym scene (D2e).
 - Next: D2c-2 (woods tileset).
+
+## 2026-11-11: D2c-2 Window Woods tileset
+- New `game/sprites/woodsTiles.ts`: 14 deterministic 16x16 tiles (grass x2, path, path edge, pine, standing four-pane glass window, stump, fern undergrowth (2 frames, encounter tile), stream and plank bridge (4 frames), mushroom, boulder, leaf pile, fence), 34-colour palette with 3-4 shade ramps, `WOODS_SOLID` set. Shown on `/dev/sprites` with a sample woods scene. `tests/woods-tiles.test.ts` (6 tests).
+- Verified: `npm run lint`, `typecheck`, `npm test` (684 pass incl. native content verify), `build`, `build:pages` all exit 0. Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; desktop screenshot reviewed (pines read as tiered trees, panes read as windows, stream animates, bridge/fence legible).
+- CI/deploy: Actions quota period over; no `gh` here, so not confirmed (checked via GitHub MCP, see run summary).
+- Known gaps: tiles not yet used by a map or the world canvas (D2c-3); fern is subtle at 1x.
+- Next: D2c-3 (woods battle/gym backdrop and overworld map).

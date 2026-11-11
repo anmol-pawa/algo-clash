@@ -13,10 +13,28 @@ import { buildTidecaller } from "@/game/sprites/tidecaller";
 import { buildPaneWarden } from "@/game/sprites/paneWarden";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
+import { WOODS_TILE_NAMES, buildWoodsTileset } from "@/game/sprites/woodsTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
 const ANIMS = ["idle", "attack", "hurt", "faint", "evolve"];
 const WALKS = ["down", "up", "left", "right"];
+
+const WOODS_LEGEND: Record<string, string> = {
+  g: "grass", G: "grass2", p: "path", e: "pathEdge", P: "pine", w: "glassPane", s: "stump", f: "fern",
+  r: "stream", b: "bridge", m: "mushroom", o: "boulder", l: "leafPile", F: "fence",
+};
+const WOODS_SAMPLE = [
+  "PPPPPPPPPPPPPPPPPPPP",
+  "PgGgPwwgGgPgwwgGgPgP",
+  "PGgmgggeeepegggoGgPP",
+  "PgfffgGpppppgsgggGgP",
+  "PGfffggpppppggglllgP",
+  "PgfffggepepegGllllgP",
+  "rrrrrrrrbbrrrrrrrrrr",
+  "rrrrrrrrbbrrrrrrrrrr",
+  "PgGgFFFFpppFFFFgGgPP",
+  "PPgGgggGpppgGgGgggPP",
+];
 
 export default function SpritesDev() {
   const sheets = useMemo(() => ({ front: buildArrayling("front"), back: buildArrayling("back") }), []);
@@ -27,6 +45,7 @@ export default function SpritesDev() {
   const paneWarden = useMemo(() => buildPaneWarden(), []);
   const tiles = useMemo(() => buildTileset(), []);
   const atoll = useMemo(() => buildAtollTileset(), []);
+  const woods = useMemo(() => buildWoodsTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
       <h1 className="mb-1 text-xl font-bold">Sprites</h1>
@@ -128,6 +147,19 @@ export default function SpritesDev() {
           <GymScene sheet={tidecaller} anim="idle" scale={3} region="array-atoll" />
           <GymScene sheet={tidecaller} anim="attack" scale={3} region="array-atoll" />
         </div>
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Window Woods tileset (16x16)</h2>
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-9">
+          {WOODS_TILE_NAMES.map((n) => (
+            <figure key={n} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
+              <SpriteCanvas sheet={woods} anim={n} scale={4} />
+              <figcaption className="truncate text-xs text-black">{n}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Sample woods scene</h3>
+        <TileScene sheet={woods} scale={2} rows={WOODS_SAMPLE} legend={WOODS_LEGEND} />
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">
