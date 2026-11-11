@@ -219,3 +219,77 @@ export function drawWoodsBackdrop(c: CanvasRenderingContext2D, time: number, gym
     ellipseFill(c, "#a07848", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
   }
 }
+
+/**
+ * Hashwood Harbor battle scene: a dawn sky with gulls, a far shoreline of warehouses, bobbing boats on a
+ * glittering bay, and a plank quay with a hash-bucket locker wall. `gym` uses the lower gym ledges (the Hydra).
+ */
+export function drawHarborBackdrop(c: CanvasRenderingContext2D, time: number, gym = false): void {
+  const sky = ["#f6c9a0", "#f8d6b0", "#f9e0c0", "#fbeacf", "#fdf2dd"];
+  sky.forEach((b, i) => rect(c, b, 0, i * 12, LW, 12));
+  // sun low on the horizon
+  ellipseFill(c, "#fff1c0", 190, 58, 16, 9);
+  ellipseFill(c, "#ffd98a", 190, 58, 10, 6);
+  // gulls
+  for (const [gx, gy, ph] of [[40, 16, 0], [88, 26, 2], [150, 12, 4]] as const) {
+    const x = Math.round(((gx + time / 60) % (LW + 20)) - 10);
+    const up = Math.floor(time / 260 + ph) % 2 === 0;
+    rect(c, "#ffffff", x, gy + (up ? 0 : 1), 3, 1);
+    rect(c, "#ffffff", x + 3, gy + (up ? 1 : 0), 3, 1);
+  }
+  // far shoreline: warehouses with roof slopes and a crane
+  const roofs: Array<[number, number, number, string]> = [[6, 40, 30, "#8c6a5a"], [44, 46, 26, "#7a5d6a"], [78, 38, 36, "#8c6a5a"], [124, 44, 28, "#6a5a78"], [160, 36, 22, "#8c6a5a"], [206, 42, 30, "#7a5d6a"]];
+  for (const [x, y, w, col] of roofs) {
+    rect(c, col, x, y + 6, w, 70 - y - 6);
+    rect(c, "#52404a", x, y + 6, w, 2);
+    for (let i = 0; i < 6; i++) rect(c, col, x + (i >> 0), y + 5 - i, w - 2 * i, 1);
+    rect(c, "#f2c477", x + 4, y + 14, 3, 3);
+    rect(c, "#f2c477", x + w - 8, y + 14, 3, 3);
+  }
+  rect(c, "#3c3a4e", 148, 20, 2, 38);
+  rect(c, "#3c3a4e", 136, 20, 22, 2);
+  rect(c, "#3c3a4e", 136, 22, 1, 8 + Math.round(Math.sin(time / 900) * 2));
+  // bay with animated glitter
+  rect(c, "#3f8fb0", 0, 70, LW, 22);
+  rect(c, "#2f7a9c", 0, 82, LW, 10);
+  for (let x = 0; x < LW; x += 5) {
+    const s = (x * 7 + Math.floor(time / 180)) % 11;
+    if (s < 3) rect(c, "#d6f3fb", (x + (s << 2)) % LW, 72 + ((x * 3) % 17), 3, 1);
+  }
+  // bobbing sailboats
+  for (const [bx, by] of [[30, 76], [118, 80]] as const) {
+    const bob = Math.round(Math.sin(time / 600 + bx) * 1);
+    rect(c, "#6b4a2c", bx, by + bob + 8, 16, 3);
+    rect(c, "#6b4a2c", bx + 2, by + bob + 11, 12, 1);
+    rect(c, "#5a3a24", bx + 7, by + bob, 1, 9);
+    for (let i = 0; i < 7; i++) rect(c, "#fdf7ec", bx + 8, by + bob + 1 + i, 1 + (i >> 1) + 1, 1);
+  }
+  rect(c, "#e8fbff", 0, 70, LW, 1);
+  // quay: planks with seams, then cobble
+  rect(c, "#8a6a44", 0, 92, LW, 12);
+  for (let x = 0; x < LW; x += 12) rect(c, "#6b4f30", x, 92, 1, 12);
+  rect(c, "#a98458", 0, 92, LW, 2);
+  rect(c, "#6b4f30", 0, 103, LW, 1);
+  rect(c, "#9a9aa8", 0, 104, LW, LH - 104);
+  for (let i = 0; i < 90; i++) {
+    const x = (i * 53) % LW, y = 106 + ((i * 31) % 26);
+    rect(c, i % 3 === 0 ? "#b4b4c0" : "#80808e", x, y, 3, 1);
+  }
+  // locker wall at the left edge and crate stack at the right
+  for (let i = 0; i < 4; i++) {
+    rect(c, "#4a5f7a", 4 + i * 9, 94, 8, 10);
+    rect(c, "#6f87a6", 5 + i * 9, 95, 6, 3);
+    rect(c, "#e9c46a", 8 + i * 9, 100, 1, 2);
+  }
+  for (const [cx, cy] of [[214, 92], [224, 92], [219, 83]] as const) {
+    rect(c, "#9c6b3a", cx, cy, 10, 10);
+    rect(c, "#c58f52", cx, cy, 10, 2);
+    rect(c, "#6e4a26", cx + 4, cy, 2, 10);
+  }
+  const plats = gym ? GYM_PLATFORMS : PLATFORMS;
+  for (const p of [plats.foe, plats.player]) {
+    ellipseFill(c, "#4a3a28", p.cx, p.cy + 3, p.rx, p.ry);
+    ellipseFill(c, "#8a6a44", p.cx, p.cy, p.rx, p.ry);
+    ellipseFill(c, "#b08a5a", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
+  }
+}

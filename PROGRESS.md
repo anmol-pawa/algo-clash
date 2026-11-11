@@ -683,3 +683,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: the sample scene's dock rows are rough (just a tile check); not yet used by a map (D3d-3).
 - Next: D3d-3 (harbor battle/gym backdrop and overworld map).
+
+## 2026-11-11: D3d-3 Harbor backdrop and overworld map (D3d complete)
+- `drawHarborBackdrop` in `game/battle/backdrop.ts` (dawn sky, gulls, warehouse skyline with crane, glittering bay, bobbing sailboats, plank quay, locker wall, crates; wild and gym ledges). `lib/overworld/harbor.ts`: `HASHWOOD_HARBOR` 22x15 map (warehouse wall with the gym door at 11,0, cobble lanes, two piers to the docks, no NPCs/warps/encounters yet). `GymScene` takes region `hashwood-harbor`; `/dev/sprites` shows the map and the Hydra on the new backdrop. `tests/harbor-map.test.ts`.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (781 pass incl. native content verify), `build`, `build:pages` exit 0. Playwright on the static export `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (map reads as a quay with docks; backdrop and Hydra read clearly in idle and attack).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: the map is not registered in `WorldCanvas`, and the door's `/gym/harbor/` route does not exist yet (D3f); no encounter tile in the harbor tileset yet.
+- Next: D3e (lessons: hash internals, key design, rolling hash; ~36 cards).

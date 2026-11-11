@@ -16,6 +16,7 @@ import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { WOODS_TILE_NAMES, buildWoodsTileset } from "@/game/sprites/woodsTiles";
+import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
 import { HARBOR_TILE_NAMES, buildHarborTileset } from "@/game/sprites/harborTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
@@ -210,6 +211,12 @@ export default function SpritesDev() {
         </div>
         <h3 className="mb-1 mt-3 text-sm font-semibold">Sample harbor scene</h3>
         <TileScene sheet={harbor} scale={2} rows={HARBOR_SAMPLE} legend={HARBOR_LEGEND} />
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Hashwood Harbor map (22x15) and gym backdrop</h3>
+        <TileScene sheet={harbor} scale={2} rows={HASHWOOD_HARBOR.rows} legend={HASHWOOD_HARBOR.legend} />
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <GymScene sheet={hydra} anim="idle" scale={3} region="hashwood-harbor" />
+          <GymScene sheet={hydra} anim="attack" scale={3} region="hashwood-harbor" />
+        </div>
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">
