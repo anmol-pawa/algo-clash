@@ -641,3 +641,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: not confirmed in this session (no gh).
 - Known gaps: problems are not yet linked from lessons (D3e); the first verify run showed the TLE wrong must do real extra work per candidate to exceed 1 s.
 - Next: D3b.
+
+## 2026-11-11: D3b-1 Chant Match and Twin Strands
+- ROADMAP D3b split into D3b-1 (done) and D3b-2 (design problems). Two full R4 packages: Chant Match (Word Pattern variant: two-way letter/word maps; wrongs one-way map, ignores count, first-letters only, TLE pairs) and Twin Strands (Repeated DNA: 2-bit rolling code in uint64, len <= 31 so it is exact; wrongs counts every repeat, 32-bit code, skips last window, TLE all starts). Seeded tests in four groups; catalog regenerated.
+- Verified: `npm run content:verify` (57 packages pass, native g++ incl. wrong-solution rejection), `lint` (0 errors), `typecheck`, `npm test` (765 pass), `build`, `build:pages`. No visual change.
+- CI/deploy: skipped (Actions quota).
+- Known gaps: not linked from lessons yet (D3e). Work pushed to the session branch claude/eloquent-ritchie-m60zd0, not main.
+- Next: D3b-2 (Insert Delete GetRandom O(1), Design HashMap as design-spec problems).
