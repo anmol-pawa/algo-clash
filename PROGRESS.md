@@ -634,3 +634,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; confirmation via GitHub MCP, see run summary.
 - Known gaps: encounters are still a toast; no portraits for Juniper/Bram; the Pane Warden is not yet shown on the map itself.
 - Next: D3 (Hashwood Harbor, R4), starting with its problem batch.
+
+## 2026-11-11: D3a Hashwood Harbor problems batch 1
+- ROADMAP D3 split into D3a..D3f. D3a done: three full R4 packages (`content/problems/R4/`): Twin Scripts (bijection via last-seen arrays), Brick Gap (prefix-sum edge counts, `long long`), Crate Variety (hash-map window, at most K kinds). Each has reference, brute, 3-4 wrong solutions (incl. a TLE one; Brick Gap also has an overflow wrong that needs an edge pair exactly 2^32 apart), seeded tests in four groups, hints, editorial.
+- Verified: `npm run lint`, `typecheck`, `npm test` (incl. native content verify), `build`, `build:pages`. No visual change, no screenshots.
+- CI/deploy: not confirmed in this session (no gh).
+- Known gaps: problems are not yet linked from lessons (D3e); the first verify run showed the TLE wrong must do real extra work per candidate to exceed 1 s.
+- Next: D3b.

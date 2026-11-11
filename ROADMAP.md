@@ -163,7 +163,13 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D2e-2. Visualisers: variable window and monotonic deque steppers.
     - [x] D2e-3. Pane Warden gym (data + signature mechanic, per GDD §5.5) wired to the woods map door.
   - [x] D2f. Warp, encounters, NPC dialogue, story beat, music.
-- [ ] D3. Hashwood Harbor (R4)
+- [ ] D3. Hashwood Harbor (R4), split by the region recipe:
+  - [x] D3a. Problems batch 1: Twin Scripts (isomorphic, M), Brick Gap (Brick Wall, M), Crate Variety (at most K distinct, M).
+  - [ ] D3b. Problems batch 2: Word Pattern variant, Insert Delete GetRandom O(1) (design), Repeated DNA (rolling hash), Design HashMap.
+  - [ ] D3c. Problems batch 3 (H): Longest Duplicate Substring, Substring with Concatenation of All Words.
+  - [ ] D3d. Art: Hydra of Hashwood 96x96, harbor tileset, backdrop and map.
+  - [ ] D3e. Lessons (hash internals, key design, rolling hash) and ~36 cards.
+  - [ ] D3f. Forge scrolls, visualisers, Hydra gym, warp, dialogue, music.
 - [ ] D4. Stackspire (R6)
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
 - [ ] D6. Recursion Ruins (R7)
