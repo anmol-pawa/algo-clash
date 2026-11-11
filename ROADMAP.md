@@ -168,7 +168,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] D3b. Problems batch 2, split:
     - [x] D3b-1. Verse Match (Word Pattern variant, M) and Drum Bag (Insert Delete GetRandom O(1) as a deterministic slot design, M).
     - [x] D3b-2. Echo Strand (Repeated DNA Sequences variant, rolling 2-bit key, M) and Locker Board (Design HashMap, M).
-  - [ ] D3c. Problems batch 3 (H): Longest Duplicate Substring, Substring with Concatenation of All Words.
+  - [ ] D3c. Problems batch 3 (H), split:
+    - [x] D3c-1. Longest Echo (Longest Duplicate Substring variant: binary search + verified double-mod rolling hash).
+    - [ ] D3c-2. Word Chain Window (Substring with Concatenation of All Words variant).
   - [ ] D3d. Art: Hydra of Hashwood 96x96, harbor tileset, backdrop and map.
   - [ ] D3e. Lessons (hash internals, key design, rolling hash) and ~36 cards.
   - [ ] D3f. Forge scrolls, visualisers, Hydra gym, warp, dialogue, music.

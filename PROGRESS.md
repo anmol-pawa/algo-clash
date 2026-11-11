@@ -655,3 +655,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota note no longer applies after 2026-11-01, but no `gh` here; not confirmed.
 - Known gaps: not yet linked from lessons (D3e).
 - Next: D3c (hard problems: Longest Duplicate Substring, Substring with Concatenation of All Words).
+
+## 2026-11-11: D3c-1 Longest Echo (hard)
+- ROADMAP D3c split into D3c-1/D3c-2. D3c-1 done: full R4 package **Longest Echo** (Longest Duplicate Substring variant, H): binary search on length + double-mod rolling hash with verified matches; tie-break = repeat that completes earliest. Wrongs: off-by-one `hi`, unverified mod-2^64 hash (killed by Thue–Morse tests), wrong tie-break, quadratic TLE, non-overlap only. Catalog regenerated (59 problems).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (768 pass incl. native g++ verify), `build`, `build:pages` exit 0. No visual change, no screenshots.
+- CI/deploy: no `gh` here; not confirmed.
+- Known gaps: not yet linked from lessons (D3e).
+- Next: D3c-2 (Word Chain Window, Substring with Concatenation of All Words variant).
