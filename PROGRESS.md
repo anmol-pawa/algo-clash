@@ -648,3 +648,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not yet linked from lessons (D3e).
 - Next: D3b-2 (Repeated DNA with rolling hash, Design HashMap).
+
+## 2026-11-11: D3b-2 Hashwood Harbor problems batch 2b (D3b complete)
+- Two full R4 packages. **Echo Strand** (Repeated DNA Sequences variant, M: all k-blocks, k up to 30, occurring at 2+ starts; reference slides a 2-bit-per-letter `long long` key; wrongs: no-overlap, duplicates, 32-bit key, quadratic TLE). **Locker Board** (Design HashMap, M: hand-built chained table with doubling; wrongs: no-overwrite, zero-as-empty, stale count, fixed-8-bucket TLE).
+- Verified: native `content-problems` run (59 tests) passed for everything except locker-board's metadata check (complexity strings); fixed and re-ran locker-board green. lint, typecheck, other tests and builds: see run summary.
+- CI/deploy: Actions quota note no longer applies after 2026-11-01, but no `gh` here; not confirmed.
+- Known gaps: not yet linked from lessons (D3e).
+- Next: D3c (hard problems: Longest Duplicate Substring, Substring with Concatenation of All Words).
