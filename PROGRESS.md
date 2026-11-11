@@ -591,3 +591,4 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period over; no `gh` here, so not confirmed (checked via GitHub MCP, see run summary).
 - Known gaps: tiles not yet used by a map or the world canvas (D2c-3); fern is subtle at 1x.
 - Next: D2c-3 (woods battle/gym backdrop and overworld map).
+- Fix (same run): CI on `main` had been red since D2b-3 because `pane-peaks/wrong/tle-rescan.cpp` was not slow enough on the CI runner (g++ -O2 auto-vectorised the max-rescan, so the whole perf batch fit inside 1 s). The wrong solution now tracks the argmax index (a true dependency chain; 8.4 s vs 1.7 s locally per wide case at -O2) and is rejected robustly. Verified `content-problems` for pane-peaks locally; full local suite was green before this one-file change.
