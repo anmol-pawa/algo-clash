@@ -676,3 +676,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` here; not confirmed.
 - Known gaps: attack frames' mouth/jet poses only checked in the still screenshot (first frame); no back sprite (bosses are front-only like Pane Warden).
 - Next: D3d-2 (harbor tileset).
+
+## 2026-11-11: D3d-2 Hashwood Harbor tileset
+- `game/sprites/harborTiles.ts`: 16 original 16x16 tiles (sand x2, cobble, planks, dock edge, water, shore, crate, barrel, bollard, lamp, boat, warehouse, hash-bucket lockers wall, net rack, warehouse door), 39-colour palette with 3-4 step ramps, deterministic. Animated: water (4), dock edge (4), shore surf (3), bobbing sailboat (4), flickering lamp (2). `HARBOR_SOLID` lists blocking tiles. Shown on `/dev/sprites` with a sample scene; `tests/harbor-tiles.test.ts`.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (777 pass incl. native content verify), `build`, `build:pages` exit 0. Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (tiles read clearly, ramps and outlines clean).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: the sample scene's dock rows are rough (just a tile check); not yet used by a map (D3d-3).
+- Next: D3d-3 (harbor battle/gym backdrop and overworld map).

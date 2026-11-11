@@ -16,7 +16,23 @@ import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { WOODS_TILE_NAMES, buildWoodsTileset } from "@/game/sprites/woodsTiles";
+import { HARBOR_TILE_NAMES, buildHarborTileset } from "@/game/sprites/harborTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
+
+const HARBOR_LEGEND: Record<string, string> = {
+  s: "sand", S: "sand2", c: "cobble", p: "planks", d: "dockEdge", w: "water", h: "shore", x: "crate", b: "barrel",
+  o: "bollard", l: "lamp", B: "boat", W: "warehouse", L: "lockers", n: "netRack", D: "door",
+};
+const HARBOR_SAMPLE = [
+  "WWWWWLLWWWWDWWWWWWWW",
+  "ssSsscccccccccsSsxbs",
+  "sSsnsccsSsscccsxxsSs",
+  "ssSsscccccccccsSbsss",
+  "hhhhhhhhhhhhhhhhhhhh",
+  "wwwwwwwwwwwwwwwwwwww",
+  "dpppppppppppdwwwwwww",
+  "wolpplppopwwwwBwwwww",
+];
 
 const ANIMS = ["idle", "attack", "hurt", "faint", "evolve"];
 const WALKS = ["down", "up", "left", "right"];
@@ -49,6 +65,7 @@ export default function SpritesDev() {
   const tiles = useMemo(() => buildTileset(), []);
   const atoll = useMemo(() => buildAtollTileset(), []);
   const woods = useMemo(() => buildWoodsTileset(), []);
+  const harbor = useMemo(() => buildHarborTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
       <h1 className="mb-1 text-xl font-bold">Sprites</h1>
@@ -180,6 +197,19 @@ export default function SpritesDev() {
           <GymScene sheet={paneWarden} anim="idle" scale={3} region="window-woods" />
           <GymScene sheet={paneWarden} anim="attack" scale={3} region="window-woods" />
         </div>
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Hashwood Harbor tileset (16x16)</h2>
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8">
+          {HARBOR_TILE_NAMES.map((n) => (
+            <figure key={n} className="min-w-0 rounded bg-[#e9dcb8] p-2 text-center">
+              <SpriteCanvas sheet={harbor} anim={n} scale={4} />
+              <figcaption className="truncate text-xs text-black">{n}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Sample harbor scene</h3>
+        <TileScene sheet={harbor} scale={2} rows={HARBOR_SAMPLE} legend={HARBOR_LEGEND} />
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">
