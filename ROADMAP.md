@@ -176,7 +176,11 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D3d-2. Harbor tileset on `/dev/sprites`.
     - [x] D3d-3. Harbor battle/gym backdrop and overworld map.
   - [x] D3e. Lessons (hash internals, key design, rolling hash) and 37 cards.
-  - [ ] D3f. Forge scrolls, visualisers, Hydra gym, warp, dialogue, music.
+  - [ ] D3f. Forge scrolls, visualisers, Hydra gym, warp, dialogue, music, split:
+    - [x] D3f-1. Forge scrolls: Twin Ledgers (two-way map, Verse Match) and Sliding Key (rolling key, Echo Strand), 10 native trace cards.
+    - [ ] D3f-2. Visualisers: hash table (buckets/chains/rehash) and rolling key steppers.
+    - [ ] D3f-3. Hydra of Hashwood gym (data + signature mechanic per GDD §5.5) wired to the harbor map door.
+    - [ ] D3f-4. Register the harbor map in `WorldCanvas`, warp from the previous region, encounters, NPC dialogue, story beat, music.
 - [ ] D4. Stackspire (R6)
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
 - [ ] D6. Recursion Ruins (R7)

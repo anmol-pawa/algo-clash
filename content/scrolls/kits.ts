@@ -5,6 +5,8 @@ import { meta as stretchMeta } from "../problems/R2/exact-stretches/meta";
 import { meta as basinMeta } from "../problems/R2/widest-basin/meta";
 import { meta as peaksMeta } from "../problems/R3/pane-peaks/meta";
 import { meta as tidyMeta } from "../problems/R3/tidy-tape/meta";
+import { meta as echoMeta } from "../problems/R4/echo-strand/meta";
+import { meta as verseMeta } from "../problems/R4/verse-match/meta";
 
 /** Everything the Forge UI needs to judge a scroll: the problem spec, statement, starter and (lazily loaded) hidden tests. */
 export interface ScrollKit {
@@ -112,6 +114,50 @@ For every position of the frame, record the **hottest** reading among the panes 
 - \`-1000000000 <= heat[i] <= 1000000000\`
 `;
 
+const VERSE_STATEMENT = `# Verse Match
+
+A poet marks the rhyme of a poem with a **pattern**: one lowercase letter per line, where equal letters mean "these lines are the same word" and different letters mean "different words". A poem **fits** a pattern when letters and words pair up perfectly: the same letter always stands for the same word, and two different letters never stand for the same word.
+
+You are given a \`pattern\` and a list of \`words\`. They may have different lengths. Return the length of the **longest prefix** (counting the first \`L\` letters against the first \`L\` words) that still fits. The empty prefix always fits.
+
+## Examples
+
+- \`pattern = "abba"\`, \`words = ["sun","moon","moon","sun"]\` gives \`4\`.
+- \`pattern = "abba"\`, \`words = ["sun","moon","moon","star"]\` gives \`3\` (\`a\` would have to be both \`sun\` and \`star\`).
+- \`pattern = "abc"\`, \`words = ["x","x"]\` gives \`1\` (\`a\` and \`b\` would both be \`x\`, and only two words exist).
+- \`pattern = ""\`, \`words = ["a"]\` gives \`0\`.
+
+## Constraints
+
+- \`0 <= pattern.length() <= 100000\`, \`0 <= words.size() <= 100000\`
+- Each word has \`1\` to \`10\` lowercase letters; the pattern has only lowercase letters.
+- The total number of word characters is at most \`1000000\`.
+`;
+
+const ECHO_STATEMENT = `# Echo Strand
+
+A lab records a strand as a string of the four letters \`A\`, \`C\`, \`G\` and \`T\`. An **echo** is a block of exactly \`k\` consecutive letters that occurs at **two or more different starting positions** (the occurrences may overlap).
+
+Return every distinct echo exactly once, sorted in ascending alphabetical (lexicographic) order.
+
+## Example
+
+\`\`\`
+strand = "ACGACGAC", k = 3
+blocks:  ACG(0)  CGA(1)  GAC(2)  ACG(3)  CGA(4)  GAC(5)
+echoes:  ["ACG", "CGA", "GAC"]
+
+strand = "AAAAAA", k = 2   ->  ["AA"]     (starts 0..4, overlapping)
+strand = "ACGT",   k = 2   ->  []
+\`\`\`
+
+## Constraints
+
+- \`0 <= strand.length() <= 100000\`; every letter is \`A\`, \`C\`, \`G\` or \`T\`.
+- \`1 <= k <= 30\`.
+- If \`k > strand.length()\` there are no blocks and the answer is empty.
+`;
+
 export const scrollKits: Record<string, ScrollKit> = {
   accumulate: {
     statement: POUCH_STATEMENT,
@@ -183,5 +229,33 @@ public:
     parSeconds: peaksMeta.parSeconds,
     timeLimitMs: peaksMeta.timeLimitMs,
     loadTests: async () => (await import("../problems/R3/pane-peaks/tests.json")).default as TestCase[],
+  },
+  "two-way-map": {
+    statement: VERSE_STATEMENT,
+    starter: `class Solution {
+public:
+    int matchingPrefix(string pattern, vector<string> words) {
+        // write the scroll from memory
+    }
+};
+`,
+    spec: verseMeta.spec as FunctionSpec,
+    parSeconds: verseMeta.parSeconds,
+    timeLimitMs: verseMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R4/verse-match/tests.json")).default as TestCase[],
+  },
+  "rolling-key": {
+    statement: ECHO_STATEMENT,
+    starter: `class Solution {
+public:
+    vector<string> echoes(string strand, int k) {
+        // write the scroll from memory
+    }
+};
+`,
+    spec: echoMeta.spec as FunctionSpec,
+    parSeconds: echoMeta.parSeconds,
+    timeLimitMs: echoMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R4/echo-strand/tests.json")).default as TestCase[],
   },
 };

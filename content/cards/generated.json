@@ -470,5 +470,35 @@
     "output": "6\n"
   },
   "r4-rh-anti": {},
-  "r4-rh-words": {}
+  "r4-rh-words": {},
+  "forge-two-way-map-trace-basic": {
+    "output": "4\n"
+  },
+  "forge-two-way-map-trace-letter-clash": {
+    "output": "3\n"
+  },
+  "forge-two-way-map-trace-word-clash": {
+    "output": "1\n"
+  },
+  "forge-two-way-map-trace-short-words": {
+    "output": "2\n"
+  },
+  "forge-two-way-map-trace-empty": {
+    "output": "0\n"
+  },
+  "forge-rolling-key-trace-basic": {
+    "output": "[ACG, CGA, GAC]\n"
+  },
+  "forge-rolling-key-trace-overlap": {
+    "output": "[AA]\n"
+  },
+  "forge-rolling-key-trace-none": {
+    "output": "[]\n"
+  },
+  "forge-rolling-key-trace-too-long": {
+    "output": "[]\n"
+  },
+  "forge-rolling-key-trace-thrice": {
+    "output": "[TT]\n"
+  }
 }

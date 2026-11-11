@@ -697,3 +697,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: lessons are not reachable from the map yet (D3f); no visualisers or scrolls for R4.
 - Next: D3f (Forge scrolls, visualisers, Hydra gym, warp, dialogue, music), likely to be split.
+
+## 2026-11-11: D3f-1 Hashwood Harbor Forge scrolls
+- ROADMAP D3f split into D3f-1..4. D3f-1 done: `content/scrolls/harbor.ts` with **Scroll of the Twin Ledgers** (two-way map, CUR #46 added to the curriculum; template = Verse Match reference) and **Scroll of the Sliding Key** (rolling key, CUR #32; template = Echo Strand reference). Annotations, common-bugs lists, kits (statement byte-equal to `problem.md`, starter, hidden tests) and 10 trace cards (`content/cards/R4/forge.ts`) whose outputs were produced by native g++ (`content:gen`).
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (incl. forge scroll/kit tests and native card verification), `build`, `build:pages`. No visual change, no screenshots.
+- CI/deploy: Actions quota period is over; no `gh` in this session, so not confirmed.
+- Known gaps: scrolls are not yet reachable from the harbor map (D3f-4); no moves learned screens specific to R4.
+- Next: D3f-2 (visualisers).
