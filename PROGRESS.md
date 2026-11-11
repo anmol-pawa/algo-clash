@@ -669,3 +669,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` here; not confirmed.
 - Known gaps: not yet linked from lessons (D3e).
 - Next: D3d (Hydra of Hashwood art, harbor tileset, backdrop, map).
+
+## 2026-11-11: D3d-1 Hydra of Hashwood sprite
+- ROADMAP D3d split into D3d-1..3. D3d-1 done: `game/sprites/hydra.ts`, a 96x96 three-headed hydra gym boss (teal scale ramp, barnacled bulk, sand belly plates, brow gems where two heads share the red gem = a hash collision and one is blue). Idle (4 frames), attack (coil, strike, water-jet), hurt (white flash + recoil) and faint (sink + fade). Shown on `/dev/sprites`; `tests/hydra-sprite.test.ts`.
+- Verified: `lint` (0 errors), `typecheck`; Playwright screenshot of `/dev/sprites` section reviewed (silhouette reads as a hydra, outlines and shading clean, no console errors); full `npm test`, `build`, `build:pages` see commit.
+- CI/deploy: no `gh` here; not confirmed.
+- Known gaps: attack frames' mouth/jet poses only checked in the still screenshot (first frame); no back sprite (bosses are front-only like Pane Warden).
+- Next: D3d-2 (harbor tileset).

@@ -11,6 +11,7 @@ import { GymScene } from "@/components/GymScene";
 import { buildWarden } from "@/game/sprites/warden";
 import { buildTidecaller } from "@/game/sprites/tidecaller";
 import { buildPaneWarden } from "@/game/sprites/paneWarden";
+import { buildHydra } from "@/game/sprites/hydra";
 import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
@@ -44,6 +45,7 @@ export default function SpritesDev() {
   const warden = useMemo(() => buildWarden(), []);
   const tidecaller = useMemo(() => buildTidecaller(), []);
   const paneWarden = useMemo(() => buildPaneWarden(), []);
+  const hydra = useMemo(() => buildHydra(), []);
   const tiles = useMemo(() => buildTileset(), []);
   const atoll = useMemo(() => buildAtollTileset(), []);
   const woods = useMemo(() => buildWoodsTileset(), []);
@@ -114,6 +116,17 @@ export default function SpritesDev() {
           {["idle", "attack", "hurt", "faint"].map((a) => (
             <figure key={a} className="min-w-0 rounded bg-[#cfe8c4] p-2 text-center">
               <SpriteCanvas sheet={paneWarden} anim={a} scale={3} />
+              <figcaption className="text-xs text-black">{a}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Hydra of Hashwood (96x96 gym boss, Hashwood Harbor)</h2>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {["idle", "attack", "hurt", "faint"].map((a) => (
+            <figure key={a} className="min-w-0 rounded bg-[#bfe0ec] p-2 text-center">
+              <SpriteCanvas sheet={hydra} anim={a} scale={3} />
               <figcaption className="text-xs text-black">{a}</figcaption>
             </figure>
           ))}
