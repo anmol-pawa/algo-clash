@@ -584,3 +584,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period over; no `gh` here, so not confirmed. Pushed to `main`.
 - Known gaps: leaf gust is faint at 3x; no portrait; not yet used in a gym scene (D2e).
 - Next: D2c-2 (woods tileset).
+
+## 2026-11-11: D2c-2 Window Woods tileset
+- New `game/sprites/woodsTiles.ts`: 14 original 16x16 tiles (grass x2, path, path edge, three-tier pine, free-standing glass-pane window landmark, stump, animated tall grass, flowers, log, mushroom, animated pond, leaf litter, light shaft) with a solid-tile set; shown on `/dev/sprites`. `tests/woods-tiles.test.ts`.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (683 pass incl. native content verify), `build`, `build:pages`; Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (pine first read as a blob, fixed with gapped tiers).
+- CI/deploy: no `gh` in this session, so not confirmed. Pushed to the designated branch `claude/eloquent-ritchie-u1ku5g`, not `main`, per the session's branch instruction.
+- Known gaps: tiles not yet used in a map (D2c-3).
+- Next: D2c-3 (woods battle/gym backdrop and overworld map).
