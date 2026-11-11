@@ -7,9 +7,10 @@ import { parseNumbers } from "@/lib/visualiser/parse";
 import { SORT_COMPLEXITY, SORT_NAMES, traceSort, type SortKind } from "@/lib/visualiser/sort";
 import type { Trace } from "@/lib/visualiser/types";
 import { traceKadane, tracePrefixCount, traceTwoSumMap } from "@/lib/visualiser/hashprefix";
+import { traceDequeMax, traceShortestAtLeast } from "@/lib/visualiser/deque";
 import { traceLongestDistinct, tracePairSum, traceWindowMax } from "@/lib/visualiser/window";
 
-type VisId = SortKind | "pair" | "window" | "distinct" | "hashpair" | "prefix" | "kadane";
+type VisId = SortKind | "pair" | "window" | "distinct" | "hashpair" | "prefix" | "kadane" | "shortest" | "deque";
 
 interface VisDef {
   id: VisId;
@@ -38,6 +39,10 @@ const DEFS: VisDef[] = [
     blurb: "A stretch sums to k exactly when two prefix sums differ by k. Count earlier prefixes equal to prefix minus k. It works with negatives, where a sliding window cannot.", cost: "Time O(n) average · space O(n)" },
   { id: "kadane", title: "Kadane: best stretch sum", group: "Hashing and prefix sums", sample: "-2 1 -3 4 -1 2 1 -5 4",
     blurb: "Carry the best stretch ending here. If it went negative it can only hurt the next value, so restart. Take the max over all ends.", cost: "Time O(n) · space O(1)" },
+  { id: "shortest", title: "Variable window: shortest stretch with sum at least T", group: "Window Woods", sample: "2 3 1 2 4 3", hasParam: { label: "Target T", sample: 7 },
+    blurb: "Grow on the right until the sum reaches T, then shrink from the left while it still does, recording the length each time. Values must be non-negative: that is why shrinking never skips a better answer.", cost: "Time O(n) · space O(1)" },
+  { id: "deque", title: "Monotonic deque: window maximum", group: "Window Woods", sample: "1 3 -1 -3 5 3 6 7", hasParam: { label: "Window size k", sample: 3 },
+    blurb: "Keep indices whose values decrease from front to back. A new value pops every smaller-or-equal one from the back; the front is always the window maximum, and it leaves from the front when it ages out.", cost: "Time O(n) · space O(k)" },
 ];
 
 function build(def: VisDef, values: number[], param: number): Trace {
@@ -48,6 +53,8 @@ function build(def: VisDef, values: number[], param: number): Trace {
     case "hashpair": return traceTwoSumMap(values, param);
     case "prefix": return tracePrefixCount(values, param);
     case "kadane": return traceKadane(values);
+    case "shortest": return traceShortestAtLeast(values, param);
+    case "deque": return traceDequeMax(values, param);
     default: return traceSort(def.id, values);
   }
 }

@@ -160,7 +160,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] D2d. Lessons (window template, monotonic deque) and ~36 cards.
   - [ ] D2e. Forge scrolls, visualisers (window, deque), Pane Warden gym, split:
     - [x] D2e-1. Forge scrolls: Elastic Frame (variable window) and Hot Front (monotonic deque), 10 native trace cards.
-    - [ ] D2e-2. Visualisers: variable window and monotonic deque steppers.
+    - [x] D2e-2. Visualisers: variable window and monotonic deque steppers.
     - [ ] D2e-3. Pane Warden gym (data + signature mechanic, per GDD §5.5) wired to the woods map door.
   - [ ] D2f. Warp, encounters, NPC dialogue, story beat, music.
 - [ ] D3. Hashwood Harbor (R4)

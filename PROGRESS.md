@@ -613,3 +613,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: scrolls not visually checked in the Forge screen (data-driven, same component).
 - Next: D2e-2 (window and deque visualisers).
+
+## 2026-11-11: D2e-2 Window Woods visualisers
+- New `lib/visualiser/deque.ts`: `traceShortestAtLeast` (variable window, grow/shrink, non-negative values) and `traceDequeMax` (monotonic deque of indices; push pops smaller-or-equal from the back, expired front pops, front is the window max). Both added to the Library under a "Window Woods" group; the player can type their own numbers and k/T. Tests compare each against brute force on 300 random cases.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (746 pass), `build`, `build:pages` all exit 0. Playwright on the static export at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (deque indices highlighted with the deque state and a plain-language note; window L/R pointers read clearly on mobile).
+- CI/deploy: no `gh` in this session; not confirmed here.
+- Known gaps: the visualisers are not yet linked from the lessons; the deque has no separate visual strip beyond the state line.
+- Next: D2e-3 (Pane Warden gym, data + signature mechanic, wired to the woods map door).

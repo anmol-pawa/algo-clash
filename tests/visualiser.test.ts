@@ -136,3 +136,31 @@ describe("hash and prefix traces", () => {
     expect(traceKadane([-3, -1, -2]).result).toBe(-1);
   });
 });
+
+import { traceDequeMax, traceShortestAtLeast } from "@/lib/visualiser/deque";
+
+describe("window and deque traces", () => {
+  it("shortest-at-least agrees with brute force", () => {
+    const r = rng(77);
+    for (let t = 0; t < 300; t++) {
+      const a = randArr(r, Math.floor(r() * 12), 9).map(Math.abs);
+      const target = 1 + Math.floor(r() * 20);
+      let best = 0;
+      for (let i = 0; i < a.length; i++) { let s = 0; for (let j = i; j < a.length; j++) { s += a[j]; if (s >= target) { if (!best || j - i + 1 < best) best = j - i + 1; break; } } }
+      const tr = traceShortestAtLeast(a, target);
+      expect(tr.result).toBe(best);
+      expect(tr.frames.length).toBeGreaterThan(0);
+    }
+  });
+  it("deque max agrees with brute force", () => {
+    const r = rng(78);
+    for (let t = 0; t < 300; t++) {
+      const a = randArr(r, 1 + Math.floor(r() * 12), 9);
+      const k = 1 + Math.floor(r() * a.length);
+      const want: number[] = [];
+      for (let i = 0; i + k <= a.length; i++) want.push(Math.max(...a.slice(i, i + k)));
+      expect(traceDequeMax(a, k).result).toEqual(want);
+    }
+    expect(traceDequeMax([1, 2], 5).result).toEqual([]);
+  });
+});
