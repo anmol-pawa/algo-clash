@@ -9,6 +9,8 @@ export interface ForbiddenRule {
   allowed?: number;
   /** One friendly line naming what was found and why it is off limits. */
   message: string;
+  /** When this also matches the code, the rule is satisfied (a "do X if you do Y" rule, e.g. verify a hash match). */
+  unless?: RegExp;
 }
 
 /** Replaces comments and string/char literals with spaces so words inside them never trigger a rule. */
@@ -42,7 +44,7 @@ export function findForbidden(src: string, rules: readonly ForbiddenRule[]): str
   for (const r of rules) {
     const flags = r.pattern.flags.includes("g") ? r.pattern.flags : r.pattern.flags + "g";
     const count = (code.match(new RegExp(r.pattern.source, flags)) ?? []).length;
-    if (count > (r.allowed ?? 0)) return r.message;
+    if (count > (r.allowed ?? 0) && !(r.unless && r.unless.test(code))) return r.message;
   }
   return null;
 }

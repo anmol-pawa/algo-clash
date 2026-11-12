@@ -711,3 +711,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session, so not confirmed.
 - Known gaps: the rolling-key final frame drops the seen-hash table; visualisers not yet linked from the harbor map (D3f-4).
 - Next: D3f-3 (Hydra of Hashwood gym).
+
+## 2026-11-12: D3f-3 Hydra of Hashwood gym
+- `/gym/harbor/`: `content/gyms/r4.ts` (8-item blitz: 6 R4 + 2 review, Bucket Badge), core **Echo Strand** (M) then signature **Longest Echo** (H, its follow-up) via `content/gyms/kitsR4.ts`; `HarborGymScreen`; scene `harbor-gym` in `BattleArena`/`BattleStage`/`GymScreen` (harbor backdrop + 96x96 Hydra foe). The harbor map door already pointed at the route.
+- Twist "Hash flood": `ForbiddenRule` gained `unless`; `hashFloodRules` rejects, before compiling, a number-keyed `unordered_map/set` when nothing compares the real letters (`.compare`, `equal`, `memcmp`, `substr(...) ==`). Rejection shows as a compile error, no heart lost. Anti-hash Thue-Morse tests were already in Longest Echo's hidden tests. GDD §5.5 updated.
+- Verified: `npm run typecheck`, `tests/gym-harbor.test.ts` (reference and TLE-brute pass the rule, overflow-hash-no-verify is rejected, comments/strings ignored); `scripts/smoke-gym-harbor.mjs` on the static export at desktop and iPhone 14 (intro, blitz with one miss, core win with reference, debrief, signature rejected by the twist then won, badge, persistence): no console errors, no horizontal overflow; screenshots reviewed. Full lint/test/build results see commit.
+- Known gaps: the twist is a source heuristic (an integer-keyed hash with an unrelated `==` on substrings would pass); the desktop battle stage clips the player's Arrayling under the dialogue box (same as other gyms).
+- Next: D3f-4 (register the harbor map in `WorldCanvas`, warp, encounters, NPC dialogue, story beat, music).

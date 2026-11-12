@@ -27,8 +27,8 @@ export interface GymConfig {
   gym: GymDef;
   kits: Record<string, GymKit>;
   buildLeader: () => SpriteSheet;
-  scene: "gym" | "atoll-gym" | "woods-gym";
-  region: "syntax-shores" | "array-atoll" | "window-woods";
+  scene: "gym" | "atoll-gym" | "woods-gym" | "harbor-gym";
+  region: "syntax-shores" | "array-atoll" | "window-woods" | "hashwood-harbor";
   /** Compiler flags for the signature round (the Syntax Shores twist). */
   signatureFlags?: string[];
   /** Source rules for the signature round (the Array Atoll twist). */

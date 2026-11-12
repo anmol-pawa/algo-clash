@@ -71,7 +71,7 @@ export interface ArenaOptions {
   /** Foe HP at the start of the fight (gym head start). */
   foeStartHp?: number;
   /** "gym": lighthouse backdrop and Warden Brace as the foe. */
-  scene?: "meadow" | "gym" | "atoll-gym" | "woods-gym";
+  scene?: "meadow" | "gym" | "atoll-gym" | "woods-gym" | "harbor-gym";
   /** clang flags for every Run/Submit (a gym twist such as -Werror). Compile errors never cost a heart. */
   compileFlags?: string[];
   /** Source rules checked before compiling (a gym twist such as "Dry tide"); a violation shows as a compile error and never costs a heart. */
