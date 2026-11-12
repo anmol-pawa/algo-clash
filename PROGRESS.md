@@ -739,3 +739,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not yet linked from lessons or the gym (D4e/D4f); E problems have no `prompt.json` quick-check yet. Fresh-container full `content:verify` takes >20 min because every package compiles from a cold cache.
 - Next: D4b (Stackspire problems batch 2: Car Fleet, Asteroid Collision, Decode String, Remove K Digits, Simplify Path, ...).
+
+## 2026-11-12: D4b-1 Stackspire problems: Convoy Count, Drift Rocks
+- ROADMAP D4b split into D4b-1..3. D4b-1 done: two full M packages in `content/problems/R6/`. **Convoy Count** (Car Fleet; sort by position, running max of arrival time, exact `long long` cross-multiplication; wrongs: no sort, tie counted as separate convoy, int overflow, speed-only comparison, TLE pair scan) and **Drift Rocks** (Asteroid Collision; stack of survivors; wrongs: `if` not `while`, tie keeps the right-mover, ignores direction, drops the left-mover after one kill, TLE rescan). Examples are original; the catalog was regenerated (`catalog:gen`, 67 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t "convoy-count|drift-rocks"` (reference matches brute on random cases, every wrong rejected), `npm run lint` (0 errors), `typecheck`, `npm test`, `build`, `build:pages`. No visual change, no screenshots.
+- Known gaps: not yet linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-checks for the new E/M problems yet.
+- Branch note: committed to `main` per CLAUDE.md and also pushed to the session branch `claude/eloquent-ritchie-nk1ntb`.
+- Next: D4b-2 (Decode String, Remove K Digits, Simplify Path).
