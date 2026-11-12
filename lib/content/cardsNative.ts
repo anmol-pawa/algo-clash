@@ -101,7 +101,10 @@ export function verifyCards(cards: Card[], generated: ComputedMap, write = false
         }));
       }
       computed[c.id] = got;
-      if (!write && JSON.stringify(generated[c.id] ?? null) !== JSON.stringify(got)) e("generated.json is stale: run `npm run content:gen`");
+      // Compiler wording varies between g++ patch releases, so compiler-error cards are compared by failing line only.
+      const comparable = (v: Computed | null | undefined) =>
+        c.kind === "compilerError" && v?.diagnostic !== undefined ? { diagnostic: /^line \d+/.exec(v.diagnostic)?.[0] ?? "" } : v ?? null;
+      if (!write && JSON.stringify(comparable(generated[c.id])) !== JSON.stringify(comparable(got))) e("generated.json is stale: run `npm run content:gen`");
     } catch (err) {
       e(err instanceof Error ? err.message : String(err));
     }

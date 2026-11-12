@@ -746,3 +746,4 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: not yet linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-checks for the new E/M problems yet.
 - Branch note: committed to `main` per CLAUDE.md and also pushed to the session branch `claude/eloquent-ritchie-nk1ntb`.
 - Next: D4b-2 (Decode String, Remove K Digits, Simplify Path).
+- CI fix (same day): `main` was red on CI before D4b-1 (two failures, both green locally). (1) Gauge Stack's `tle-rescan` wrong passed on the faster CI runner: its `low()` rescan is now `min_element` (not auto-vectorised) and a new perf test pushes 50000 values then asks for the minimum 149999 times (7.5e9 element visits for a rescan). (2) `r4-hash-pair-error` was "stale" because g++ wording differs between patch releases: the staleness check for compiler-error cards now compares the failing line only (`lib/content/cardsNative.ts`). Not yet confirmed green on CI.

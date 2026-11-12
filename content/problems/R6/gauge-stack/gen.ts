@@ -34,6 +34,14 @@ const ramp = (up: number, f: (i: number) => number): string[] => {
   return enc(calls);
 };
 
+/** Push `up` values, then query the minimum `lows` times without popping (a rescan costs up * lows). */
+const hammer = (up: number, lows: number, f: (i: number) => number): string[] => {
+  const calls: Call[] = [E("GaugeStack")];
+  for (let i = 0; i < up; ++i) calls.push(E("push", f(i)));
+  for (let i = 0; i < lows; ++i) calls.push(E("low"));
+  return enc(calls);
+};
+
 export const gen: GenModule = {
   small: (r) => session(r, r.int(1, 14), -4, 4, 0.5),
   groups: {
@@ -58,6 +66,7 @@ export const gen: GenModule = {
       () => ramp(66000, (i) => 66000 - i),
       () => ramp(66000, () => 1),
       (r) => session(r, 199999, -1000000000, 1000000000, 0.7),
+      () => hammer(50000, 149999, (i) => 50000 - i),
     ],
   },
 };
