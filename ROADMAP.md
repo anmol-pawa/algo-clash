@@ -186,7 +186,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [x] D4a-2. Min Stack as a design problem (Gauge Stack, M), Queue from Two Stacks (Twin Stack Line, E), Baseball Game variant (Score Tape, E).
   - [ ] D4b. Problems batch 2 (M), split:
     - [x] D4b-1. Convoy Count (Car Fleet) and Drift Rocks (Asteroid Collision).
-    - [ ] D4b-2. Decode String, Remove K Digits, Simplify Path (originals, themed to Stackspire).
+    - [x] D4b-2. Unroll Banner (Decode String), Smallest Seal (Remove K Digits), Tidy Route (Simplify Path).
     - [ ] D4b-3. Sum of Subarray Minimums, Design Circular Queue.
   - [ ] D4c. Problems batch 3 (H): Basic Calculator, Maximal Rectangle, Trapping Rain Water (stack version).
   - [ ] D4d. Art: Stackspire Sentinel sprite, tileset, backdrop and map.

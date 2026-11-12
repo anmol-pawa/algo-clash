@@ -747,3 +747,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Branch note: committed to `main` per CLAUDE.md and also pushed to the session branch `claude/eloquent-ritchie-nk1ntb`.
 - Next: D4b-2 (Decode String, Remove K Digits, Simplify Path).
 - CI fix (same day): `main` was red on CI before D4b-1 (two failures, both green locally). (1) Gauge Stack's `tle-rescan` wrong passed on the faster CI runner: its `low()` rescan is now `min_element` (not auto-vectorised) and a new perf test pushes 50000 values then asks for the minimum 149999 times (7.5e9 element visits for a rescan). (2) `r4-hash-pair-error` was "stale" because g++ wording differs between patch releases: the staleness check for compiler-error cards now compares the failing line only (`lib/content/cardsNative.ts`). Not yet confirmed green on CI.
+
+## 2026-11-12: D4b-2 Stackspire problems: Unroll Banner, Smallest Seal, Tidy Route
+- Three full M packages in `content/problems/R6/`. **Unroll Banner** (Decode String; single output string plus a stack of body-start indexes, O(n + L); wrongs: single-digit count, drops text before the bracket, repeats the outer text, TLE rescan), **Smallest Seal** (Remove K Digits; monotonic stack with a removal budget, leftover removals from the tail, zero stripping; wrongs: keeps leading zeros, forgets the tail, scratches the k largest digits, TLE repeated scan) and **Tidy Route** (Simplify Path; wrongs: `..` kept at the top level, `...` treated as special, `""` for the top level, trailing slash, TLE erase-scan). Seeded generators, hint ladders, house-style editorials. Catalog regenerated (70 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t "unroll-banner|smallest-seal|tidy-route"` (reference matches brute on random cases, every wrong rejected, complexity claims checked), `npm run lint` (0 errors), `typecheck`, `npm test`, `build`, `build:pages`. No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not yet linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-checks.
+- Next: D4b-3 (Sum of Subarray Minimums, Design Circular Queue).
