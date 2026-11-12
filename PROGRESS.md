@@ -754,3 +754,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not yet linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-checks.
 - Next: D4b-3 (Sum of Subarray Minimums, Design Circular Queue).
+
+## 2026-11-12: D4b-3 Stackspire problems: Valley Tally, Ring Lane (D4b complete)
+- Two full M packages in `content/problems/R6/`. **Valley Tally** (Sum of Subarray Minimums; single-pass monotonic stack, each step owns `left*right` stretches with strict-left / non-strict-right tie rule, mod 1e9+7; wrongs: strict on both sides double-counts ties, int overflow of the stretch count, no stack flush, TLE running-min O(n^2)). **Ring Lane** (Design Circular Queue; fixed array + head + size; wrongs: head==tail empty/full confusion, wrong `back` index after wrap, no full check overwrites the front, TLE linked chain walking to the tail).
+- Verified: `CONTENT_WRITE=1 vitest -t "valley-tally|ring-lane"` (reference matches brute on random cases, every wrong rejected, complexity claims checked), `npm run lint` (0 errors), `typecheck`, `npm test` (871 pass), `build`, `build:pages`, `catalog:gen` (72 problems). No visual change, no screenshots.
+- Finding: an `erase(begin())` vector queue is not rejected as TLE at 100000 elements (memmove is too fast), so the TLE wrong for Ring Lane walks a forward_list to its tail instead.
+- CI/deploy: Actions quota period is over, but no `gh` in this session; not confirmed.
+- Known gaps: not yet linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-checks.
+- Next: D4c (Basic Calculator, Maximal Rectangle, Trapping Rain Water).
