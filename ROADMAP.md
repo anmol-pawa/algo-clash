@@ -181,7 +181,14 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D3f-2. Visualisers: hash table (buckets/chains/rehash) and rolling key steppers.
     - [x] D3f-3. Hydra of Hashwood gym (data + signature mechanic per GDD §5.5) wired to the harbor map door.
     - [x] D3f-4. Register the harbor map in `WorldCanvas`, warp from the previous region, encounters, NPC dialogue, story beat, music.
-- [ ] D4. Stackspire (R6)
+- [ ] D4. Stackspire (R6), split by the region recipe (Crate Brackets E and Skyline Hall H already exist):
+  - [x] D4a-1. Heat Wave (Daily Temperatures, M) and Tape Calculator (RPN, M).
+  - [ ] D4a-2. Min Stack as a design problem, Queue from Two Stacks (E), Baseball Game variant (E).
+  - [ ] D4b. Problems batch 2 (M): Car Fleet, Asteroid Collision, Decode String, Remove K Digits, Simplify Path, Sum of Subarray Minimums, Design Circular Queue (split further when started).
+  - [ ] D4c. Problems batch 3 (H): Basic Calculator, Maximal Rectangle, Trapping Rain Water (stack version).
+  - [ ] D4d. Art: Stackspire Sentinel sprite, tileset, backdrop and map.
+  - [ ] D4e. Lessons (stack, monotonic stack, expression evaluation) and ~36 cards.
+  - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music.
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
 - [ ] D6. Recursion Ruins (R7)
 - [ ] D7. Bisect Bay (R8), with the interactive-judge mode for the Bisect Sage

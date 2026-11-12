@@ -725,3 +725,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: the harbor NPCs and the arrival view were not screenshotted in conversation; harbor encounters only fire on a single shore row; encounter battles still stubbed with a text note.
 - Next: D4 (Stackspire, R6).
+
+## 2026-11-12: D4a-1 Stackspire problems: Heat Wave, Tape Calculator
+- ROADMAP D4 split into D4a-1..D4f. D4a-1 done: two full M packages in `content/problems/R6/`. **Heat Wave** (Daily Temperatures; monotonic stack, wrongs: equal-counts, next-day-only, pops-one, TLE scan) and **Tape Calculator** (RPN; stack, wrongs: swapped operands, floor division, minus-as-operator, TLE rewrite). Seeded generators (tape generator keeps every intermediate within +-1e9), hint ladders and house-style editorials. Catalog regenerated (62 problems).
+- Verified: `content:gen`/native verify for both (reference vs brute, all wrongs rejected), `npm run lint` (0 errors), `typecheck`, `npm test` (861 incl. catalog after `catalog:gen`), `build`, `build:pages` exit 0. No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not yet linked from lessons or the gym (D4e/D4f). Branch note: the session's designated branch (`claude/eloquent-ritchie-051rbn`) was also pushed alongside `main`.
+- Next: D4a-2 (Min Stack design problem, Queue from Two Stacks, Baseball Game variant).
