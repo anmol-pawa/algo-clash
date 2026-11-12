@@ -732,3 +732,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not yet linked from lessons or the gym (D4e/D4f). Branch note: the session's designated branch (`claude/eloquent-ritchie-051rbn`) was also pushed alongside `main`.
 - Next: D4a-2 (Min Stack design problem, Queue from Two Stacks, Baseball Game variant).
+
+## 2026-11-12: D4a-2 Stackspire problems: Gauge Stack, Twin Stack Line, Score Tape
+- Three full packages in `content/problems/R6/`. **Gauge Stack** (Min Stack as a `design` problem, M; wrongs: min never repaired after pop, side stack that skips duplicate minimums, TLE rescan), **Twin Stack Line** (queue from two stacks, E, amortised O(1); wrongs: refill without the empty-outbox guard, `empty()` ignoring the outbox, TLE shuttle on every enqueue) and **Score Tape** (Baseball Game variant with an added halve command `H`, E; wrongs: `int` sum, floored halves, `+` that pops the top, TLE re-sum). Seeded generators, hint ladders, house-style editorials. Catalog regenerated (65 problems).
+- Verified: native verify per package (`vitest -t <id>` with `CONTENT_WRITE=1`: reference matches brute force, every wrong rejected), `npm run lint` (0 errors), `typecheck`, `npm test`, `build`, `build:pages` (see commit). No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not yet linked from lessons or the gym (D4e/D4f); E problems have no `prompt.json` quick-check yet. Fresh-container full `content:verify` takes >20 min because every package compiles from a cold cache.
+- Next: D4b (Stackspire problems batch 2: Car Fleet, Asteroid Collision, Decode String, Remove K Digits, Simplify Path, ...).
