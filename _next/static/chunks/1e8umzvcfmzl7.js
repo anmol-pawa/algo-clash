@@ -1,0 +1,8 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,53668,e=>{"use strict";var t=e.i(43476),s=e.i(71645),a=e.i(90325),l=e.i(47659);let n=`class Solution {
+public:
+    int longestCalm(string s, int k) {
+        // at most k distinct characters
+        return 0;
+    }
+};
+`;e.s(["default",0,function(){let[e,i]=(0,s.useState)(n),[o,c]=(0,s.useState)(l.C),r="px-btn px-3 text-sm";return(0,t.jsxs)("main",{className:"mx-auto flex h-dvh max-w-3xl flex-col gap-2 px-4 py-4",children:[(0,t.jsx)("h1",{className:"font-display text-2xl text-[var(--gold)]",children:"Editor playground"}),(0,t.jsxs)("div",{className:"flex flex-wrap items-center gap-2",children:[(0,t.jsxs)("button",{className:r,onClick:()=>c({...o,theme:"night"===o.theme?"paper":"night"}),children:["Theme: ",o.theme]}),(0,t.jsx)("button",{className:r,"aria-label":"Smaller font",onClick:()=>c({...o,fontSize:Math.max(l.d,o.fontSize-1)}),children:"A−"}),(0,t.jsxs)("span",{className:"text-sm",children:[o.fontSize,"px"]}),(0,t.jsx)("button",{className:r,"aria-label":"Larger font",onClick:()=>c({...o,fontSize:Math.min(l.D,o.fontSize+1)}),children:"A+"}),(0,t.jsxs)("button",{className:r,onClick:()=>c({...o,autocomplete:!o.autocomplete}),children:["Autocomplete: ",o.autocomplete?"on":"off"]})]}),(0,t.jsx)("div",{className:"min-h-0 flex-1",children:(0,t.jsx)(a.f,{value:e,onChange:i,settings:o})}),(0,t.jsxs)("div",{id:"len",className:"text-xs opacity-70",children:[e.length," chars"]})]})}])}]);
