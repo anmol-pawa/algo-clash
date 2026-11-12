@@ -63,6 +63,19 @@ export const HIKER: CharacterLook = {
     "#4a5a7a", "#33405a", "#3a2a2a", "#ffffff", "#141018", "#d8503c", "#e8a090", "#7a2c2c"],
 };
 
+export const DOCKHAND: CharacterLook = {
+  name: "dockhand",
+  colors: ["#e0b088", "#bc8860", "#3a4a6a", "#26324a", "#d8c050", "#a8902c", "#f2e6c9", "#cdbd96",
+    "#6a4a2a", "#4a321a", "#3a2a2a", "#ffffff", "#141018", "#d8503c", "#e8a090", "#7a2c2c"],
+};
+
+export const CLERK: CharacterLook = {
+  name: "clerk",
+  colors: ["#f0c8a0", "#c89a72", "#7a3a5a", "#522640", "#3a8a8a", "#286464", "#f2e6c9", "#cdbd96",
+    "#3a3a52", "#26263a", "#3a2a2a", "#ffffff", "#141018", "#f0c040", "#f0a090", "#7a2c2c"],
+  tuft: true,
+};
+
 export function lookPalette(l: CharacterLook): string[] {
   // index 0 transparent, 1 outline, 2..17 from look
   return ["", "#1a1420", ...l.colors];

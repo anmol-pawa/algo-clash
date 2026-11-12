@@ -3,6 +3,7 @@ import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
+import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
 import { parseMap, tileAt } from "@/lib/overworld/map";
 import { newWorld, tickWorld, STEP_MS } from "@/lib/overworld/mover";
 import { WOODS_DIALOGUES } from "@/lib/dialogue/woods";
@@ -12,7 +13,7 @@ import { SONGS } from "@/lib/audio/songs";
 
 const maps = {
   mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1),
-  "array-atoll": parseMap(ARRAY_ATOLL), "window-woods": parseMap(WINDOW_WOODS),
+  "array-atoll": parseMap(ARRAY_ATOLL), "window-woods": parseMap(WINDOW_WOODS), "hashwood-harbor": parseMap(HASHWOOD_HARBOR),
 };
 
 describe("Window Woods in the world", () => {

@@ -718,3 +718,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `npm run typecheck`, `tests/gym-harbor.test.ts` (reference and TLE-brute pass the rule, overflow-hash-no-verify is rejected, comments/strings ignored); `scripts/smoke-gym-harbor.mjs` on the static export at desktop and iPhone 14 (intro, blitz with one miss, core win with reference, debrief, signature rejected by the twist then won, badge, persistence): no console errors, no horizontal overflow; screenshots reviewed. Full lint/test/build results see commit.
 - Known gaps: the twist is a source heuristic (an integer-keyed hash with an unrelated `==` on substrings would pass); the desktop battle stage clips the player's Arrayling under the dialogue box (same as other gyms).
 - Next: D3f-4 (register the harbor map in `WorldCanvas`, warp, encounters, NPC dialogue, story beat, music).
+
+## 2026-11-12: D3f-4 Hashwood Harbor in the overworld (D3 complete)
+- Window Woods' east gap now warps to Hashwood Harbor (and back via the harbor's west lane); harbor map registered in `WorldCanvas` with its own tileset lookup, two NPCs (Dockhand Marlo: hash tables, collisions, O(n) worst case; Clerk Tansy: the "hash flood" rule, verify matches, long long, ordered-map fallback) with new `DOCKHAND`/`CLERK` looks, encounters on the `shore` tile (pool `harbor-tide`, rate 0.25; `shore` added to `ENCOUNTER_TILES`), and a new D-mixolydian `harbor` theme.
+- Verified: `npm run lint` (0 errors), `typecheck`, `npm test` (859 pass; new `tests/harbor-world.test.ts`; older world tests now include the harbor map), `build:pages`; new `scripts/smoke-harbor-world.mjs` on the static export at desktop and iPhone 14: walk woods -> harbor -> woods ok, no console errors, no overflow; both screenshots reviewed (harbor renders, readable, d-pad targets large). `content:verify` unchanged (no new problems).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: the harbor NPCs and the arrival view were not screenshotted in conversation; harbor encounters only fire on a single shore row; encounter battles still stubbed with a text note.
+- Next: D4 (Stackspire, R6).

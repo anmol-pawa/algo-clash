@@ -158,5 +158,49 @@ export const WOODS_THEME: Song = {
   ],
 };
 
-export const SONGS = { mainville: MAINVILLE_THEME, atoll: ATOLL_THEME, woods: WOODS_THEME, battle: BATTLE_THEME } as const;
+/** Hashwood Harbor: a swaying D-mixolydian sea shanty over a rolling bass (4 bars, 64 steps). */
+export const HARBOR_THEME: Song = {
+  id: "harbor",
+  bpm: 108,
+  stepsPerBeat: 2,
+  channels: [
+    {
+      wave: "square",
+      gain: 0.2,
+      pattern: [
+        "D5 _ F#5 _ A5 - F#5 _  D5 _ E5 _ F#5 - - -",
+        "G5 _ B5 _ A5 - F#5 _  E5 _ F#5 _ G5 - - -",
+        "A5 _ C6 _ B5 - G5 _   F#5 _ A5 _ E5 - - -",
+        "D5 _ F#5 _ A5 - F#5 _  E5 _ C5 _ D5 - - -",
+      ].join(" "),
+    },
+    {
+      wave: "triangle",
+      gain: 0.45,
+      pattern: [
+        "- - A4 - - - A4 -   - - A4 - - - A4 -",
+        "- - B4 - - - B4 -   - - A4 - - - A4 -",
+        "- - C5 - - - B4 -   - - A4 - - - G4 -",
+        "- - A4 - - - A4 -   - - G4 - - - A4 -",
+      ].join(" "),
+    },
+    {
+      wave: "triangle",
+      gain: 0.8,
+      pattern: [
+        "D2 - - - A2 - - -   D2 - - - A2 - - -",
+        "G2 - - - D3 - - -   A2 - - - E2 - - -",
+        "A2 - - - E3 - - -   D2 - - - A2 - - -",
+        "D2 - - - A2 - - -   G2 - - - A2 - - -",
+      ].join(" "),
+    },
+    {
+      wave: "noise",
+      gain: 0.05,
+      pattern: Array.from({ length: 8 }, () => "- - A5 - - - - -").join(" "),
+    },
+  ],
+};
+
+export const SONGS = { mainville: MAINVILLE_THEME, atoll: ATOLL_THEME, woods: WOODS_THEME, harbor: HARBOR_THEME, battle: BATTLE_THEME } as const;
 export type SongId = keyof typeof SONGS;

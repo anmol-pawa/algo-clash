@@ -3,7 +3,7 @@ import type { MapDef } from "./map";
 /**
  * Window Woods (R3): a pine forest where standing panes of glass frame the Pane Warden's clearing at the
  * north end. A stream cuts the forest in two; the plank bridge is the only crossing. Uses the woods
- * tileset (game/sprites/woodsTiles.ts). Ferns hide wild Structlings. The gym door (between the two glass-pane banks) opens the Pane Warden gym. A gap in the west pines leads back to Array Atoll.
+ * tileset (game/sprites/woodsTiles.ts). Ferns hide wild Structlings. The gym door (between the two glass-pane banks) opens the Pane Warden gym. A gap in the west pines leads back to Array Atoll; a gap in the east pines leads on to Hashwood Harbor.
  *
  * Legend: g/h grass, p path, e path edge, T pine, W glass pane, s stump, f fern, r stream, b bridge,
  * m mushroom, o boulder, l leaf pile, F fence.
@@ -24,7 +24,7 @@ export const WINDOW_WOODS: MapDef = {
     "TrrrrrrrrbbrrrrrrrrrrT",
     "TglhgohgepphgghfffghgT",
     "TgfffhgglppehgghfffgoT",
-    "ggfffgmghppegslhfffghT",
+    "ggfffgmghppegslhfffghg",
     "TghgsgghgppehgghgglhgT",
     "TTTTTTTTTppTTTTTTTTTTT",
   ],
@@ -37,7 +37,11 @@ export const WINDOW_WOODS: MapDef = {
     { id: "ranger-juniper", x: 8, y: 11, facing: "right", sprite: "ranger", dialogue: "woods-juniper" },
     { id: "hiker-bram", x: 12, y: 6, facing: "left", sprite: "hiker", dialogue: "woods-bram" },
   ],
-  warps: [{ x: 0, y: 12, to: "array-atoll", tx: 20, ty: 8, facing: "left" }],
+  warps: [
+    { x: 0, y: 12, to: "array-atoll", tx: 20, ty: 8, facing: "left" },
+    // East gap in the pines: the path down to Hashwood Harbor.
+    { x: 21, y: 12, to: "hashwood-harbor", tx: 1, ty: 3, facing: "right" },
+  ],
   encounterRate: 0.2,
   encounterPool: "woods-fern",
   doors: [{ x: 10, y: 1, href: "/gym/woods/", label: "Entering the Pane Warden's clearing…", tag: "GYM" }],

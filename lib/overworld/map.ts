@@ -14,7 +14,7 @@ export const SOLID_TILES: ReadonlySet<string> = new Set([
   "water", "tree", "bush", "fence", "sign", "wallHouse", "roofHouse", "windowHouse", "wallLab", "roofLab",
 ]);
 /** Tiles that can trigger wild encounters. */
-export const ENCOUNTER_TILES: ReadonlySet<string> = new Set(["tallGrass", "seagrass", "fern"]);
+export const ENCOUNTER_TILES: ReadonlySet<string> = new Set(["tallGrass", "seagrass", "fern", "shore"]);
 /** Solid tiles the player can read by facing them and pressing the action button. */
 export const READABLE_TILES: ReadonlySet<string> = new Set(["sign"]);
 

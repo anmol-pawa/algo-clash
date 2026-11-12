@@ -163,7 +163,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D2e-2. Visualisers: variable window and monotonic deque steppers.
     - [x] D2e-3. Pane Warden gym (data + signature mechanic, per GDD §5.5) wired to the woods map door.
   - [x] D2f. Warp, encounters, NPC dialogue, story beat, music.
-- [ ] D3. Hashwood Harbor (R4), split by the region recipe:
+- [x] D3. Hashwood Harbor (R4), split by the region recipe:
   - [x] D3a. Problems batch 1: Twin Scripts (isomorphic, M), Brick Gap (Brick Wall, M), Crate Variety (at most K distinct, M).
   - [x] D3b. Problems batch 2, split:
     - [x] D3b-1. Verse Match (Word Pattern variant, M) and Drum Bag (Insert Delete GetRandom O(1) as a deterministic slot design, M).
@@ -176,11 +176,11 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D3d-2. Harbor tileset on `/dev/sprites`.
     - [x] D3d-3. Harbor battle/gym backdrop and overworld map.
   - [x] D3e. Lessons (hash internals, key design, rolling hash) and 37 cards.
-  - [ ] D3f. Forge scrolls, visualisers, Hydra gym, warp, dialogue, music, split:
+  - [x] D3f. Forge scrolls, visualisers, Hydra gym, warp, dialogue, music, split:
     - [x] D3f-1. Forge scrolls: Twin Ledgers (two-way map, Verse Match) and Sliding Key (rolling key, Echo Strand), 10 native trace cards.
     - [x] D3f-2. Visualisers: hash table (buckets/chains/rehash) and rolling key steppers.
     - [x] D3f-3. Hydra of Hashwood gym (data + signature mechanic per GDD §5.5) wired to the harbor map door.
-    - [ ] D3f-4. Register the harbor map in `WorldCanvas`, warp from the previous region, encounters, NPC dialogue, story beat, music.
+    - [x] D3f-4. Register the harbor map in `WorldCanvas`, warp from the previous region, encounters, NPC dialogue, story beat, music.
 - [ ] D4. Stackspire (R6)
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
 - [ ] D6. Recursion Ruins (R7)
