@@ -725,3 +725,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: the harbor NPCs and the arrival view were not screenshotted in conversation; harbor encounters only fire on a single shore row; encounter battles still stubbed with a text note.
 - Next: D4 (Stackspire, R6).
+
+## 2026-11-12: D4a Stackspire problems batch 1
+- ROADMAP D4 split into D4a..f. D4a done: **Warm Spell** (next warmer day, monotonic stack, M) and **Rail Fleet** (non-overtaking convoys, exact cross-multiplied arrival times, M). Each has reference, brute, 4-5 wrong solutions (Warm Spell: `<=`, single pop, day-not-gap, TLE rescan; Rail Fleet: distinct times, tie splits, float time, int overflow, TLE pairwise), seeded generators with exact-tie and near-tie adversarial groups, 3-rung hints and house-style editorials. Tests generated via `content:gen`; catalog regenerated.
+- Verified: native `content:verify` for both packages (reference == brute, every wrong rejected); full `lint`, `typecheck`, `npm test`, `build`, `build:pages` see commit. No visual change.
+- CI/deploy: Actions quota period is over, but there is no `gh` here and work goes to the session branch, so not confirmed.
+- Known gaps: not yet linked from lessons or gyms (D4d/D4e).
+- Next: D4b (problems batch 2).
