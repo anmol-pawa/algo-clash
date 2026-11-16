@@ -777,3 +777,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: not linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-check. Full `npm test` takes ~14 min on a cold cache.
 - Branch note: session branch `claude/eloquent-ritchie-u2cfrn`; pushed there and to `main` per CLAUDE.md.
 - Next: D4c-3 (Trapping Rain Water, stack version).
+
+## 2026-11-16: D4c-3 Stackspire problem: Cistern Rows (H) (D4c complete)
+- Full H package `content/problems/R6/cistern-rows/` (Trapping Rain Water, stack version; the two-pointer version is Tide Pools in R2, and the editorial contrasts the layer-by-layer stack method with the column-by-column one). Reference: non-increasing index stack, each pop adds one horizontal layer `(i - left - 1) * (min(left, i) - floor)` in `long long`, O(n) time, O(n) space. Brute: per-pillar left/right maximum scan. Wrongs (all rejected): floor height not subtracted, `int` total overflow, width measured from the popped floor, left-maximum only (open right end ignored), TLE O(n^2) rescan. Seeded generator (wells, staircases, V/peak shapes, alternating, random) with n up to 200000 so a deep well overflows 32 bits; 29 hidden tests in four groups. Catalog regenerated (75 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t cistern-rows` (reference matches brute, all wrongs rejected, complexity checked), `lint` (0 errors), `typecheck`, `npm test`, `build`, `build:pages`. No visual change, no screenshots.
+- Known gaps: not linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-check.
+- Branch note: committed to `main` per CLAUDE.md.
+- Next: D4d (Stackspire art: Sentinel sprite, tileset, backdrop, map).
