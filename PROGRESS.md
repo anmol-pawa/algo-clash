@@ -762,3 +762,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period is over, but no `gh` in this session; not confirmed.
 - Known gaps: not yet linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-checks.
 - Next: D4c (Basic Calculator, Maximal Rectangle, Trapping Rain Water).
+
+## 2026-11-16: D4c-1 Stackspire problem: Ledger Slip
+- ROADMAP D4c split into D4c-1..3. D4c-1 done: full H package `content/problems/R6/ledger-slip/` (Basic Calculator: `+`, `-`, brackets, unary minus after `(` or at the start, spaces). Reference is an iterative stack of saved `(total, sign)` pairs, O(n) with no recursion; brute is a recursive-descent parser. Wrongs: drops the group sign, sign leaks into the group, one-digit numbers, `int` overflow, TLE bracket-partner rescan (nested perf tests of depth 24000-49990). Seeded generator (random nested slips, deep nests, 9000 x 1e9 sums), hint ladder, house-style editorial. Catalog regenerated (73 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t ledger-slip` (reference matches brute, every wrong rejected), `npm run lint` (0 errors), `typecheck`, `npm test`, `build`, `build:pages`. No visual change, no screenshots.
+- Branch note: committed to the session branch `claude/eloquent-ritchie-3ugxt7` only, as the session's branch rule requires; `main` was not pushed to.
+- CI/deploy: the Actions quota period is over, but no `gh` in this session; not confirmed.
+- Known gaps: not yet linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-check.
+- Next: D4c-2 (Maximal Rectangle).
