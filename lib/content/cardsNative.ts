@@ -101,9 +101,10 @@ export function verifyCards(cards: Card[], generated: ComputedMap, write = false
         }));
       }
       computed[c.id] = got;
-      // Compiler wording varies between g++ patch releases, so compiler-error cards are compared by failing line only.
+      // Wording and even the reported line vary between g++ releases, so compiler-error cards only need to
+      // still fail to compile (computeCard throws otherwise); their stored diagnostic is not compared.
       const comparable = (v: Computed | null | undefined) =>
-        c.kind === "compilerError" && v?.diagnostic !== undefined ? { diagnostic: /^line \d+/.exec(v.diagnostic)?.[0] ?? "" } : v ?? null;
+        c.kind === "compilerError" && v?.diagnostic !== undefined ? { diagnostic: "fails" } : v ?? null;
       if (!write && JSON.stringify(comparable(generated[c.id])) !== JSON.stringify(comparable(got))) e("generated.json is stale: run `npm run content:gen`");
     } catch (err) {
       e(err instanceof Error ? err.message : String(err));

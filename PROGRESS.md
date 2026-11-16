@@ -769,3 +769,4 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: not linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-check.
 - Branch note: the session is pinned to branch `claude/eloquent-ritchie-49fw3u`; pushed there and to `main` per CLAUDE.md.
 - Next: D4c-2 (Maximal Rectangle).
+- CI fix (2026-11-16): `main` was red before D4c-1 on the CI g++ (`r4-hash-pair-error` "generated.json is stale": CI's compiler reports the error on a different line than g++ 13.3 here). Compiler-error cards are no longer compared by line either; `computeCard` still throws if the code compiles. `tests/cards.test.ts` passes (247). Not yet confirmed green on CI.
