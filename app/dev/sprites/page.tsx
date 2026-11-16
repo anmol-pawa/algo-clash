@@ -19,6 +19,7 @@ import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { WOODS_TILE_NAMES, buildWoodsTileset } from "@/game/sprites/woodsTiles";
 import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
 import { HARBOR_TILE_NAMES, buildHarborTileset } from "@/game/sprites/harborTiles";
+import { SPIRE_TILE_NAMES, buildSpireTileset } from "@/game/sprites/spireTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
 const HARBOR_LEGEND: Record<string, string> = {
@@ -34,6 +35,21 @@ const HARBOR_SAMPLE = [
   "wwwwwwwwwwwwwwwwwwww",
   "dpppppppppppdwwwwwww",
   "wolpplppopwwwwBwwwww",
+];
+
+const SPIRE_LEGEND: Record<string, string> = {
+  f: "floor", F: "floor2", r: "rune", p: "path", w: "wall", s: "slabs", i: "pillar", t: "torch", b: "banner", k: "sky",
+  e: "ledge", c: "crates", u: "statue", a: "stairs", T: "tower", D: "door",
+};
+const SPIRE_SAMPLE = [
+  "kkkkkkkkkkkkkkkkkkkk",
+  "eeeeeeeeeeeeeeeeeeee",
+  "TwwbwwwiDiwwbwwwwwwT",
+  "TfFfftfpppfftfFfcsfT",
+  "TfFrffFpppfffFfrfcfT",
+  "TfufffFpppfFfifffufT",
+  "TfFfFfaaaaaffFfsfFfT",
+  "TwwwwwwwwwwwwwwwwwwT",
 ];
 
 const ANIMS = ["idle", "attack", "hurt", "faint", "evolve"];
@@ -69,6 +85,7 @@ export default function SpritesDev() {
   const atoll = useMemo(() => buildAtollTileset(), []);
   const woods = useMemo(() => buildWoodsTileset(), []);
   const harbor = useMemo(() => buildHarborTileset(), []);
+  const spire = useMemo(() => buildSpireTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
       <h1 className="mb-1 text-xl font-bold">Sprites</h1>
@@ -230,6 +247,19 @@ export default function SpritesDev() {
           <GymScene sheet={hydra} anim="idle" scale={3} region="hashwood-harbor" />
           <GymScene sheet={hydra} anim="attack" scale={3} region="hashwood-harbor" />
         </div>
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Stackspire tileset (16x16)</h2>
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8">
+          {SPIRE_TILE_NAMES.map((n) => (
+            <figure key={n} className="min-w-0 rounded bg-[#cfc9c0] p-2 text-center">
+              <SpriteCanvas sheet={spire} anim={n} scale={4} />
+              <figcaption className="truncate text-xs text-black">{n}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Sample Stackspire scene</h3>
+        <TileScene sheet={spire} scale={2} rows={SPIRE_SAMPLE} legend={SPIRE_LEGEND} />
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">

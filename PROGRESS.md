@@ -791,3 +791,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: front-only (bosses have no back sprite); not yet on a backdrop or in a gym (D4d-3, D4f).
 - Branch note: committed to `main` per CLAUDE.md.
 - Next: D4d-2 (Stackspire tileset).
+
+## 2026-11-16: D4d-2 Stackspire tileset
+- `game/sprites/spireTiles.ts`: 16 tiles at 16x16 on a 31-colour palette (warm flagstone, slate slabs matching the Sentinel, bronze trim, teal rune glow, brick, dusk sky): floor, floor2 (moss), rune pad (pulses), path (slate courses), wall, slabs (four-slab stack, the region motif), pillar, torch (flickers), banner (sways, slab-stack emblem), sky (drifting cloud), ledge, crates (LIFO pile), statue, stairs, tower, door. `SPIRE_SOLID` lists the blocking tiles (wall, slabs, pillar, torch, sky, ledge, crates, statue, tower). Shown on `/dev/sprites` with a sample scene; `tests/spire-tiles.test.ts` (opaque tiles, palette bounds, animated frames differ, deterministic).
+- Verified: `lint` (0 errors), `typecheck`, full `npm test`, `build`, `build:pages`. Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (tiles read clearly, ramps and outlines consistent with the harbor set).
+- Known gaps: not yet used by a map, backdrop or the warp (D4d-3, D4f).
+- Branch note: session branch `claude/eloquent-ritchie-ok6m2n`; pushed there and to `main` per CLAUDE.md.
+- Next: D4d-3 (Stackspire battle/gym backdrop and overworld map).

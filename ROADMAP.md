@@ -194,7 +194,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D4c-3. Trapping Rain Water (stack version): Cistern Rows.
   - [ ] D4d. Art: Stackspire Sentinel sprite, tileset, backdrop and map, split:
     - [x] D4d-1. Stackspire Sentinel 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
-    - [ ] D4d-2. Stackspire tileset on `/dev/sprites`.
+    - [x] D4d-2. Stackspire tileset on `/dev/sprites`.
     - [ ] D4d-3. Stackspire battle/gym backdrop and overworld map.
   - [ ] D4e. Lessons (stack, monotonic stack, expression evaluation) and ~36 cards.
   - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music.
