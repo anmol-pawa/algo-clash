@@ -784,3 +784,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: not linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-check.
 - Branch note: committed to `main` per CLAUDE.md.
 - Next: D4d (Stackspire art: Sentinel sprite, tileset, backdrop, map).
+
+## 2026-11-16: D4d-1 Stackspire Sentinel sprite
+- ROADMAP D4d split into D4d-1..3. D4d-1 done: `game/sprites/sentinel.ts`, a 96x96 gym boss built from four stacked slate slabs (narrowing upward, each with a rune socket and bronze corner caps), a visored helm with a red pennant marking the "top", and floating stone gauntlets. Idle (4 frames), attack (wind-up, the top slab pops off the stack, fists slam), hurt (white flash + recoil) and faint (slabs come off one by one from the top, then sink and fade, so the collapse reads as repeated pops). Shown on `/dev/sprites`; `tests/sentinel-sprite.test.ts`.
+- Verified: `lint`, `typecheck`, full `npm test`, `build`, `build:pages` (see commit). Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshot reviewed (silhouette reads as a slab stack with a helm, ramps and outlines clean).
+- Known gaps: front-only (bosses have no back sprite); not yet on a backdrop or in a gym (D4d-3, D4f).
+- Branch note: committed to `main` per CLAUDE.md.
+- Next: D4d-2 (Stackspire tileset).
