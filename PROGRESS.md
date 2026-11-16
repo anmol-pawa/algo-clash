@@ -770,3 +770,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Branch note: the session is pinned to branch `claude/eloquent-ritchie-49fw3u`; pushed there and to `main` per CLAUDE.md.
 - Next: D4c-2 (Maximal Rectangle).
 - CI fix (2026-11-16): `main` was red before D4c-1 on the CI g++ (`r4-hash-pair-error` "generated.json is stale": CI's compiler reports the error on a different line than g++ 13.3 here). Compiler-error cards are no longer compared by line either; `computeCard` still throws if the code compiles. `tests/cards.test.ts` passes (247). Not yet confirmed green on CI.
+
+## 2026-11-16: D4c-2 Stackspire problem: Lantern Wall (H)
+- Full H package `content/problems/R6/lantern-wall/` (Maximal Rectangle: largest all-lit rectangle in a binary grid of `vector<string>` rows, up to 250000 panes). Reference: per-row column heights plus the Skyline Hall monotonic stack with a zero sentinel, O(rows * cols) time, O(cols) space. Brute: per-cell downward scan with run lengths, O(rows^2 * cols). Wrongs (all rejected): heights not reset on a dark pane, no end-of-row flush, largest-square DP, longest straight run only, TLE all-corner-pairs with prefix sums (O(rows^2 * cols^2)). Seeded generator (solid, staircase, checker, noisy-with-planted-block, near-full grids); 27 hidden tests in four groups. Catalog regenerated (74 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t lantern-wall` (reference matches brute, all wrongs rejected, complexity claims checked), `npm run lint` (0 errors), `typecheck`, `npm test` (873 pass, 62 files), `build`, `build:pages`. No visual change, no screenshots.
+- Known gaps: not linked from lessons or the gym (D4e/D4f); no `prompt.json` quick-check. Full `npm test` takes ~14 min on a cold cache.
+- Branch note: session branch `claude/eloquent-ritchie-u2cfrn`; pushed there and to `main` per CLAUDE.md.
+- Next: D4c-3 (Trapping Rain Water, stack version).

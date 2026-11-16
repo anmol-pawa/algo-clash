@@ -190,7 +190,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D4b-3. Valley Tally (Sum of Subarray Minimums), Ring Lane (Design Circular Queue).
   - [ ] D4c. Problems batch 3 (H), split:
     - [x] D4c-1. Ledger Fold (Basic Calculator III with unary minus).
-    - [ ] D4c-2. Maximal Rectangle.
+    - [x] D4c-2. Lantern Wall (Maximal Rectangle).
     - [ ] D4c-3. Trapping Rain Water (stack version).
   - [ ] D4d. Art: Stackspire Sentinel sprite, tileset, backdrop and map.
   - [ ] D4e. Lessons (stack, monotonic stack, expression evaluation) and ~36 cards.
