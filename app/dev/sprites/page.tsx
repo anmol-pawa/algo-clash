@@ -17,6 +17,7 @@ import { TILE_NAMES, buildTileset } from "@/game/sprites/tiles";
 import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { WOODS_TILE_NAMES, buildWoodsTileset } from "@/game/sprites/woodsTiles";
+import { STACKSPIRE } from "@/lib/overworld/spire";
 import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
 import { HARBOR_TILE_NAMES, buildHarborTileset } from "@/game/sprites/harborTiles";
 import { SPIRE_TILE_NAMES, buildSpireTileset } from "@/game/sprites/spireTiles";
@@ -260,6 +261,12 @@ export default function SpritesDev() {
         </div>
         <h3 className="mb-1 mt-3 text-sm font-semibold">Sample Stackspire scene</h3>
         <TileScene sheet={spire} scale={2} rows={SPIRE_SAMPLE} legend={SPIRE_LEGEND} />
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Stackspire map (22x14) and gym backdrop</h3>
+        <TileScene sheet={spire} scale={2} rows={STACKSPIRE.rows} legend={STACKSPIRE.legend} />
+        <div className="mt-3 flex flex-wrap gap-3">
+          <GymScene sheet={sentinel} anim="idle" scale={3} region="stackspire" />
+          <GymScene sheet={sentinel} anim="attack" scale={3} region="stackspire" />
+        </div>
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">

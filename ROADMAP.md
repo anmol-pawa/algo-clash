@@ -192,10 +192,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D4c-1. Ledger Fold (Basic Calculator III with unary minus).
     - [x] D4c-2. Lantern Wall (Maximal Rectangle).
     - [x] D4c-3. Trapping Rain Water (stack version): Cistern Rows.
-  - [ ] D4d. Art: Stackspire Sentinel sprite, tileset, backdrop and map, split:
+  - [x] D4d. Art: Stackspire Sentinel sprite, tileset, backdrop and map, split:
     - [x] D4d-1. Stackspire Sentinel 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
     - [x] D4d-2. Stackspire tileset on `/dev/sprites`.
-    - [ ] D4d-3. Stackspire battle/gym backdrop and overworld map.
+    - [x] D4d-3. Stackspire battle/gym backdrop and overworld map.
   - [ ] D4e. Lessons (stack, monotonic stack, expression evaluation) and ~36 cards.
   - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music.
 - [ ] D5. Chainlink Caves (R5), with LRU Cache

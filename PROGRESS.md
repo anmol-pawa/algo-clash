@@ -798,3 +798,13 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: not yet used by a map, backdrop or the warp (D4d-3, D4f).
 - Branch note: session branch `claude/eloquent-ritchie-ok6m2n`; pushed there and to `main` per CLAUDE.md.
 - Next: D4d-3 (Stackspire battle/gym backdrop and overworld map).
+
+## 2026-11-17: D4d-3 Stackspire backdrop and overworld map (D4d complete)
+- `drawSpireBackdrop` in `game/battle/backdrop.ts` (violet-to-amber dusk, twinkling stars, drifting cloud streaks, a far skyline of stacked slab towers, a great five-slab spire with pulsing rune sockets and a swaying red pennant, flagstone terrace, flickering torches, slate platforms; `gym` uses the lower gym ledges). Wired as `region="stackspire"` in `GymScene` and `scene="spire-gym"` in `BattleStage` (foe = Sentinel).
+- `lib/overworld/spire.ts`: `STACKSPIRE` map (22x14): tower door at the top of a central avenue, rune pads, pillars, statues, crate stacks, a stair to the lower court, and a west lane tile (0,11) reserved for the Skyline Hall warp. Not yet registered in `WorldCanvas` (no NPCs, doors or warps until D4f).
+- `/dev/sprites` shows the map and the Sentinel on the backdrop (idle and attack). `tests/spire-map.test.ts` (rectangle, tile names, solid list in sync, spawn reaches the door front and the west lane, backdrop stays on the canvas).
+- Verified: `lint` (0 errors), `typecheck`, `build`, `build:pages`, full `npm test`. Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed. First backdrop draft left a black gap behind the skyline and hid the spire behind the Sentinel; both fixed.
+- Note: `next build` intermittently exits 1 with a Next.js security-upgrade advisory printed by the CLI (a retry passes). Not acted on; owner may want to review the Next.js version.
+- Known gaps: map unregistered; no encounters, NPCs, dialogue or warp (D4f).
+- Branch note: session branch `claude/eloquent-ritchie-8wtqo4`.
+- Next: D4e (stack lessons and ~36 cards).

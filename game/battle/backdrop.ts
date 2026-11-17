@@ -293,3 +293,78 @@ export function drawHarborBackdrop(c: CanvasRenderingContext2D, time: number, gy
     ellipseFill(c, "#b08a5a", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
   }
 }
+
+/**
+ * Stackspire battle scene: a violet dusk over a city of stacked towers, a great slab-stack spire with a
+ * swaying red pennant, flickering torches and a flagstone terrace. `gym` uses the lower gym ledges (the Sentinel).
+ */
+export function drawSpireBackdrop(c: CanvasRenderingContext2D, time: number, gym = false): void {
+  const sky = ["#1f2150", "#2c2f5a", "#3f3f78", "#58508f", "#7d6aa0", "#b98ba6", "#f0a98a"];
+  sky.forEach((b, i) => rect(c, b, 0, i * 10, LW, 10));
+  // twinkling stars in the upper sky
+  for (let i = 0; i < 30; i++) {
+    const x = (i * 43) % LW, y = (i * 19) % 36;
+    if ((Math.floor(time / 600) + i) % 4 !== 0) rect(c, i % 7 === 0 ? "#ffe9a8" : "#e6e4ff", x, y, 1, 1);
+  }
+  // slow cloud streaks
+  const drift = (time / 300) % (LW + 80);
+  for (const [k, y] of [[10, 34], [130, 44]] as const) {
+    const x = ((k + drift) % (LW + 80)) - 40;
+    rect(c, "#8f7db0", x, y, 36, 2);
+    rect(c, "#a894c0", x + 6, y - 1, 20, 1);
+  }
+  // city haze below the sky bands, so no gap shows behind the skyline
+  rect(c, "#d9967f", 0, 70, LW, 4);
+  rect(c, "#3a3868", 0, 74, LW, 8);
+  // far skyline of stacked slab towers (each tower is a narrowing stack of slabs)
+  const towers: Array<[number, number, number]> = [[6, 4, 14], [40, 5, 12], [78, 3, 16], [150, 4, 14], [190, 5, 12], [222, 3, 14]];
+  for (const [x, slabs, w] of towers) {
+    for (let s = 0; s < slabs; s++) {
+      const sw = w - s * 2, sy = 78 - (s + 1) * 7;
+      rect(c, s % 2 ? "#4a4f86" : "#3f4478", x + s, sy, sw, 7);
+      rect(c, "#6b6a92", x + s, sy, sw, 1);
+      rect(c, "#2c2f5a", x + s, sy + 6, sw, 1);
+    }
+    rect(c, "#b23a2a", x + (slabs >> 0), 78 - slabs * 7 - 4, 1, 4);
+  }
+  // great spire at the centre-left, clear of the foe ledge: five slate slabs, rune sockets, a red pennant
+  const sx = 92;
+  for (let s = 0; s < 5; s++) {
+    const w = 46 - s * 7, y = 80 - (s + 1) * 11, x = sx + (46 - w) / 2;
+    rect(c, "#566179", x, y, w, 11);
+    rect(c, "#7886a3", x, y, w, 2);
+    rect(c, "#3d4658", x, y + 9, w, 2);
+    rect(c, "#14171f", x, y + 10, w, 1);
+    rect(c, "#b0702c", x, y, 2, 2);
+    rect(c, "#b0702c", x + w - 2, y, 2, 2);
+    const glow = Math.floor(time / 400 + s) % 3 === 0;
+    rect(c, glow ? "#6fe3d0" : "#1f7f86", sx + 22, y + 4, 2, 3);
+  }
+  rect(c, "#14171f", sx + 22, 8, 2, 17);
+  const wave = Math.round(Math.sin(time / 300) * 2);
+  for (let i = 0; i < 7; i++) rect(c, i % 3 === 2 ? "#8c2430" : "#c4404a", sx + 24 + i, 9 + (i >> 1) + Math.round((wave * i) / 7), 1, 5 - (i >> 1));
+  // terrace: back parapet then flagstone courses
+  rect(c, "#3d4658", 0, 82, LW, 4);
+  for (let x = 0; x < LW; x += 10) rect(c, "#566179", x + 1, 82, 8, 3);
+  rect(c, "#14171f", 0, 86, LW, 1);
+  rect(c, "#8f8a84", 0, 87, LW, LH - 87);
+  for (let y = 87; y < LH; y += 9) {
+    rect(c, "#6e6a66", 0, y, LW, 1);
+    for (let x = ((y - 87) / 9) % 2 ? 0 : 14; x < LW; x += 28) rect(c, "#6e6a66", x, y, 1, 9);
+  }
+  for (let i = 0; i < 60; i++) rect(c, i % 3 ? "#b3ada4" : "#6e6a66", (i * 59) % LW, 89 + ((i * 31) % 44), 2, 1);
+  // torches on short posts at both edges
+  for (const tx of [6, 230] as const) {
+    rect(c, "#4a2f1c", tx, 70, 3, 16);
+    rect(c, "#b0702c", tx - 1, 69, 5, 2);
+    const f = Math.floor(time / 130 + tx) % 3;
+    rect(c, "#e8782e", tx, 64 - f, 3, 5 + f);
+    rect(c, "#ffd25a", tx + 1, 66 - f, 1, 3);
+  }
+  const plats = gym ? GYM_PLATFORMS : PLATFORMS;
+  for (const p of [plats.foe, plats.player]) {
+    ellipseFill(c, "#3d4658", p.cx, p.cy + 3, p.rx, p.ry);
+    ellipseFill(c, "#7886a3", p.cx, p.cy, p.rx, p.ry);
+    ellipseFill(c, "#b3ada4", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
+  }
+}
