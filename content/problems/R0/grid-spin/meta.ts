@@ -8,6 +8,7 @@ export const meta: ProblemMeta = {
   patterns: ["syntax"],
   signals: ["write this function", "build a 2D vector", "rows and columns swap places"],
   prerequisites: [],
+  complexity: { time: "O(R * C)", space: "O(R * C)" },
   parSeconds: 420,
   timeLimitMs: 1000,
   testWeights: { basic: 0.25, edge: 0.25, adversarial: 0.2, perf: 0.3 },

@@ -8,6 +8,7 @@ export const meta: ProblemMeta = {
   patterns: ["syntax"],
   signals: ["write this function", "remove every element equal to a value", "keep the order"],
   prerequisites: [],
+  complexity: { time: "O(n)", space: "O(1)" },
   parSeconds: 360,
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.2, perf: 0.4 },

@@ -8,6 +8,7 @@ export const meta: ProblemMeta = {
   patterns: ["syntax"],
   signals: ["TreeNode*", "check nullptr before dereferencing", "recursion on left and right children"],
   prerequisites: [],
+  complexity: { time: "O(n)", space: "O(h)" },
   parSeconds: 480,
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.2, perf: 0.4 },

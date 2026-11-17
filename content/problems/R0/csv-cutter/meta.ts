@@ -8,6 +8,7 @@ export const meta: ProblemMeta = {
   patterns: ["syntax"],
   signals: ["write this function", "split a string on a separator", "keep empty pieces"],
   prerequisites: [],
+  complexity: { time: "O(n)", space: "O(n)" },
   parSeconds: 420,
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.3, adversarial: 0.2, perf: 0.3 },

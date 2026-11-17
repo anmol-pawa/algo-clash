@@ -873,3 +873,6 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not yet linked from lessons or the world; the in-game statement shows the `@pos` form as plain text (no pointer diagram until D5f); no `prompt.json` quick-checks.
 - Next: D5b (Reorder List, Remove Nth From End, Add Two Numbers, ...).
+
+## 2026-11-17: CI fix after the stale-branch merge
+- `34ee715` (merge of a stale session branch) brought six R0 problems whose `meta.ts` lacked the required `complexity` field, so CI typecheck and the Pages build failed. Added `complexity` to clear-the-deck, crate-order, csv-cutter, grid-spin, reverse-chain, tree-depth (matching their editorials), regenerated the catalog (86 problems). Verified: typecheck (0 errors), native verify of those six, non-content test suite (888 pass), lint 0 errors.

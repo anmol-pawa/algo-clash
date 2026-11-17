@@ -8,6 +8,7 @@ export const meta: ProblemMeta = {
   patterns: ["syntax"],
   signals: ["singly linked list", "ListNode*", "rewire next pointers in place"],
   prerequisites: [],
+  complexity: { time: "O(n)", space: "O(1)" },
   parSeconds: 480,
   timeLimitMs: 1000,
   testWeights: { basic: 0.2, edge: 0.2, adversarial: 0.2, perf: 0.4 },
