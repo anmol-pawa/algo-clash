@@ -76,6 +76,19 @@ export const CLERK: CharacterLook = {
   tuft: true,
 };
 
+export const SENTRY: CharacterLook = {
+  name: "sentry",
+  colors: ["#d9a67c", "#b88258", "#2a2a3a", "#1a1a28", "#6a7488", "#4a5468", "#3fb8a8", "#2a8a7c",
+    "#3a4258", "#262c3e", "#2a2a3a", "#ffffff", "#141018", "#e8a838", "#e8a090", "#7a2c2c"],
+};
+
+export const SCRIBE: CharacterLook = {
+  name: "scribe",
+  colors: ["#f0c8a0", "#c89a72", "#8a5a3a", "#5e3c24", "#7a4a9a", "#563478", "#f2e6c9", "#cdbd96",
+    "#3a3a52", "#26263a", "#3a2a2a", "#ffffff", "#141018", "#f0c040", "#f0a090", "#7a2c2c"],
+  glasses: true,
+};
+
 export function lookPalette(l: CharacterLook): string[] {
   // index 0 transparent, 1 outline, 2..17 from look
   return ["", "#1a1420", ...l.colors];

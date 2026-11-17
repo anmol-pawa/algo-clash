@@ -202,5 +202,49 @@ export const HARBOR_THEME: Song = {
   ],
 };
 
-export const SONGS = { mainville: MAINVILLE_THEME, atoll: ATOLL_THEME, woods: WOODS_THEME, harbor: HARBOR_THEME, battle: BATTLE_THEME } as const;
+/** Stackspire: a stately C-minor march that climbs in stacked phrases (4 bars, 64 steps). */
+export const SPIRE_THEME: Song = {
+  id: "spire",
+  bpm: 100,
+  stepsPerBeat: 2,
+  channels: [
+    {
+      wave: "square",
+      gain: 0.18,
+      pattern: [
+        "C5 _ _ _ Eb5 _ G5 _  C6 - - - G5 - - -",
+        "Ab5 _ _ _ G5 _ Eb5 _  F5 - - - D5 - - -",
+        "Eb5 _ G5 _ Bb5 - G5 _  Eb6 - - - Bb5 - - -",
+        "C6 _ Bb5 _ Ab5 _ G5 _  G5 - - - - - - -",
+      ].join(" "),
+    },
+    {
+      wave: "triangle",
+      gain: 0.4,
+      pattern: [
+        "G4 - Eb4 - G4 - Eb4 -   G4 - Eb4 - G4 - Eb4 -",
+        "Ab4 - F4 - Ab4 - F4 -   Bb4 - F4 - Bb4 - F4 -",
+        "Bb4 - G4 - Bb4 - G4 -   Bb4 - G4 - Bb4 - G4 -",
+        "Ab4 - F4 - Ab4 - F4 -   B4 - G4 - B4 - G4 -",
+      ].join(" "),
+    },
+    {
+      wave: "triangle",
+      gain: 0.8,
+      pattern: [
+        "C2 - - - C3 - - -   C2 - - - G2 - - -",
+        "Ab1 - - - Ab2 - - -   Bb1 - - - Bb2 - - -",
+        "Eb2 - - - Eb3 - - -   Eb2 - - - Bb2 - - -",
+        "Ab1 - - - Ab2 - - -   G2 - - - G2 - - -",
+      ].join(" "),
+    },
+    {
+      wave: "noise",
+      gain: 0.05,
+      pattern: Array.from({ length: 8 }, () => "- - A5 - - - A5 -").join(" "),
+    },
+  ],
+};
+
+export const SONGS = { mainville: MAINVILLE_THEME, atoll: ATOLL_THEME, woods: WOODS_THEME, harbor: HARBOR_THEME, spire: SPIRE_THEME, battle: BATTLE_THEME } as const;
 export type SongId = keyof typeof SONGS;

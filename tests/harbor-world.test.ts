@@ -4,6 +4,7 @@ import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
+import { STACKSPIRE } from "@/lib/overworld/spire";
 import { parseMap, tileAt } from "@/lib/overworld/map";
 import { newWorld, tickWorld, STEP_MS } from "@/lib/overworld/mover";
 import { HARBOR_DIALOGUES } from "@/lib/dialogue/harbor";
@@ -13,7 +14,7 @@ import { SONGS } from "@/lib/audio/songs";
 
 const maps = {
   mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL),
-  "window-woods": parseMap(WINDOW_WOODS), "hashwood-harbor": parseMap(HASHWOOD_HARBOR),
+  "window-woods": parseMap(WINDOW_WOODS), "hashwood-harbor": parseMap(HASHWOOD_HARBOR), stackspire: parseMap(STACKSPIRE),
 };
 
 describe("Hashwood Harbor in the world", () => {

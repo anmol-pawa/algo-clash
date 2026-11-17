@@ -851,3 +851,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: the spire map is not yet registered in `WorldCanvas` (D4f-4).
 - Next: D4f-4 (register the spire map, warp, encounters, dialogue, story beat, music).
+
+## 2026-11-17: D4f-4 Stackspire in the overworld (D4 complete)
+- Array Atoll's west shore (0,8, now wet sand) warps to Stackspire and back via the spire's west lane (0,11); spire map registered in `WorldCanvas` with its own tileset, two NPCs (Sentry Ossian: LIFO, push/pop O(1), bracket matching, monotonic sweep O(n); Scribe Wren: the "Iron stack" no-recursion rule, explicit std::stack/vector, two-stack evaluator, long long) with new `SENTRY`/`SCRIBE` looks, encounters on `rune` pads (pool `spire-rune`, rate 0.25; `rune` added to `ENCOUNTER_TILES`), and a new C-minor `spire` march theme.
+- Verified: `npm run lint` (0 errors), `typecheck`, full `npm test` (963 pass, 68 files; new `tests/spire-world.test.ts`, older world tests include the spire map), `build` and `build:pages` (compile and export succeed; the known Next.js advisory-fetch exit 1 is printed). `scripts/smoke-spire-world.mjs` on the static export at desktop and iPhone 14: atoll -> spire -> atoll ok, no console errors, no overflow; screenshots reviewed (spire flagstones, brick, slabs, NPCs and d-pad readable).
+- CI/deploy: Actions quota note is over but there is no `gh` in this session; not confirmed.
+- Known gaps: the spire NPC portraits are the shared walk sprites; encounter battles are still stubbed with a text note; rune pads are only 4 tiles.
+- Next: D5 (Chainlink Caves, R5, with LRU Cache).
