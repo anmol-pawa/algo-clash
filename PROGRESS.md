@@ -882,3 +882,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `CONTENT_WRITE=1 vitest -t "tail-snip|carry-chain|weave-ends"` (native g++: reference matches brute on random cases; every wrong solution rejected; one first-draft Weave Ends wrong solution turned out to be correct and was replaced), `npm run lint` (0 errors), `typecheck`, `build:pages` (compiles and exports; the known npm advisory-fetch notice exits 1 on some tries), full `npm test`. No visual change, no screenshots.
 - Known gaps: not yet linked from lessons or the world; no `prompt.json` quick-checks.
 - Next: D5b-2 (Palindrome Linked List, Intersection, Odd Even, Rotate List).
+
+## 2026-11-17: D5b-2 Chainlink Caves problems batch 2b (M)
+- ROADMAP D5b-2 done for three of four: **Mirror Chain** (Palindrome Linked List, similar LC 234: runners, reverse second half, compare, restore), **Parity Rails** (Odd Even List, LC 328: two rails by position), **Spin Chain** (Rotate List, LC 61: k up to 2e9, k % n, ring re-cut). Each a full package (reference, brute, 3-4 wrong solutions incl. a TLE one, seeded generator, 4-group hidden tests, hint ladder, editorial). Catalog regenerated (92 problems). A first-draft wrong solution for Parity Rails turned out to be correct and was replaced.
+- **Split:** Intersection of Two Lists needs a harness extension for two lists sharing a tail, now box D5b-2b.
+- Verified: `CONTENT_WRITE=1 vitest -t "mirror-chain|parity-rails|spin-chain"` (native g++: reference matches brute, every wrong rejected), `npm run lint` (0 errors), `typecheck`, full `npm test` (981 pass, 68 files), `build:pages` (exit 0 on retry; first try hit the known npm advisory-fetch exit 1). No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
+- Next: D5b-2b (shared-tail harness + Intersection of Two Lists), then D5b-3.
