@@ -135,17 +135,34 @@ inline void readTree(Reader& r, TreeNode*& out) {
   r.expect(']');
 }
 
+// Nodes of the most recently read list, and whether it carried an '@pos' tail link (cyclic input mode).
+// A cyclic list is written [3,2,0,-4]@1: the tail links back to index 1; @-1 means no cycle.
+// When the input was cyclic, a returned ListNode* prints as its index in that list (-1 for null).
+inline std::vector<ListNode*>& listNodes() { static std::vector<ListNode*> v; return v; }
+inline bool& listCyclic() { static bool b = false; return b; }
+
 inline void readList(Reader& r, ListNode*& out) {
   r.expect('[');
   out = nullptr;
   ListNode* tail = nullptr;
-  if (r.take(']')) return;
-  do {
-    ListNode* n = new ListNode(static_cast<int>(r.integer()));
-    if (tail) tail->next = n; else out = n;
-    tail = n;
-  } while (r.take(','));
-  r.expect(']');
+  auto& nodes = listNodes();
+  nodes.clear();
+  listCyclic() = false;
+  if (!r.take(']')) {
+    do {
+      ListNode* n = new ListNode(static_cast<int>(r.integer()));
+      if (tail) tail->next = n; else out = n;
+      tail = n;
+      nodes.push_back(n);
+    } while (r.take(','));
+    r.expect(']');
+  }
+  if (r.take('@')) {
+    const long long pos = r.integer();
+    if (pos < -1 || pos >= static_cast<long long>(nodes.size())) fail("cycle position out of range");
+    if (pos >= 0) tail->next = nodes[static_cast<size_t>(pos)];
+    listCyclic() = true;  // '@' present: results print as indexes, even when the list has no cycle
+  }
 }
 
 #ifdef LCH_GRAPH_NODE
@@ -244,6 +261,14 @@ inline void printTree(std::string& out, const TreeNode* root) {
 }
 
 inline void printList(std::string& out, const ListNode* head) {
+  if (listCyclic()) {
+    // Cyclic input: identify the returned node by its position in the list that was read.
+    if (!head) { out += "-1"; return; }
+    const auto& nodes = listNodes();
+    for (size_t i = 0; i < nodes.size(); ++i)
+      if (nodes[i] == head) { out += std::to_string(i); return; }
+    fail("returned node does not belong to the list");
+  }
   out += '[';
   bool first = true;
   size_t guard = 0;

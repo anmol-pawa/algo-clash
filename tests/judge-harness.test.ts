@@ -75,6 +75,14 @@ describe("function driver", () => {
     expect(lines(run(bin, [["[1,2,3,4]"], ["[]"], ["[7]"]]).stdout)).toEqual(["[4,3,2,1]", "[]", "[7]"]);
   });
 
+  it("builds cyclic lists from [..]@pos and prints a returned node as its index", () => {
+    const spec: DriverSpec = { kind: "function", name: "entry", returns: "ListNode*", params: [{ type: "ListNode*", name: "head" }] };
+    const code = `class Solution { public: ListNode* entry(ListNode* head) { ListNode *s = head, *f = head;
+      while (f && f->next) { s = s->next; f = f->next->next; if (s == f) { s = head; while (s != f) { s = s->next; f = f->next; } return s; } } return nullptr; } };`;
+    const bin = build(spec, code);
+    expect(lines(run(bin, [["[3,2,0,-4]@1"], ["[1,2]@0"], ["[1]@0"], ["[1,2,3]@-1"], ["[1,2,3]"], ["[]"]]).stdout)).toEqual(["1", "0", "0", "-1", "[]", "[]"]);
+  });
+
   it("builds and prints binary trees in level order with nulls", () => {
     const spec: DriverSpec = { kind: "function", name: "invertTree", returns: "TreeNode*", params: [{ type: "TreeNode*", name: "root" }] };
     const code = `class Solution { public: TreeNode* invertTree(TreeNode* r) { if (!r) return nullptr; swap(r->left, r->right); invertTree(r->left); invertTree(r->right); return r; } };`;

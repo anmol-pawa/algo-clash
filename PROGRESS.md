@@ -865,3 +865,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: there is no `gh` in this session, so CI and the Pages deploy were not confirmed.
 - Known gaps: cycle problems need a harness extension (D5a-2); the R5 problems are not yet linked from lessons or the world; no `prompt.json` quick-checks.
 - Next: D5a-2 (harness support for cyclic lists, then Chain Loop and Loop Gate).
+
+## 2026-11-17: D5a-2 Cyclic-list harness extension, Chain Loop and Loop Gate
+- **Harness:** list literals accept an `@pos` suffix (`[3,2,0,-4]@1`: the tail links back to index 1, `@-1` means no cycle). When `@` is present the harness remembers the nodes it built and prints a returned `ListNode*` as its **index** (`-1` for null; a node not from the list is an error), so duplicate values cannot hide a wrong node. Plain lists print as before. New harness test (g++ native) covers entry-finding, self-loop, `@-1` and the plain-list path.
+- **Problems (full packages, `content/problems/R5/`):** **Chain Loop** (E, Floyd cycle detection, similar LC 141; wrongs: value-based seen set, no null checks, compare-before-move, fixed hop budget) and **Loop Gate** (M, cycle entry, similar LC 142, editorial includes the `a = (k-1)L + (L-b)` proof; wrongs: returns the meeting point, restarted walker moves two steps, value-based seen set, TLE per-node rescan). Seeded generators with equal-value, self-loop, long-tail and 100000-node perf cases. Catalog regenerated (80 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t "chain-loop|loop-gate"` (reference matches brute on random cases, every wrong rejected), `tests/judge-harness.test.ts` (16 pass), `npm run lint` (0 errors), `typecheck`, full `npm test`, `build:pages`. No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not yet linked from lessons or the world; the in-game statement shows the `@pos` form as plain text (no pointer diagram until D5f); no `prompt.json` quick-checks.
+- Next: D5b (Reorder List, Remove Nth From End, Add Two Numbers, ...).
