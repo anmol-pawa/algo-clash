@@ -205,7 +205,14 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D4f-2. Visualisers: stack/queue animator and monotonic-stack stepper.
     - [x] D4f-3. Stackspire Sentinel gym (data + signature mechanic per GDD §5.5) wired to the spire map door.
     - [x] D4f-4. Register the spire map in `WorldCanvas`, warp from Skyline Hall/previous region, encounters, NPC dialogue, story beat, music.
-- [ ] D5. Chainlink Caves (R5), with LRU Cache
+- [ ] D5. Chainlink Caves (R5), with LRU Cache, split by the region recipe:
+  - [x] D5a-1. Problems batch 1 (E): Flip Chain (reverse), Zipper Merge (merge two sorted), Mid Link (middle node).
+  - [ ] D5a-2. Cycle problems need a harness extension (a list with a tail-to-position link): Chain Loop (E, cycle detection) and Loop Gate (M, cycle entry, with the Floyd proof in the editorial).
+  - [ ] D5b. Problems batch 2 (M), split: Reorder List, Remove Nth From End, Add Two Numbers, Palindrome Linked List, Intersection, Odd Even, Rotate List, Sort List, Copy List with Random Pointer, Find the Duplicate Number.
+  - [ ] D5c. Problems batch 3 (H): Merge k Sorted Lists, Reverse Nodes in k-Group; design: LRU Cache (hand-rolled and `std::list` + `splice`).
+  - [ ] D5d. Art: Chainwyrm Matriarch 96x96 sprite, Chainlink tileset, backdrop and map.
+  - [ ] D5e. Lessons (pointer rewiring and dummy node, fast/slow, merge and sort) and ~36 cards.
+  - [ ] D5f. Forge scrolls, visualisers (pointer diagram), Chainwyrm gym, warp, dialogue, music.
 - [ ] D6. Recursion Ruins (R7)
 - [ ] D7. Bisect Bay (R8), with the interactive-judge mode for the Bisect Sage
 - [ ] D8. Sorting Steppes (R9)

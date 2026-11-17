@@ -858,3 +858,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota note is over but there is no `gh` in this session; not confirmed.
 - Known gaps: the spire NPC portraits are the shared walk sprites; encounter battles are still stubbed with a text note; rune pads are only 4 tiles.
 - Next: D5 (Chainlink Caves, R5, with LRU Cache).
+
+## 2026-11-17: D5a-1 Chainlink Caves problems batch 1 (E)
+- ROADMAP D5 split into D5a-1..D5f. D5a-1 done: three new R5 problems, each a full package (reference, brute, 3 wrong solutions, seeded generator, 4-group hidden tests, hint ladder, house-style editorial): Flip Chain (reverse a list in place, similar LC 206), Zipper Merge (splice two sorted lists with a dummy head, LC 21), Mid Link (fast/slow runners, second middle, LC 876). Catalog regenerated (78 problems).
+- Verified: `npm run lint` (0 errors), `typecheck`, `content:verify` (79 passed; native g++ stress against brute force, every wrong solution rejected), full `npm test` (966 pass), `build:pages` (exit 0). `npm run build` compiles but exits 1 with the known Next.js advisory-fetch error (network), same as earlier runs. No visual change, no screenshots.
+- CI/deploy: there is no `gh` in this session, so CI and the Pages deploy were not confirmed.
+- Known gaps: cycle problems need a harness extension (D5a-2); the R5 problems are not yet linked from lessons or the world; no `prompt.json` quick-checks.
+- Next: D5a-2 (harness support for cyclic lists, then Chain Loop and Loop Gate).
