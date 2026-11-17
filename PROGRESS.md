@@ -808,3 +808,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Known gaps: map unregistered; no encounters, NPCs, dialogue or warp (D4f).
 - Branch note: session branch `claude/eloquent-ritchie-8wtqo4`.
 - Next: D4e (stack lessons and ~36 cards).
+
+## 2026-11-17: D4e-1 Stackspire lesson: stack basics and 12 cards
+- ROADMAP D4e split into D4e-1..3. D4e-1 done: lesson `r6-stack-basics` in `content/lessons/R6/spire.ts` (LIFO and std::stack pitfalls, bracket matching with a stack of owed closers, queues, ring-buffer index arithmetic, queue from two stacks) with 3 runnable listings (real g++ output) and 12 cards in `content/cards/R6/spire.ts` (mcq, multi, predict, trace, parsons, cloze, compilerError; outputs computed by native g++). Links crate-brackets, score-tape, gauge-stack, twin-stack-line, ring-lane. `tests/r6-content.test.ts`.
+- Verified: `npm run lint` (0 errors), `typecheck`, full `npm test` (900 pass incl. native card/lesson verification), `build` (passes on retry), `build:pages`. No visual change, no screenshots.
+- Note: `next build` still intermittently exits 1 with a Next.js security-advisory message printed by the CLI (a retry passes). The owner may want to review the Next.js version; no upgrade was run.
+- CI/deploy: Actions quota period is over, but there is no `gh` in this session; not confirmed.
+- Known gaps: the other 7 R6 problems are not linked from a lesson until D4e-2/3.
+- Next: D4e-2 (monotonic stack lesson and 12 cards).

@@ -500,5 +500,29 @@
   },
   "forge-rolling-key-trace-thrice": {
     "output": "[TT]\n"
-  }
+  },
+  "r6-stk-signal": {},
+  "r6-stk-pop-void": {},
+  "r6-stk-predict": {
+    "output": "3 3\n"
+  },
+  "r6-stk-depth-trace": {
+    "output": "3\n"
+  },
+  "r6-stk-match-checks": {},
+  "r6-stk-pop-error": {
+    "diagnostic": "line 6: void value not ignored as it ought to be"
+  },
+  "r6-stk-uses": {},
+  "r6-stk-reverse-parsons": {
+    "output": "kcats\n"
+  },
+  "r6-stk-match-cloze": {
+    "output": "1\n"
+  },
+  "r6-stk-two-stack": {},
+  "r6-stk-ring-trace": {
+    "output": "0\n"
+  },
+  "r6-stk-ring-full": {}
 }
