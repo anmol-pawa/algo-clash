@@ -823,3 +823,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: no `prompt.json` quick-checks; not yet in the gym (D4f).
 - Next: D4e-3 (expressions lesson and 12 cards).
+
+## 2026-11-17: D4e-3 Stackspire lesson: expressions and 12 cards (D4e complete)
+- Lesson `r6-expressions` in `content/lessons/R6/spire.ts` (postfix evaluation and operand order, two-stack infix evaluator with precedence and brackets, why the "insert 0 before -" unary trick fails, decode-string with a stack of counts and parked text, path simplification, explicit stack vs recursion depth) with 3 runnable listings (real g++ output: 30, 12, accaccacc) and 12 cards in `content/cards/R6/spire.ts` (mcq, multi, predict, trace, parsons, cloze, compilerError; outputs computed by native g++). Links tape-calculator, ledger-fold, unroll-banner, tidy-route. `tests/r6-content.test.ts` extended; all R6 cards are now practised by exactly one lesson.
+- Verified: `npm run lint` (0 errors), `typecheck`, full `npm test` (926 pass, 66 files), `build` (exit 0; prints the known npm advisory notice), `build:pages`. No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: no `prompt.json` quick-checks; Stackspire not yet registered in the world or the gym (D4f).
+- Next: D4f (forge scrolls, visualisers, Sentinel gym, warp, dialogue, music), likely to be split into sub-boxes.

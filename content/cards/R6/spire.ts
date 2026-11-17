@@ -347,4 +347,199 @@ int main() {
     answer: 0,
     explanation: "Bars that are never followed by a shorter bar would stay on the stack and never be measured. A 0 is shorter than every real bar, so it forces all of them to be popped and measured. Forgetting it is the classic bug.",
   },
+  // ---- Expressions
+  {
+    id: "r6-expr-signal", kind: "mcq", region: "R6", tags: ["stack", "expressions", "recognition"],
+    prompt: "A tape lists numbers and operators like `4 5 + 2 *`, where each operator uses the two most recent unused values. Which structure evaluates it in one pass?",
+    choices: ["A stack of values", "A queue of values", "A hash map from operator to result", "A sorted array"],
+    answer: 0,
+    explanation: "An operator always needs the two newest unused values, which is exactly what the top of a stack holds. A queue would hand back the oldest values instead.",
+  },
+  {
+    id: "r6-expr-operand-order", kind: "mcq", region: "R6", tags: ["stack", "expressions", "edge-cases"],
+    prompt: "While evaluating the postfix tape `10 4 -`, the evaluator pops `x` first and `y` second. Which expression gives the correct 6?",
+    choices: ["y - x", "x - y", "x + y", "x * y - 34"],
+    answer: 0,
+    explanation: "The first value popped is the newest one, which is the right operand (4). So the older value minus the newer one is `y - x`. Swapping them is harmless for + and *, but wrong for - and /.",
+  },
+  {
+    id: "r6-expr-predict", kind: "predict", region: "R6", tags: ["stack", "expressions", "rpn"],
+    prompt: "What does this program print?",
+    code: `#include <iostream>
+#include <stack>
+#include <string>
+#include <vector>
+
+int main() {
+    const std::vector<std::string> tape = {"3", "4", "+", "2", "*", "5", "-"};
+    std::stack<int> vals;
+    for (const auto& tok : tape) {
+        if (tok == "+" || tok == "-" || tok == "*") {
+            const int right = vals.top();
+            vals.pop();
+            const int left = vals.top();
+            vals.pop();
+            vals.push(tok == "+" ? left + right : tok == "-" ? left - right : left * right);
+        } else {
+            vals.push(std::stoi(tok));
+        }
+    }
+    std::cout << vals.top() << '\\n';
+}
+`,
+    explanation: "`3 4 +` is 7, `7 2 *` is 14, and `14 5 -` is 9. The final subtraction is the older value 14 minus the newer value 5.",
+  },
+  {
+    id: "r6-expr-div-trace", kind: "trace", region: "R6", tags: ["stack", "expressions", "trace", "integer-division"],
+    prompt: "What does this program print?",
+    code: `#include <iostream>
+#include <stack>
+#include <vector>
+
+int main() {
+    std::stack<int> vals;
+    for (int x : {-7, 2}) vals.push(x);
+    const int right = vals.top();
+    vals.pop();
+    const int left = vals.top();
+    vals.pop();
+    vals.push(left / right);
+    vals.push(5);
+    const int b = vals.top();
+    vals.pop();
+    const int a = vals.top();
+    vals.pop();
+    std::cout << a * b << ' ' << -7 % 2 << '\\n';
+}
+`,
+    explanation: "C++ integer division truncates toward zero, so `-7 / 2` is `-3` (not `-4`), and `-3 * 5` is `-15`. The remainder takes the sign of the dividend, so `-7 % 2` is `-1`.",
+  },
+  {
+    id: "r6-expr-prec", kind: "mcq", region: "R6", tags: ["stack", "expressions", "precedence"],
+    prompt: "In a two-stack infix evaluator, a `-` arrives and the operator stack has `*` on top. What happens first?",
+    choices: ["Apply the `*` to the top two values, then continue; the new `-` is pushed afterwards", "Push `-` on top of `*` immediately", "Discard the `*`", "Apply the `-` first"],
+    answer: 0,
+    explanation: "`*` binds tighter than `-`, so everything it needs is already known and it must be finished first. Leaving it waiting under `-` would let a later operator be applied to the wrong operands. With equal precedence the same rule keeps left-to-right grouping: `8 - 3 - 2` is `(8 - 3) - 2`.",
+  },
+  {
+    id: "r6-expr-uses", kind: "multi", region: "R6", tags: ["stack", "expressions", "recognition"],
+    prompt: "Which tasks are naturally solved with a stack? Select all that apply.",
+    choices: ["Decode `3[a2[c]]` into a full string", "Simplify the path `/a/./b/../c`", "Evaluate `(1+2)*3` with brackets", "Sort a list of numbers with the STL"],
+    answers: [0, 1, 2],
+    explanation: "Nested brackets, `..` undoing the last name, and bracketed arithmetic all finish the newest unfinished piece first. Sorting needs no stack.",
+  },
+  {
+    id: "r6-expr-switch-error", kind: "compilerError", region: "R6", tags: ["expressions", "compiler-errors", "switch"],
+    prompt: "This code does not compile. What is the cause?",
+    code: `#include <iostream>
+#include <string>
+
+int main() {
+    const std::string tok = "+";
+    switch (tok) {
+        case "+": std::cout << "plus\\n"; break;
+        default: std::cout << "other\\n";
+    }
+}
+`,
+    choices: ["switch needs an integral value (such as char or int), and a std::string is not one", "std::string cannot hold a plus sign", "case labels must be uppercase", "default must come first"],
+    answer: 0,
+    explanation: "`switch` works on integers and enums only. Use `switch (tok[0])` with character labels for single-character tokens, or an `if / else if` chain on the whole string as the tape evaluator does.",
+  },
+  {
+    id: "r6-expr-path-parsons", kind: "parsons", region: "R6", tags: ["stack", "paths", "parsons"],
+    prompt: "Order the lines so the program prints the names left after applying `.` and `..`.",
+    lines: [
+      "#include <iostream>",
+      "#include <string>",
+      "#include <vector>",
+      "int main() {",
+      "    const std::vector<std::string> parts = {\"a\", \".\", \"b\", \"..\", \"c\"};",
+      "    std::vector<std::string> st;",
+      "    for (const auto& p : parts) {",
+      "        if (p == \".\") continue;",
+      "        if (p == \"..\") {",
+      "            if (!st.empty()) st.pop_back();",
+      "        } else {",
+      "            st.push_back(p);",
+      "        }",
+      "    }",
+      "    for (const auto& s : st) std::cout << s << ' ';",
+      "    std::cout << \"\\n\";",
+      "}",
+    ],
+    explanation: "A `.` does nothing, `..` removes the last kept name only if there is one (going up from the top stays at the top), and every other name is pushed. Here `a`, `b` are kept, `..` removes `b`, and `c` is added, leaving `a c`.",
+  },
+  {
+    id: "r6-expr-cloze", kind: "cloze", region: "R6", tags: ["stack", "expressions", "cloze"],
+    prompt: "Fill the blanks so the program applies a subtraction to the two newest values.",
+    template: `#include <iostream>
+#include <stack>
+
+int main() {
+    std::stack<int> vals;
+    vals.push(10);
+    vals.push(2);
+    const int b = vals.top();
+    vals.pop();
+    const int a = vals.___();
+    vals.___();
+    vals.push(a - b);
+    std::cout << vals.top() << "\\n";
+}
+`,
+    blanks: [["top"], ["pop"]],
+    explanation: "Read the older value with `top()`, then remove it with `pop()`. Subtracting the newer value `b` from the older `a` gives 10 - 2 = 8.",
+  },
+  {
+    id: "r6-expr-unary", kind: "mcq", region: "R6", tags: ["expressions", "unary-minus", "edge-cases"],
+    prompt: "A calculator rewrites every `-` that has no left operand into `0 -`. Which input breaks it?",
+    choices: ["2 * -3", "-3 + 4", "(-3)", "5 - 1"],
+    answer: 0,
+    explanation: "Inserting a 0 gives `2 * 0 - 3`, which multiplies first and yields -3, but the correct answer is -6. The trick survives a leading minus or a minus after `(`, but not after `*` or `/`. A real unary operator with its own precedence handles all cases.",
+  },
+  {
+    id: "r6-expr-decode-trace", kind: "trace", region: "R6", tags: ["stack", "expressions", "trace", "decode"],
+    prompt: "What does this program print?",
+    code: `#include <cctype>
+#include <iostream>
+#include <stack>
+#include <string>
+
+int main() {
+    const std::string code = "2[a2[b]]";
+    std::string cur;
+    int num = 0;
+    std::stack<int> counts;
+    std::stack<std::string> parked;
+    for (const char c : code) {
+        if (std::isdigit(static_cast<unsigned char>(c))) {
+            num = num * 10 + (c - '0');
+        } else if (c == '[') {
+            counts.push(num);
+            parked.push(cur);
+            num = 0;
+            cur.clear();
+        } else if (c == ']') {
+            std::string outer = parked.top();
+            parked.pop();
+            for (int r = counts.top(); r > 0; --r) outer += cur;
+            counts.pop();
+            cur = outer;
+        } else {
+            cur += c;
+        }
+    }
+    std::cout << cur << '\\n';
+}
+`,
+    explanation: "The inner `2[b]` becomes `bb`, so the outer text is `abb`, and the outer `2[...]` repeats it twice: `abbabb`.",
+  },
+  {
+    id: "r6-expr-depth", kind: "mcq", region: "R6", tags: ["expressions", "recursion", "stack-overflow", "complexity"],
+    prompt: "A calculator input has up to 100000 levels of nested brackets. Why prefer an explicit stack over a recursive evaluator?",
+    choices: ["Recursion depth that large can overflow the call stack, while an explicit stack lives on the heap", "Recursion is always O(n^2)", "Explicit stacks make the answer exact", "Recursive code cannot handle brackets"],
+    answer: 0,
+    explanation: "Both approaches are correct and O(n), but each recursive call uses call-stack memory, and a hundred thousand frames can crash. A std::stack or vector grows on the heap, so depth is limited only by memory.",
+  },
 ];

@@ -19,6 +19,11 @@ describe("R6 Stackspire content", () => {
     expect(l.cardIds).toHaveLength(12);
     expect([...l.problemIds].sort()).toEqual(["cistern-rows", "convoy-count", "drift-rocks", "heat-wave", "lantern-wall", "skyline-hall", "smallest-seal", "valley-tally"]);
   });
+  it("the expressions lesson has 12 cards and links its four problems", () => {
+    const l = lessons.find((x) => x.id === "r6-expressions")!;
+    expect(l.cardIds).toHaveLength(12);
+    expect([...l.problemIds].sort()).toEqual(["ledger-fold", "tape-calculator", "tidy-route", "unroll-banner"]);
+  });
   it("every mcq has distinct choices", () => {
     for (const c of r6Cards) if (c.kind === "mcq" || c.kind === "multi") expect(new Set(c.choices).size, c.id).toBe(c.choices.length);
   });
@@ -32,6 +37,14 @@ describe("R6 Stackspire content", () => {
     expect(computed["r6-mono-hist-trace"].output).toBe("12\n");
     expect(computed["r6-mono-parsons"].output).toBe("2 1 0 \n");
     expect(computed["r6-mono-cloze"].output).toBe("1 2 1 0 \n");
+    expect(computed["r6-expr-predict"].output).toBe("9\n");
+    expect(computed["r6-expr-div-trace"].output).toBe("-15 -1\n");
+    expect(computed["r6-expr-path-parsons"].output).toBe("a c \n");
+    expect(computed["r6-expr-cloze"].output).toBe("8\n");
+    expect(computed["r6-expr-decode-trace"].output).toBe("abbabb\n");
+    expect(lessonOutputs[lessonKey("r6-expressions", 0, 1)]).toBe("30\n");
+    expect(lessonOutputs[lessonKey("r6-expressions", 1, 1)]).toBe("12\n");
+    expect(lessonOutputs[lessonKey("r6-expressions", 2, 1)]).toBe("accaccacc\n");
     expect(lessonOutputs[lessonKey("r6-monotonic-stack", 0, 1)]).toBe("3 1 1 0 1 1 0 0 \n");
     expect(lessonOutputs[lessonKey("r6-monotonic-stack", 1, 2)]).toBe("15\n");
     expect(lessonOutputs[lessonKey("r6-monotonic-stack", 2, 1)]).toBe("10\n");

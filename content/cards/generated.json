@@ -548,5 +548,29 @@
   "r6-mono-hist-trace": {
     "output": "12\n"
   },
-  "r6-mono-sentinel": {}
+  "r6-mono-sentinel": {},
+  "r6-expr-signal": {},
+  "r6-expr-operand-order": {},
+  "r6-expr-predict": {
+    "output": "9\n"
+  },
+  "r6-expr-div-trace": {
+    "output": "-15 -1\n"
+  },
+  "r6-expr-prec": {},
+  "r6-expr-uses": {},
+  "r6-expr-switch-error": {
+    "diagnostic": "line 6: switch quantity not an integer"
+  },
+  "r6-expr-path-parsons": {
+    "output": "a c \n"
+  },
+  "r6-expr-cloze": {
+    "output": "8\n"
+  },
+  "r6-expr-unary": {},
+  "r6-expr-decode-trace": {
+    "output": "abbabb\n"
+  },
+  "r6-expr-depth": {}
 }

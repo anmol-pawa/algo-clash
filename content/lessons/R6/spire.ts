@@ -186,4 +186,143 @@ int main() {
       },
     ],
   },
+  {
+    id: "r6-expressions", region: "R6", section: "R6",
+    title: "Expressions on a stack: postfix, brackets and nesting",
+    summary: "Evaluating arithmetic, decoding nested repeat codes and simplifying paths are the same trick: keep the unfinished work on a stack and finish the newest piece first.",
+    cardIds: ["r6-expr-signal", "r6-expr-operand-order", "r6-expr-predict", "r6-expr-div-trace", "r6-expr-prec", "r6-expr-uses", "r6-expr-switch-error", "r6-expr-path-parsons", "r6-expr-cloze", "r6-expr-unary", "r6-expr-decode-trace", "r6-expr-depth"],
+    problemIds: ["tape-calculator", "ledger-fold", "unroll-banner", "tidy-route"],
+    pages: [
+      {
+        title: "Postfix: the stack does the work",
+        blocks: [
+          { kind: "text", text: "In postfix (reverse Polish) notation the operator comes after its operands: `2 3 +` means `2 + 3`. There are no brackets and no precedence rules, because the order of the tokens already says what happens first. A stack evaluates it in one pass: a number is pushed; an operator pops two values, combines them and pushes the result." },
+          { kind: "code", run: true, caption: "Evaluate a postfix tape. The first pop is the RIGHT operand.", code: `#include <iostream>
+#include <stack>
+#include <string>
+#include <vector>
+
+int main() {
+    const std::vector<std::string> tape = {"2", "3", "+", "10", "4", "-", "*"};
+    std::stack<int> vals;
+    for (const auto& tok : tape) {
+        if (tok == "+" || tok == "-" || tok == "*" || tok == "/") {
+            const int right = vals.top();
+            vals.pop();
+            const int left = vals.top();
+            vals.pop();
+            if (tok == "+") vals.push(left + right);
+            else if (tok == "-") vals.push(left - right);
+            else if (tok == "*") vals.push(left * right);
+            else vals.push(left / right);
+        } else {
+            vals.push(std::stoi(tok));
+        }
+    }
+    std::cout << vals.top() << '\\n';
+}
+` },
+          { kind: "pitfall", title: "Operand order and negative numbers", text: "The value popped first is the right-hand operand, so `10 4 -` is `10 - 4`, not `4 - 10`. Subtraction and division care. C++ integer division truncates toward zero (`-7 / 2` is `-3`), which is what most interview statements want, but not what floor division gives. Also, `-3` is a number token while `-` alone is an operator: test the whole token, not its first character." },
+          { kind: "text", text: "The loop runs in `O(n)` time and `O(n)` space for `n` tokens. In an interview, say the validity assumption out loud ('the tape is well formed, so an operator always finds two values') and ask whether you must handle malformed input." },
+        ],
+      },
+      {
+        title: "Infix: two stacks and precedence",
+        blocks: [
+          { kind: "text", text: "People write infix: `2*(3+4)-10/5`. Now the order depends on precedence and brackets. Use two stacks: one for values, one for operators waiting for their right operand. When a new operator arrives, first finish every waiting operator that binds at least as tightly (higher precedence, or equal precedence because `-` and `/` group to the left). Then push the new one. `(` is pushed and acts as a wall; `)` finishes everything back to the wall." },
+          { kind: "code", run: true, caption: "Infix evaluator for + - * / and brackets on non-negative numbers.", code: `#include <cctype>
+#include <iostream>
+#include <stack>
+#include <string>
+
+int prec(char op) { return (op == '*' || op == '/') ? 2 : 1; }
+
+void applyTop(std::stack<long long>& vals, std::stack<char>& ops) {
+    const long long b = vals.top();
+    vals.pop();
+    const long long a = vals.top();
+    vals.pop();
+    const char op = ops.top();
+    ops.pop();
+    switch (op) {
+        case '+': vals.push(a + b); break;
+        case '-': vals.push(a - b); break;
+        case '*': vals.push(a * b); break;
+        default:  vals.push(a / b); break;
+    }
+}
+
+int main() {
+    const std::string s = "2*(3+4)-10/5";
+    std::stack<long long> vals;
+    std::stack<char> ops;
+    for (size_t i = 0; i < s.size(); ++i) {
+        const char c = s[i];
+        if (std::isdigit(static_cast<unsigned char>(c))) {
+            long long v = 0;
+            while (i < s.size() && std::isdigit(static_cast<unsigned char>(s[i]))) v = v * 10 + (s[i++] - '0');
+            --i;                                  // the for loop will step past the number
+            vals.push(v);
+        } else if (c == '(') {
+            ops.push(c);
+        } else if (c == ')') {
+            while (ops.top() != '(') applyTop(vals, ops);
+            ops.pop();                            // discard the '('
+        } else {
+            while (!ops.empty() && ops.top() != '(' && prec(ops.top()) >= prec(c)) applyTop(vals, ops);
+            ops.push(c);
+        }
+    }
+    while (!ops.empty()) applyTop(vals, ops);
+    std::cout << vals.top() << '\\n';
+}
+` },
+          { kind: "pitfall", title: "Unary minus is not a binary minus", text: "A `-` at the start, after `(`, or right after another operator has no left operand: `2 * -3`. The popular trick of inserting a `0` before such a minus works after `(` but breaks after `*` or `/`: `2 * 0 - 3` is `-3`, not `-6`. The robust fix is to mark that minus as a separate unary operator with the highest precedence that applies to the next value, and to decide 'unary or binary' by looking at the previous token." },
+          { kind: "text", text: "Use `long long` for values if the input can approach the `int` range, and iterate with explicit stacks. A recursive-descent evaluator is just as correct, but a bracket depth of `100000` overflows the call stack; the explicit stack lives on the heap and does not." },
+          { kind: "interview", text: "Narrate the invariant: 'the value stack holds finished sub-results, the operator stack holds operators whose right side is still unknown, in increasing precedence from bottom to top'. Then test `2-3-4` (left grouping), `2*(3+4)` and a single number." },
+        ],
+      },
+      {
+        title: "Nesting without arithmetic: repeat codes and paths",
+        blocks: [
+          { kind: "text", text: "The same shape appears with no numbers to add. A repeat code like `3[a2[c]]` nests: when a `[` opens, park what you have built so far and the repeat count on stacks, and start fresh inside. When the matching `]` closes, pop the parked text, append the inner text `count` times, and carry on. The newest unfinished bracket is always the one that closes first." },
+          { kind: "code", run: true, caption: "Decode nested repeat codes with a stack of counts and a stack of parked text.", code: `#include <cctype>
+#include <iostream>
+#include <stack>
+#include <string>
+
+int main() {
+    const std::string code = "3[a2[c]]";
+    std::string cur;                          // text built at the current depth
+    int num = 0;                              // count being read
+    std::stack<int> counts;
+    std::stack<std::string> parked;
+    for (const char c : code) {
+        if (std::isdigit(static_cast<unsigned char>(c))) {
+            num = num * 10 + (c - '0');       // counts can have several digits
+        } else if (c == '[') {
+            counts.push(num);
+            parked.push(cur);
+            num = 0;
+            cur.clear();
+        } else if (c == ']') {
+            std::string outer = parked.top();
+            parked.pop();
+            for (int r = counts.top(); r > 0; --r) outer += cur;
+            counts.pop();
+            cur = outer;
+        } else {
+            cur += c;
+        }
+    }
+    std::cout << cur << '\\n';
+}
+` },
+          { kind: "text", text: "Simplifying a file-style path is the lightest version: split on `/`, ignore empty names and `.`, pop on `..` if there is something to pop (going up from the top stays at the top), and push everything else, including odd names such as `...`. Join what is left with `/`. A `std::vector<std::string>` works as the stack and is easy to join afterwards." },
+          { kind: "pitfall", title: "Size and cost of the output", text: "Decoding builds the full output, so the cost is proportional to the output length, not the input length. Check the constraints for the maximum output size before you copy strings freely, and move the inner text rather than copying it where you can." },
+          { kind: "interview", text: "When a problem mixes brackets with something to compute, say: 'brackets mean nesting, nesting means a stack; I will push the context when I enter a bracket and restore it when I leave'. That sentence names the pattern and the invariant in one go." },
+        ],
+      },
+    ],
+  },
 ];
