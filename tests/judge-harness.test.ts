@@ -83,6 +83,17 @@ describe("function driver", () => {
     expect(lines(run(bin, [["[3,2,0,-4]@1"], ["[1,2]@0"], ["[1]@0"], ["[1,2,3]@-1"], ["[1,2,3]"], ["[]"]]).stdout)).toEqual(["1", "0", "0", "-1", "[]", "[]"]);
   });
 
+  it("builds a second list sharing a tail with the first ([..]^i) and prints the returned node as an index", () => {
+    const spec: DriverSpec = { kind: "function", name: "meet", returns: "ListNode*", params: [{ type: "ListNode*", name: "a" }, { type: "ListNode*", name: "b" }] };
+    const code = `class Solution { public: ListNode* meet(ListNode* a, ListNode* b) { ListNode *p = a, *q = b;
+      while (p != q) { p = p ? p->next : b; q = q ? q->next : a; } return p; } };`;
+    const bin = build(spec, code);
+    expect(lines(run(bin, [["[4,1,8,4,5]", "[5,6,1]^2"], ["[1,2]", "[3]^-1"], ["[7,7,7]", "[]^0"], ["[]", "[]^-1"], ["[1]", "[2,2]^0"]]).stdout)).toEqual(["2", "-1", "0", "-1", "0"]);
+    // A node only the second list owns prints as b<index> (so a wrong answer is a WA, not a crash).
+    const wrong = build(spec, `class Solution { public: ListNode* meet(ListNode*, ListNode* b) { return b; } };`);
+    expect(lines(run(wrong, [["[1,2,3]", "[9]^1"]]).stdout)).toEqual(["b0"]);
+  });
+
   it("builds and prints binary trees in level order with nulls", () => {
     const spec: DriverSpec = { kind: "function", name: "invertTree", returns: "TreeNode*", params: [{ type: "TreeNode*", name: "root" }] };
     const code = `class Solution { public: TreeNode* invertTree(TreeNode* r) { if (!r) return nullptr; swap(r->left, r->right); invertTree(r->left); invertTree(r->right); return r; } };`;

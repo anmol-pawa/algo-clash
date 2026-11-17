@@ -890,3 +890,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
 - Next: D5b-2b (shared-tail harness + Intersection of Two Lists), then D5b-3.
+
+## 2026-11-17: D5b-2b Shared-tail harness and Fork Point
+- **Harness:** the second list of a pair may be written `[own values]^i`: its tail links to node `i` of the previous list read (`^-1`: disjoint; `[]^i`: the head is node `i`). In this mode a returned `ListNode*` prints as its index in the first list (`-1` for null), or `b<k>` for a node only the second list owns (so a wrong answer is a WA, not a crash). New harness test (native g++) covers shared, disjoint, empty and wrong-node cases.
+- **Problem (full package, `content/problems/R5/fork-point/`):** **Fork Point** (M, two-pass pointer swap, similar LC 160; wrongs: value compare, switch-before-null (infinite loop on disjoint), return shared tail, shorten the wrong list, TLE nested loop). Seeded generator with equal-value, unequal-prefix, join-at-head/last and 100000-node perf cases. Catalog regenerated (102 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t fork-point` (reference matches brute, every wrong rejected), `tests/judge-harness.test.ts` (17 pass), lint (0 errors), typecheck; full test, content:verify and builds as listed in the final summary of the run. No visual change, no screenshots.
+- Known gaps: not linked from lessons or the world; the statement shows `^i` as plain text (no pointer diagram until D5f); no `prompt.json` quick-checks.
+- Next: D5b-3 (Sort List, Copy List with Random Pointer (needs a random-pointer harness extension), Find the Duplicate Number).

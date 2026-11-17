@@ -135,10 +135,15 @@ inline void readTree(Reader& r, TreeNode*& out) {
   r.expect(']');
 }
 
-// Nodes of the most recently read list, and whether it carried an '@pos' tail link (cyclic input mode).
-// A cyclic list is written [3,2,0,-4]@1: the tail links back to index 1; @-1 means no cycle.
-// When the input was cyclic, a returned ListNode* prints as its index in that list (-1 for null).
+// Nodes of the most recently read list, and whether the input used a position suffix (identity mode).
+// Cyclic list: [3,2,0,-4]@1 links the tail back to index 1; @-1 means no cycle.
+// Shared tail (second list of a pair): [5,6]^1 links the tail to index 1 of the PREVIOUS list; ^-1 means
+// the lists are disjoint. In identity mode a returned ListNode* prints as its index in the base list
+// (-1 for null); a node that only the second list owns prints as "b<index>" so it fails as a wrong answer.
 inline std::vector<ListNode*>& listNodes() { static std::vector<ListNode*> v; return v; }
+inline std::vector<ListNode*>& prevListNodes() { static std::vector<ListNode*> v; return v; }
+inline std::vector<ListNode*>& printBase() { static std::vector<ListNode*> v; return v; }
+inline std::vector<ListNode*>& printExtra() { static std::vector<ListNode*> v; return v; }
 inline bool& listCyclic() { static bool b = false; return b; }
 
 inline void readList(Reader& r, ListNode*& out) {
@@ -146,6 +151,7 @@ inline void readList(Reader& r, ListNode*& out) {
   out = nullptr;
   ListNode* tail = nullptr;
   auto& nodes = listNodes();
+  prevListNodes() = nodes;
   nodes.clear();
   listCyclic() = false;
   if (!r.take(']')) {
@@ -161,7 +167,20 @@ inline void readList(Reader& r, ListNode*& out) {
     const long long pos = r.integer();
     if (pos < -1 || pos >= static_cast<long long>(nodes.size())) fail("cycle position out of range");
     if (pos >= 0) tail->next = nodes[static_cast<size_t>(pos)];
+    printBase() = nodes;
+    printExtra().clear();
     listCyclic() = true;  // '@' present: results print as indexes, even when the list has no cycle
+  } else if (r.take('^')) {
+    const auto& base = prevListNodes();
+    const long long pos = r.integer();
+    if (pos < -1 || pos >= static_cast<long long>(base.size())) fail("shared position out of range");
+    if (pos >= 0) {
+      ListNode* shared = base[static_cast<size_t>(pos)];
+      if (tail) tail->next = shared; else out = shared;
+    }
+    printBase() = base;
+    printExtra() = nodes;
+    listCyclic() = true;
   }
 }
 
@@ -262,11 +281,14 @@ inline void printTree(std::string& out, const TreeNode* root) {
 
 inline void printList(std::string& out, const ListNode* head) {
   if (listCyclic()) {
-    // Cyclic input: identify the returned node by its position in the list that was read.
+    // Identity mode: name the returned node by its position in the list(s) that were read.
     if (!head) { out += "-1"; return; }
-    const auto& nodes = listNodes();
-    for (size_t i = 0; i < nodes.size(); ++i)
-      if (nodes[i] == head) { out += std::to_string(i); return; }
+    const auto& base = printBase();
+    for (size_t i = 0; i < base.size(); ++i)
+      if (base[i] == head) { out += std::to_string(i); return; }
+    const auto& extra = printExtra();
+    for (size_t i = 0; i < extra.size(); ++i)
+      if (extra[i] == head) { out += "b" + std::to_string(i); return; }
     fail("returned node does not belong to the list");
   }
   out += '[';
