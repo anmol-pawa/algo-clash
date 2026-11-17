@@ -830,3 +830,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: no `prompt.json` quick-checks; Stackspire not yet registered in the world or the gym (D4f).
 - Next: D4f (forge scrolls, visualisers, Sentinel gym, warp, dialogue, music), likely to be split into sub-boxes.
+
+## 2026-11-17: D4f-1 Stackspire Forge scrolls and trace cards
+- ROADMAP D4f split into D4f-1..4. D4f-1 done: `content/scrolls/spire.ts` with the Scroll of the Waiting Stack (`next-greater`, template = Heat Wave reference) and the Scroll of the Zero Sentinel (`sentinel-sweep`, template = Skyline Hall reference), each with line annotations and common bugs; kits registered in `kits.ts`; 10 trace cards in `content/cards/R6/forge.ts` (outputs computed by native g++ into `generated.json`; the sentinel `basic` explanation was corrected to match the real walk). CURRICULUM scroll #47 added.
+- Verified: `lint` (0 errors), `typecheck`, full `npm test` (946 pass, 66 files), `build:pages`. `npm run build` compiles and generates all pages but exits 1 with the known Next.js security-advisory message (owner may want to upgrade Next.js). No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: scrolls are not yet reachable from the world (needs the Stackspire map registered, D4f-4).
+- Next: D4f-2 (stack/queue and monotonic-stack visualisers).

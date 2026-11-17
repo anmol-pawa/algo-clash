@@ -7,6 +7,8 @@ import { meta as peaksMeta } from "../problems/R3/pane-peaks/meta";
 import { meta as tidyMeta } from "../problems/R3/tidy-tape/meta";
 import { meta as echoMeta } from "../problems/R4/echo-strand/meta";
 import { meta as verseMeta } from "../problems/R4/verse-match/meta";
+import { meta as heatMeta } from "../problems/R6/heat-wave/meta";
+import { meta as hallMeta } from "../problems/R6/skyline-hall/meta";
 
 /** Everything the Forge UI needs to judge a scroll: the problem spec, statement, starter and (lazily loaded) hidden tests. */
 export interface ScrollKit {
@@ -158,6 +160,43 @@ strand = "ACGT",   k = 2   ->  []
 - If \`k > strand.length()\` there are no blocks and the answer is empty.
 `;
 
+const HEAT_STATEMENT = `# Heat Wave
+
+A weather station logs one reading per day. For every day, the crew wants to know how long they must wait for a **strictly hotter** day.
+
+Given the array \`temps\`, return an array \`wait\` of the same length where \`wait[i]\` is the number of days from day \`i\` to the nearest later day with a higher reading. If no later day is hotter, \`wait[i]\` is \`0\`.
+
+## Examples
+
+- \`temps = [30, 40, 35, 50, 45]\` gives \`[1, 2, 1, 0, 0]\`.
+- \`temps = [60, 60, 60]\` gives \`[0, 0, 0]\` (equal is not hotter).
+- \`temps = [9, 8, 7, 10]\` gives \`[3, 2, 1, 0]\`.
+
+## Constraints
+
+- \`0 <= temps.length <= 100000\`
+- \`-1000000000 <= temps[i] <= 1000000000\`
+`;
+
+const HALL_STATEMENT = `# Skyline Hall
+
+A row of walls stands side by side, each exactly one unit wide. Wall \`i\` has height \`heights[i]\`. You want to build a rectangular hall out of consecutive walls: pick a stretch of \`w\` adjacent walls; the hall's height is limited by the shortest wall in that stretch, so its floor area is \`w\` times that shortest height.
+
+Return the largest floor area you can get from any stretch of consecutive walls. If there are no walls, return \`0\`.
+
+## Examples
+
+- \`heights = [2,1,5,6,2,3]\` gives \`10\` (the walls of height 5 and 6 give \`2 * 5\`).
+- \`heights = [4,4,4]\` gives \`12\`.
+- \`heights = [7]\` gives \`7\`.
+
+## Constraints
+
+- \`0 <= heights.length <= 100000\`
+- \`0 <= heights[i] <= 10^9\`
+- The answer can exceed 32 bits.
+`;
+
 export const scrollKits: Record<string, ScrollKit> = {
   accumulate: {
     statement: POUCH_STATEMENT,
@@ -257,5 +296,33 @@ public:
     parSeconds: echoMeta.parSeconds,
     timeLimitMs: echoMeta.timeLimitMs,
     loadTests: async () => (await import("../problems/R4/echo-strand/tests.json")).default as TestCase[],
+  },
+  "next-greater": {
+    statement: HEAT_STATEMENT,
+    starter: `class Solution {
+public:
+    vector<int> waitDays(vector<int>& temps) {
+        // write the scroll from memory
+    }
+};
+`,
+    spec: heatMeta.spec as FunctionSpec,
+    parSeconds: heatMeta.parSeconds,
+    timeLimitMs: heatMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R6/heat-wave/tests.json")).default as TestCase[],
+  },
+  "sentinel-sweep": {
+    statement: HALL_STATEMENT,
+    starter: `class Solution {
+public:
+    long long largestHall(vector<int>& heights) {
+        // write the scroll from memory
+    }
+};
+`,
+    spec: hallMeta.spec as FunctionSpec,
+    parSeconds: hallMeta.parSeconds,
+    timeLimitMs: hallMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R6/skyline-hall/tests.json")).default as TestCase[],
   },
 };

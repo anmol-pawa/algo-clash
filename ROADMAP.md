@@ -200,7 +200,11 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D4e-1. Lesson `r6-stack-basics` (LIFO, std::stack, bracket matching, queues, circular buffer, two-stack queue) and 12 cards; links crate-brackets, score-tape, gauge-stack, twin-stack-line, ring-lane.
     - [x] D4e-2. Lesson `r6-monotonic-stack` and 12 cards; links heat-wave, convoy-count, drift-rocks, valley-tally, skyline-hall, smallest-seal, cistern-rows, lantern-wall.
     - [x] D4e-3. Lesson `r6-expressions` (RPN, two-stack evaluation, decode/path stacks) and 12 cards; links tape-calculator, ledger-fold, unroll-banner, tidy-route.
-  - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music.
+  - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music, split:
+    - [x] D4f-1. Forge scrolls: Waiting Stack (next greater, Heat Wave) and Zero Sentinel (histogram sweep, Skyline Hall), 10 native trace cards.
+    - [ ] D4f-2. Visualisers: stack/queue animator and monotonic-stack stepper.
+    - [ ] D4f-3. Stackspire Sentinel gym (data + signature mechanic per GDD §5.5) wired to the spire map door.
+    - [ ] D4f-4. Register the spire map in `WorldCanvas`, warp from Skyline Hall/previous region, encounters, NPC dialogue, story beat, music.
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
 - [ ] D6. Recursion Ruins (R7)
 - [ ] D7. Bisect Bay (R8), with the interactive-judge mode for the Bisect Sage

@@ -572,5 +572,35 @@
   "r6-expr-decode-trace": {
     "output": "abbabb\n"
   },
-  "r6-expr-depth": {}
+  "r6-expr-depth": {},
+  "forge-next-greater-trace-basic": {
+    "output": "[1, 2, 1, 0, 0]\n"
+  },
+  "forge-next-greater-trace-equal": {
+    "output": "[0, 0, 0]\n"
+  },
+  "forge-next-greater-trace-dip": {
+    "output": "[3, 2, 1, 0]\n"
+  },
+  "forge-next-greater-trace-empty": {
+    "output": "[]\n"
+  },
+  "forge-next-greater-trace-rising": {
+    "output": "[1, 1, 1, 0]\n"
+  },
+  "forge-sentinel-sweep-trace-basic": {
+    "output": "10\n"
+  },
+  "forge-sentinel-sweep-trace-empty": {
+    "output": "0\n"
+  },
+  "forge-sentinel-sweep-trace-flat": {
+    "output": "12\n"
+  },
+  "forge-sentinel-sweep-trace-rising": {
+    "output": "9\n"
+  },
+  "forge-sentinel-sweep-trace-big": {
+    "output": "6000000000\n"
+  }
 }

@@ -272,6 +272,7 @@ Mixed problems drawn from every region, weighted to the player's weak patterns, 
 44. nCr mod p
 45. Reservoir sampling
 46. Two-way map (bijection check: one map per direction)
+47. Zero-sentinel stack sweep (histogram; variant of #6)
 
 Each scroll: spec, reference, tests, par time, a common-bugs list, and the four Forge tiers (GAME_DESIGN §6.4).
 
