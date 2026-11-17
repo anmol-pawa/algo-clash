@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<int> daysToWarmer(vector<int>& forecast) {
+        const int n = static_cast<int>(forecast.size());
+        vector<int> wait(n, 0);
+        // Correct but slow: every day rescans the whole future, O(n^2) on a long cooling streak.
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (forecast[j] > forecast[i]) {
+                    wait[i] = j - i;
+                    break;
+                }
+            }
+        }
+        return wait;
+    }
+};
