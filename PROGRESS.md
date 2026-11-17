@@ -844,3 +844,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: visualisers are not yet linked from the Stackspire lessons.
 - Next: D4f-3 (Stackspire Sentinel gym).
+
+## 2026-11-17: D4f-3 Stackspire Sentinel gym (Iron stack twist)
+- `content/gyms/r6.ts` (blitz of 8: 6 R6 + 2 review; core Heat Wave M, signature Ledger Fold H), `kitsR6.ts`, `components/SpireGymScreen.tsx`, route `/gym/spire/`, spire map door at (10,2). Twist "Iron stack": `hasRecursion` in `lib/gym/twist.ts` (direct, mutual and `std::function` recursion; member calls like `st.top()` ignored) via a new `ForbiddenRule.check`; rejection shows as a compile error and costs no heart. GDD §5.5 updated. Scene/region types widened for `spire-gym`/`stackspire`.
+- Verified: `lint` (0 errors), `typecheck`, full `npm test` (957 pass, 67 files, incl. `tests/gym-spire.test.ts`), `build` (passes; known advisory exit on some tries), `build:pages` (passes on retry). `scripts/smoke-gym-spire.mjs` at desktop and iPhone 14: intro, blitz, Heat Wave win, recursive evaluator rejected by Iron stack, Ledger Fold win, badge, persistence; no console errors, no overflow; screenshots reviewed (Sentinel on the spire backdrop, rejection message readable).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: the spire map is not yet registered in `WorldCanvas` (D4f-4).
+- Next: D4f-4 (register the spire map, warp, encounters, dialogue, story beat, music).

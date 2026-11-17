@@ -203,7 +203,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
   - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music, split:
     - [x] D4f-1. Forge scrolls: Waiting Stack (next greater, Heat Wave) and Zero Sentinel (histogram sweep, Skyline Hall), 10 native trace cards.
     - [x] D4f-2. Visualisers: stack/queue animator and monotonic-stack stepper.
-    - [ ] D4f-3. Stackspire Sentinel gym (data + signature mechanic per GDD §5.5) wired to the spire map door.
+    - [x] D4f-3. Stackspire Sentinel gym (data + signature mechanic per GDD §5.5) wired to the spire map door.
     - [ ] D4f-4. Register the spire map in `WorldCanvas`, warp from Skyline Hall/previous region, encounters, NPC dialogue, story beat, music.
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
 - [ ] D6. Recursion Ruins (R7)
