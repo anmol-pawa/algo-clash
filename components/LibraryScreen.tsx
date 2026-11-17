@@ -9,9 +9,10 @@ import type { Trace } from "@/lib/visualiser/types";
 import { traceKadane, tracePrefixCount, traceTwoSumMap } from "@/lib/visualiser/hashprefix";
 import { traceChainedTable, traceRollingRepeats } from "@/lib/visualiser/hashtable";
 import { traceDequeMax, traceShortestAtLeast } from "@/lib/visualiser/deque";
+import { traceContainer, traceNextGreater } from "@/lib/visualiser/stack";
 import { traceLongestDistinct, tracePairSum, traceWindowMax } from "@/lib/visualiser/window";
 
-type VisId = SortKind | "pair" | "window" | "distinct" | "hashpair" | "prefix" | "kadane" | "shortest" | "deque" | "chain" | "rolling";
+type VisId = SortKind | "pair" | "window" | "distinct" | "hashpair" | "prefix" | "kadane" | "shortest" | "deque" | "chain" | "rolling" | "stack" | "queue" | "nextgreater";
 
 interface VisDef {
   id: VisId;
@@ -48,6 +49,12 @@ const DEFS: VisDef[] = [
     blurb: "Each key lands in bucket (key mod bucket count). Keys sharing a bucket form a chain. When one more key would push the load factor above 1, the table doubles and re-places every key. (libstdc++ uses prime bucket counts; doubling is easier to follow.)", cost: "Insert and lookup O(1) average, O(n) worst case · rehash O(n) but amortised away" },
   { id: "rolling", title: "Rolling key: repeated windows", group: "Hashwood Harbor", sample: "1 2 3 1 2 3 4 9 2 3 1", hasParam: { label: "Window length k", sample: 3 },
     blurb: "Hash every window of length k in O(1) per slide by removing the leftmost share, shifting, and adding the new value. A hash match only makes a window a suspect: compare the real values. This demo uses a tiny modulus (101) so you can see collisions.", cost: "Time O(n) average with verification · space O(n)" },
+  { id: "stack", title: "Stack: push and pop", group: "Stackspire", sample: "4 7 0 2 0 0 9 0 0 0",
+    blurb: "Each number is one operation: 0 pops, anything else is pushed. Only the top is reachable, so the newest item always leaves first (LIFO). Try popping more than you pushed.", cost: "push, pop, top: O(1) each · space O(n)" },
+  { id: "queue", title: "Queue: push and pop", group: "Stackspire", sample: "4 7 0 2 0 0 9 0 0 0",
+    blurb: "Same operations as the stack, different order: items leave from the front, the one who waited longest (FIFO). Compare the two on identical input.", cost: "push, pop, front: O(1) each · space O(n)" },
+  { id: "nextgreater", title: "Monotonic stack: wait for a greater value", group: "Stackspire", sample: "73 74 75 71 69 72 76 73",
+    blurb: "The stack holds indices still waiting for something bigger, with values that never increase going up. A new value pops every smaller index and answers it with the distance. This is the Heat Wave pattern.", cost: "Time O(n) · space O(n)" },
 ];
 
 function build(def: VisDef, values: number[], param: number): Trace {
@@ -62,6 +69,9 @@ function build(def: VisDef, values: number[], param: number): Trace {
     case "deque": return traceDequeMax(values, param);
     case "chain": return traceChainedTable(values, param);
     case "rolling": return traceRollingRepeats(values, param);
+    case "stack": return traceContainer("stack", values);
+    case "queue": return traceContainer("queue", values);
+    case "nextgreater": return traceNextGreater(values);
     default: return traceSort(def.id, values);
   }
 }

@@ -837,3 +837,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: scrolls are not yet reachable from the world (needs the Stackspire map registered, D4f-4).
 - Next: D4f-2 (stack/queue and monotonic-stack visualisers).
+
+## 2026-11-17: D4f-2 Stackspire visualisers
+- `lib/visualiser/stack.ts`: `traceContainer` (stack and queue animator; each number is an operation, 0 pops, empty pops are reported as undefined behaviour) and `traceNextGreater` (monotonic-stack stepper, the Heat Wave pattern: stack of waiting indices, pops resolve answers). Three new entries in the Library under "Stackspire" (stack, queue, monotonic stack). Tests in `tests/visualiser.test.ts` compare against an array model and a brute force on random inputs.
+- Verified: `lint` (0 errors), `typecheck`, full `npm test` (948 pass, 66 files), `build` (exit 0), `build:pages` (exit 0 on retry; first try hit the known Next.js advisory-fetch exit 1). Playwright on `/library` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshots reviewed (stack/queue boxes, top/front pointers, monotonic stack state line all readable).
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: visualisers are not yet linked from the Stackspire lessons.
+- Next: D4f-3 (Stackspire Sentinel gym).

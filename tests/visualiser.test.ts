@@ -211,3 +211,39 @@ describe("hash table and rolling key traces", () => {
     expect(traceRollingRepeats([1, 2], 5).result).toEqual([]);
   });
 });
+
+import { traceContainer, traceNextGreater } from "@/lib/visualiser/stack";
+
+describe("stack, queue and monotonic stack traces", () => {
+  it("stack and queue match a plain array model, with empty pops reported", () => {
+    const r = rng(101);
+    for (let t = 0; t < 300; t++) {
+      const ops = randArr(r, Math.floor(r() * 14), 6);
+      for (const kind of ["stack", "queue"] as const) {
+        const model: number[] = [];
+        let emptyPops = 0;
+        for (const op of ops) {
+          if (op !== 0) model.push(op);
+          else if (!model.length) emptyPops++;
+          else if (kind === "stack") model.pop();
+          else model.shift();
+        }
+        const tr = traceContainer(kind, ops);
+        expect(tr.result).toEqual(model);
+        expect(tr.frames.filter((f) => f.note.includes("empty")).length).toBeGreaterThanOrEqual(emptyPops);
+        for (const f of tr.frames) for (const m of f.marks) expect(m.index >= 0 && m.index < f.array.length).toBe(true);
+      }
+    }
+  });
+  it("next greater agrees with brute force, stack stays non-increasing", () => {
+    const r = rng(102);
+    for (let t = 0; t < 400; t++) {
+      const a = randArr(r, Math.floor(r() * 14), 12);
+      const want = a.map((v, i) => { for (let j = i + 1; j < a.length; j++) if (a[j] > v) return j - i; return 0; });
+      const tr = traceNextGreater(a);
+      expect(tr.result).toEqual(want);
+      for (const f of tr.frames) for (const m of f.marks) expect(m.index >= 0 && m.index < a.length).toBe(true);
+    }
+    expect(traceNextGreater([73, 74, 75, 71, 69, 72, 76, 73]).result).toEqual([1, 1, 4, 2, 1, 1, 0, 0]);
+  });
+});
