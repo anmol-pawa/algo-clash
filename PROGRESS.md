@@ -876,3 +876,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 
 ## 2026-11-17: CI fix after the stale-branch merge
 - `34ee715` (merge of a stale session branch) brought six R0 problems whose `meta.ts` lacked the required `complexity` field, so CI typecheck and the Pages build failed. Added `complexity` to clear-the-deck, crate-order, csv-cutter, grid-spin, reverse-chain, tree-depth (matching their editorials), regenerated the catalog (86 problems). Verified: typecheck (0 errors), native verify of those six, non-content test suite (888 pass), lint 0 errors.
+
+## 2026-11-17: D5b-1 Chainlink Caves problems batch 2a (M)
+- ROADMAP D5b split into D5b-1..3. D5b-1 done: three medium R5 problems, each a full package (reference, brute, wrong solutions incl. a TLE one, seeded generator, 4-group hidden tests, hint ladder, house-style editorial): **Tail Snip** (remove n-th from end, lead/trail gap with a dummy head, similar LC 19), **Carry Chain** (add two digit lists with carry, 100000-digit and 64-bit-overflow cases, similar LC 2), **Weave Ends** (middle + reverse half + interleave, similar LC 143). Catalog regenerated (89 problems).
+- Verified: `CONTENT_WRITE=1 vitest -t "tail-snip|carry-chain|weave-ends"` (native g++: reference matches brute on random cases; every wrong solution rejected; one first-draft Weave Ends wrong solution turned out to be correct and was replaced), `npm run lint` (0 errors), `typecheck`, `build:pages` (compiles and exports; the known npm advisory-fetch notice exits 1 on some tries), full `npm test`. No visual change, no screenshots.
+- Known gaps: not yet linked from lessons or the world; no `prompt.json` quick-checks.
+- Next: D5b-2 (Palindrome Linked List, Intersection, Odd Even, Rotate List).
