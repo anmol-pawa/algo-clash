@@ -162,4 +162,189 @@ int main() {
     answer: 0,
     explanation: "When the tail catches up with the head the ring may hold 0 or `cap` items. Storing `size` is the simplest cure; the other classic fix reserves one empty slot so `full` means `tail + 1 == head` (mod cap).",
   },
+
+  // ---- Monotonic stack
+  {
+    id: "r6-mono-signal", kind: "mcq", region: "R6", tags: ["monotonic-stack", "recognition"],
+    prompt: "For every element you must find the nearest element to its right that is larger. Which technique gives O(n)?",
+    choices: ["A stack of indices kept in decreasing value order", "Sort the array and binary search", "A hash map from value to index", "Two pointers moving inward from both ends"],
+    answer: 0,
+    explanation: "Each new value resolves every waiting smaller value on top of the stack, then waits itself. Sorting loses the positions, a hash map has no notion of 'nearest', and two pointers need a sorted or symmetric structure.",
+  },
+  {
+    id: "r6-mono-invariant", kind: "mcq", region: "R6", tags: ["monotonic-stack", "invariant"],
+    prompt: "In the 'next warmer day' loop, you pop while temp[top] < temp[i] and then push i. What do the temperatures on the stack look like from bottom to top?",
+    choices: ["Never increasing (equal values may sit next to each other)", "Strictly increasing", "Strictly decreasing, with no repeats", "In no particular order"],
+    answer: 0,
+    explanation: "A value is popped only when something strictly larger arrives, so equal values stay and larger ones never sit on top of smaller ones: the stack is non-increasing.",
+  },
+  {
+    id: "r6-mono-predict", kind: "predict", region: "R6", tags: ["monotonic-stack", "predict"],
+    prompt: "What does this program print?",
+    code: `#include <iostream>
+#include <stack>
+#include <vector>
+
+int main() {
+    std::vector<int> a = {4, 2, 7, 3, 5, 1};
+    std::vector<int> next(a.size(), -1);
+    std::stack<int> st;
+    for (int i = 0; i < static_cast<int>(a.size()); ++i) {
+        while (!st.empty() && a[st.top()] < a[i]) {
+            next[st.top()] = a[i];
+            st.pop();
+        }
+        st.push(i);
+    }
+    for (int v : next) std::cout << v << ' ';
+    std::cout << '\\n';
+}
+`,
+    explanation: "Value 7 arrives and pops 2 and 4, so both get 7. Value 5 pops 3. The values 7, 5 and 1 are still waiting at the end, so they keep -1.",
+  },
+  {
+    id: "r6-mono-pops-trace", kind: "trace", region: "R6", tags: ["monotonic-stack", "trace", "amortized"],
+    prompt: "What does this program print (total pops, then the biggest stack size)?",
+    code: `#include <algorithm>
+#include <iostream>
+#include <stack>
+#include <vector>
+
+int main() {
+    std::vector<int> a = {3, 1, 4, 1, 5, 9, 2, 6};
+    std::stack<int> st;
+    int pops = 0, peak = 0;
+    for (int x : a) {
+        while (!st.empty() && st.top() < x) {
+            st.pop();
+            ++pops;
+        }
+        st.push(x);
+        peak = std::max(peak, static_cast<int>(st.size()));
+    }
+    std::cout << pops << ' ' << peak << '\\n';
+}
+`,
+    explanation: "4 pops 1 and 3; 5 pops 1 and 4; 9 pops 5; 6 pops 2. That is 2 + 2 + 1 + 1 = 6 pops, never more than the 8 pushes. The stack never holds more than 2 values here, because each big value clears what is below it.",
+  },
+  {
+    id: "r6-mono-uses", kind: "multi", region: "R6", tags: ["monotonic-stack", "recognition"],
+    prompt: "Which problems are solved with a monotonic stack? Select all that apply.",
+    choices: ["Days until a warmer temperature", "Largest rectangle in a histogram", "Count the words in a sentence", "Trapping rain water, layer by layer"],
+    answers: [0, 1, 3],
+    explanation: "All three need the nearest taller or shorter neighbour of each element. Counting words is a single linear scan with a counter.",
+  },
+  {
+    id: "r6-mono-vector-error", kind: "compilerError", region: "R6", tags: ["monotonic-stack", "compiler-errors"],
+    prompt: "This code does not compile. What is the cause?",
+    code: `#include <vector>
+
+int main() {
+    std::vector<int> st;
+    st.push_back(3);
+    st.push_back(8);
+    st.pop();
+    return static_cast<int>(st.size());
+}
+`,
+    choices: ["std::vector has no member named pop; the call is pop_back()", "push_back needs two arguments", "A vector cannot be empty at the start", "size() returns a string"],
+    answer: 0,
+    explanation: "`std::stack` has `pop`, but `std::vector` uses `pop_back`. Many solutions use a vector as the stack so they can peek below the top: `st.back()`, `st.pop_back()`.",
+  },
+  {
+    id: "r6-mono-parsons", kind: "parsons", region: "R6", tags: ["monotonic-stack", "parsons"],
+    prompt: "Order the lines so the program prints how many days each day waits for a warmer one.",
+    lines: [
+      "#include <iostream>",
+      "#include <stack>",
+      "#include <vector>",
+      "int main() {",
+      "    std::vector<int> a = {2, 1, 5};",
+      "    std::vector<int> wait(a.size(), 0);",
+      "    std::stack<int> st;",
+      "    for (int i = 0; i < 3; ++i) {",
+      "        while (!st.empty() && a[st.top()] < a[i]) {",
+      "            wait[st.top()] = i - st.top();",
+      "            st.pop();",
+      "        }",
+      "        st.push(i);",
+      "    }",
+      "    for (int w : wait) std::cout << w << ' ';",
+      "    std::cout << \"\\n\";",
+      "}",
+    ],
+    explanation: "The `while` resolves waiting days before the new index joins the stack. The record `wait[st.top()] = ...` must come before `pop()`, otherwise `top()` already points at a different index.",
+  },
+  {
+    id: "r6-mono-cloze", kind: "cloze", region: "R6", tags: ["monotonic-stack", "cloze"],
+    prompt: "Fill the blanks so the program prints the distance each element waits for a larger one.",
+    template: `#include <iostream>
+#include <stack>
+#include <vector>
+
+int main() {
+    std::vector<int> a = {1, 3, 2, 4};
+    std::vector<int> wait(a.size(), 0);
+    std::stack<int> st;
+    for (int i = 0; i < static_cast<int>(a.size()); ++i) {
+        while (!st.empty() && a[st.___()] < a[i]) {
+            wait[st.top()] = i - st.top();
+            st.___();
+        }
+        st.push(i);
+    }
+    for (int w : wait) std::cout << w << ' ';
+    std::cout << "\\n";
+}
+`,
+    blanks: [["top"], ["pop"]],
+    explanation: "Peek with `top()` to compare, and `pop()` once the waiting index is answered. Here 1 waits 1 day for 3, 3 waits 2 days for 4, and 2 waits 1 day for 4.",
+  },
+  {
+    id: "r6-mono-amortized", kind: "mcq", region: "R6", tags: ["monotonic-stack", "complexity", "amortized"],
+    prompt: "The monotonic-stack loop has a while inside a for. Why is the total time O(n) and not O(n^2)?",
+    choices: ["Each index is pushed once and popped at most once, so all pops together are at most n", "The while loop runs at most twice per iteration", "The stack never holds more than log n items", "Pop is free, so only pushes count"],
+    answer: 0,
+    explanation: "One iteration can pop many items, but an item can only be popped after it was pushed, and only once. The total number of pops across the run is bounded by n, so total work is O(n).",
+  },
+  {
+    id: "r6-mono-ties", kind: "mcq", region: "R6", tags: ["monotonic-stack", "ties", "edge-cases"],
+    prompt: "When counting, for each element, the stretch in which it is the minimum of a subarray, the array has equal values. What keeps every subarray counted exactly once?",
+    choices: ["Stop on strictly smaller on one side and on smaller-or-equal on the other", "Stop on strictly smaller on both sides", "Stop on smaller-or-equal on both sides", "Skip every duplicated value"],
+    answer: 0,
+    explanation: "A subarray like [2, 2] has two positions that could claim the minimum. Making exactly one side strict gives that subarray to exactly one of them. Strict on both sides counts it twice; non-strict on both counts it for neither.",
+  },
+  {
+    id: "r6-mono-hist-trace", kind: "trace", region: "R6", tags: ["monotonic-stack", "histogram", "trace"],
+    prompt: "What does this program print (the largest rectangle)?",
+    code: `#include <algorithm>
+#include <iostream>
+#include <stack>
+#include <vector>
+
+int main() {
+    std::vector<int> h = {4, 2, 6, 3, 5, 5, 0};
+    std::stack<int> st;
+    int best = 0;
+    for (int i = 0; i < static_cast<int>(h.size()); ++i) {
+        while (!st.empty() && h[st.top()] > h[i]) {
+            const int height = h[st.top()];
+            st.pop();
+            const int left = st.empty() ? -1 : st.top();
+            best = std::max(best, height * (i - left - 1));
+        }
+        st.push(i);
+    }
+    std::cout << best << '\\n';
+}
+`,
+    explanation: "The bar of height 2 reaches both ends of the six real bars, so it spans width 6 and gives 12. The pair of 5s gives 10, and 3, 5, 5 gives 9, so 12 wins.",
+  },
+  {
+    id: "r6-mono-sentinel", kind: "mcq", region: "R6", tags: ["monotonic-stack", "histogram", "edge-cases"],
+    prompt: "A histogram solution appends a bar of height 0 to the input. What is it for?",
+    choices: ["It pops and measures every bar still on the stack at the end", "It makes the array length even", "It avoids integer overflow", "It sorts the bars"],
+    answer: 0,
+    explanation: "Bars that are never followed by a shorter bar would stay on the stack and never be measured. A 0 is shorter than every real bar, so it forces all of them to be popped and measured. Forgetting it is the classic bug.",
+  },
 ];

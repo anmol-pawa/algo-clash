@@ -14,6 +14,11 @@ describe("R6 Stackspire content", () => {
     expect(l.cardIds).toHaveLength(12);
     expect([...l.problemIds].sort()).toEqual(["crate-brackets", "gauge-stack", "ring-lane", "score-tape", "twin-stack-line"]);
   });
+  it("the monotonic-stack lesson has 12 cards and links its eight problems", () => {
+    const l = lessons.find((x) => x.id === "r6-monotonic-stack")!;
+    expect(l.cardIds).toHaveLength(12);
+    expect([...l.problemIds].sort()).toEqual(["cistern-rows", "convoy-count", "drift-rocks", "heat-wave", "lantern-wall", "skyline-hall", "smallest-seal", "valley-tally"]);
+  });
   it("every mcq has distinct choices", () => {
     for (const c of r6Cards) if (c.kind === "mcq" || c.kind === "multi") expect(new Set(c.choices).size, c.id).toBe(c.choices.length);
   });
@@ -22,6 +27,14 @@ describe("R6 Stackspire content", () => {
     expect(computed["r6-stk-depth-trace"].output).toBe("3\n");
     expect(computed["r6-stk-ring-trace"].output).toBe("0\n");
     expect(computed["r6-stk-reverse-parsons"].output).toBe("kcats\n");
+    expect(computed["r6-mono-predict"].output).toBe("7 7 -1 5 -1 -1 \n");
+    expect(computed["r6-mono-pops-trace"].output).toBe("6 2\n");
+    expect(computed["r6-mono-hist-trace"].output).toBe("12\n");
+    expect(computed["r6-mono-parsons"].output).toBe("2 1 0 \n");
+    expect(computed["r6-mono-cloze"].output).toBe("1 2 1 0 \n");
+    expect(lessonOutputs[lessonKey("r6-monotonic-stack", 0, 1)]).toBe("3 1 1 0 1 1 0 0 \n");
+    expect(lessonOutputs[lessonKey("r6-monotonic-stack", 1, 2)]).toBe("15\n");
+    expect(lessonOutputs[lessonKey("r6-monotonic-stack", 2, 1)]).toBe("10\n");
     expect(lessonOutputs[lessonKey("r6-stack-basics", 1, 1)]).toBe("1000\n");
     expect(lessonOutputs[lessonKey("r6-stack-basics", 2, 2)]).toBe("30 40 50 60 | head=2\n");
   });

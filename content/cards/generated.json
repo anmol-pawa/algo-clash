@@ -524,5 +524,29 @@
   "r6-stk-ring-trace": {
     "output": "0\n"
   },
-  "r6-stk-ring-full": {}
+  "r6-stk-ring-full": {},
+  "r6-mono-signal": {},
+  "r6-mono-invariant": {},
+  "r6-mono-predict": {
+    "output": "7 7 -1 5 -1 -1 \n"
+  },
+  "r6-mono-pops-trace": {
+    "output": "6 2\n"
+  },
+  "r6-mono-uses": {},
+  "r6-mono-vector-error": {
+    "diagnostic": "line 7: 'class std::vector<int>' has no member named 'pop'"
+  },
+  "r6-mono-parsons": {
+    "output": "2 1 0 \n"
+  },
+  "r6-mono-cloze": {
+    "output": "1 2 1 0 \n"
+  },
+  "r6-mono-amortized": {},
+  "r6-mono-ties": {},
+  "r6-mono-hist-trace": {
+    "output": "12\n"
+  },
+  "r6-mono-sentinel": {}
 }

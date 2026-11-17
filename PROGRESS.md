@@ -816,3 +816,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: Actions quota period is over, but there is no `gh` in this session; not confirmed.
 - Known gaps: the other 7 R6 problems are not linked from a lesson until D4e-2/3.
 - Next: D4e-2 (monotonic stack lesson and 12 cards).
+
+## 2026-11-17: D4e-2 Stackspire lesson: monotonic stack and 12 cards
+- Lesson `r6-monotonic-stack` in `content/lessons/R6/spire.ts` (next-greater with a stack of indices and the non-increasing invariant, amortized O(n) argument, direction/comparison variants, the one-strict-side tie rule via a sum-of-subarray-minimums listing, histogram with a zero sentinel, rain-water layers) with 3 runnable listings and 12 cards in `content/cards/R6/spire.ts` (mcq, multi, predict, trace, parsons, cloze, compilerError). Links heat-wave, convoy-count, drift-rocks, valley-tally, skyline-hall, smallest-seal, cistern-rows, lantern-wall. `tests/r6-content.test.ts` extended.
+- Verified: `npm run lint` (0 errors), `typecheck`, full `npm test` (913 pass, 66 files; outputs computed by native g++), `build` (passes on retry, the known advisory exit), `build:pages`. Native run caught a hand-computed listing output (45 waits 1 day, not 2); the test now asserts the real output. No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: no `prompt.json` quick-checks; not yet in the gym (D4f).
+- Next: D4e-3 (expressions lesson and 12 cards).

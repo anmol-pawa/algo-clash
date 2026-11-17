@@ -55,5 +55,8 @@
   "r4-rolling-hash:2:1": "3\n",
   "r6-stack-basics:0:1": "2 3\n9 2\n",
   "r6-stack-basics:1:1": "1000\n",
-  "r6-stack-basics:2:2": "30 40 50 60 | head=2\n"
+  "r6-stack-basics:2:2": "30 40 50 60 | head=2\n",
+  "r6-monotonic-stack:0:1": "3 1 1 0 1 1 0 0 \n",
+  "r6-monotonic-stack:1:2": "15\n",
+  "r6-monotonic-stack:2:1": "10\n"
 }

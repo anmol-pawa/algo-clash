@@ -198,7 +198,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D4d-3. Stackspire battle/gym backdrop and overworld map.
   - [ ] D4e. Lessons (stack, monotonic stack, expression evaluation) and ~36 cards, split:
     - [x] D4e-1. Lesson `r6-stack-basics` (LIFO, std::stack, bracket matching, queues, circular buffer, two-stack queue) and 12 cards; links crate-brackets, score-tape, gauge-stack, twin-stack-line, ring-lane.
-    - [ ] D4e-2. Lesson `r6-monotonic-stack` and 12 cards; links heat-wave, convoy-count, drift-rocks, valley-tally, skyline-hall, smallest-seal, cistern-rows, lantern-wall.
+    - [x] D4e-2. Lesson `r6-monotonic-stack` and 12 cards; links heat-wave, convoy-count, drift-rocks, valley-tally, skyline-hall, smallest-seal, cistern-rows, lantern-wall.
     - [ ] D4e-3. Lesson `r6-expressions` (RPN, two-stack evaluation, decode/path stacks) and 12 cards; links tape-calculator, ledger-fold, unroll-banner, tidy-route.
   - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music.
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
