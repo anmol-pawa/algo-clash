@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
+import { STACKSPIRE } from "@/lib/overworld/spire";
 import { MAINVILLE } from "@/lib/overworld/mainville";
 import { ROUTE_1 } from "@/lib/overworld/route1";
 import { parseMap, tileAt } from "@/lib/overworld/map";
@@ -11,7 +12,7 @@ import { WORLD_DIALOGUES } from "@/lib/dialogue/world";
 import { validateScript } from "@/lib/dialogue/script";
 import { SONGS } from "@/lib/audio/songs";
 
-const maps = { mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL), "window-woods": parseMap(WINDOW_WOODS), "hashwood-harbor": parseMap(HASHWOOD_HARBOR) };
+const maps = { mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL), "window-woods": parseMap(WINDOW_WOODS), "hashwood-harbor": parseMap(HASHWOOD_HARBOR), stackspire: parseMap(STACKSPIRE) };
 
 describe("Array Atoll in the world", () => {
   it("every warp lands on a walkable tile of a known map", () => {

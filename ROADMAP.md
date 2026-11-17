@@ -181,7 +181,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D3f-2. Visualisers: hash table (buckets/chains/rehash) and rolling key steppers.
     - [x] D3f-3. Hydra of Hashwood gym (data + signature mechanic per GDD §5.5) wired to the harbor map door.
     - [x] D3f-4. Register the harbor map in `WorldCanvas`, warp from the previous region, encounters, NPC dialogue, story beat, music.
-- [ ] D4. Stackspire (R6), split by the region recipe (Crate Brackets E and Skyline Hall H already exist):
+- [x] D4. Stackspire (R6), split by the region recipe (Crate Brackets E and Skyline Hall H already exist):
   - [x] D4a-1. Heat Wave (Daily Temperatures, M) and Tape Calculator (RPN, M).
   - [x] D4a-2. Min Stack as a design problem (Gauge Stack, M), Queue from Two Stacks (Twin Stack Line, E), Baseball Game variant (Score Tape, E).
   - [x] D4b. Problems batch 2 (M), split:
@@ -200,11 +200,11 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D4e-1. Lesson `r6-stack-basics` (LIFO, std::stack, bracket matching, queues, circular buffer, two-stack queue) and 12 cards; links crate-brackets, score-tape, gauge-stack, twin-stack-line, ring-lane.
     - [x] D4e-2. Lesson `r6-monotonic-stack` and 12 cards; links heat-wave, convoy-count, drift-rocks, valley-tally, skyline-hall, smallest-seal, cistern-rows, lantern-wall.
     - [x] D4e-3. Lesson `r6-expressions` (RPN, two-stack evaluation, decode/path stacks) and 12 cards; links tape-calculator, ledger-fold, unroll-banner, tidy-route.
-  - [ ] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music, split:
+  - [x] D4f. Forge scrolls, visualisers, Sentinel gym, warp, dialogue, music, split:
     - [x] D4f-1. Forge scrolls: Waiting Stack (next greater, Heat Wave) and Zero Sentinel (histogram sweep, Skyline Hall), 10 native trace cards.
     - [x] D4f-2. Visualisers: stack/queue animator and monotonic-stack stepper.
     - [x] D4f-3. Stackspire Sentinel gym (data + signature mechanic per GDD §5.5) wired to the spire map door.
-    - [ ] D4f-4. Register the spire map in `WorldCanvas`, warp from Skyline Hall/previous region, encounters, NPC dialogue, story beat, music.
+    - [x] D4f-4. Register the spire map in `WorldCanvas`, warp from Skyline Hall/previous region, encounters, NPC dialogue, story beat, music.
 - [ ] D5. Chainlink Caves (R5), with LRU Cache
 - [ ] D6. Recursion Ruins (R7)
 - [ ] D7. Bisect Bay (R8), with the interactive-judge mode for the Bisect Sage

@@ -76,6 +76,19 @@ export const CLERK: CharacterLook = {
   tuft: true,
 };
 
+export const MASON: CharacterLook = {
+  name: "mason",
+  colors: ["#d9a67c", "#b88258", "#6a6a74", "#4a4a54", "#8a8a96", "#62626e", "#f2e6c9", "#cdbd96",
+    "#5a4a3a", "#3e3226", "#3a2a2a", "#ffffff", "#141018", "#f0c040", "#e8a090", "#7a2c2c"],
+};
+
+export const ARCHIVIST: CharacterLook = {
+  name: "archivist",
+  colors: ["#f0c8a0", "#c89a72", "#e8e4f0", "#b8b4c8", "#4a5aa8", "#34417e", "#f2e6c9", "#cdbd96",
+    "#2a2a46", "#1c1c32", "#3a2a2a", "#ffffff", "#141018", "#f0c040", "#f0a090", "#7a2c2c"],
+  glasses: true,
+};
+
 export function lookPalette(l: CharacterLook): string[] {
   // index 0 transparent, 1 outline, 2..17 from look
   return ["", "#1a1420", ...l.colors];

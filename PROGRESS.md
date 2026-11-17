@@ -851,3 +851,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: the spire map is not yet registered in `WorldCanvas` (D4f-4).
 - Next: D4f-4 (register the spire map, warp, encounters, dialogue, story beat, music).
+
+## 2026-11-17: D4f-4 Stackspire in the overworld (D4 complete)
+- `stackspire` registered in `WorldCanvas` (spire tileset, `spire` march theme in A minor, encounter text). Warp: east end of the Hashwood Harbor sand (21,7) <-> spire lower court (0,11) (Chainlink Caves R5 does not exist yet, so the harbor is the previous region). Rune pads (now striping the lower court) are encounter tiles with pool `spire-rune`. Two NPCs (Mason Orrin: LIFO, monotonic stack, empty-top UB; Archivist Pell: the Iron stack rule and explicit stacks) with new `MASON`/`ARCHIVIST` looks. `tests/spire-world.test.ts` added; earlier world tests now include the spire map.
+- Verified: `lint` (0 errors), `typecheck`, full `npm test` (963 pass, 68 files), `build` (exit 1 only with the known Next.js advisory-fetch message), `build:pages`. `scripts/smoke-spire-world.mjs` at desktop and iPhone 14: harbor to spire and back, no console errors, no overflow; screenshots reviewed (tiles, rune pads, player readable).
+- Branch note: this session is pinned to branch `claude/eloquent-ritchie-fmsl9n`, so work was pushed there, not to `main`. Merge to `main` is the owner's call.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: encounters are placeholder text until B3 battles; the NPC sprites were not viewed up close.
+- Next: D5 (Chainlink Caves, R5, with LRU Cache), likely to be split into sub-boxes.

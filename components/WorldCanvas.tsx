@@ -8,6 +8,7 @@ import { ROUTE_1 } from "@/lib/overworld/route1";
 import { ARRAY_ATOLL } from "@/lib/overworld/atoll";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
+import { STACKSPIRE } from "@/lib/overworld/spire";
 import { Dir, GameMap, parseMap } from "@/lib/overworld/map";
 import { faceNpc, newWorld, playerDrawPos, press, tapTo, tickWorld, WorldState } from "@/lib/overworld/mover";
 import { WORLD_DIALOGUES } from "@/lib/dialogue/world";
@@ -17,11 +18,12 @@ import { flagSet, raiseFlags } from "@/lib/dialogue/flags";
 import { SaveService } from "@/lib/save/service";
 import { IdbBackend } from "@/lib/save/idb";
 import type { CoreSave } from "@/lib/save/schema";
-import { ANGLER, CLERK, DIVER, DOCKHAND, HIKER, IOTA, RANGER, TRAINER, VILLAGER, buildCharacter } from "@/game/sprites/character";
+import { ANGLER, ARCHIVIST, CLERK, DIVER, DOCKHAND, HIKER, IOTA, MASON, RANGER, TRAINER, VILLAGER, buildCharacter } from "@/game/sprites/character";
 import { buildTileset, TILE } from "@/game/sprites/tiles";
 import { buildAtollTileset } from "@/game/sprites/atollTiles";
 import { buildWoodsTileset } from "@/game/sprites/woodsTiles";
 import { buildHarborTileset } from "@/game/sprites/harborTiles";
+import { buildSpireTileset } from "@/game/sprites/spireTiles";
 import type { SongId } from "@/lib/audio/songs";
 import { sheetToCanvases } from "@/game/sprites/canvasFrames";
 
@@ -29,8 +31,9 @@ const VIEW_W = 11;
 const VIEW_H = 9;
 const WORLD_KEY = "algo-clash.world";
 /** Region music by map id; maps not listed play the Mainville theme. */
-const MAP_SONG: Record<string, SongId> = { "array-atoll": "atoll", "window-woods": "woods", "hashwood-harbor": "harbor" };
+const MAP_SONG: Record<string, SongId> = { "array-atoll": "atoll", "window-woods": "woods", "hashwood-harbor": "harbor", stackspire: "spire" };
 const ENCOUNTER_TEXT: Record<string, string> = {
+  "spire-rune": "A rune pad flares and something steps out… (battles arrive in B3)",
   "harbor-tide": "Something splashes in the tide line… (battles arrive in B3)",
   "woods-fern": "Something stirs in the ferns… (battles arrive in B3)",
   "atoll-seagrass": "Something rustles in the seagrass… (battles arrive in B3)",
@@ -45,7 +48,7 @@ export function WorldCanvas() {
   useMusic(MAP_SONG[mapId] ?? "mainville");
   const router = useRouter();
   const cvRef = useRef<HTMLCanvasElement>(null);
-  const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL), "window-woods": parseMap(WINDOW_WOODS), "hashwood-harbor": parseMap(HASHWOOD_HARBOR) }), []);
+  const maps = useMemo<Record<string, GameMap>>(() => ({ mainville: parseMap(MAINVILLE), "route-1": parseMap(ROUTE_1), "array-atoll": parseMap(ARRAY_ATOLL), "window-woods": parseMap(WINDOW_WOODS), "hashwood-harbor": parseMap(HASHWOOD_HARBOR), stackspire: parseMap(STACKSPIRE) }), []);
   const world = useRef<WorldState>(newWorld(maps.mainville));
   const keys = useRef<Dir[]>([]);
   const [mapName, setMapName] = useState(maps.mainville.name);
@@ -129,6 +132,7 @@ export function WorldCanvas() {
     // The woods tileset reuses names such as "grass" and "path", so it is looked up on its own.
     const woodsTiles = sheetToCanvases(buildWoodsTileset());
     const harborTiles = sheetToCanvases(buildHarborTileset());
+    const spireTiles = sheetToCanvases(buildSpireTileset());
     const tileMs = 350;
     const people: Record<string, Record<string, HTMLCanvasElement[]>> = {
       trainer: sheetToCanvases(buildCharacter(TRAINER)),
@@ -140,6 +144,8 @@ export function WorldCanvas() {
       hiker: sheetToCanvases(buildCharacter(HIKER)),
       dockhand: sheetToCanvases(buildCharacter(DOCKHAND)),
       clerk: sheetToCanvases(buildCharacter(CLERK)),
+      mason: sheetToCanvases(buildCharacter(MASON)),
+      archivist: sheetToCanvases(buildCharacter(ARCHIVIST)),
     };
     let raf = 0;
     let last = performance.now();
@@ -155,7 +161,7 @@ export function WorldCanvas() {
       ctx.fillRect(0, 0, cv.width, cv.height);
       for (let y = 0; y < m.height; y++)
         for (let x = 0; x < m.width; x++) {
-          const fr = (m.id === "window-woods" ? woodsTiles : m.id === "hashwood-harbor" ? harborTiles : baseTiles)[m.tiles[y][x]];
+          const fr = (m.id === "window-woods" ? woodsTiles : m.id === "hashwood-harbor" ? harborTiles : m.id === "stackspire" ? spireTiles : baseTiles)[m.tiles[y][x]];
           ctx.drawImage(fr[Math.floor(clock / tileMs) % fr.length], ox + x * TILE, oy + y * TILE);
         }
       const sprites: Array<{ y: number; draw: () => void }> = [];
