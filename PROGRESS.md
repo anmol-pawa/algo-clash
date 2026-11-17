@@ -897,3 +897,5 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `CONTENT_WRITE=1 vitest -t fork-point` (reference matches brute, every wrong rejected), `tests/judge-harness.test.ts` (17 pass), lint (0 errors), typecheck; full test, content:verify and builds as listed in the final summary of the run. No visual change, no screenshots.
 - Known gaps: not linked from lessons or the world; the statement shows `^i` as plain text (no pointer diagram until D5f); no `prompt.json` quick-checks.
 - Next: D5b-3 (Sort List, Copy List with Random Pointer (needs a random-pointer harness extension), Find the Duplicate Number).
+
+- Follow-up fix: CI on the lock commit failed because the R0 `overlap-count` TLE wrong solution (`suffix-copy-tle`) was too close to the 1 s limit on a fast runner and passed every test. It now makes three suffix copies per position, so it is rejected with a wide margin (native verify passes).
