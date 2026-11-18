@@ -907,3 +907,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
 - Next: D5b-3b (random-pointer harness + Copy List with Random Pointer).
+
+## 2026-11-18: D5b-3b Random-pointer harness and Mirror Twins
+- **Harness:** new optional `Node` type (`val`, `next`, `random`) behind `LCH_RANDOM_NODE`, enabled by `randomNode: true` in a function spec. Literal `[[val,randomIndex|null],...]`. The printer shows the copy in the same format and prints a message (a wrong answer) if the copy reuses an original node, is cyclic, has a random pointer leaving the copy, or the original list was modified. New harness test covers a good copy and each rejection.
+- **Problem (full package, `content/problems/R5/mirror-twins/`):** **Mirror Twins** (M, deep copy with random pointers; O(1)-space weave-and-unzip reference, similar LC 138; brute is the quadratic rescan; wrongs: shared random pointers, weave without unzip, value-keyed map, TLE rescan). Seeded generator with equal values, self/forward/backward shortcuts and 100000-node perf cases. Catalog regenerated (105 problems).
+- Verified: `tests/judge-harness.test.ts` (18 pass), `CONTENT_WRITE=1 vitest -t mirror-twins` (reference matches brute, every wrong rejected), `lint` (0 errors), `typecheck`, `build:pages` (exports; known advisory-fetch exit 1), full `npm test` (see run summary). No visual change.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
+- Next: D5c (Merge k Sorted Lists, Reverse Nodes in k-Group, LRU Cache).

@@ -110,6 +110,20 @@ describe("function driver", () => {
     expect(lines(run(bin, [["[[2,4],[1,3],[2,4],[1,3]]"], ["[[]]"], ["[]"]]).stdout)).toEqual(["[[2,4],[1,3],[2,4],[1,3]]", "[[]]", "[]"]);
   });
 
+  it("reads and prints random-pointer lists, and rejects shared nodes and damaged originals", () => {
+    const mk = (code: string) => build({ kind: "function", name: "copyChain", returns: "Node*", params: [{ type: "Node*", name: "head" }], randomNode: true }, `class Solution { public: ${code} };`);
+    const good = mk(`Node* copyChain(Node* h) { unordered_map<Node*,Node*> m; for (Node* p = h; p; p = p->next) m[p] = new Node(p->val);
+      for (Node* p = h; p; p = p->next) { m[p]->next = p->next ? m[p->next] : nullptr; m[p]->random = p->random ? m[p->random] : nullptr; } return h ? m[h] : nullptr; }`);
+    const input = [["[[7,null],[13,0],[11,4],[10,2],[1,0]]"], ["[[1,1],[2,1]]"], ["[]"]];
+    expect(lines(run(good, input).stdout)).toEqual(["[[7,null],[13,0],[11,4],[10,2],[1,0]]", "[[1,1],[2,1]]", "[]"]);
+    const same = mk("Node* copyChain(Node* h) { return h; }");
+    expect(lines(run(same, [["[[1,null]]"]]).stdout)).toEqual(['"the copy reuses an original node"']);
+    const shallow = mk("Node* copyChain(Node* h) { Node* c = h ? new Node(h->val) : nullptr; if (c) c->random = h; return c; }");
+    expect(lines(run(shallow, [["[[1,0]]"]]).stdout)).toEqual(['"a random pointer leaves the copy"']);
+    const damage = mk("Node* copyChain(Node* h) { if (h) h->random = nullptr; return nullptr; }");
+    expect(lines(run(damage, [["[[1,0]]"]]).stdout)).toEqual(['"the original list was modified"']);
+  });
+
   it("prints the out-parameter for void in-place functions", () => {
     const spec: DriverSpec = { kind: "function", name: "rotate", returns: "void", params: [{ type: "vector<int>&", name: "nums" }, { type: "int", name: "k" }], outParam: "nums" };
     const code = `class Solution { public: void rotate(vector<int>& nums, int k) { if (nums.empty()) return; k %= (int)nums.size(); std::rotate(nums.begin(), nums.end() - k, nums.end()); } };`;

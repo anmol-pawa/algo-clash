@@ -20,6 +20,8 @@ export interface FunctionSpec extends MethodSpec {
   kind: "function";
   className?: string;
   graphNode?: boolean;
+  /** `Node` with `val`, `next`, `random` (copy-list-with-random-pointer). Exclusive with graphNode. */
+  randomNode?: boolean;
 }
 
 /** LC operations format: `["LRUCache","put","get"]` then `[[2],[1,1],[1]]`. */
@@ -146,7 +148,7 @@ ${branches.join("")}      } else {
 /** The complete source handed to the compiler: harness, then the player's code, then `main`. */
 export function generateSource(spec: DriverSpec, userCode: string): string {
   check(spec);
-  const macros = spec.graphNode ? "#define LCH_GRAPH_NODE 1\n" : "";
+  const macros = (spec.graphNode ? "#define LCH_GRAPH_NODE 1\n" : "") + (spec.kind === "function" && spec.randomNode ? "#define LCH_RANDOM_NODE 1\n" : "");
   const main = spec.kind === "function" ? functionMain(spec) : designMain(spec);
   return `${macros}${PRELUDE}${LC_HARNESS_H}\n#line 1 "solution.cpp"\n${userCode}\n#line 1 "driver.cpp"\n${main}`;
 }

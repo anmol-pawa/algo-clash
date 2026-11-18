@@ -6,6 +6,7 @@
  *
  * Optional node types are switched on by macros the generated driver defines first:
  *   LCH_GRAPH_NODE  `Node` with `val` + `neighbors` (clone-graph style)
+ *   LCH_RANDOM_NODE `Node` with `val`, `next`, `random` (copy-list-with-random-pointer style)
  */
 export const LC_HARNESS_H = String.raw`#ifndef LCH_HARNESS_H
 #define LCH_HARNESS_H
@@ -44,6 +45,16 @@ class Node {
   Node() : val(0) {}
   Node(int _val) : val(_val) {}
   Node(int _val, std::vector<Node*> _neighbors) : val(_val), neighbors(_neighbors) {}
+};
+#endif
+
+#ifdef LCH_RANDOM_NODE
+class Node {
+ public:
+  int val;
+  Node* next;
+  Node* random;
+  Node(int _val) : val(_val), next(nullptr), random(nullptr) {}
 };
 #endif
 
@@ -184,6 +195,39 @@ inline void readList(Reader& r, ListNode*& out) {
   }
 }
 
+#ifdef LCH_RANDOM_NODE
+// Random-pointer list: [[7,null],[13,0],[11,4]] is [val, index of random target or null] per node.
+// The originals are remembered (with their expected links) so the printer can reject a copy that
+// reuses an original node and a solution that damages the original list.
+struct RandomOriginal { std::vector<Node*> nodes; std::vector<long long> randoms; };
+inline RandomOriginal& randomOriginal() { static RandomOriginal o; return o; }
+
+inline void readRandomList(Reader& r, Node*& out) {
+  r.expect('[');
+  out = nullptr;
+  auto& orig = randomOriginal();
+  orig.nodes.clear();
+  orig.randoms.clear();
+  if (r.take(']')) return;
+  do {
+    r.expect('[');
+    Node* n = new Node(static_cast<int>(r.integer()));
+    r.expect(',');
+    orig.randoms.push_back(r.takeWord("null") ? -1 : r.integer());
+    r.expect(']');
+    if (!orig.nodes.empty()) orig.nodes.back()->next = n;
+    orig.nodes.push_back(n);
+  } while (r.take(','));
+  r.expect(']');
+  for (size_t i = 0; i < orig.nodes.size(); ++i) {
+    const long long to = orig.randoms[i];
+    if (to < -1 || to >= static_cast<long long>(orig.nodes.size())) fail("random index out of range");
+    if (to >= 0) orig.nodes[i]->random = orig.nodes[static_cast<size_t>(to)];
+  }
+  out = orig.nodes[0];
+}
+#endif
+
 #ifdef LCH_GRAPH_NODE
 // Adjacency list, 1-indexed like LeetCode: [[2,4],[1,3],[2,4],[1,3]]. Reads node 1 (null if empty).
 inline void readGraph(Reader& r, Node*& out) {
@@ -224,6 +268,10 @@ template <class T> void read(Reader& r, T& out) {
 #ifdef LCH_GRAPH_NODE
   } else if constexpr (std::is_same_v<T, Node*>) {
     readGraph(r, out);
+#endif
+#ifdef LCH_RANDOM_NODE
+  } else if constexpr (std::is_same_v<T, Node*>) {
+    readRandomList(r, out);
 #endif
   } else if constexpr (IsVector<T>::value) {
     out.clear();
@@ -303,6 +351,44 @@ inline void printList(std::string& out, const ListNode* head) {
   out += ']';
 }
 
+#ifdef LCH_RANDOM_NODE
+// Prints the copy in the input format. A copy that reuses an original node, a random pointer that
+// leaves the copy, a cyclic copy, or a damaged original list prints a message, so it is a wrong answer.
+inline void printRandomList(std::string& out, const Node* head) {
+  const auto& orig = randomOriginal();
+  for (size_t i = 0; i < orig.nodes.size(); ++i) {
+    const Node* o = orig.nodes[i];
+    const Node* wantNext = i + 1 < orig.nodes.size() ? orig.nodes[i + 1] : nullptr;
+    const Node* wantRandom = orig.randoms[i] >= 0 ? orig.nodes[static_cast<size_t>(orig.randoms[i])] : nullptr;
+    if (o->next != wantNext || o->random != wantRandom) { out += "\"the original list was modified\""; return; }
+  }
+  std::unordered_map<const Node*, size_t> index;
+  std::vector<const Node*> order;
+  for (const Node* n = head; n; n = n->next) {
+    if (!index.emplace(n, order.size()).second) { out += "\"the copy is cyclic\""; return; }
+    order.push_back(n);
+  }
+  std::unordered_map<const Node*, bool> isOriginal;
+  for (const Node* o : orig.nodes) isOriginal[o] = true;
+  for (const Node* n : order)
+    if (isOriginal.count(n)) { out += "\"the copy reuses an original node\""; return; }
+  out += '[';
+  for (size_t i = 0; i < order.size(); ++i) {
+    if (i) out += ',';
+    out += '[' + std::to_string(order[i]->val) + ',';
+    const Node* rnd = order[i]->random;
+    if (!rnd) out += "null";
+    else {
+      auto it = index.find(rnd);
+      if (it == index.end()) { out.clear(); out += "\"a random pointer leaves the copy\""; return; }
+      out += std::to_string(it->second);
+    }
+    out += ']';
+  }
+  out += ']';
+}
+#endif
+
 #ifdef LCH_GRAPH_NODE
 // Adjacency list ordered by node value, so any traversal order of a correct clone prints alike.
 inline void printGraph(std::string& out, const Node* start) {
@@ -351,6 +437,10 @@ template <class T> void print(std::string& out, const T& v) {
 #ifdef LCH_GRAPH_NODE
   } else if constexpr (std::is_same_v<T, Node*>) {
     printGraph(out, v);
+#endif
+#ifdef LCH_RANDOM_NODE
+  } else if constexpr (std::is_same_v<T, Node*>) {
+    printRandomList(out, v);
 #endif
   } else if constexpr (IsVector<T>::value) {
     out += '[';
