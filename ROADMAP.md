@@ -212,7 +212,8 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D5b-1. Tail Snip (Remove Nth From End), Carry Chain (Add Two Numbers), Weave Ends (Reorder List).
     - [x] D5b-2. Palindrome Linked List (Mirror Chain), Odd Even List (Parity Rails), Rotate List (Spin Chain).
     - [x] D5b-2b. Intersection of Two Lists (Fork Point): harness `[own]^i` shared-tail literal, then the problem package.
-    - [ ] D5b-3. Sort List (merge sort on a list), Copy List with Random Pointer (needs a harness extension for random pointers), Find the Duplicate Number (Floyd on an array).
+    - [x] D5b-3a. Sort List (Chain Sort, merge sort on a list) and Find the Duplicate Number (Twin Beacon, Floyd on an array).
+    - [ ] D5b-3b. Copy List with Random Pointer: harness extension for random pointers (`[[val,randomIndex|null],...]`), then the problem package.
   - [ ] D5c. Problems batch 3 (H): Merge k Sorted Lists, Reverse Nodes in k-Group; design: LRU Cache (hand-rolled and `std::list` + `splice`).
   - [ ] D5d. Art: Chainwyrm Matriarch 96x96 sprite, Chainlink tileset, backdrop and map.
   - [ ] D5e. Lessons (pointer rewiring and dummy node, fast/slow, merge and sort) and ~36 cards.

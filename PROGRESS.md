@@ -899,3 +899,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Next: D5b-3 (Sort List, Copy List with Random Pointer (needs a random-pointer harness extension), Find the Duplicate Number).
 
 - Follow-up fix: CI on the lock commit failed because the R0 `overlap-count` TLE wrong solution (`suffix-copy-tle`) was too close to the 1 s limit on a fast runner and passed every test. It now makes three suffix copies per position, so it is rejected with a wide margin (native verify passes).
+
+## 2026-11-18: D5b-3a Chain Sort and Twin Beacon
+- ROADMAP D5b-3 split: D5b-3a done, D5b-3b (Copy List with Random Pointer, needs a random-pointer harness) remains.
+- Two full packages in `content/problems/R5/`: **Chain Sort** (M, merge sort on a list, similar LC 148; wrongs: split that never shrinks, uncut first half, one bubble pass, TLE insertion sort) and **Twin Beacon** (M, find the duplicate by Floyd on `i -> a[i]`, similar LC 287; wrongs: sum formula (fails with 3+ copies), meeting point returned, double-speed phase 2, TLE pair scan). Catalog regenerated (104 problems). An initial "subtract-compare overflow" wrong was dropped: with values up to 1e9 the difference (2e9) still fits in int.
+- Verified: `content:verify` for both (native g++, reference matches brute, every wrong rejected), `lint` (0 errors), `typecheck`, full `npm test` (994 pass), `build:pages` (exit 0). No visual change, no screenshots.
+- CI/deploy: no `gh` in this session; not confirmed.
+- Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
+- Next: D5b-3b (random-pointer harness + Copy List with Random Pointer).
