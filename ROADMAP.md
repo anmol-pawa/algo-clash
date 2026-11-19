@@ -214,9 +214,9 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D5b-2b. Intersection of Two Lists (Fork Point): harness `[own]^i` shared-tail literal, then the problem package.
     - [x] D5b-3a. Sort List (Chain Sort, merge sort on a list) and Find the Duplicate Number (Twin Beacon, Floyd on an array).
     - [x] D5b-3b. Copy List with Random Pointer: harness extension for random pointers (`[[val,randomIndex|null],...]`), then the problem package.
-  - [ ] D5c. Problems batch 3 (H), split:
+  - [x] D5c. Problems batch 3 (H), split:
     - [x] D5c-1. Merge k Sorted Lists (Tunnel Council, min-heap of fronts) and Reverse Nodes in k-Group (Relay Flip).
-    - [ ] D5c-2. LRU Cache design problem (hand-rolled list + hash map, and `std::list` + `splice`): needs a class-design harness (op sequence in, results out).
+    - [x] D5c-2. LRU Cache design problem (Burrow Cache). The existing `design` driver already covers op-sequence input, so no harness change was needed.
   - [ ] D5d. Art: Chainwyrm Matriarch 96x96 sprite, Chainlink tileset, backdrop and map.
   - [ ] D5e. Lessons (pointer rewiring and dummy node, fast/slow, merge and sort) and ~36 cards.
   - [ ] D5f. Forge scrolls, visualisers (pointer diagram), Chainwyrm gym, warp, dialogue, music.

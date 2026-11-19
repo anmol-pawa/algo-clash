@@ -926,3 +926,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` CLI in this session; confirm via the Actions tab.
 - Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
 - Next: D5c-2 (LRU Cache with a class-design harness).
+
+## 2026-11-19: D5c-2 Burrow Cache (LRU Cache)
+- The existing `design` driver (op-sequence in, results out) already handled this, so no harness change. New full package `content/problems/R5/burrow-cache/`: **Burrow Cache** (M, LRU with `std::list` + `splice` + hash map of iterators, O(1); similar LC 146). Brute is the vector scan; wrongs: get does not refresh, put-update does not refresh, evicts on update when full, evicts the freshest, TLE linear scan. Seeded generator includes update-while-full, hot-key churn and 50000-capacity scattered-key perf cases. Catalog regenerated (108 problems). The hand-written node (no `std::list`) variant is covered in the editorial walkthrough only.
+- Note: the roadmap called LRU a hard; it is calibrated M here (matches LC 146 as listed medium).
+- Verified: `CONTENT_WRITE=1 vitest -t burrow-cache` (native g++: reference matches brute, every wrong rejected), lint (0 errors), typecheck; full test/build results in the run summary. No visual change.
+- Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
+- Next: D5d (Chainwyrm Matriarch art, Chainlink tileset, backdrop, map).
