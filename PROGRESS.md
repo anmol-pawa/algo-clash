@@ -915,3 +915,14 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` in this session; not confirmed.
 - Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
 - Next: D5c (Merge k Sorted Lists, Reverse Nodes in k-Group, LRU Cache).
+
+## 2026-11-19: D5c-1 Tunnel Council and Relay Flip (H)
+- ROADMAP D5c split: D5c-1 done, D5c-2 (LRU Cache) remains and needs a class-design harness (operation sequence in, results out).
+- Two hard full packages in `content/problems/R5/` (reference, brute, 4 wrong solutions each incl. a TLE one, seeded generator, 4-group hidden tests, hint ladder, house-style editorial):
+  - **Tunnel Council** (Merge k Sorted Lists, similar LC 23): min-heap of fronts, O(N log k); the existing harness already reads `vector<ListNode*>`, no extension needed. Wrongs: null head pushed, max-heap order, tunnels cut short, odd list dropped in pairwise rounds, TLE sequential accumulator (50000 two-node tunnels).
+  - **Relay Flip** (Reverse Nodes in k-Group, similar LC 25): block-by-block reversal with a dummy head, O(1) space. Wrongs: reverses the short tail, loses the next block, off-by-one block size, TLE re-walk from the head.
+  - Catalog regenerated (107 problems). An early Relay Flip wrong (k-1 lookahead) turned out to be equivalent to the reference and was replaced.
+- Verified: `CONTENT_WRITE=1 vitest -t "tunnel-council|relay-flip"` (native g++: reference matches brute, every wrong rejected), `npm run lint` (0 errors), `typecheck`, full `npm test` (998 pass, 68 files), `build:pages` (exports; first run hit the known npm advisory-fetch exit 1, retry exit 0). No visual change, no screenshots.
+- CI/deploy: no `gh` CLI in this session; confirm via the Actions tab.
+- Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
+- Next: D5c-2 (LRU Cache with a class-design harness).
