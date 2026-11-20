@@ -933,3 +933,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `CONTENT_WRITE=1 vitest -t burrow-cache` (native g++: reference matches brute, every wrong rejected), lint (0 errors), typecheck; full test/build results in the run summary. No visual change.
 - Known gaps: not linked from lessons or the world; no `prompt.json` quick-checks.
 - Next: D5d (Chainwyrm Matriarch art, Chainlink tileset, backdrop, map).
+
+## 2026-11-20: D5d-1 Chainwyrm Matriarch sprite
+- ROADMAP D5d split into D5d-1..3. D5d-1 done: `game/sprites/matriarch.ts`, a 96x96 gym boss serpent whose body is a chain of five shaded jade nodes joined by golden link rings (the `next` pointers), a hollow gold ring at the tail (null) and a golden arrow crest on the head (the `head` pointer). Idle (4 frames: body wave, tongue flick, blink), attack (coil back, jaws-open whip, strike, recover), hurt (white flash + recoil) and faint (link rings drop away tail-first as the nodes slump, then sink and fade, so the collapse reads as unlinking). Shown on `/dev/sprites`; `tests/matriarch-sprite.test.ts`.
+- Verified: `lint` (0 errors), `typecheck`, sprite tests, full `npm test`, `build`, `build:pages` (see run summary). Playwright on `/dev/sprites` at desktop and iPhone 14: no console errors, no horizontal overflow; screenshot reviewed (first draft hid the link rings behind the nodes; they are now drawn over the seams).
+- CI/deploy: confirmation outside the Actions-quota period is attempted via the GitHub MCP tools (no `gh` for runs).
+- Known gaps: not wired into a gym yet (D5f); no walk cycle needed (boss).
+- Next: D5d-2 (Chainlink Caves tileset).
