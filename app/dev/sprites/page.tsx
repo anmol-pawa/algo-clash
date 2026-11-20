@@ -22,6 +22,7 @@ import { STACKSPIRE } from "@/lib/overworld/spire";
 import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
 import { HARBOR_TILE_NAMES, buildHarborTileset } from "@/game/sprites/harborTiles";
 import { SPIRE_TILE_NAMES, buildSpireTileset } from "@/game/sprites/spireTiles";
+import { CHAIN_TILE_NAMES, buildChainTileset } from "@/game/sprites/chainTiles";
 import { IOTA, TRAINER, buildCharacter, buildPortrait } from "@/game/sprites/character";
 
 const HARBOR_LEGEND: Record<string, string> = {
@@ -52,6 +53,21 @@ const SPIRE_SAMPLE = [
   "TfufffFpppfFfifffufT",
   "TfFfFfaaaaaffFfsfFfT",
   "TwwwwwwwwwwwwwwwwwwT",
+];
+
+const CHAIN_LEGEND: Record<string, string> = {
+  f: "floor", F: "floor2", p: "linkpath", n: "nodepad", w: "wall", v: "void", s: "stalag", c: "crystal",
+  h: "chains", l: "lantern", o: "pool", b: "bridge", r: "ring", u: "boulder", a: "stairs", D: "door",
+};
+const CHAIN_SAMPLE = [
+  "vvvvvvvvvvvvvvvvvvvv",
+  "wwhwwrwwwDwwrwwhwwww",
+  "wfFfflfpppfflfFfcsfw",
+  "wfsfffFpnpfffFfffufw",
+  "wFfffoopppoofFfcffFw",
+  "wfFfboobpbooFfffsffw",
+  "wfffaoopnpoofFfuffFw",
+  "wwwwwwwwwwwwwwwwwwww",
 ];
 
 const ANIMS = ["idle", "attack", "hurt", "faint", "evolve"];
@@ -89,6 +105,7 @@ export default function SpritesDev() {
   const woods = useMemo(() => buildWoodsTileset(), []);
   const harbor = useMemo(() => buildHarborTileset(), []);
   const spire = useMemo(() => buildSpireTileset(), []);
+  const chain = useMemo(() => buildChainTileset(), []);
   return (
     <main className="mx-auto max-w-5xl p-4">
       <h1 className="mb-1 text-xl font-bold">Sprites</h1>
@@ -280,6 +297,19 @@ export default function SpritesDev() {
           <GymScene sheet={sentinel} anim="idle" scale={3} region="stackspire" />
           <GymScene sheet={sentinel} anim="attack" scale={3} region="stackspire" />
         </div>
+      </section>
+      <section className="mb-6">
+        <h2 className="mb-2 font-semibold">Chainlink Caves tileset (16x16)</h2>
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8">
+          {CHAIN_TILE_NAMES.map((n) => (
+            <figure key={n} className="min-w-0 rounded bg-[#cfc9c0] p-2 text-center">
+              <SpriteCanvas sheet={chain} anim={n} scale={4} />
+              <figcaption className="truncate text-xs text-black">{n}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Sample Chainlink Caves scene</h3>
+        <TileScene sheet={chain} scale={2} rows={CHAIN_SAMPLE} legend={CHAIN_LEGEND} />
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">

@@ -940,3 +940,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: confirmation outside the Actions-quota period is attempted via the GitHub MCP tools (no `gh` for runs).
 - Known gaps: not wired into a gym yet (D5f); no walk cycle needed (boss).
 - Next: D5d-2 (Chainlink Caves tileset).
+
+## 2026-11-20: D5d-2 Chainlink Caves tileset
+- New `game/sprites/chainTiles.ts`: 16 deterministic 16x16 tiles with a 31-colour palette (violet cave rock, earth floor, iron, jade glow matching the Matriarch, gold link rings, crystal, underground water): floor, floor2, linkpath (flat iron chain links as a walkway), nodepad (gold ring around a pulsing jade core with a "next" arrow), wall, void, stalag, crystal, chains, lantern, pool, bridge, ring (iron ring anchored in rock: the first link), boulder, stairs, door (iron gate with jade lintel glow). Animated: nodepad, crystal, chains, lantern, pool. `CHAIN_SOLID` lists blocking tiles.
+- `/dev/sprites` shows the tile grid and a sample cave scene. `tests/chain-tiles.test.ts` (opaque, palette-bounded, animated frames differ, deterministic, solids valid).
+- Verified: `lint` (0 errors), `typecheck`, the new tile test, Playwright on `/dev/sprites` at desktop and iPhone 14 (screenshots reviewed: tiles readable, no console errors, no horizontal overflow); full `npm test` (1005 pass, 70 files), `build` and `build:pages` (exit 0; first try may hit the known advisory-fetch exit 1).
+- Known gaps: `chains` tile reads a little busy at 1x; not yet used by a map (D5d-3).
+- Next: D5d-3 (Chainlink battle/gym backdrop and overworld map).

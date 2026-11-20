@@ -219,7 +219,7 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D5c-2. LRU Cache design problem (Burrow Cache). The existing `design` driver already covers op-sequence input, so no harness change was needed.
   - [ ] D5d. Art: Chainwyrm Matriarch sprite, Chainlink tileset, backdrop and map, split:
     - [x] D5d-1. Chainwyrm Matriarch 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
-    - [ ] D5d-2. Chainlink Caves tileset on `/dev/sprites`.
+    - [x] D5d-2. Chainlink Caves tileset on `/dev/sprites`.
     - [ ] D5d-3. Chainlink battle/gym backdrop and overworld map.
   - [ ] D5e. Lessons (pointer rewiring and dummy node, fast/slow, merge and sort) and ~36 cards.
   - [ ] D5f. Forge scrolls, visualisers (pointer diagram), Chainwyrm gym, warp, dialogue, music.
