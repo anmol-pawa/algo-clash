@@ -955,3 +955,10 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `lint` (0 errors), `typecheck`, chain-map tests, full `npm test`, `build:pages` (exit 0; first run hits the known advisory-fetch exit 1). Playwright on the static export `/dev/sprites` at desktop and iPhone 14: screenshots reviewed (path reads as a list, backdrop and boss sit well), no console errors, no horizontal overflow.
 - Known gaps: not yet registered in `WorldCanvas`/`BattleStage`; no NPCs, encounters or dialogue (D5f).
 - Next: D5e (lessons for pointer rewiring and dummy node, fast/slow, merge and sort, plus ~36 cards).
+
+## 2026-11-21: D5e-1 Chainlink pointer-rewiring lesson and 12 cards
+- ROADMAP D5e split into D5e-1..3. D5e-1 done: lesson `r5-pointer-rewiring` (3 pages: nodes and next pointers, iterative reversal, the dummy node; 3 runnable listings whose real g++ output is shown) in `content/lessons/R5/caves.ts`, and 12 cards in `content/cards/R5/caves.ts` (mcq, multi, predict, trace, compilerError, parsons, cloze). Links flip-chain, tail-snip, spin-chain, parity-rails, relay-flip. Computed outputs in both `generated.json` files came from native g++ and match the explanations.
+- Verified: `CONTENT_WRITE=1` cards and lessons tests, `lint` (0 errors), `typecheck`, full `npm test` (1023 pass, 71 files; slow on a cold native cache), `build:pages` (export produced; exit 1 is the known npm advisory-fetch failure). No visual change, no screenshots.
+- CI/deploy: no `gh` for runs in this session; to confirm via the Actions tab.
+- Known gaps: lesson not yet reachable from the Chainlink map (D5f).
+- Next: D5e-2 (fast/slow lesson and 12 cards).

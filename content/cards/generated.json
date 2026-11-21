@@ -501,6 +501,32 @@
   "forge-rolling-key-trace-thrice": {
     "output": "[TT]\n"
   },
+  "r5-ptr-signal": {},
+  "r5-ptr-save-next": {},
+  "r5-ptr-predict": {
+    "output": "2 7\n"
+  },
+  "r5-ptr-reverse-trace": {
+    "output": "2 5 8 3 \n"
+  },
+  "r5-ptr-arrow-error": {
+    "diagnostic": "line 8: request for member 'next' in 'cur', which is of pointer type 'ListNode*' (maybe you meant to use '->' ?)"
+  },
+  "r5-ptr-dummy-uses": {},
+  "r5-ptr-reverse-parsons": {
+    "output": "3 2 1 "
+  },
+  "r5-ptr-reverse-cloze": {
+    "output": "3 2 1 \n"
+  },
+  "r5-ptr-null-loop": {},
+  "r5-ptr-dummy-trace": {
+    "output": "1 9 \n"
+  },
+  "r5-ptr-complexity": {},
+  "r5-ptr-partial-predict": {
+    "output": "3 2 1 4 5 \n"
+  },
   "r6-stk-signal": {},
   "r6-stk-pop-void": {},
   "r6-stk-predict": {
