@@ -368,3 +368,84 @@ export function drawSpireBackdrop(c: CanvasRenderingContext2D, time: number, gym
     ellipseFill(c, "#b3ada4", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
   }
 }
+
+/**
+ * Chainlink Caves battle scene: a violet cavern with a stalactite ceiling, great iron chains sagging across the
+ * back wall (their links are the `next` pointers), swaying hanging chains, pulsing jade crystals and a flagged
+ * earth floor. `gym` uses the lower gym ledges (the Chainwyrm Matriarch).
+ */
+export function drawChainBackdrop(c: CanvasRenderingContext2D, time: number, gym = false): void {
+  const wall = ["#14102a", "#1b1636", "#241d44", "#2e2552", "#382d60", "#43376c", "#4e4079"];
+  wall.forEach((b, i) => rect(c, b, 0, i * 12, LW, 12));
+  // rock strata and speckles on the back wall
+  for (let i = 0; i < 46; i++) rect(c, i % 3 ? "#2e2552" : "#4e4079", (i * 53) % LW, 14 + ((i * 29) % 60), 3 + (i % 4), 1);
+  // stalactites along the ceiling
+  for (let x = 0, i = 0; x < LW; x += 11 + (i % 3) * 3, i++) {
+    const h = 6 + ((i * 7) % 12);
+    for (let y = 0; y < h; y++) {
+      const w = Math.max(1, 6 - Math.floor((y * 6) / h));
+      rect(c, y % 4 === 0 ? "#43376c" : "#241d44", x - (w >> 1), y, w, 1);
+    }
+    rect(c, "#14102a", x, 0, 1, h);
+  }
+  // two great chains sagging across the wall: iron links alternate face-on (ring) and edge-on (bar)
+  for (const [base, sag] of [[44, 14], [60, 10]] as const) {
+    for (let x = 0; x < LW; x += 6) {
+      const y = base + Math.round(Math.sin((x / LW) * Math.PI) * sag);
+      if ((x / 6) % 2 === 0) {
+        rect(c, "#6f7585", x, y, 7, 5);
+        rect(c, "#14102a", x + 2, y + 1, 3, 3);
+        rect(c, "#9aa0b2", x, y, 7, 1);
+      } else {
+        rect(c, "#555b6c", x, y + 1, 7, 3);
+        rect(c, "#8a90a2", x, y + 1, 7, 1);
+      }
+    }
+  }
+  // gold link rings catch the light where the chains meet the left wall
+  rect(c, "#ffd25a", 0, 44, 2, 5);
+  rect(c, "#b0702c", 0, 48, 2, 1);
+  // hanging chains that sway a little
+  for (const [hx, len] of [[28, 34], [112, 26], [206, 38]] as const) {
+    for (let i = 0; i < len; i += 3) {
+      const sw = Math.round(Math.sin(time / 500 + hx + i / 9) * (i / 14));
+      rect(c, i % 6 ? "#555b6c" : "#8a90a2", hx + sw, i, 2, 3);
+    }
+  }
+  // jade crystals, pulsing, clear of the foe ledge
+  const pulse = 0.5 + 0.5 * Math.sin(time / 420);
+  for (const [cx, h] of [[16, 12], [70, 9], [96, 14]] as const) {
+    const y = 82 - h;
+    rect(c, "#1f6f62", cx, y + 2, 5, h - 2);
+    rect(c, "#2fb59b", cx + 1, y + 1, 3, h - 2);
+    rect(c, "#7ff0d2", cx + 2, y, 1, h - 3);
+    rect(c, pulse > 0.5 ? "#b8fff0" : "#5fe0c0", cx + 2, y + 2, 1, 2);
+  }
+  // cave floor: dark rim, then packed earth with flagstones
+  rect(c, "#14102a", 0, 80, LW, 3);
+  rect(c, "#4a2f1c", 0, 83, LW, LH - 83);
+  rect(c, "#6e4a2c", 0, 83, LW, 2);
+  for (let y = 85; y < LH; y += 8) {
+    for (let x = ((y - 85) / 8) % 2 ? 0 : 12; x < LW; x += 24) {
+      rect(c, "#6e4a2c", x, y, 18, 6);
+      rect(c, "#8e6a40", x, y, 18, 1);
+      rect(c, "#3a2414", x, y + 5, 18, 1);
+    }
+  }
+  for (let i = 0; i < 50; i++) rect(c, i % 2 ? "#8e6a40" : "#3a2414", (i * 61) % LW, 86 + ((i * 37) % 46), 2, 1);
+  // lanterns on iron posts at both edges
+  for (const lx of [6, 230] as const) {
+    rect(c, "#555b6c", lx, 68, 2, 18);
+    rect(c, "#8a90a2", lx - 2, 66, 6, 2);
+    const f = Math.floor(time / 140 + lx) % 3;
+    rect(c, "#e8782e", lx - 1, 61 - f + 3, 4, 5 + f);
+    rect(c, "#ffd25a", lx, 63 - f + 3, 2, 3);
+  }
+  const plats = gym ? GYM_PLATFORMS : PLATFORMS;
+  for (const p of [plats.foe, plats.player]) {
+    ellipseFill(c, "#1b1636", p.cx, p.cy + 3, p.rx, p.ry);
+    ellipseFill(c, "#555b6c", p.cx, p.cy, p.rx, p.ry);
+    ellipseFill(c, "#8a90a2", p.cx, p.cy - 1, p.rx - 6, p.ry - 3);
+    ellipseFill(c, pulse > 0.5 ? "#2fb59b" : "#1f6f62", p.cx, p.cy - 1, p.rx - 24, Math.max(1, p.ry - 6));
+  }
+}

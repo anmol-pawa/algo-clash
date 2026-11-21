@@ -947,3 +947,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `lint` (0 errors), `typecheck`, the new tile test, Playwright on `/dev/sprites` at desktop and iPhone 14 (screenshots reviewed: tiles readable, no console errors, no horizontal overflow); full `npm test` (1005 pass, 70 files), `build` and `build:pages` (exit 0; first try may hit the known advisory-fetch exit 1).
 - Known gaps: `chains` tile reads a little busy at 1x; not yet used by a map (D5d-3).
 - Next: D5d-3 (Chainlink battle/gym backdrop and overworld map).
+
+## 2026-11-21: D5d-3 Chainlink battle/gym backdrop and overworld map
+- `drawChainBackdrop` (game/battle/backdrop.ts): violet cavern with stalactite ceiling, two sagging iron chains (alternating face-on and edge-on links), swaying hanging chains, pulsing jade crystals, flagged earth floor, lanterns, and iron platforms with a jade glow; `gym` uses the lower gym ledges. `GymScene` takes `region="chainlink-caves"`.
+- `lib/overworld/chain.ts`: `CHAINLINK_CAVES` 24x14 map. The link path is a singly linked list on the floor (gate in the north wall = head, node pads on the path, an iron ring anchor, a bridge across the pool as a shortcut link). West lane (x=0,y=10) warps to Stackspire; gate door `/gym/chain/`. Both are declared but not wired until D5f (no NPCs, encounter pool or dialogue yet).
+- Both shown on `/dev/sprites` with the Matriarch idle/attack on the new backdrop. `tests/chain-map.test.ts` (rectangle, tileset-only, solid list in sync, spawn reaches the gate and west lane, all node pads reachable, bridge, backdrop bounds).
+- Verified: `lint` (0 errors), `typecheck`, chain-map tests, full `npm test`, `build:pages` (exit 0; first run hits the known advisory-fetch exit 1). Playwright on the static export `/dev/sprites` at desktop and iPhone 14: screenshots reviewed (path reads as a list, backdrop and boss sit well), no console errors, no horizontal overflow.
+- Known gaps: not yet registered in `WorldCanvas`/`BattleStage`; no NPCs, encounters or dialogue (D5f).
+- Next: D5e (lessons for pointer rewiring and dummy node, fast/slow, merge and sort, plus ~36 cards).

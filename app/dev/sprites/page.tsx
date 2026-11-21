@@ -19,6 +19,7 @@ import { ATOLL_TILE_NAMES, buildAtollTileset } from "@/game/sprites/atollTiles";
 import { WINDOW_WOODS } from "@/lib/overworld/woods";
 import { WOODS_TILE_NAMES, buildWoodsTileset } from "@/game/sprites/woodsTiles";
 import { STACKSPIRE } from "@/lib/overworld/spire";
+import { CHAINLINK_CAVES } from "@/lib/overworld/chain";
 import { HASHWOOD_HARBOR } from "@/lib/overworld/harbor";
 import { HARBOR_TILE_NAMES, buildHarborTileset } from "@/game/sprites/harborTiles";
 import { SPIRE_TILE_NAMES, buildSpireTileset } from "@/game/sprites/spireTiles";
@@ -310,6 +311,12 @@ export default function SpritesDev() {
         </div>
         <h3 className="mb-1 mt-3 text-sm font-semibold">Sample Chainlink Caves scene</h3>
         <TileScene sheet={chain} scale={2} rows={CHAIN_SAMPLE} legend={CHAIN_LEGEND} />
+        <h3 className="mb-1 mt-3 text-sm font-semibold">Chainlink Caves map (24x14) and gym backdrop</h3>
+        <TileScene sheet={chain} scale={2} rows={CHAINLINK_CAVES.rows} legend={CHAINLINK_CAVES.legend} />
+        <div className="mt-3 flex flex-wrap gap-3">
+          <GymScene sheet={matriarch} anim="idle" scale={3} region="chainlink-caves" />
+          <GymScene sheet={matriarch} anim="attack" scale={3} region="chainlink-caves" />
+        </div>
       </section>
       {chars.map(({ l, sheet, portrait }) => (
         <section key={l.name} className="mb-6">
