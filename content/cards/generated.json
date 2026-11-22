@@ -551,6 +551,30 @@
     "output": "7 7\n"
   },
   "r5-fs-palindrome-cost": {},
+  "r5-ms-dummy-why": {},
+  "r5-ms-merge-predict": {
+    "output": "1 2 5 5 6 7 8 6\n"
+  },
+  "r5-ms-carry-trace": {
+    "output": "2 3 0 1 \n"
+  },
+  "r5-ms-split-why": {},
+  "r5-ms-sort-cost": {},
+  "r5-ms-decl-error": {
+    "diagnostic": "line 8: cannot convert 'ListNode' to 'ListNode*' in initialization"
+  },
+  "r5-ms-kway-cost": {},
+  "r5-ms-merge-parsons": {
+    "output": "1 2 3 4 "
+  },
+  "r5-ms-lru-cloze": {
+    "output": "3 3\n"
+  },
+  "r5-ms-lru-predict": {
+    "output": "2 3 \n"
+  },
+  "r5-ms-copy-why": {},
+  "r5-ms-which-structure": {},
   "r6-stk-signal": {},
   "r6-stk-pop-void": {},
   "r6-stk-predict": {

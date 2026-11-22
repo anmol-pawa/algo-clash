@@ -221,10 +221,10 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D5d-1. Chainwyrm Matriarch 96x96 sprite (idle/attack/hurt/faint) on `/dev/sprites`.
     - [x] D5d-2. Chainlink Caves tileset on `/dev/sprites`.
     - [x] D5d-3. Chainlink battle/gym backdrop and overworld map.
-  - [ ] D5e. Lessons (pointer rewiring and dummy node, fast/slow, merge and sort) and ~36 cards, split:
+  - [x] D5e. Lessons (pointer rewiring and dummy node, fast/slow, merge and sort) and ~36 cards, split:
     - [x] D5e-1. Lesson `r5-pointer-rewiring` (nodes, reversal, dummy node) and 12 cards; links flip-chain, tail-snip, spin-chain, parity-rails, relay-flip.
     - [x] D5e-2. Lesson `r5-fast-slow` (middle, Floyd cycle with proof, intersection, palindrome) and 12 cards; links mid-link, chain-loop, loop-gate, twin-beacon, fork-point, mirror-chain, weave-ends.
-    - [ ] D5e-3. Lesson `r5-merge-sort-lists` (merge, carry, merge sort, k-way heap, LRU list, random-pointer copy) and 12 cards; links zipper-merge, carry-chain, chain-sort, tunnel-council, mirror-twins, burrow-cache.
+    - [x] D5e-3. Lesson `r5-merge-sort-lists` (merge, carry, merge sort, k-way heap, LRU list, random-pointer copy) and 12 cards; links zipper-merge, carry-chain, chain-sort, tunnel-council, mirror-twins, burrow-cache.
   - [ ] D5f. Forge scrolls, visualisers (pointer diagram), Chainwyrm gym, warp, dialogue, music.
 - [ ] D6. Recursion Ruins (R7)
 - [ ] D7. Bisect Bay (R8), with the interactive-judge mode for the Bisect Sage

@@ -246,4 +246,157 @@ int main() {
       },
     ],
   },
+  {
+    id: "r5-merge-sort-lists", region: "R5", section: "R5",
+    title: "Merge, sort and cache with lists",
+    summary: "Merging two sorted lists is the one building block behind adding numbers digit by digit, sorting a list in O(n log n), combining k lists with a heap and keeping a cache in recency order. Learn it once, with a dummy node, and reuse it everywhere.",
+    cardIds: ["r5-ms-dummy-why", "r5-ms-merge-predict", "r5-ms-carry-trace", "r5-ms-split-why", "r5-ms-sort-cost", "r5-ms-decl-error", "r5-ms-kway-cost", "r5-ms-merge-parsons", "r5-ms-lru-cloze", "r5-ms-lru-predict", "r5-ms-copy-why", "r5-ms-which-structure"],
+    problemIds: ["zipper-merge", "carry-chain", "chain-sort", "tunnel-council", "mirror-twins", "burrow-cache"],
+    pages: [
+      {
+        title: "Merging and carrying with a dummy node",
+        blocks: [
+          { kind: "text", text: "Two sorted lists become one sorted list by repeating a single decision: compare the two front nodes and relink the smaller one onto the tail of the answer. No values are copied; only `next` pointers change. The awkward part is the very first node, because the answer has no tail yet. A dummy node solves it: start with a stack-allocated `ListNode dummy` and a `tail` pointer to it, and return `dummy.next` at the end. The loop then has no special case for the head." },
+          { kind: "code", run: true, caption: "Merge two sorted lists by relinking nodes. Time O(m + n), extra space O(1).", code: `#include <iostream>
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    explicit ListNode(int v = 0, ListNode* n = nullptr) : val(v), next(n) {}
+};
+
+ListNode* merge(ListNode* a, ListNode* b) {
+    ListNode dummy;
+    ListNode* tail = &dummy;
+    while (a != nullptr && b != nullptr) {
+        if (b->val < a->val) {               // strict < keeps equal values in a-first order (stable)
+            tail->next = b;
+            b = b->next;
+        } else {
+            tail->next = a;
+            a = a->next;
+        }
+        tail = tail->next;
+    }
+    tail->next = (a != nullptr) ? a : b;     // splice the leftover run in one move
+    return dummy.next;
+}
+
+int main() {
+    ListNode* a = new ListNode(1, new ListNode(4, new ListNode(9)));
+    ListNode* b = new ListNode(2, new ListNode(4, new ListNode(5, new ListNode(11))));
+    for (ListNode* cur = merge(a, b); cur != nullptr; cur = cur->next) std::cout << cur->val << ' ';
+    std::cout << '\\n';
+}
+` },
+          { kind: "text", text: "The leftover run needs no loop: when one list is empty, the other is already sorted and already linked, so one assignment attaches all of it. Adding two numbers stored as digit lists uses the same skeleton. Walk both lists together, and at each step add the two digits (a missing digit counts as 0) plus a `carry`, write `sum % 10` into a new node on the tail and keep `sum / 10` as the next carry. The loop condition is `a || b || carry`, so a final carry of 1 still produces a node, which is the case most first attempts forget." },
+          { kind: "pitfall", title: "The dummy lives on the stack", text: "`ListNode dummy;` is fine here because you return `dummy.next`, a heap node, never the address of `dummy`. Returning `&dummy` would hand back a dangling pointer. Also write `ListNode* tail = &dummy;`: declaring `ListNode* tail = dummy;` does not compile because `dummy` is an object, not a pointer." },
+          { kind: "interview", text: "Name the invariant out loud: 'everything before tail is final and sorted, and both remaining lists are sorted'. It shows why the leftover splice is correct and lets you handle empty inputs without extra branches." },
+        ],
+      },
+      {
+        title: "Sorting a list and merging k lists",
+        blocks: [
+          { kind: "text", text: "Arrays are sorted with random access, which a list lacks, so heap sort and quicksort partitioning are awkward. Merge sort fits perfectly: split the list in half, sort each half recursively, merge the halves with the function above. The split uses fast and slow pointers. To cut the list into a first half and a second half you need the first middle, so start `fast` at `head->next`; with the second middle a list of two nodes would split into the whole list and an empty one, and the recursion would never shrink." },
+          { kind: "code", run: true, caption: "Merge sort on a singly linked list. Time O(n log n), extra space O(log n) for the recursion.", code: `#include <iostream>
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    explicit ListNode(int v = 0, ListNode* n = nullptr) : val(v), next(n) {}
+};
+
+ListNode* merge(ListNode* a, ListNode* b) {
+    ListNode dummy;
+    ListNode* tail = &dummy;
+    while (a != nullptr && b != nullptr) {
+        ListNode*& smaller = (b->val < a->val) ? b : a;
+        tail->next = smaller;
+        smaller = smaller->next;
+        tail = tail->next;
+    }
+    tail->next = (a != nullptr) ? a : b;
+    return dummy.next;
+}
+
+ListNode* sortList(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) return head;
+    ListNode* slow = head;
+    ListNode* fast = head->next;             // first middle: slow ends on the last node of the left half
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    ListNode* right = slow->next;
+    slow->next = nullptr;                    // cut the list in two
+    return merge(sortList(head), sortList(right));
+}
+
+int main() {
+    ListNode* head = new ListNode(5, new ListNode(1, new ListNode(4, new ListNode(2, new ListNode(3, new ListNode(1))))));
+    for (ListNode* cur = sortList(head); cur != nullptr; cur = cur->next) std::cout << cur->val << ' ';
+    std::cout << '\\n';
+}
+` },
+          { kind: "text", text: "The recursion depth is log n and every level touches each node once, so the time is O(n log n) and the extra space is O(log n) for the call stack. A bottom-up version merges runs of length 1, 2, 4, and so on, and reaches O(1) extra space; mention it when the interviewer asks for constant space." },
+          { kind: "text", text: "Now k sorted lists with N nodes in total. Merging them one after another into a growing answer re-walks the answer every time and costs O(N * k). Two better ways cost O(N log k). Keep a min-heap holding the current front node of every list: pop the smallest, append it, push its successor. Or merge the lists pairwise in rounds, which is the merge sort recursion over the list of lists. The heap holds at most k nodes, so its operations cost log k, and each of the N nodes passes through it once. With `std::priority_queue` you need a comparator that makes the smallest value the top, because the default is a max-heap." },
+          { kind: "idiom", title: "Heap of fronts", text: "Push only non-null nodes. A comparator `[](ListNode* x, ListNode* y) { return x->val > y->val; }` gives a min-heap; flipping the sign is the single most common bug in this problem." },
+        ],
+      },
+      {
+        title: "Caches and copies: lists plus a hash map",
+        blocks: [
+          { kind: "text", text: "A least-recently-used cache needs two operations in O(1): find an entry by key, and move an entry to the front of the recency order. A hash map alone finds in O(1) but has no order; a list alone keeps order and moves in O(1) once you hold the node, but finding it costs O(n). Together they give both: the list stores (key, value) pairs from most to least recent, and the map stores, for each key, an iterator to its list node. In C++ `std::list::splice` moves a node to the front without invalidating iterators or copying, so a hit is a map lookup plus one splice. When the cache is full, evict `list.back()` and erase its key from the map, which is why the list must keep the key as well as the value." },
+          { kind: "code", run: true, caption: "LRU cache with std::list and an unordered_map of iterators. get and put are O(1) on average.", code: `#include <iostream>
+#include <list>
+#include <unordered_map>
+#include <utility>
+
+class LRUCache {
+public:
+    explicit LRUCache(int capacity) : capacity_(capacity) {}
+
+    int get(int key) {
+        auto it = index_.find(key);
+        if (it == index_.end()) return -1;
+        order_.splice(order_.begin(), order_, it->second);   // mark as most recent
+        return it->second->second;
+    }
+
+    void put(int key, int value) {
+        auto it = index_.find(key);
+        if (it != index_.end()) {
+            it->second->second = value;
+            order_.splice(order_.begin(), order_, it->second);
+            return;
+        }
+        if (static_cast<int>(order_.size()) == capacity_) {
+            index_.erase(order_.back().first);               // evict the least recent
+            order_.pop_back();
+        }
+        order_.emplace_front(key, value);
+        index_[key] = order_.begin();
+    }
+
+private:
+    int capacity_;
+    std::list<std::pair<int, int>> order_;                   // front = most recent
+    std::unordered_map<int, std::list<std::pair<int, int>>::iterator> index_;
+};
+
+int main() {
+    LRUCache cache(2);
+    cache.put(1, 10);
+    cache.put(2, 20);
+    cache.get(1);                                            // 1 is now fresher than 2
+    cache.put(3, 30);                                        // evicts 2
+    std::cout << cache.get(2) << ' ' << cache.get(1) << ' ' << cache.get(3) << '\\n';
+}
+` },
+          { kind: "text", text: "The same pairing idea copies a list whose nodes also carry a `random` pointer to any node. A hash map from each original node pointer to its clone lets you build all clones in one pass and wire `next` and `random` in a second pass: the map answers 'which clone corresponds to this original?' in O(1). Key the map by node pointer, never by value, because values repeat. The O(1)-space alternative weaves each clone between its original and the next original, sets each clone's random through `orig->random->next`, and then unzips the two lists; it is trickier, so offer the map first and the weave as the follow-up." },
+          { kind: "interview", text: "For the cache, say the invariant: 'the map and the list always contain exactly the same keys'. Every bug in this problem breaks it: forgetting to erase the evicted key from the map, or updating a key without refreshing its position." },
+        ],
+      },
+    ],
+  },
 ];

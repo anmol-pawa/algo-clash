@@ -968,3 +968,11 @@ Append a dated entry after every run: what changed, how it was verified (command
 - Verified: `CONTENT_WRITE=1` cards + lessons tests (327 pass), `lint` (0 errors), `typecheck`; full `npm test` and `build:pages` results in the run summary. No visual change, no screenshots.
 - Known gaps: lesson not yet reachable from the Chainlink map (D5f).
 - Next: D5e-3 (merge/sort lesson and 12 cards).
+
+## 2026-11-22: D5e-3 Merge, sort and cache lesson and 12 cards
+- Start of run: landed the leftover `claude/eloquent-ritchie-zyfo7j` branch (D5d/D5e-1/D5e-2 work, a fast-forward of main) before taking the lock.
+- Lesson `r5-merge-sort-lists` (3 pages: merge with a dummy node and digit-carry addition, merge sort on a list plus k-way merge with a heap, LRU cache with `std::list::splice` + map of iterators and the random-pointer copy) in `content/lessons/R5/caves.ts`, with 3 runnable listings whose real g++ output is stored. 12 cards in `content/cards/R5/caves.ts` (mcq x5, multi, predict x2, trace, compilerError, parsons, cloze); outputs computed by g++ and cross-checked by hand (merge `1 2 5 5 6 7 8 6`, carry `2 3 0 1`, LRU order `2 3`). Links zipper-merge, carry-chain, chain-sort, tunnel-council, mirror-twins, burrow-cache. D5e is now complete.
+- Verified: `CONTENT_WRITE=1` cards + lessons tests, `lint` (0 errors), `typecheck`, full `npm test` (1047 pass, 71 files), `build:pages`. No visual change, no screenshots.
+- CI/deploy: the Actions-quota note had lapsed by this date; see the run summary for what could be confirmed (no `gh` runs API in this session).
+- Known gaps: lesson not yet reachable from the Chainlink map (D5f).
+- Next: D5f (forge scrolls, pointer-diagram visualiser, Chainwyrm gym, warp, dialogue, music).

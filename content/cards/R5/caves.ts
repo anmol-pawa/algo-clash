@@ -418,4 +418,200 @@ int main() {
     answer: 0,
     explanation: "Finding the middle, reversing and comparing are three linear passes with a few pointers. The reversal damages the list, so say so and offer to restore it. Copying to a vector is the read-only O(n)-space alternative.",
   },
+  // ---- Merge, sort and cache with lists
+  {
+    id: "r5-ms-dummy-why", kind: "mcq", region: "R5", tags: ["linked-list", "merge", "dummy-node"],
+    prompt: "Why does the merge function start from a dummy node?",
+    choices: ["The answer's first node needs no special case, because there is always a tail to attach to", "It makes the merge run in O(1)", "It keeps the original lists unchanged", "It sorts equal values for you"],
+    answer: 0,
+    explanation: "Without a dummy you must decide separately which list supplies the head. With one, every node, including the first, is appended with `tail->next = ...`, and `dummy.next` is the result.",
+  },
+  {
+    id: "r5-ms-merge-predict", kind: "predict", region: "R5", tags: ["linked-list", "merge", "predict"],
+    prompt: "What does this program print?",
+    code: `#include <iostream>
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    explicit ListNode(int v = 0, ListNode* n = nullptr) : val(v), next(n) {}
+};
+
+int main() {
+    ListNode* a = new ListNode(1, new ListNode(5, new ListNode(7)));
+    ListNode* b = new ListNode(2, new ListNode(5, new ListNode(6, new ListNode(8))));
+    ListNode dummy;
+    ListNode* tail = &dummy;
+    int moves = 0;
+    while (a != nullptr && b != nullptr) {
+        if (b->val < a->val) { tail->next = b; b = b->next; }
+        else { tail->next = a; a = a->next; }
+        tail = tail->next;
+        ++moves;
+    }
+    tail->next = a != nullptr ? a : b;
+    for (ListNode* cur = dummy.next; cur != nullptr; cur = cur->next) std::cout << cur->val << ' ';
+    std::cout << moves << '\\n';
+}
+`,
+    explanation: "The loop relinks nodes one at a time until list a is used up, which takes 6 moves (1, 2, 5, 5, 6, 7). The 5 from a goes before the 5 from b because of the strict `<`, so the merge is stable. The leftover node 8 is attached by one assignment, so the move counter never sees it.",
+  },
+  {
+    id: "r5-ms-carry-trace", kind: "trace", region: "R5", tags: ["linked-list", "carry", "trace"],
+    prompt: "Digits are stored least significant first, so 5 -> 8 -> 9 is the number 985. What does this program print?",
+    code: `#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> a = {5, 8, 9};
+    std::vector<int> b = {7, 4};
+    std::vector<int> out;
+    int carry = 0;
+    for (std::size_t i = 0; i < a.size() || i < b.size() || carry != 0; ++i) {
+        int sum = carry;
+        if (i < a.size()) sum += a[i];
+        if (i < b.size()) sum += b[i];
+        out.push_back(sum % 10);
+        carry = sum / 10;
+    }
+    for (int d : out) std::cout << d << ' ';
+    std::cout << '\\n';
+}
+`,
+    explanation: "985 + 47 = 1032, stored backwards as 2, 3, 0, 1. The last digit exists only because the loop condition includes `carry != 0`: after the third column the carry is still 1, so a fourth node is produced.",
+  },
+  {
+    id: "r5-ms-split-why", kind: "mcq", region: "R5", tags: ["linked-list", "merge-sort", "fast-slow"],
+    prompt: "When splitting a list for merge sort, `fast` starts at `head->next`. What goes wrong if both cursors start at `head` and you cut after `slow`?",
+    choices: ["A two-node list splits into the whole list and an empty one, so the recursion never terminates", "The merge step becomes O(n^2)", "The list loses its first node", "Nothing; the two starts are equivalent"],
+    answer: 0,
+    explanation: "With both starting on the head, an even length puts `slow` on the second middle. For two nodes `slow` ends on the second node, so the left half is still both nodes and sortList(left) calls itself on the same input. Starting `fast` one node ahead makes `slow` the last node of the left half.",
+  },
+  {
+    id: "r5-ms-sort-cost", kind: "mcq", region: "R5", tags: ["linked-list", "merge-sort", "complexity"],
+    prompt: "What are the time and extra space of recursive merge sort on a linked list of n nodes?",
+    choices: ["O(n log n) time and O(log n) extra space for the recursion stack", "O(n log n) time and O(n) extra space", "O(n^2) time and O(1) space", "O(n) time and O(1) space"],
+    answer: 0,
+    explanation: "There are log n levels, and every level merges all n nodes once. Merging relinks existing nodes, so no node storage is allocated; only the call stack of depth log n is used. A bottom-up version avoids even that.",
+  },
+  {
+    id: "r5-ms-decl-error", kind: "compilerError", region: "R5", tags: ["linked-list", "dummy-node", "compiler-errors"],
+    prompt: "This code does not compile. What is the cause?",
+    code: `struct ListNode {
+    int val;
+    ListNode* next;
+};
+
+ListNode* appendAll(ListNode* a) {
+    ListNode dummy{0, nullptr};
+    ListNode* tail = dummy;
+    while (a != nullptr) {
+        tail->next = a;
+        tail = a;
+        a = a->next;
+    }
+    return dummy.next;
+}
+`,
+    choices: ["`dummy` is a ListNode object, so it cannot initialise a ListNode*: write `&dummy`", "A struct cannot contain a pointer to itself", "`dummy.next` must be written `dummy->next`", "A local object cannot be named dummy"],
+    answer: 0,
+    explanation: "A pointer holds an address: `ListNode* tail = &dummy;`. Assigning the object itself has no conversion. Note also that the function returns `dummy.next`, a node owned by the caller, and never the address of the local dummy.",
+  },
+  {
+    id: "r5-ms-kway-cost", kind: "mcq", region: "R5", tags: ["linked-list", "heap", "k-way-merge", "complexity"],
+    prompt: "k sorted lists hold N nodes in total. Which approach costs O(N log k)?",
+    choices: ["A min-heap holding the front node of each list, popping and pushing the successor", "Merging the lists one after another into a growing answer", "Concatenating the lists and bubble sorting", "Merging only the first two lists and ignoring the rest"],
+    answer: 0,
+    explanation: "Every node is pushed and popped once, and the heap never holds more than k nodes, so each operation costs O(log k). The sequential accumulator re-walks an answer that keeps growing and costs O(N * k) in the worst case.",
+  },
+  {
+    id: "r5-ms-merge-parsons", kind: "parsons", region: "R5", tags: ["linked-list", "merge", "parsons"],
+    prompt: "Order the lines so the program merges two sorted lists and prints 1 2 3 4.",
+    lines: [
+      "#include <iostream>",
+      "struct ListNode {",
+      "    int val;",
+      "    ListNode* next;",
+      "};",
+      "ListNode* merge(ListNode* a, ListNode* b) {",
+      "    ListNode dummy{0, nullptr};",
+      "    ListNode* tail = &dummy;",
+      "    while (a != nullptr && b != nullptr) {",
+      "        if (b->val < a->val) { tail->next = b; b = b->next; }",
+      "        else { tail->next = a; a = a->next; }",
+      "        tail = tail->next;",
+      "    }",
+      "    tail->next = a != nullptr ? a : b;",
+      "    return dummy.next;",
+      "}",
+      "int main() {",
+      "    ListNode a2{3, nullptr}, a1{1, &a2};",
+      "    ListNode b2{4, nullptr}, b1{2, &b2};",
+      "    for (ListNode* c = merge(&a1, &b1); c != nullptr; c = c->next) std::cout << c->val << ' ';",
+      "}",
+    ],
+    explanation: "The dummy and tail are set up first, the loop relinks the smaller front node and advances the tail, and the leftover run is spliced after the loop. Returning `dummy.next` skips the placeholder.",
+  },
+  {
+    id: "r5-ms-lru-cloze", kind: "cloze", region: "R5", tags: ["linked-list", "lru", "cloze"],
+    prompt: "Fill the blanks so the touched entry moves to the front of the list and the program prints 3 3.",
+    template: `#include <iostream>
+#include <iterator>
+#include <list>
+
+int main() {
+    std::list<int> order = {1, 2, 3};
+    auto it = std::next(order.begin(), 2);
+    order.___(order.begin(), order, it);
+    std::cout << order.front() << ' ' << order.size() << '\\n';
+}
+`,
+    blanks: [["splice"]],
+    explanation: "`splice(pos, other, it)` moves one element in O(1) without copying it, and iterators to it stay valid. An LRU cache uses exactly this to mark a key as most recently used.",
+  },
+  {
+    id: "r5-ms-lru-predict", kind: "predict", region: "R5", tags: ["linked-list", "lru", "predict"],
+    prompt: "A cache of capacity 2 holds keys in recency order. What does this program print?",
+    code: `#include <iostream>
+#include <list>
+#include <unordered_map>
+
+int main() {
+    std::list<int> order;
+    std::unordered_map<int, std::list<int>::iterator> where;
+    const int capacity = 2;
+    auto touch = [&](int key) {
+        auto it = where.find(key);
+        if (it != where.end()) {
+            order.splice(order.begin(), order, it->second);
+            return;
+        }
+        if (static_cast<int>(order.size()) == capacity) {
+            where.erase(order.back());
+            order.pop_back();
+        }
+        order.push_front(key);
+        where[key] = order.begin();
+    };
+    for (int key : {1, 2, 1, 3, 2}) touch(key);
+    for (int key : order) std::cout << key << ' ';
+    std::cout << '\\n';
+}
+`,
+    explanation: "Keys 1 and 2 fill the cache (order 2, 1). Touching 1 moves it to the front (1, 2). Key 3 is new and the cache is full, so it evicts the least recent, 2 (order 3, 1). Key 2 is now missing again and evicts 1. The final order from most to least recent is 2, 3.",
+  },
+  {
+    id: "r5-ms-copy-why", kind: "mcq", region: "R5", tags: ["linked-list", "random-pointer", "hash-map"],
+    prompt: "To deep-copy a list whose nodes have a `random` pointer, the hash map should be keyed by:",
+    choices: ["The original node's address, mapping to its clone", "The node's value", "The node's position counted from the tail", "Nothing; a map is never needed"],
+    answer: 0,
+    explanation: "Values can repeat, so two different nodes with the same value would share one clone. The address is unique, and the map then answers 'which clone belongs to this original?' for both `next` and `random` in O(1). An O(1)-space weave exists, but the map is the clear first answer.",
+  },
+  {
+    id: "r5-ms-which-structure", kind: "multi", region: "R5", tags: ["linked-list", "lru", "recognition"],
+    prompt: "Which parts of an LRU cache give O(1) get and put? Select all that apply.",
+    choices: ["A hash map from key to a list iterator", "A doubly linked list ordered by recency", "A sorted array of keys searched with binary search", "Moving a touched node to the front by splicing", "Scanning the list for the key on every get"],
+    answers: [0, 1, 3],
+    explanation: "The map finds a node in O(1), the list holds the recency order, and splicing relinks a node without shifting anything. A sorted array needs O(n) shifts, and scanning for the key makes get O(n).",
+  },
 ];
