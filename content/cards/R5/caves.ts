@@ -216,4 +216,206 @@ int main() {
 `,
     explanation: "The loop reverses only the first three nodes. The old head (1) is now the end of the reversed block, so `head->next = cur` reconnects it to the untouched suffix (4, 5). This reconnect step is the heart of reversing in blocks of k.",
   },
+
+  // ---- Fast and slow pointers
+  {
+    id: "r5-fs-signal", kind: "mcq", region: "R5", tags: ["linked-list", "fast-slow", "recognition"],
+    prompt: "You need the middle node of a singly linked list of unknown length, in one pass and O(1) extra space. Which technique?",
+    choices: ["Two cursors, one moving twice as fast as the other", "Copy the list into a vector and index it", "Recursion that returns the length", "Sort the list first"],
+    answer: 0,
+    explanation: "When the fast cursor reaches the end, the slow one has travelled half as far, so it stands on the middle. A vector costs O(n) space, and recursion costs O(n) stack.",
+  },
+  {
+    id: "r5-fs-middle-predict", kind: "predict", region: "R5", tags: ["linked-list", "fast-slow", "predict"],
+    prompt: "What does this program print?",
+    code: `#include <iostream>
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v, ListNode* n = nullptr) : val(v), next(n) {}
+};
+
+int main() {
+    ListNode* head = new ListNode(5, new ListNode(8, new ListNode(2, new ListNode(9, new ListNode(4, new ListNode(7))))));
+    ListNode* slow = head;
+    ListNode* fast = head;
+    int rounds = 0;
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+        ++rounds;
+    }
+    std::cout << slow->val << ' ' << rounds << '\\n';
+}
+`,
+    explanation: "With six nodes the loop runs n / 2 = 3 times, and slow ends on the fourth node (9), the second of the two middle nodes. Using only `fast->next != nullptr` as the condition would stop one round earlier for an even length.",
+  },
+  {
+    id: "r5-fs-floyd-trace", kind: "trace", region: "R5", tags: ["linked-list", "fast-slow", "cycle", "trace"],
+    prompt: "Nodes 0 to 6 hold the values 0, 10, ..., 60, and node 6 links back to node 2. What does this program print?",
+    code: `#include <iostream>
+
+struct Node {
+    int val;
+    Node* next;
+};
+
+int main() {
+    Node n[7];
+    for (int i = 0; i < 7; ++i) n[i] = {i * 10, i + 1 < 7 ? &n[i + 1] : &n[2]};
+    Node* slow = &n[0];
+    Node* fast = &n[0];
+    int steps = 0;
+    do {
+        slow = slow->next;
+        fast = fast->next->next;
+        ++steps;
+    } while (slow != fast);
+    std::cout << steps << ' ' << slow->val << '\\n';
+    Node* p = &n[0];
+    while (p != slow) {
+        p = p->next;
+        slow = slow->next;
+    }
+    std::cout << p->val << '\\n';
+}
+`,
+    explanation: "The tail is 2 nodes long and the cycle has 5, so the gap closes by one per step and the cursors meet after 5 steps, on the node holding 50. Phase 2 walks one cursor from the head and one from the meeting node at the same speed: after 2 steps both stand on the cycle entry, the node holding 20.",
+  },
+  {
+    id: "r5-fs-no-skip", kind: "mcq", region: "R5", tags: ["linked-list", "fast-slow", "cycle", "proof"],
+    prompt: "Inside a cycle, why can the fast cursor never jump over the slow one without landing on it?",
+    choices: ["The gap between them changes by exactly one node per step, so it must pass through zero", "Fast moves three nodes per step", "Slow stops when fast is close", "The cycle length is always even"],
+    answer: 0,
+    explanation: "Fast gains two nodes and slow gains one, so the distance changes by exactly one per step. A gap that shrinks one at a time cannot go from positive to negative without being zero. (With a speed ratio of 3 the gap could change by 2 and skip, depending on the cycle length.)",
+  },
+  {
+    id: "r5-fs-entry-reset", kind: "mcq", region: "R5", tags: ["linked-list", "fast-slow", "cycle", "proof"],
+    prompt: "The cursors have met inside the cycle. How do you find the node where the cycle begins?",
+    choices: ["Put one cursor back on the head and move both one step at a time until they meet", "Keep running fast and slow until they meet again", "Count the cycle length and walk that far from the head", "Reverse the list and look for the old head"],
+    answer: 0,
+    explanation: "With a = head to entry, b = entry to meeting point and c = cycle length, a + b = k * c, so a = (k - 1) * c + (c - b). Walking a steps from the head, and a steps from the meeting point, both end on the entry.",
+  },
+  {
+    id: "r5-fs-decl-error", kind: "compilerError", region: "R5", tags: ["linked-list", "fast-slow", "compiler-errors"],
+    prompt: "This code does not compile. What is the cause?",
+    code: `struct ListNode {
+    int val;
+    ListNode* next;
+};
+
+ListNode* middle(ListNode* head) {
+    ListNode* slow = head, fast = head;
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+`,
+    choices: ["In `ListNode* slow = head, fast = head;` only `slow` is a pointer: `fast` is a ListNode", "A function cannot return a pointer to a struct", "`fast->next->next` is not allowed", "`nullptr` cannot be compared with `!=`"],
+    answer: 0,
+    explanation: "The `*` binds to the name, not the type: one declaration with two names makes `slow` a pointer and `fast` an object. Write two statements, or `ListNode *slow = head, *fast = head;`.",
+  },
+  {
+    id: "r5-fs-which-problems", kind: "multi", region: "R5", tags: ["linked-list", "fast-slow", "recognition"],
+    prompt: "Which tasks are solved by fast and slow pointers? Select all that apply.",
+    choices: ["Detect a cycle in a linked list", "Find the middle node of a list", "Find the duplicate in an array of n + 1 values in 1..n by treating i -> a[i] as a pointer", "Binary search a sorted array", "Reverse a list in place"],
+    answers: [0, 1, 2],
+    explanation: "Cycle detection, the middle and the array-as-pointers duplicate all rely on a speed gap. Binary search halves a range instead, and reversal needs prev/cur/next, not two speeds.",
+  },
+  {
+    id: "r5-fs-hascycle-parsons", kind: "parsons", region: "R5", tags: ["linked-list", "fast-slow", "cycle", "parsons"],
+    prompt: "Order the lines so the program detects the cycle (c links back to b) and prints 1.",
+    lines: [
+      "#include <iostream>",
+      "struct ListNode {",
+      "    int val;",
+      "    ListNode* next;",
+      "};",
+      "bool hasCycle(ListNode* head) {",
+      "    ListNode* slow = head;",
+      "    ListNode* fast = head;",
+      "    while (fast != nullptr && fast->next != nullptr) {",
+      "        slow = slow->next;",
+      "        fast = fast->next->next;",
+      "        if (slow == fast) return true;",
+      "    }",
+      "    return false;",
+      "}",
+      "int main() {",
+      "    ListNode c{3, nullptr}, b{2, &c}, a{1, &b};",
+      "    c.next = &b;",
+      "    std::cout << hasCycle(&a) << '\\n';",
+      "}",
+    ],
+    explanation: "Both cursors start on the head, move, and only then are compared: comparing before moving would report a cycle on the very first check. Falling off the end (`fast` or `fast->next` null) means no cycle.",
+  },
+  {
+    id: "r5-fs-middle-cloze", kind: "cloze", region: "R5", tags: ["linked-list", "fast-slow", "cloze"],
+    prompt: "Fill the blanks so the program prints the middle value, 3.",
+    template: `#include <iostream>
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v, ListNode* n = nullptr) : val(v), next(n) {}
+};
+
+int main() {
+    ListNode* head = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
+    ListNode* slow = head;
+    ListNode* fast = head;
+    while (fast != nullptr && fast->___ != nullptr) {
+        slow = slow->___;
+        fast = fast->next->___;
+    }
+    std::cout << slow->val << '\\n';
+}
+`,
+    blanks: [["next"], ["next"], ["next"]],
+    explanation: "Check `fast->next` before taking two steps, advance slow by one `next` and fast by two.",
+  },
+  {
+    id: "r5-fs-intersect-why", kind: "mcq", region: "R5", tags: ["linked-list", "intersection"],
+    prompt: "In the intersection trick each cursor jumps to the other list's head when it reaches the end. Why do they meet at the shared node?",
+    choices: ["Each cursor walks lenA + lenB nodes, so they reach the common tail on the same step", "The longer list is cut shorter first", "Both cursors move at double speed", "The lists are sorted"],
+    answer: 0,
+    explanation: "Cursor A walks its own prefix, the shared tail, then B's prefix; cursor B does the mirror image. Both distances are the sum of the two private parts plus the tail, so the length difference cancels. With no shared node both become nullptr on the same step and the loop stops.",
+  },
+  {
+    id: "r5-fs-intersect-predict", kind: "predict", region: "R5", tags: ["linked-list", "intersection", "predict"],
+    prompt: "List A is 1, 2, 7, 8, 9 and list B is 5, 7, 8, 9, where the 7, 8, 9 nodes are shared. What does this program print?",
+    code: `#include <iostream>
+
+struct Node {
+    int val;
+    Node* next;
+};
+
+int main() {
+    Node t3{9, nullptr}, t2{8, &t3}, t1{7, &t2};
+    Node a2{2, &t1}, a1{1, &a2};
+    Node b1{5, &t1};
+    Node* pa = &a1;
+    Node* pb = &b1;
+    int steps = 0;
+    while (pa != pb) {
+        pa = pa ? pa->next : &b1;
+        pb = pb ? pb->next : &a1;
+        ++steps;
+    }
+    std::cout << (pa ? pa->val : -1) << ' ' << steps << '\\n';
+}
+`,
+    explanation: "The private parts have 2 and 1 nodes and the shared tail has 3. Each cursor walks its private part, the tail, one step through nullptr, and then the other private part, so they meet on the first shared node (7) after 2 + 1 + 3 + 1 = 7 steps.",
+  },
+  {
+    id: "r5-fs-palindrome-cost", kind: "mcq", region: "R5", tags: ["linked-list", "palindrome", "complexity"],
+    prompt: "What does the middle, reverse-second-half, compare approach to a palindrome list cost, and what must you mention?",
+    choices: ["O(n) time and O(1) extra space, and it modifies the list unless you reverse the half back", "O(n log n) time and O(1) space, and it is read-only", "O(n) time and O(n) extra space, and it is read-only", "O(n^2) time and O(1) space"],
+    answer: 0,
+    explanation: "Finding the middle, reversing and comparing are three linear passes with a few pointers. The reversal damages the list, so say so and offer to restore it. Copying to a vector is the read-only O(n)-space alternative.",
+  },
 ];

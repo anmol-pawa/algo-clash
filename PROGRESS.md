@@ -962,3 +962,9 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: no `gh` for runs in this session; to confirm via the Actions tab.
 - Known gaps: lesson not yet reachable from the Chainlink map (D5f).
 - Next: D5e-2 (fast/slow lesson and 12 cards).
+
+## 2026-11-22: D5e-2 Fast and slow pointers lesson and 12 cards
+- Lesson `r5-fast-slow` (3 pages: middle in one pass, Floyd cycle detection with the a + b = k*c proof of the entry phase, intersection / palindrome / reorder building blocks; 3 runnable listings with real g++ output) in `content/lessons/R5/caves.ts`, and 12 cards in `content/cards/R5/caves.ts` (mcq, multi, predict x2, trace, compilerError, parsons, cloze). Links mid-link, chain-loop, loop-gate, twin-beacon, fork-point, mirror-chain, weave-ends. Computed outputs in both `generated.json` files came from native g++ and match the explanations (middle 9 3; Floyd 5 50 / 20; intersection 7 7; the declaration trap `ListNode* slow = head, fast = head;` gives the real g++ diagnostic).
+- Verified: `CONTENT_WRITE=1` cards + lessons tests (327 pass), `lint` (0 errors), `typecheck`; full `npm test` and `build:pages` results in the run summary. No visual change, no screenshots.
+- Known gaps: lesson not yet reachable from the Chainlink map (D5f).
+- Next: D5e-3 (merge/sort lesson and 12 cards).

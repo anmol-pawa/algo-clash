@@ -527,6 +527,30 @@
   "r5-ptr-partial-predict": {
     "output": "3 2 1 4 5 \n"
   },
+  "r5-fs-signal": {},
+  "r5-fs-middle-predict": {
+    "output": "9 3\n"
+  },
+  "r5-fs-floyd-trace": {
+    "output": "5 50\n20\n"
+  },
+  "r5-fs-no-skip": {},
+  "r5-fs-entry-reset": {},
+  "r5-fs-decl-error": {
+    "diagnostic": "line 7: conversion from 'ListNode*' to non-scalar type 'ListNode' requested"
+  },
+  "r5-fs-which-problems": {},
+  "r5-fs-hascycle-parsons": {
+    "output": "1\n"
+  },
+  "r5-fs-middle-cloze": {
+    "output": "3\n"
+  },
+  "r5-fs-intersect-why": {},
+  "r5-fs-intersect-predict": {
+    "output": "7 7\n"
+  },
+  "r5-fs-palindrome-cost": {},
   "r6-stk-signal": {},
   "r6-stk-pop-void": {},
   "r6-stk-predict": {
