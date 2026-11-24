@@ -575,6 +575,36 @@
   },
   "r5-ms-copy-why": {},
   "r5-ms-which-structure": {},
+  "forge-list-reversal-trace-basic": {
+    "output": "[1, 5, 8, 3]\n"
+  },
+  "forge-list-reversal-trace-single": {
+    "output": "[42]\n[]\n"
+  },
+  "forge-list-reversal-trace-old-head": {
+    "output": "1 end 3\n"
+  },
+  "forge-list-reversal-trace-twice": {
+    "output": "[6, 2, 9]\n"
+  },
+  "forge-list-reversal-trace-prefix": {
+    "output": "[2, 1, 3, 4, 5]\n"
+  },
+  "forge-lru-cache-trace-basic": {
+    "output": "1 -1 3\n"
+  },
+  "forge-lru-cache-trace-get-refresh": {
+    "output": "50 -1 50 70\n"
+  },
+  "forge-lru-cache-trace-update": {
+    "output": "15 -1 30\n"
+  },
+  "forge-lru-cache-trace-cap-one": {
+    "output": "-1 5 9\n"
+  },
+  "forge-lru-cache-trace-miss": {
+    "output": "-1 -1 2\n"
+  },
   "r6-stk-signal": {},
   "r6-stk-pop-void": {},
   "r6-stk-predict": {

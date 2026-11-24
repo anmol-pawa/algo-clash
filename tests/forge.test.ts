@@ -130,8 +130,10 @@ describe("scroll kits", () => {
       const kit = scrollKits[s.id];
       expect(kit).toBeDefined();
       expect(kit.statement).toBe(readFileSync(join(process.cwd(), "content", "problems", s.region, s.problemId, "problem.md"), "utf8"));
-      expect(s.template).toContain(kit.spec.name);
-      expect(kit.starter).toContain(kit.spec.name);
+      const name = kit.spec.kind === "design" ? kit.spec.className : kit.spec.name;
+      expect(s.template).toContain(name);
+      expect(kit.starter).toContain(name);
+      if (kit.spec.kind === "design") for (const m of kit.spec.methods) expect(kit.starter).toContain(` ${m.name}(`);
       expect(kit.parSeconds).toBeGreaterThan(0);
     });
   }

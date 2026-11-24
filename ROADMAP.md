@@ -225,7 +225,11 @@ Goal: a new player can start a game, walk Mainville, get the starter, take the f
     - [x] D5e-1. Lesson `r5-pointer-rewiring` (nodes, reversal, dummy node) and 12 cards; links flip-chain, tail-snip, spin-chain, parity-rails, relay-flip.
     - [x] D5e-2. Lesson `r5-fast-slow` (middle, Floyd cycle with proof, intersection, palindrome) and 12 cards; links mid-link, chain-loop, loop-gate, twin-beacon, fork-point, mirror-chain, weave-ends.
     - [x] D5e-3. Lesson `r5-merge-sort-lists` (merge, carry, merge sort, k-way heap, LRU list, random-pointer copy) and 12 cards; links zipper-merge, carry-chain, chain-sort, tunnel-council, mirror-twins, burrow-cache.
-  - [ ] D5f. Forge scrolls, visualisers (pointer diagram), Chainwyrm gym, warp, dialogue, music.
+  - [ ] D5f. Forge scrolls, visualisers (pointer diagram), Chainwyrm gym, warp, dialogue, music, split:
+    - [x] D5f-1. Forge scrolls: Turned Chain (list reversal, Flip Chain, CUR §4 #25) and Fresh Front (LRU cache, Burrow Cache, CUR §4 #27; first design-spec scroll), 10 native trace cards.
+    - [ ] D5f-2. Visualiser: linked-list pointer diagram stepper (reversal, fast/slow, merge).
+    - [ ] D5f-3. Chainwyrm Matriarch gym (data + signature mechanic per GDD §5.5) wired to the caves gate door.
+    - [ ] D5f-4. Register the caves map in `WorldCanvas`, warp from Stackspire, encounters, NPC dialogue, story beat, music.
 - [ ] D6. Recursion Ruins (R7)
 - [ ] D7. Bisect Bay (R8), with the interactive-judge mode for the Bisect Sage
 - [ ] D8. Sorting Steppes (R9)

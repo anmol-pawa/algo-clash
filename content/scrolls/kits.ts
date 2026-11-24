@@ -1,4 +1,4 @@
-import type { FunctionSpec } from "@/lib/judge/harness/driver";
+import type { DesignSpec, DriverSpec, FunctionSpec } from "@/lib/judge/harness/driver";
 import type { TestCase } from "@/lib/judge/verdict";
 import { meta as pouchMeta } from "../problems/R0/pouch-sum/meta";
 import { meta as stretchMeta } from "../problems/R2/exact-stretches/meta";
@@ -7,6 +7,8 @@ import { meta as peaksMeta } from "../problems/R3/pane-peaks/meta";
 import { meta as tidyMeta } from "../problems/R3/tidy-tape/meta";
 import { meta as echoMeta } from "../problems/R4/echo-strand/meta";
 import { meta as verseMeta } from "../problems/R4/verse-match/meta";
+import { meta as burrowMeta } from "../problems/R5/burrow-cache/meta";
+import { meta as flipMeta } from "../problems/R5/flip-chain/meta";
 import { meta as heatMeta } from "../problems/R6/heat-wave/meta";
 import { meta as hallMeta } from "../problems/R6/skyline-hall/meta";
 
@@ -14,7 +16,7 @@ import { meta as hallMeta } from "../problems/R6/skyline-hall/meta";
 export interface ScrollKit {
   statement: string;
   starter: string;
-  spec: FunctionSpec;
+  spec: DriverSpec;
   parSeconds: number;
   timeLimitMs: number;
   loadTests: () => Promise<TestCase[]>;
@@ -197,6 +199,67 @@ Return the largest floor area you can get from any stretch of consecutive walls.
 - The answer can exceed 32 bits.
 `;
 
+const FLIP_STATEMENT = `# Flip Chain
+
+A cave tunnel is a chain of lanterns. Each lantern knows only the **next** lantern deeper in the cave. The guides want the chain turned around, so the deepest lantern becomes the entrance and every lantern points back toward the old entrance.
+
+Given \`head\`, the first node of a singly linked list, reverse the list **in place** by rewiring the \`next\` pointers (do not build a new list) and return the new head.
+
+The node type is provided:
+
+\`\`\`cpp
+struct ListNode {
+    int val;
+    ListNode* next;
+};
+\`\`\`
+
+## Examples
+
+- \`head = [1,2,3,4]\` gives \`[4,3,2,1]\`.
+- \`head = [7]\` gives \`[7]\`.
+- \`head = []\` gives \`[]\`.
+
+## Constraints
+
+- \`0 <= length <= 100000\`
+- \`-1000000000 <= val <= 1000000000\`
+`;
+
+const BURROW_STATEMENT = `# Burrow Cache
+
+A burrow keeps only a few treasures near the door. Each treasure has a **key** (its label) and a **value** (how shiny it is). When the burrow is full and a new treasure arrives, the one that was **touched longest ago** is thrown out to make room. A treasure is "touched" whenever it is looked up or stored.
+
+Design \`BurrowCache\` with these operations, each in **O(1)** average time:
+
+- \`BurrowCache(int capacity)\`: create an empty burrow that holds at most \`capacity\` treasures.
+- \`int get(int key)\`: return the value stored for \`key\`, or \`-1\` if it is not in the burrow. A successful \`get\` counts as touching the treasure.
+- \`void put(int key, int value)\`: store \`value\` under \`key\`. If \`key\` is already present, replace its value; either way the treasure is now the most recently touched. If storing a **new** key would exceed \`capacity\`, first throw out the treasure that was touched longest ago.
+
+## Example
+
+\`\`\`
+BurrowCache(2)
+put(1, 10)
+put(2, 20)
+get(1)      -> 10   (1 is now the freshest)
+put(3, 30)          (full: throws out 2, the stalest)
+get(2)      -> -1
+put(1, 11)          (update, nothing thrown out)
+put(4, 40)          (full: throws out 3)
+get(3)      -> -1
+get(1)      -> 11
+get(4)      -> 40
+\`\`\`
+
+## Constraints
+
+- \`1 <= capacity <= 100000\`
+- \`0 <= key <= 1000000000\`, \`0 <= value <= 1000000000\`
+- Up to \`200000\` operations in total.
+- Keys can be huge, so a plain array indexed by key will not fit.
+`;
+
 export const scrollKits: Record<string, ScrollKit> = {
   accumulate: {
     statement: POUCH_STATEMENT,
@@ -324,5 +387,39 @@ public:
     parSeconds: hallMeta.parSeconds,
     timeLimitMs: hallMeta.timeLimitMs,
     loadTests: async () => (await import("../problems/R6/skyline-hall/tests.json")).default as TestCase[],
+  },
+  "list-reversal": {
+    statement: FLIP_STATEMENT,
+    starter: `class Solution {
+public:
+    ListNode* flipChain(ListNode* head) {
+        // write the scroll from memory
+    }
+};
+`,
+    spec: flipMeta.spec as FunctionSpec,
+    parSeconds: flipMeta.parSeconds,
+    timeLimitMs: flipMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R5/flip-chain/tests.json")).default as TestCase[],
+  },
+  "lru-cache": {
+    statement: BURROW_STATEMENT,
+    starter: `class BurrowCache {
+public:
+    explicit BurrowCache(int capacity) {
+        // write the scroll from memory
+    }
+
+    int get(int key) {
+    }
+
+    void put(int key, int value) {
+    }
+};
+`,
+    spec: burrowMeta.spec as DesignSpec,
+    parSeconds: burrowMeta.parSeconds,
+    timeLimitMs: burrowMeta.timeLimitMs,
+    loadTests: async () => (await import("../problems/R5/burrow-cache/tests.json")).default as TestCase[],
   },
 };

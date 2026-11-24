@@ -976,3 +976,12 @@ Append a dated entry after every run: what changed, how it was verified (command
 - CI/deploy: the Actions-quota note had lapsed by this date; see the run summary for what could be confirmed (no `gh` runs API in this session).
 - Known gaps: lesson not yet reachable from the Chainlink map (D5f).
 - Next: D5f (forge scrolls, pointer-diagram visualiser, Chainwyrm gym, warp, dialogue, music).
+
+## 2026-11-24: D5f-1 Chainlink Forge scrolls (list reversal, LRU cache)
+- ROADMAP D5f split into D5f-1..4 (scrolls, pointer-diagram visualiser, Matriarch gym, map registration/warp/dialogue/music), following the D4f pattern.
+- `content/scrolls/caves.ts`: **Scroll of the Turned Chain** (`list-reversal`, CUR §4 #25, template = `R5/flip-chain/solution.cpp`) and **Scroll of the Fresh Front** (`lru-cache`, CUR §4 #27, template = `R5/burrow-cache/solution.cpp`), each with line annotations and a common-bugs list. Both are core scrolls for the readiness gate, and each also becomes a Structling move (moves derive from scrolls).
+- The Fresh Front is the first scroll judged against a **design** spec. `ScrollKit.spec` is widened from `FunctionSpec` to `DriverSpec` (`judgeProblem` already took both), and the kit test now checks `className` and every method name for design kits.
+- `content/cards/R5/forge.ts`: 10 trace cards (reversal: basic, single/empty, old-head pointer, reverse twice, cut-flip-reattach prefix; LRU: basic, get refreshes, update refreshes without evicting, capacity 1, a miss touches nothing). Outputs are computed by native g++ in `content/cards/generated.json`; all 10 matched the explanations on the first run.
+- Verified: `CONTENT_WRITE=1 vitest -t "forge-list-reversal|forge-lru-cache"`, `lint` (0 errors, existing warnings), `typecheck`, full `npm test` (1067 pass, 71 files, including content-problems = content:verify), `build:pages` (exit 0 on retry; the first try hit the known npm advisory-fetch exit 1). Playwright on the static export `/forge/` at desktop and iPhone 14: both scrolls are listed, the trace tier opens with its annotations and cards, no console errors, no horizontal overflow. Screenshots reviewed.
+- Known gaps: the Blank tier for the LRU scroll was not driven end to end in the browser (judging is the same `judgeProblem` + burrow-cache spec/tests that content:verify covers). Long template lines clip inside the desktop code panel, as on the existing scrolls.
+- Next: D5f-2 (linked-list pointer-diagram visualiser).
